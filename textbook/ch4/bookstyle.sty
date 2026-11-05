@@ -36,18 +36,16 @@
 \newcommand{\heiti}{\CJKfamily{zhhei}}
 \newcommand{\kaishu}{\CJKfamily{zhkai}}
 \newcommand{\fangsong}{\CJKfamily{zhfs}}
-% 图中文字：中西文统一用微软雅黑（nature-figure：一种字族）；图中不用数学模式，变量与符号直接用文本
-\newfontfamily\figlatin{msyh.ttc}[Path=\zhfontpath, FontIndex=0,
-  BoldFont=msyhbd.ttc, BoldFeatures={FontIndex=0}]
-\newcommand{\figfont}{\figlatin\CJKfamily{zhyahei}}
-% 图中字号只有三级：大 8.5pt（层名/标题）、中 7.5pt（一般标注）、小 6.5pt（次要注记）
+% 图中文字：与正文同一套字体（中文宋体、西文 Times），图与正文读起来是一体的；图中不用数学模式
+\newcommand{\figfont}{\rmfamily}
+% 图中字号只有两级：大 9pt（层名/标题）、小 7.5pt（一般标注与注记）；宋体笔画细，不再用更小的字
 \newcommand{\figsizes}{%
   \def\baselinestretch{1}%
-  \renewcommand{\normalsize}{\fontsize{8.5}{11.5}\selectfont}%
-  \renewcommand{\small}{\fontsize{8.5}{11.5}\selectfont}%
-  \renewcommand{\footnotesize}{\fontsize{7.5}{10.2}\selectfont}%
-  \renewcommand{\scriptsize}{\fontsize{6.5}{8.8}\selectfont}%
-  \renewcommand{\tiny}{\fontsize{6.5}{8.8}\selectfont}}
+  \renewcommand{\normalsize}{\fontsize{9}{12}\selectfont}%
+  \renewcommand{\small}{\fontsize{9}{12}\selectfont}%
+  \renewcommand{\footnotesize}{\fontsize{7.5}{10}\selectfont}%
+  \renewcommand{\scriptsize}{\fontsize{7.5}{10}\selectfont}%
+  \renewcommand{\tiny}{\fontsize{7.5}{10}\selectfont}}
 \linespread{1.42}
 \setlength{\parskip}{0pt}
 

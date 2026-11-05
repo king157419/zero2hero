@@ -11,7 +11,7 @@
   axis line style={figline}, tick style={figline},
   xtick={1,10,100,1000,10000}, ytick={1,10,100,1000},
   xticklabels={1,10,100,{1\,000},{10\,000}}, yticklabels={1,10,100,{1\,000}},
-  minor tick num=0, clip=false,
+  minor tick num=0, clip=false, tick pos=left,
 ]
   % 屋顶线：min(989, 3.35 I)
   \addplot[draw=ink, line width=1.1pt, domain=0.3:295, samples=2] {3.35*x};
@@ -19,7 +19,7 @@
   % 拐点
   \draw[dashed, rulegray] (axis cs:295,1) -- (axis cs:295,989);
   \node[note, anchor=south west, inner sep=2pt] at (axis cs:360,1.5) {拐点 I\textsuperscript{*} ≈ 295};
-  \node[note, anchor=south] at (axis cs:2300,1050) {计算受限区：P\textsubscript{peak}};
+  \node[note, anchor=south] at (axis cs:2300,1100) {计算受限区：P\textsubscript{peak}};
   \node[note, anchor=south west] at (axis cs:0.4,40) {访存受限区：I\,·\,B\textsubscript{mem}};
   % 解码（批大小 1）
   \addplot[only marks, mark=*, mark size=2.4pt, warn] coordinates {(1,3.35)};
