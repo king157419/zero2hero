@@ -1,0 +1,180 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand*\HyPL@Entry[1]{}
+\HyPL@Entry{0<</S/D>>}
+\@writefile{toc}{\contentsline {chapter}{\numberline {第4章\hspace  {.3em}}大模型计算系统}{1}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:system}{{4}{1}{大模型计算系统}{chapter.4}{}}
+\citation{kaplan2020scaling}
+\citation{nvidia2023h100}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}大模型对计算系统提出的要求}{2}{section.4.1}\protected@file@percent }
+\newlabel{sec:req}{{4.1}{2}{大模型对计算系统提出的要求}{section.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}两个典型场景}{2}{subsection.4.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}三个基本量的估算}{2}{subsection.4.1.2}\protected@file@percent }
+\newlabel{subsec:three-quantities}{{4.1.2}{2}{三个基本量的估算}{subsection.4.1.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{存储量}{2}{paragraph*.1}\protected@file@percent }
+\newlabel{eq:weight-mem}{{4-1}{2}{存储量}{equation.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{计算量}{2}{paragraph*.2}\protected@file@percent }
+\newlabel{eq:train-flops}{{4-2}{2}{计算量}{equation.4.2}{}}
+\citation{williams2009roofline}
+\newlabel{ex:gpus}{{4-1}{3}{计算量}{tcb@cnt@example.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{数据搬运量}{3}{paragraph*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}瓶颈判断工具：算术强度与 Roofline 模型}{3}{subsection.4.1.3}\protected@file@percent }
+\newlabel{subsec:roofline}{{4.1.3}{3}{瓶颈判断工具：算术强度与 Roofline 模型}{subsection.4.1.3}{}}
+\newlabel{eq:roofline}{{4-4}{3}{瓶颈判断工具：算术强度与 Roofline 模型}{equation.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-1}{\ignorespaces Roofline 模型示意。以峰值算力约 \SI {989}{TFLOP/s}、显存带宽约 \SI {3.35}{TB/s} 的 GPU 为例；坐标为对数刻度，各点为数量级估计}}{4}{figure.caption.4}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:roofline}{{4-1}{4}{Roofline 模型示意。以峰值算力约 \SI {989}{TFLOP/s}、显存带宽约 \SI {3.35}{TB/s} 的 GPU 为例；坐标为对数刻度，各点为数量级估计}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.4}从需求到方案：计算系统的四层结构}{4}{subsection.4.1.4}\protected@file@percent }
+\newlabel{subsec:four-layers}{{4.1.4}{4}{从需求到方案：计算系统的四层结构}{subsection.4.1.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-2}{\ignorespaces 大模型计算系统的四层结构。左侧为各层满足的需求，右侧为对应的章节；向下的箭头表示上层向下层提交的工作，向上的箭头表示下层向上层提供的能力}}{5}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:overview}{{4-2}{5}{大模型计算系统的四层结构。左侧为各层满足的需求，右侧为对应的章节；向下的箭头表示上层向下层提交的工作，向上的箭头表示下层向上层提供的能力}{figure.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4-1}{\ignorespaces 本章内容与系统层次的对应关系}}{5}{table.caption.6}\protected@file@percent }
+\newlabel{tab:roadmap}{{4-1}{5}{本章内容与系统层次的对应关系}{table.caption.6}{}}
+\citation{hwu2026pmpp}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}算力资源：让计算算得快、存得下、传得动}{6}{section.4.2}\protected@file@percent }
+\newlabel{sec:hw}{{4.2}{6}{算力资源：让计算算得快、存得下、传得动}{section.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}计算芯片：CPU、GPU 与 NPU/ASIC}{6}{subsection.4.2.1}\protected@file@percent }
+\newlabel{subsec:chips}{{4.2.1}{6}{计算芯片：CPU、GPU 与 NPU/ASIC}{subsection.4.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-3}{\ignorespaces 三类计算芯片的结构取舍（示意）。从左到右，芯片的通用性逐渐降低，矩阵运算的吞吐与能效逐渐提高}}{7}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:chips}{{4-3}{7}{三类计算芯片的结构取舍（示意）。从左到右，芯片的通用性逐渐降低，矩阵运算的吞吐与能效逐渐提高}{figure.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4-2}{\ignorespaces 计算芯片的适用性比较}}{7}{table.caption.8}\protected@file@percent }
+\newlabel{tab:chips}{{4-2}{7}{计算芯片的适用性比较}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}存储层次：为什么 HBM 如此重要}{7}{subsection.4.2.2}\protected@file@percent }
+\newlabel{subsec:hbm}{{4.2.2}{7}{存储层次：为什么 HBM 如此重要}{subsection.4.2.2}{}}
+\citation{nvidia2023h100}
+\citation{nvidia2023h100}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-4}{\ignorespaces 加速器视角下的存储层次（数量级示意，以 H100 级数据中心 GPU 为参照）。模型权重和 KV 缓存主要驻留在 HBM 中，计算时被反复读入片上 SRAM}}{8}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:memory}{{4-4}{8}{加速器视角下的存储层次（数量级示意，以 H100 级数据中心 GPU 为参照）。模型权重和 KV 缓存主要驻留在 HBM 中，计算时被反复读入片上 SRAM}{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}互联技术：PCIe、NVLink 与 InfiniBand}{8}{subsection.4.2.3}\protected@file@percent }
+\newlabel{subsec:interconnect}{{4.2.3}{8}{互联技术：PCIe、NVLink 与 InfiniBand}{subsection.4.2.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-5}{\ignorespaces 单机内与跨节点的典型数据通路（示意）。机内 GPU 经 NVLink/NVSwitch 互联，GPU 与 CPU、网卡之间经 PCIe 连接，不同服务器之间经 InfiniBand 网络通信。带宽为 H100 一代硬件的数量级参考值，具体取决于配置}}{9}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:interconnect}{{4-5}{9}{单机内与跨节点的典型数据通路（示意）。机内 GPU 经 NVLink/NVSwitch 互联，GPU 与 CPU、网卡之间经 PCIe 连接，不同服务器之间经 InfiniBand 网络通信。带宽为 H100 一代硬件的数量级参考值，具体取决于配置}{figure.caption.10}{}}
+\citation{nvidia2024cuda}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}驱动与计算软件栈：CUDA、CANN 与 NeuWare}{10}{subsection.4.2.4}\protected@file@percent }
+\newlabel{subsec:stack}{{4.2.4}{10}{驱动与计算软件栈：CUDA、CANN 与 NeuWare}{subsection.4.2.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-6}{\ignorespaces 计算软件栈的层次与三种平台的对应组件。一次矩阵乘法调用自上而下依次经过各层；不同平台的组件职责相似，但实现与行为并不完全等价}}{10}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:stack}{{4-6}{10}{计算软件栈的层次与三种平台的对应组件。一次矩阵乘法调用自上而下依次经过各层；不同平台的组件职责相似，但实现与行为并不完全等价}{figure.caption.11}{}}
+\citation{zhang2023d2l}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}深度学习框架：把算法组织成可执行的计算}{11}{section.4.3}\protected@file@percent }
+\newlabel{sec:fw}{{4.3}{11}{深度学习框架：把算法组织成可执行的计算}{section.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}为什么需要深度学习框架}{11}{subsection.4.3.1}\protected@file@percent }
+\citation{paszke2019pytorch}
+\citation{ansel2024pytorch2}
+\@writefile{lot}{\contentsline {table}{\numberline {4-3}{\ignorespaces 代表性深度学习框架}}{12}{table.caption.12}\protected@file@percent }
+\newlabel{tab:frameworks}{{4-3}{12}{代表性深度学习框架}{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}PyTorch：张量、自动微分与编译优化}{12}{subsection.4.3.2}\protected@file@percent }
+\newlabel{subsec:pytorch}{{4.3.2}{12}{PyTorch：张量、自动微分与编译优化}{subsection.4.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{张量}{12}{paragraph*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{自动微分}{12}{paragraph*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{动态图与编译}{12}{paragraph*.15}\protected@file@percent }
+\citation{rajbhandari2020zero}
+\citation{hu2021lora}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}训练显存：一张卡要装下什么}{13}{subsection.4.3.3}\protected@file@percent }
+\newlabel{subsec:train-mem}{{4.3.3}{13}{训练显存：一张卡要装下什么}{subsection.4.3.3}{}}
+\newlabel{eq:train-mem}{{4-6}{13}{训练显存：一张卡要装下什么}{equation.4.6}{}}
+\newlabel{ex:trainmem}{{4-2}{13}{训练显存：一张卡要装下什么}{tcb@cnt@example.4.2}{}}
+\citation{shoeybi2019megatron}
+\citation{rajbhandari2020zero}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}单卡放不下怎么办：分布式训练}{14}{subsection.4.3.4}\protected@file@percent }
+\newlabel{subsec:parallel}{{4.3.4}{14}{单卡放不下怎么办：分布式训练}{subsection.4.3.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-7}{\ignorespaces 三种基本并行方式的切分对象（以 2 张 GPU、4 层模型为例）。红色箭头表示频繁通信，应放在高带宽链路上}}{14}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:parallel}{{4-7}{14}{三种基本并行方式的切分对象（以 2 张 GPU、4 层模型为例）。红色箭头表示频繁通信，应放在高带宽链路上}{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-8}{\ignorespaces 7B 模型在 8 张 GPU 上采用不同 ZeRO 阶段时，每张卡的模型状态显存（BF16 混合精度 + Adam，未计激活值与通信缓冲区）}}{15}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:zero}{{4-8}{15}{7B 模型在 8 张 GPU 上采用不同 ZeRO 阶段时，每张卡的模型状态显存（BF16 混合精度 + Adam，未计激活值与通信缓冲区）}{figure.caption.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.5}训练系统的四类瓶颈}{15}{subsection.4.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4-4}{\ignorespaces 大规模训练的四类瓶颈与应对手段}}{16}{table.caption.18}\protected@file@percent }
+\newlabel{tab:walls}{{4-4}{16}{大规模训练的四类瓶颈与应对手段}{table.caption.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}推理服务：让模型又快又省地回答请求}{16}{section.4.4}\protected@file@percent }
+\newlabel{sec:infer}{{4.4}{16}{推理服务：让模型又快又省地回答请求}{section.4.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}推理的两个阶段：预填充与解码}{16}{subsection.4.4.1}\protected@file@percent }
+\newlabel{subsec:prefill-decode}{{4.4.1}{16}{推理的两个阶段：预填充与解码}{subsection.4.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{预填充（Prefill）}{16}{paragraph*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{解码（Decode）}{17}{paragraph*.20}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4-9}{\ignorespaces 一次推理请求的两个阶段。预填充并行处理全部输入、写入 KV 缓存并给出首个 token；之后每个解码步只生成一个 token，却要读取全部权重与已有缓存}}{17}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:prefill}{{4-9}{17}{一次推理请求的两个阶段。预填充并行处理全部输入、写入 KV 缓存并给出首个 token；之后每个解码步只生成一个 token，却要读取全部权重与已有缓存}{figure.caption.21}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}KV 缓存：用存储换计算}{17}{subsection.4.4.2}\protected@file@percent }
+\newlabel{subsec:kvcache}{{4.4.2}{17}{KV 缓存：用存储换计算}{subsection.4.4.2}{}}
+\newlabel{eq:kv}{{4-7}{17}{KV 缓存：用存储换计算}{equation.4.7}{}}
+\citation{dao2022flashattention}
+\citation{kwon2023vllm}
+\newlabel{ex:kv}{{4-3}{18}{KV 缓存：用存储换计算}{tcb@cnt@example.4.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-10}{\ignorespaces 例\,\ref {ex:kv} 中 8B 模型的 KV 缓存随序列长度 $T$ 与并发请求数 $B$ 的变化（BF16）。曲线与虚线的交点给出了该配置下能够支撑的最大上下文长度}}{18}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:kv}{{4-10}{18}{例\,\ref {ex:kv} 中 8B 模型的 KV 缓存随序列长度 $T$ 与并发请求数 $B$ 的变化（BF16）。曲线与虚线的交点给出了该配置下能够支撑的最大上下文长度}{figure.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}推理优化技术}{18}{subsection.4.4.3}\protected@file@percent }
+\newlabel{subsec:infer-opt}{{4.4.3}{18}{推理优化技术}{subsection.4.4.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{FlashAttention：减少注意力计算中的显存读写}{18}{paragraph*.23}\protected@file@percent }
+\citation{yu2022orca}
+\citation{dettmers2023qlora}
+\@writefile{toc}{\contentsline {paragraph}{PagedAttention：像管理内存页一样管理 KV 缓存}{19}{paragraph*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{连续批处理：在每个解码步动态调度请求}{19}{paragraph*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{量化：用更少的位数表示数值}{19}{paragraph*.26}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4-5}{\ignorespaces 常见推理优化技术的作用位置}}{19}{table.caption.27}\protected@file@percent }
+\newlabel{tab:infer-opt}{{4-5}{19}{常见推理优化技术的作用位置}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.4}如何衡量推理性能}{19}{subsection.4.4.4}\protected@file@percent }
+\newlabel{subsec:metrics}{{4.4.4}{19}{如何衡量推理性能}{subsection.4.4.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}应用系统工具：从模型到产品}{20}{section.4.5}\protected@file@percent }
+\newlabel{sec:tools}{{4.5}{20}{应用系统工具：从模型到产品}{section.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}一个大模型应用由哪些部分组成}{20}{subsection.4.5.1}\protected@file@percent }
+\citation{kwon2023vllm}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-11}{\ignorespaces 大模型应用的典型分层与五类工具的位置。每个框底部的色带标出该层对应的工具类别。编排层发起检索与模型调用；微调（虚线框）在线下进行，产出的权重交给模型服务层加载}}{21}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:app-arch}{{4-11}{21}{大模型应用的典型分层与五类工具的位置。每个框底部的色带标出该层对应的工具类别。编排层发起检索与模型调用；微调（虚线框）在线下进行，产出的权重交给模型服务层加载}{figure.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}五类工具的定位}{21}{subsection.4.5.2}\protected@file@percent }
+\newlabel{subsec:tool-types}{{4.5.2}{21}{五类工具的定位}{subsection.4.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}部署工具：本地运行与高并发服务}{21}{subsection.4.5.3}\protected@file@percent }
+\newlabel{subsec:deploy}{{4.5.3}{21}{部署工具：本地运行与高并发服务}{subsection.4.5.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{面向易用的本地运行工具}{21}{paragraph*.30}\protected@file@percent }
+\citation{anthropic2024agents}
+\citation{milvus2024}
+\@writefile{lot}{\contentsline {table}{\numberline {4-6}{\ignorespaces 五类应用系统工具的定位}}{22}{table.caption.29}\protected@file@percent }
+\newlabel{tab:tools}{{4-6}{22}{五类应用系统工具的定位}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {paragraph}{面向吞吐的推理引擎}{22}{paragraph*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.4}编排、检索与微调工具}{22}{subsection.4.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{编排平台与应用开发框架}{22}{paragraph*.32}\protected@file@percent }
+\citation{hu2021lora,dettmers2023qlora}
+\@writefile{toc}{\contentsline {paragraph}{向量数据库与检索增强}{23}{paragraph*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{微调工具}{23}{paragraph*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}综合案例：课程知识问答助手的系统设计}{23}{section.4.6}\protected@file@percent }
+\newlabel{sec:case}{{4.6}{23}{综合案例：课程知识问答助手的系统设计}{section.4.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-12}{\ignorespaces 自上而下的系统设计流程及其在课程知识问答助手中的取值。高亮的估算环节决定了方案能否成立}}{24}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:case-flow}{{4-12}{24}{自上而下的系统设计流程及其在课程知识问答助手中的取值。高亮的估算环节决定了方案能否成立}{figure.caption.35}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}第一步：明确需求与服务指标}{24}{subsection.4.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}第二步：自上而下选择方案}{24}{subsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{应用层：先 RAG，不微调}{24}{paragraph*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{模型层：选择规模与精度}{25}{paragraph*.37}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{服务层：选择推理引擎}{25}{paragraph*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}第三步：估算效果，检查可行性}{25}{subsection.4.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{显存是否够用}{25}{paragraph*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{速度是否够快}{25}{paragraph*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{瓶颈可能在哪里}{25}{paragraph*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.4}第四步：实测验证}{25}{subsection.4.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.7}本章小结与展望}{26}{section.4.7}\protected@file@percent }
+\newlabel{sec:summary}{{4.7}{26}{本章小结与展望}{section.4.7}{}}
+\@writefile{toc}{\contentsline {section}{习题}{27}{section*.42}\protected@file@percent }
+\gdef \LT@i {\LT@entry 
+    {1}{91.35826pt}\LT@entry 
+    {1}{177.02597pt}\LT@entry 
+    {1}{119.81102pt}}
+\@writefile{toc}{\contentsline {section}{本章术语}{28}{section*.44}\protected@file@percent }
+\bibcite{zhao2024llm}{{1}{}{{}}{{}}}
+\bibcite{zhang2023d2l}{{2}{}{{}}{{}}}
+\bibcite{goodfellow2016deep}{{3}{}{{}}{{}}}
+\bibcite{hwu2026pmpp}{{4}{}{{}}{{}}}
+\bibcite{kaplan2020scaling}{{5}{}{{}}{{}}}
+\bibcite{williams2009roofline}{{6}{}{{}}{{}}}
+\bibcite{nvidia2023h100}{{7}{}{{}}{{}}}
+\bibcite{nvidia2024cuda}{{8}{}{{}}{{}}}
+\bibcite{paszke2019pytorch}{{9}{}{{}}{{}}}
+\bibcite{ansel2024pytorch2}{{10}{}{{}}{{}}}
+\bibcite{rajbhandari2020zero}{{11}{}{{}}{{}}}
+\bibcite{shoeybi2019megatron}{{12}{}{{}}{{}}}
+\bibcite{hu2021lora}{{13}{}{{}}{{}}}
+\bibcite{dettmers2023qlora}{{14}{}{{}}{{}}}
+\bibcite{dao2022flashattention}{{15}{}{{}}{{}}}
+\bibcite{kwon2023vllm}{{16}{}{{}}{{}}}
+\bibcite{yu2022orca}{{17}{}{{}}{{}}}
+\bibcite{milvus2024}{{18}{}{{}}{{}}}
+\bibcite{anthropic2024agents}{{19}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\gdef \@abspage@last{29}

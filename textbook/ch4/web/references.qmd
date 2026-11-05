@@ -1,0 +1,67 @@
+---
+title: "术语与参考文献"
+---
+
+## 本章术语
+
+  缩写/术语           英文全称                                        中文
+  ------------------- ----------------------------------------------- ---------------------------
+  ASIC                Application-Specific Integrated Circuit         专用集成电路
+  CPU / GPU / NPU     Central / Graphics / Neural Processing Unit     中央/图形/神经网络处理器
+  HBM                 High Bandwidth Memory                           高带宽内存
+  TSV                 Through-Silicon Via                             硅通孔
+  PCIe                Peripheral Component Interconnect Express       高速外设互联总线
+  RDMA                Remote Direct Memory Access                     远程直接内存访问
+  RoCE                RDMA over Converged Ethernet                    基于以太网的 RDMA
+  Roofline            Roofline Model                                  屋顶线模型
+  DP / TP / PP / EP   Data / Tensor / Pipeline / Expert Parallelism   数据/张量/流水线/专家并行
+  ZeRO                Zero Redundancy Optimizer                       零冗余优化器
+  FSDP                Fully Sharded Data Parallel                     全分片数据并行
+  KV Cache            Key-Value Cache                                 键值缓存
+  TTFT                Time To First Token                             首 token 延迟
+  TPOT                Time Per Output Token                           每 token 输出时间
+  GQA / MQA           Grouped-Query / Multi-Query Attention           分组查询/多查询注意力
+  RAG                 Retrieval-Augmented Generation                  检索增强生成
+  LoRA                Low-Rank Adaptation                             低秩适配
+
+
+## 参考文献
+
+[\[1\]]{#ref-1 .refnum} 赵鑫, 李军毅, 周昆, 唐天一, 文继荣. 大语言模型[M]. 北京: 高等教育出版社, 2024.
+
+[\[2\]]{#ref-2 .refnum} Zhang A, Lipton Z C, Li M, Smola A J. Dive into Deep Learning[M]. Cambridge: Cambridge University Press, 2023. <https://d2l.ai>
+
+[\[3\]]{#ref-3 .refnum} Goodfellow I, Bengio Y, Courville A. Deep Learning[M]. Cambridge, MA: MIT Press, 2016.
+
+[\[4\]]{#ref-4 .refnum} Hwu W W, Kirk D B, El Hajj I. Programming Massively Parallel Processors: A Hands-on Approach[M]. 5th ed. Cambridge, MA: Morgan Kaufmann, 2026.
+
+[\[5\]]{#ref-5 .refnum} Kaplan J, McCandlish S, Henighan T, et al. Scaling Laws for Neural Language Models[EB/OL]. arXiv:2001.08361, 2020.
+
+[\[6\]]{#ref-6 .refnum} Williams S, Waterman A, Patterson D. Roofline: An Insightful Visual Performance Model for Multicore Architectures[J]. Communications of the ACM, 2009, 52(4): 65–76.
+
+[\[7\]]{#ref-7 .refnum} NVIDIA. NVIDIA H100 Tensor Core GPU Datasheet[EB/OL]. 2023. <https://www.nvidia.com/en-us/data-center/h100/>
+
+[\[8\]]{#ref-8 .refnum} NVIDIA. CUDA C++ Programming Guide[EB/OL]. <https://docs.nvidia.com/cuda/cuda-c-programming-guide/>
+
+[\[9\]]{#ref-9 .refnum} Paszke A, Gross S, Massa F, et al. PyTorch: An Imperative Style, High-Performance Deep Learning Library[C]//Advances in Neural Information Processing Systems 32. 2019: 8024–8035.
+
+[\[10\]]{#ref-10 .refnum} Ansel J, Yang E, He H, et al. PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation[C]//Proceedings of ASPLOS. 2024: 929–947.
+
+[\[11\]]{#ref-11 .refnum} Rajbhandari S, Rasley J, Ruwase O, He Y. ZeRO: Memory Optimizations Toward Training Trillion Parameter Models[C]//Proceedings of SC20. 2020: 1–16.
+
+[\[12\]]{#ref-12 .refnum} Shoeybi M, Patwary M, Puri R, et al. Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism[EB/OL]. arXiv:1909.08053, 2019.
+
+[\[13\]]{#ref-13 .refnum} Hu E J, Shen Y, Wallis P, et al. LoRA: Low-Rank Adaptation of Large Language Models[EB/OL]. arXiv:2106.09685, 2021.
+
+[\[14\]]{#ref-14 .refnum} Dettmers T, Pagnoni A, Holtzman A, Zettlemoyer L. QLoRA: Efficient Finetuning of Quantized LLMs[EB/OL]. arXiv:2305.14314, 2023.
+
+[\[15\]]{#ref-15 .refnum} Dao T, Fu D Y, Ermon S, et al. FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness[C]//Advances in Neural Information Processing Systems 35. 2022.
+
+[\[16\]]{#ref-16 .refnum} Kwon W, Li Z, Zhuang S, et al. Efficient Memory Management for Large Language Model Serving with PagedAttention[C]//Proceedings of SOSP. 2023: 611–626.
+
+[\[17\]]{#ref-17 .refnum} Yu G I, Jeong J S, Kim G W, et al. Orca: A Distributed Serving System for Transformer-Based Generative Models[C]//Proceedings of OSDI. 2022: 521–538.
+
+[\[18\]]{#ref-18 .refnum} Milvus. What is Milvus?[EB/OL]. <https://milvus.io/docs/overview.md>
+
+[\[19\]]{#ref-19 .refnum} Anthropic. Building Effective Agents[EB/OL]. 2024. <https://www.anthropic.com/research/building-effective-agents>
+

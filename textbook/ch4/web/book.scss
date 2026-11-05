@@ -1,0 +1,87 @@
+/*-- scss:defaults --*/
+// 与纸质版一致：正文宋体 + Times，标题与强调黑体；只用黑、灰与一种青绿强调色
+$font-family-sans-serif: "Times New Roman", Times, "Songti SC", "STSong", SimSun, "Noto Serif CJK SC", "Source Han Serif SC", serif;
+$headings-font-family: "Times New Roman", Times, "Heiti SC", "STHeiti", SimHei, "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+$font-size-root: 17px;
+$line-height-base: 1.85;
+$body-color: #1A1A1A;
+$link-color: #2E7D78;
+$primary: #2E7D78;
+$headings-font-weight: 400;
+$h1-font-size: 1.6rem;
+$h2-font-size: 1.3rem;
+$h3-font-size: 1.1rem;
+$code-color: #1A1A1A;
+
+/*-- scss:rules --*/
+:root { --ink: #1A1A1A; --rule: #8C8C8C; --boxgray: #F3F3F1; --accent: #2E7D78; --accentpale: #DCEDEB; --warn: #B23A2E; }
+body { text-align: justify; text-justify: inter-ideograph; }
+strong, b { font-family: $headings-font-family; font-weight: 400; }
+h1.title { font-size: 1.75rem; letter-spacing: .02em; }
+h2 { margin-top: 2.2rem; border-bottom: none; }
+p { margin-bottom: .9rem; }
+main a { text-decoration: none; }
+main a:hover { text-decoration: underline; }
+.sidebar-item-text, .nav-link { font-family: $headings-font-family; }
+
+// 图
+.bookfig { margin: 1.6rem 0 1.8rem; text-align: center; }
+.bookfig img { max-width: 100%; height: auto; }
+.figcap, .tabcap { font-size: .88rem; color: var(--ink); line-height: 1.6; text-align: center; margin-top: .5rem; }
+.figcap p, .tabcap p { margin: 0; text-align: left; display: inline-block; }
+.tabcap { margin-bottom: .4rem; }
+
+// 表（三线表）
+.booktab { margin: 1.4rem 0 1.6rem; }
+main table { font-size: .9rem; border-top: 1.5px solid var(--ink) !important; border-bottom: 1.5px solid var(--ink) !important; }
+main table thead th { border-bottom: .8px solid var(--ink) !important; font-family: $headings-font-family; font-weight: 400; }
+main table td, main table th { border-left: none; border-right: none; padding: .35rem .6rem; vertical-align: top; }
+main table tbody tr { border: none; }
+.table-striped > tbody > tr:nth-of-type(odd) > * { --bs-table-accent-bg: transparent; }
+
+// 文本框：与 PDF 中的四种框对应
+.bookbox { margin: 1.2rem 0 1.4rem; padding: .7rem 1rem; font-size: .95rem; }
+.bookbox p:last-child { margin-bottom: 0; }
+.bookbox .boxtitle { font-family: $headings-font-family; display: block; margin-bottom: .35rem; }
+.bookbox.guide { background: var(--boxgray); border-left: 3px solid var(--ink); }
+.bookbox.keypoints { background: var(--boxgray); }
+.bookbox.pitfall { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding-left: .3rem; padding-right: .3rem; }
+.bookbox.example { border: .6px solid var(--rule); }
+
+// 交互组件
+.widget { margin: 1.4rem 0 2rem; padding: 1rem 1.1rem 1.1rem; border: .6px solid var(--rule); background: #fff; font-size: .92rem; }
+.widget .w-title { font-family: $headings-font-family; margin-bottom: .2rem; }
+.widget .w-hint { color: #555; font-size: .85rem; margin-bottom: .8rem; }
+.widget .w-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .5rem 1.2rem; margin-bottom: .8rem; }
+.widget label { display: flex; flex-direction: column; gap: .15rem; font-size: .86rem; }
+.widget label .w-val { font-family: $headings-font-family; color: var(--accent); }
+.widget input[type=range] { accent-color: var(--accent); width: 100%; }
+.widget select { font: inherit; font-size: .86rem; padding: .15rem .3rem; border: .6px solid var(--rule); background: #fff; }
+.widget svg { width: 100%; height: auto; display: block; font-family: "Times New Roman", Times, "Songti SC", SimSun, serif; }
+.widget .w-out { margin-top: .6rem; line-height: 1.7; }
+.widget .w-out b { font-family: $headings-font-family; font-weight: 400; }
+.widget .w-tabs { display: flex; gap: .4rem; margin-bottom: .7rem; flex-wrap: wrap; }
+.widget .w-tabs button { font: inherit; font-size: .86rem; border: .6px solid var(--rule); background: #fff; padding: .15rem .7rem; cursor: pointer; }
+.widget .w-tabs button.on { background: var(--accentpale); border-color: var(--accent); }
+.widget .warn { color: var(--warn); }
+.widget .ok { color: var(--accent); }
+.ref-list p, .refnum { font-size: .9rem; }
+
+@media (max-width: 600px) {
+  body { text-align: left; }
+  .bookbox { padding: .6rem .7rem; }
+  main table { font-size: .8rem; }
+}
+h1, h2, h3, h4, .title { font-weight: 400 !important; }
+// 长公式在窄屏上各自横向滚动，整页不出现横向滚动
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+// 编号链接不在“4-10”中间断行
+main p a:not([href^="http"]), .figcap a { white-space: nowrap; }
+@media (max-width: 600px) {
+  // 手机上图保持可读的尺寸，左右滑动查看
+  .bookfig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .bookfig img { min-width: 520px; }
+  .bookfig .figcap { position: sticky; left: 0; max-width: calc(100vw - 32px); }
+}
+main table > :not(caption) > * > * { border-bottom-width: 0 !important; }
+main table thead th { border-bottom: .8px solid var(--ink) !important; }

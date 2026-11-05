@@ -1,0 +1,57 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - s4-1.qmd
+    - s4-2.qmd
+    - s4-3.qmd
+    - s4-4.qmd
+    - s4-5.qmd
+    - s4-6.qmd
+    - s4-7.qmd
+    - exercises.qmd
+    - references.qmd
+
+lang: zh
+
+website:
+  title: "大模型计算系统"
+  description: "《大语言模型原理与技术》第 4 章：大模型计算系统（网页版）"
+  page-navigation: true
+  search: true
+  reader-mode: false
+  sidebar:
+    style: floating
+    collapse-level: 1
+    contents:
+      - text: "第 4 章　大模型计算系统"
+        href: index.qmd
+      - s4-1.qmd
+      - s4-2.qmd
+      - s4-3.qmd
+      - s4-4.qmd
+      - s4-5.qmd
+      - s4-6.qmd
+      - s4-7.qmd
+      - exercises.qmd
+      - references.qmd
+    tools:
+      - icon: file-earmark-pdf
+        href: 第4章_大模型计算系统.pdf
+        text: "下载 PDF 版"
+
+format:
+  html:
+    theme: [cosmo, book.scss]
+    toc: true
+    toc-title: "本页目录"
+    toc-depth: 2
+    number-sections: false
+    html-math-method: mathjax
+    include-after-body:
+      - text: '<script src="widgets.js"></script>'
+    resources:
+      - widgets.js
+      - 第4章_大模型计算系统.pdf
+      - figs/*.svg
