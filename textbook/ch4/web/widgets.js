@@ -1,5 +1,6 @@
 /* 第 4 章交互组件：Roofline、训练显存（ZeRO）、推理显存（权重 + KV 缓存）
-   全部公式与正文一致：式 4-1、4-4、4-6、4-7，例 4-2、例 4-3。无外部依赖。 */
+   全部公式与正文一致：式 4-1、4-4、4-6、4-7，例 4-2、例 4-3。无外部依赖。
+   参数改变时，图形在约 0.3 s 内从旧状态平滑过渡到新状态；系统设置“减少动态效果”时直接跳到结果。 */
 (function () {
   "use strict";
   const C = { ink: "#1A1A1A", rule: "#8C8C8C", grid: "#E2E2DF", fill: "#EDEDEA", line: "#4D4D4D",
@@ -11,10 +12,37 @@
     if (parent) parent.appendChild(e);
     return e;
   };
-  const txt = (p, x, y, s, a = {}) => { const t = el("text", Object.assign({ x, y, fill: C.ink, "font-size": 12 }, a), p); t.setAttribute("font-size", (+t.getAttribute("font-size") * 1.2).toFixed(1)); t.textContent = s; return t; };
+  const FS = 1.2; // SVG 字号整体放大系数
+  const txt = (p, x, y, s, a = {}) => {
+    const t = el("text", Object.assign({ x, y, fill: C.ink }, a), p);
+    t.setAttribute("font-size", ((a["font-size"] || 12) * FS).toFixed(1));
+    t.textContent = s; return t;
+  };
+  // 白色描边衬底：文字压在线上时仍清楚
+  const HALO = { stroke: "#fff", "stroke-width": 4, "paint-order": "stroke", "stroke-linejoin": "round" };
+  // 估算文字宽度（中文 1 em，其余 0.55 em）
+  const textW = (s, size = 12) => [...s].reduce((w, ch) => w + (/[⺀-￿]/.test(ch) ? 1 : 0.55), 0) * size * FS;
   const h = (html) => { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; };
   const fmt = (v, d = 1) => (Math.abs(v) >= 100 ? Math.round(v).toLocaleString("en-US").replace(/,/g, " ") : v.toFixed(d));
   const GB = 1e9, GiB = 2 ** 30;
+
+  // 平滑过渡：每次给出目标参数，按缓出曲线从当前值插值到目标值
+  const REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function tweener(render, dur = 300) {
+    let cur = null, raf = 0;
+    return (target) => {
+      cancelAnimationFrame(raf);
+      if (!cur || REDUCE) { cur = Object.assign({}, target); render(cur); return; }
+      const from = Object.assign({}, cur), t0 = performance.now();
+      const step = (now) => {
+        const u = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - u, 3);
+        for (const k in target) cur[k] = from[k] + (target[k] - from[k]) * e;
+        render(cur);
+        if (u < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+  }
 
   // 通用：滑块 / 下拉
   function slider(label, min, max, step, val, show) {
@@ -35,8 +63,6 @@
     const grid = h(`<div class="w-grid"></div>`); root.appendChild(grid);
     return grid;
   }
-
-  // 对数坐标
   const logScale = (d0, d1, r0, r1) => (v) => r0 + (Math.log10(v) - Math.log10(d0)) / (Math.log10(d1) - Math.log10(d0)) * (r1 - r0);
   const linScale = (d0, d1, r0, r1) => (v) => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
 
@@ -61,40 +87,46 @@
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Roofline 图" }); root.appendChild(svg);
     const out = h(`<div class="w-out"></div>`); root.appendChild(out);
     const xs = logScale(0.3, 30000, m.l, W - m.r);
-    function draw() {
-      const g = GPUS[gpu.get()], b = +prec.get(), T = 2 ** tok.get();
-      const ymax = g.peak * 3;
-      const ys = logScale(1, ymax, H - m.b, m.t);
+
+    function render(p) {
+      const T = 2 ** p.lt, b = 2 ** p.lb, peak = p.peak, bw = p.bw;
+      const ymax = peak * 3, ys = logScale(1, ymax, H - m.b, m.t);
       svg.innerHTML = "";
-      // 网格与坐标
-      for (let e = 0; e <= 4; e++) { const v = 10 ** e; const x = xs(v); el("line", { x1: x, x2: x, y1: m.t, y2: H - m.b, stroke: C.grid }, svg); txt(svg, x, H - m.b + 16, v >= 1000 ? (v === 1000 ? "1 000" : "10 000") : String(v), { "text-anchor": "middle" }); }
-      for (let e = 0; 10 ** e <= ymax; e++) { const v = 10 ** e; const y = ys(v); el("line", { x1: m.l, x2: W - m.r, y1: y, y2: y, stroke: C.grid }, svg); txt(svg, m.l - 6, y + 4, v >= 1000 ? String(v).replace(/(\d)(\d{3})$/, "$1 $2") : String(v), { "text-anchor": "end" }); }
+      for (let e = 0; e <= 4; e++) { const v = 10 ** e, x = xs(v); el("line", { x1: x, x2: x, y1: m.t, y2: H - m.b, stroke: C.grid }, svg); txt(svg, x, H - m.b + 16, v === 1000 ? "1 000" : v === 10000 ? "10 000" : String(v), { "text-anchor": "middle" }); }
+      for (let e = 0; 10 ** e <= ymax; e++) { const v = 10 ** e, y = ys(v); el("line", { x1: m.l, x2: W - m.r, y1: y, y2: y, stroke: C.grid }, svg); txt(svg, m.l - 6, y + 4, v >= 1000 ? String(v).replace(/(\d)(\d{3})$/, "$1 $2") : String(v), { "text-anchor": "end" }); }
       el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "none", stroke: C.line }, svg);
       txt(svg, (m.l + W - m.r) / 2, H - 8, "算术强度 I / (FLOP/byte)", { "text-anchor": "middle", "font-size": 13 });
-      txt(svg, 16, (m.t + H - m.b) / 2, "可达性能 / (TFLOP/s)", { "text-anchor": "middle", "font-size": 13, transform: `rotate(-90 16 ${(m.t + H - m.b) / 2})` });
-      // 屋顶线：TFLOP/s = I × (TB/s)
-      const knee = g.peak / g.bw;
-      const x0 = 0.3, xk = Math.min(knee, 30000);
-      el("polyline", { points: `${xs(x0)},${ys(Math.max(1, x0 * g.bw))} ${xs(xk)},${ys(g.peak)} ${xs(30000)},${ys(g.peak)}`, fill: "none", stroke: C.ink, "stroke-width": 2.2 }, svg);
-      el("line", { x1: xs(knee), x2: xs(knee), y1: ys(g.peak), y2: H - m.b, stroke: C.rule, "stroke-dasharray": "4 3" }, svg);
-      txt(svg, xs(knee) + 6, H - m.b - 8, `拐点 I* ≈ ${fmt(knee, 0)}`);
-      const xm = Math.sqrt(0.3 * knee) / 3; txt(svg, xs(xm) - 8, ys(xm * g.bw) - 14, "访存受限区", { fill: C.dark, "text-anchor": "end" });
-      txt(svg, xs(Math.min(knee * 8, 12000)), ys(g.peak) - 8, "计算受限区", { fill: C.dark });
-      // 工作点
-      const I = T * 2 / b;
-      const P = Math.min(g.peak, I * g.bw);
-      const memb = I < knee;
-      el("circle", { cx: xs(I), cy: ys(P), r: 6, fill: memb ? C.warn : C.accent, stroke: "#fff", "stroke-width": 1.5 }, svg);
-      const lab = `${mode.get() === "decode" ? "解码 B" : "预填充 T"} = ${T}`;
-      txt(svg, xs(I) + (I > 3000 ? -10 : 10), ys(P) + (P > g.peak * 0.7 ? 20 : -10), lab, { "text-anchor": I > 3000 ? "end" : "start", fill: memb ? C.warn : C.accent });
-      const util = (P / g.peak) * 100;
-      out.innerHTML = `算术强度 <b>I ≈ ${fmt(I, 1)}</b> FLOP/byte，拐点 I* ≈ ${fmt(knee, 0)}；可达性能约 <b>${fmt(P, 1)} TFLOP/s</b>，为峰值的 ${fmt(util, util < 10 ? 1 : 0)}%。` +
-        (memb ? `<br><span class="warn">访存受限</span>：此时速度由显存带宽决定，算力大部分空闲。加大批量、降低权重精度都能提高算术强度。`
-              : `<br><span class="ok">计算受限</span>：此时速度由峰值算力决定，再加大批量也不会更快。`);
+      const cy = (m.t + H - m.b) / 2;
+      txt(svg, 16, cy, "可达性能 / (TFLOP/s)", { "text-anchor": "middle", "font-size": 13, transform: `rotate(-90 16 ${cy})` });
+      // 屋顶线
+      const knee = peak / bw;
+      el("polyline", { points: `${xs(0.3)},${ys(Math.max(1, 0.3 * bw))} ${xs(knee)},${ys(peak)} ${xs(30000)},${ys(peak)}`, fill: "none", stroke: C.ink, "stroke-width": 2.2 }, svg);
+      el("line", { x1: xs(knee), x2: xs(knee), y1: ys(peak), y2: H - m.b, stroke: C.rule, "stroke-dasharray": "4 3" }, svg);
+      // 区域标注固定在不会与工作点标签相撞的位置：访存区写在斜线下方，计算区写在屋顶下方右端
+      const xm = Math.sqrt(1 * knee);
+      txt(svg, xs(xm) + 10, ys(xm * bw) + 26, "访存受限区", { fill: C.dark });
+      txt(svg, W - m.r - 8, ys(peak) + 22, "计算受限区", { fill: C.dark, "text-anchor": "end" });
+      txt(svg, xs(knee) + 6, H - m.b - 8, `拐点 I* ≈ ${fmt(knee, 0)}`, Object.assign({}, HALO));
+      // 工作点：标签一律写在点的上方
+      const I = T * 2 / b, P = Math.min(peak, I * bw), memb = I < knee, col = memb ? C.warn : C.accent;
+      const px = xs(I), py = ys(P);
+      el("circle", { cx: px, cy: py, r: 6, fill: col, stroke: "#fff", "stroke-width": 1.5 }, svg);
+      const lab = `${p.mode ? "预填充 T" : "解码 B"} = ${Math.round(T)}`;
+      const right = px > W - m.r - textW(lab) - 24;
+      txt(svg, right ? px - 10 : px + 10, py - 12, lab, Object.assign({ "text-anchor": right ? "end" : "start", fill: col }, HALO));
     }
-    [gpu, prec, mode, tok].forEach((c) => c.on(draw));
-    mode.on(() => { const d = mode.get() === "decode"; tok.node.querySelector("span").firstChild.nodeValue = d ? "批大小 B：" : "输入长度 T："; tok.set(d ? 0 : 11); draw(); });
-    draw();
+    const go = tweener(render);
+    function update() {
+      const g = GPUS[gpu.get()], b = +prec.get(), T = 2 ** tok.get(), pf = mode.get() === "prefill";
+      go({ lt: tok.get(), lb: Math.log2(b), peak: g.peak, bw: g.bw, mode: pf ? 1 : 0 });
+      const knee = g.peak / g.bw, I = T * 2 / b, P = Math.min(g.peak, I * g.bw), util = (P / g.peak) * 100;
+      out.innerHTML = `算术强度 <b>I ≈ ${fmt(I, 1)}</b> FLOP/byte，拐点 I* ≈ ${fmt(knee, 0)}；可达性能约 <b>${fmt(P, 1)} TFLOP/s</b>，为峰值的 ${fmt(util, util < 10 ? 1 : 0)}%。` +
+        (I < knee ? `<br><span class="warn">访存受限</span>：此时速度由显存带宽决定，算力大部分空闲。加大批量、降低权重精度都能提高算术强度。`
+                  : `<br><span class="ok">计算受限</span>：此时速度由峰值算力决定，再加大批量也不会更快。`);
+    }
+    [gpu, prec, tok].forEach((c) => c.on(update));
+    mode.on(() => { const d = mode.get() === "decode"; tok.node.querySelector("span").firstChild.nodeValue = d ? "批大小 B：" : "输入长度 T："; tok.set(d ? 0 : 11); update(); });
+    update();
   }
 
   // ---------------- 2. 训练显存（ZeRO） ----------------
@@ -107,50 +139,60 @@
     const k = slider("GPU 数量 K", 0, ks.length - 1, 1, 3, (v) => `${ks[v]} 张`);
     const gpu = select("每张卡的显存", [["24", "24 GB"], ["40", "40 GB"], ["80", "80 GB"], ["141", "141 GB"]], "80");
     [n, k, gpu].forEach((c) => grid.appendChild(c.node));
-    const W = 640, H = 250, m = { l: 74, r: 54, t: 30, b: 40 };
+    const W = 640, H = 270, m = { l: 74, r: 60, t: 58, b: 40 };
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "ZeRO 显存条形图" }); root.appendChild(svg);
     const out = h(`<div class="w-out"></div>`); root.appendChild(out);
-    function draw() {
-      const N = sizes[n.get()] * 1e9, K = ks[k.get()], cap = +gpu.get();
-      const rows = [
-        ["数据并行", 2, 2, 12],
-        ["ZeRO-1", 2, 2, 12 / K],
-        ["ZeRO-2", 2, 2 / K, 12 / K],
-        ["ZeRO-3", 2 / K, 2 / K, 12 / K],
-      ].map(([name, p, g, o]) => ({ name, p: p * N / GB, g: g * N / GB, o: o * N / GB }));
-      const tot = rows.map((r) => r.p + r.g + r.o);
+    const parts = (N, K) => [
+      ["数据并行", 2, 2, 12], ["ZeRO-1", 2, 2, 12 / K], ["ZeRO-2", 2, 2 / K, 12 / K], ["ZeRO-3", 2 / K, 2 / K, 12 / K],
+    ].map(([name, p, g, o]) => ({ name, p: p * N / GB, g: g * N / GB, o: o * N / GB }));
+
+    function render(s) {
+      const N = 10 ** s.ln, K = 2 ** s.lk, cap = s.cap;
+      const rows = parts(N, K), tot = rows.map((r) => r.p + r.g + r.o);
       const xmax = Math.max(cap * 1.15, tot[0] * 1.05);
       const xs = linScale(0, xmax, m.l, W - m.r);
       svg.innerHTML = "";
-      // 图例
-      [["参数（BF16）", C.dark], ["梯度（BF16）", C.mid], ["优化器状态与主权重（FP32）", C.pale]].forEach(([t, c], i) => {
-        const x = m.l + i * 150; el("rect", { x, y: 8, width: 12, height: 10, fill: c, stroke: C.line, "stroke-width": .6 }, svg); txt(svg, x + 17, 17, t, { "font-size": 11.5 });
+      // 第一行：图例
+      let lx = m.l;
+      [["参数（BF16）", C.dark], ["梯度（BF16）", C.mid], ["优化器状态与主权重（FP32）", C.pale]].forEach(([t, c]) => {
+        el("rect", { x: lx, y: 6, width: 12, height: 10, fill: c, stroke: C.line, "stroke-width": .6 }, svg);
+        txt(svg, lx + 17, 15.5, t, { "font-size": 11.5 }); lx += 17 + textW(t, 11.5) + 22;
       });
+      // 第二行：单卡显存标注（单独一行，不会压到条形）
+      const cx = xs(cap), capLab = `单卡 ${Math.round(cap)} GB`;
+      const flip = cx + 6 + textW(capLab, 11.5) > W - 4;
+      txt(svg, flip ? cx - 6 : cx + 6, m.t - 14, capLab, { fill: C.warn, "font-size": 11.5, "text-anchor": flip ? "end" : "start" });
+      // 条形
       const bh = 26, gap = (H - m.t - m.b - bh * 4) / 3;
       rows.forEach((r, i) => {
         const y = m.t + i * (bh + gap);
-        txt(svg, m.l - 8, y + bh / 2 + 4, r.name, { "text-anchor": "end", "font-size": 12.5 });
+        txt(svg, m.l - 8, y + bh / 2 + 5, r.name, { "text-anchor": "end", "font-size": 12.5 });
         let x = m.l;
-        [[r.p, C.dark], [r.g, C.mid], [r.o, C.pale]].forEach(([v, c]) => { const w = xs(v) - m.l; el("rect", { x, y, width: Math.max(0, w), height: bh, fill: c, stroke: C.line, "stroke-width": .6 }, svg); x += w; });
-        const over = tot[i] > cap;
-        txt(svg, x + 5, y + bh / 2 + 4, fmt(tot[i], 1), { fill: over ? C.warn : C.ink, "font-size": 12 });
+        [[r.p, C.dark], [r.g, C.mid], [r.o, C.pale]].forEach(([v, c]) => { const w = Math.max(0, xs(v) - m.l); el("rect", { x, y, width: w, height: bh, fill: c, stroke: C.line, "stroke-width": .6 }, svg); x += w; });
+        txt(svg, x + 6, y + bh / 2 + 5, fmt(tot[i], 1), Object.assign({ fill: tot[i] > cap ? C.warn : C.ink, "font-size": 12 }, HALO));
       });
-      // 坐标与显存线
-      const ticks = 5, step = Math.pow(10, Math.floor(Math.log10(xmax / ticks)));
-      const st = [1, 2, 5, 10].map((s) => s * step).find((s) => xmax / s <= 7);
+      // 显存线画在条形之上、数值之下
+      el("line", { x1: cx, x2: cx, y1: m.t - 8, y2: H - m.b, stroke: C.warn, "stroke-dasharray": "4 3", "stroke-width": 1.2 }, svg);
+      svg.querySelectorAll("text[paint-order]").forEach((t) => svg.appendChild(t));
+      // 坐标轴
+      const step = Math.pow(10, Math.floor(Math.log10(xmax / 5)));
+      const st = [1, 2, 5, 10].map((v) => v * step).find((v) => xmax / v <= 7);
       for (let v = 0; v <= xmax; v += st) { const x = xs(v); el("line", { x1: x, x2: x, y1: H - m.b, y2: H - m.b + 4, stroke: C.line }, svg); txt(svg, x, H - m.b + 17, String(Math.round(v)), { "text-anchor": "middle", "font-size": 11.5 }); }
       el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: C.line }, svg);
-      txt(svg, (m.l + W - m.r) / 2, H - 6, "每张 GPU 上的模型状态显存 / GB", { "text-anchor": "middle", "font-size": 12.5 });
-      el("line", { x1: xs(cap), x2: xs(cap), y1: m.t - 6, y2: H - m.b, stroke: C.warn, "stroke-dasharray": "4 3", "stroke-width": 1.2 }, svg);
-      txt(svg, xs(cap) + 4, H - m.b - 6, `单卡 ${cap} GB`, { fill: C.warn, "font-size": 11.5 });
-      const fit = rows.filter((r, i) => tot[i] <= cap).map((r) => r.name);
+      txt(svg, (m.l + W - m.r) / 2, H - 4, "每张 GPU 上的模型状态显存 / GB", { "text-anchor": "middle", "font-size": 12.5 });
+    }
+    const go = tweener(render);
+    function update() {
+      const N = sizes[n.get()] * 1e9, K = ks[k.get()], cap = +gpu.get();
+      go({ ln: Math.log10(N), lk: Math.log2(K), cap });
+      const rows = parts(N, K), fit = rows.filter((r) => r.p + r.g + r.o <= cap).map((r) => r.name);
       out.innerHTML = `${sizes[n.get()]}B 模型、${K} 张卡：` + (fit.length
         ? `<span class="ok">${fit.join("、")}</span> 的模型状态能放进单卡 ${cap} GB（还需给激活值留出余量）。`
         : `<span class="warn">四种方式都放不下</span>，需要更多的卡、张量/流水线并行，或改用 LoRA 等参数高效微调。`) +
         (K === 1 ? "<br>只有 1 张卡时，ZeRO 的分片没有可分的对象，四种方式相同。" : "");
     }
-    [n, k, gpu].forEach((c) => c.on(draw));
-    draw();
+    [n, k, gpu].forEach((c) => c.on(update));
+    update();
   }
 
   // ---------------- 3. 推理显存（权重 + KV 缓存） ----------------
@@ -171,43 +213,55 @@
     const T = slider("每个请求的序列长度 T", 9, 17, 1, 12, (v) => `${(2 ** v).toLocaleString("en-US").replace(/,/g, " ")} token`);
     const ov = slider("运行时与其他开销", 0, 8, 1, 0, (v) => `${v} GB`);
     [model, gpu, wp, kp, T, ov].forEach((c) => grid.appendChild(c.node));
-    const W = 440, H = 110, m = { l: 6, r: 6 };
+    const W = 440, H = 104, m = { l: 6, r: 6 };
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "显存构成" }); root.appendChild(svg);
     const out = h(`<div class="w-out"></div>`); root.appendChild(out);
-    function draw() {
-      const M = MODELS[model.get()], g = GPUS[gpu.get()], b = +wp.get(), bk = +kp.get(), t = 2 ** T.get(), o = ov.get();
-      const wBytes = M.N * b;                                   // 式 4-1：N·b/8（b 以位计）
-      const kv1 = 2 * M.L * M.H * M.d * t * 1 * bk;              // 式 4-7，单个请求 B = 1
-      const free = g.mem * GB - wBytes - o * GB;
-      const exact = free / kv1, maxB = Math.max(0, Math.floor(exact));
+    const calc = (s) => {
+      const wBytes = s.N * s.b, kv1 = 2 * s.L * s.H * 128 * 2 ** s.lt * s.bk;   // 式 4-1、式 4-7（B = 1）
+      const free = s.mem * GB - wBytes - s.o * GB;
+      return { wBytes, kv1, free, exact: free / kv1, maxB: Math.max(0, Math.floor(free / kv1)) };
+    };
+    function render(s) {
+      const r = calc(s);
       svg.innerHTML = "";
-      const xs = linScale(0, g.mem * GB, m.l, W - m.r), y = 34, bh = 34;
+      const xs = linScale(0, s.mem * GB, m.l, W - m.r), y = 30, bh = 34;
       el("rect", { x: m.l, y, width: W - m.l - m.r, height: bh, fill: "#fff", stroke: C.line, "stroke-width": .8 }, svg);
       let x = m.l;
-      const seg = (v, c, label) => { const w = Math.max(0, Math.min(xs(v) - m.l, W - m.r - x)); el("rect", { x, y, width: w, height: bh, fill: c, stroke: C.line, "stroke-width": .6 }, svg); if (w > 60) txt(svg, x + w / 2, y + bh / 2 + 4, label, { "text-anchor": "middle", fill: c === C.dark ? "#fff" : C.ink, "font-size": 12 }); x += w; };
-      seg(wBytes, C.dark, `权重 ${fmt(wBytes / GB, 1)} GB`);
-      if (o) seg(o * GB, C.mid, `开销 ${o} GB`);
-      if (maxB > 0) seg(maxB * kv1, C.pale, `KV 缓存 × ${maxB} 个请求`);
-      txt(svg, m.l, y - 10, `${g.name}`, { "font-size": 12 });
-      txt(svg, W - m.r, y + bh + 18, `${g.mem} GB`, { "text-anchor": "end", "font-size": 11.5 });
+      const seg = (v, c, label) => {
+        const w = Math.max(0, Math.min(xs(v) - m.l, W - m.r - x));
+        el("rect", { x, y, width: w, height: bh, fill: c, stroke: C.line, "stroke-width": .6 }, svg);
+        if (w > textW(label) + 12) txt(svg, x + w / 2, y + bh / 2 + 5, label, { "text-anchor": "middle", fill: c === C.dark ? "#fff" : C.ink });
+        x += w;
+      };
+      seg(r.wBytes, C.dark, `权重 ${fmt(r.wBytes / GB, 1)} GB`);
+      if (s.o > 0.05) seg(s.o * GB, C.mid, `开销 ${Math.round(s.o)} GB`);
+      if (r.maxB > 0) seg(r.maxB * r.kv1, C.pale, `KV 缓存 × ${r.maxB} 个请求`);
+      txt(svg, m.l, y - 10, `显存 ${Math.round(s.mem)} GB`);
       txt(svg, m.l, y + bh + 18, "0", { "font-size": 11.5 });
-      const speed = (g.bw * 1e12) / wBytes;
-      out.innerHTML = (free <= 0
-        ? `<span class="warn">权重本身（${fmt(wBytes / GB, 1)} GB）加开销已超过显存</span>，需要量化、多卡切分或换更大的显卡。`
-        : `权重约 <b>${fmt(wBytes / GB, 1)} GB</b>；每个请求的 KV 缓存约 <b>${fmt(kv1 / GiB, 2)} GiB</b>。` +
-          `剩余 ${fmt(free / GB, 1)} GB 可容纳约 ${fmt(exact, 1)} 个请求，即最多 <b>${maxB}</b> 个并发请求。`) +
-        `<br>单个请求的解码速度上限 ≈ 显存带宽 ÷ 权重字节数 ≈ ${fmt(g.bw, 2)} TB/s ÷ ${fmt(wBytes / GB, 1)} GB ≈ <b>${fmt(speed, 0)} token/s</b>（第 4.1.2 小节的估算方法）。` +
+      txt(svg, W - m.r, y + bh + 18, `${Math.round(s.mem)} GB`, { "text-anchor": "end", "font-size": 11.5 });
+    }
+    const go = tweener(render);
+    function update() {
+      const M = MODELS[model.get()], g = GPUS[gpu.get()];
+      const s = { N: M.N, L: M.L, H: M.H, b: +wp.get(), bk: +kp.get(), lt: T.get(), o: ov.get(), mem: g.mem };
+      go(s);
+      const r = calc(s), speed = (g.bw * 1e12) / r.wBytes;
+      out.innerHTML = (r.free <= 0
+        ? `<span class="warn">权重本身（${fmt(r.wBytes / GB, 1)} GB）加开销已超过显存</span>，需要量化、多卡切分或换更大的显卡。`
+        : `权重约 <b>${fmt(r.wBytes / GB, 1)} GB</b>；每个请求的 KV 缓存约 <b>${fmt(r.kv1 / GiB, 2)} GiB</b>。` +
+          `剩余 ${fmt(r.free / GB, 1)} GB 可容纳约 ${fmt(r.exact, 1)} 个请求，即最多 <b>${r.maxB}</b> 个并发请求。`) +
+        `<br>单个请求的解码速度上限 ≈ 显存带宽 ÷ 权重字节数 ≈ ${fmt(g.bw, 2)} TB/s ÷ ${fmt(r.wBytes / GB, 1)} GB ≈ <b>${fmt(speed, 0)} token/s</b>（第 4.1.2 小节的估算方法）。` +
         (M.H === 32 ? `<br>这个模型没有使用 GQA，KV 头数等于查询头数，同样长度下 KV 缓存是 8 个 KV 头模型的 4 倍。` : "");
     }
-    [model, gpu, wp, kp, T, ov].forEach((c) => c.on(draw));
+    [model, gpu, wp, kp, T, ov].forEach((c) => c.on(update));
     preset.addEventListener("click", (e) => {
       const p = e.target.dataset.p; if (!p) return;
       preset.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === e.target));
       if (p === "ex") { model.set("m8"); gpu.set("h100"); wp.set("2"); kp.set("2"); T.set(12); ov.set(0); }
       else { model.set("m8"); gpu.set("r4090"); wp.set("0.625"); kp.set("2"); T.set(12); ov.set(2); }
-      draw();
+      update();
     });
-    draw();
+    update();
   }
 
   const REG = { roofline, train, infer };
