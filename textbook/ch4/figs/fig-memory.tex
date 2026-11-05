@@ -1,0 +1,29 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  % 金字塔：每层梯形，顶部最窄
+  \def\h{9}
+  \foreach \k/\name/\fillc/\drawc in {0/片上 SRAM/accentpale/accent, 1/HBM 显存/figfill/figline, 2/主机内存 DRAM/white/figline, 3/SSD 存储/white/rulegray} {
+    \pgfmathsetmacro{\yt}{-\k*\h}
+    \pgfmathsetmacro{\yb}{-(\k+1)*\h}
+    \pgfmathsetmacro{\wt}{9+\k*7}
+    \pgfmathsetmacro{\wb}{9+(\k+1)*7}
+    \draw[draw=\drawc, fill=\fillc] (-\wt,\yt) -- (\wt,\yt) -- (\wb,\yb) -- (-\wb,\yb) -- cycle;
+    \node[font=\figfont\small] at (0,{(\yt+\yb)/2}) {\name};
+  }
+  % 表头
+  \node[note, anchor=west, font=\figfont\footnotesize\bfseries] at (42,4) {典型容量};
+  \node[note, anchor=west, font=\figfont\footnotesize\bfseries] at (63,4) {对 GPU 的带宽};
+  \foreach \k/\c/\b in {0/{数十 MB}/{数十 TB/s}, 1/{数十 GB}/{约 3 TB/s}, 2/{数百 GB～数 TB}/{经 PCIe 约 64 GB/s}, 3/{数 TB 以上}/{数 GB/s～十余 GB/s}} {
+    \pgfmathsetmacro{\yc}{-(\k+0.5)*\h}
+    \pgfmathsetmacro{\xs}{9+(\k+0.5)*7+2}
+    \node[note, anchor=west] at (42,\yc) {\c};
+    \node[note, anchor=west] at (63,\yc) {\b};
+    \draw[rulegray, line width=0.3pt, dotted] (\xs,\yc) -- (41,\yc);
+  }
+  % 左侧趋势箭头
+  \draw[->, line width=0.7pt] (-42,-36) -- (-42,0) node[pos=0.5, left, note, text width=8mm, align=right] {更快\\更小\\更贵};
+\end{tikzpicture}
+\caption{加速器视角下的存储层次（数量级示意，以 H100 级数据中心 GPU 为参照）。模型权重和 KV 缓存主要驻留在 HBM 中，计算时被反复读入片上 SRAM}
+\label{fig:memory}
+\end{figure}

@@ -1,0 +1,40 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  \def\W{92}
+  % 层
+  \node[blk, minimum width=\W mm, minimum height=13mm] (L1) at (0,0)
+    {{\bfseries 应用系统工具}\\[1pt]\footnotesize 编排平台、应用开发框架、向量数据库、微调工具、部署工具};
+  \node[blk, minimum width=\W mm, minimum height=13mm] (L2) at (0,-21)
+    {{\bfseries 训练与推理框架}\\[1pt]\footnotesize PyTorch、DeepSpeed / Megatron-LM、vLLM / SGLang};
+  \node[blk, minimum width=\W mm, minimum height=13mm] (L3) at (0,-42)
+    {{\bfseries 驱动与计算软件栈}\\[1pt]\footnotesize 编译器、运行时、算子库、通信库（CUDA / CANN / NeuWare）};
+  % 硬件层：三个子块
+  \node[grp, minimum width=\W mm, minimum height=24mm] (L4) at (0,-68) {};
+  \node[anchor=north, font=\figfont\small\bfseries] at (L4.north) {算力资源};
+  \node[blkw, minimum width=27.5mm, minimum height=12mm] (C) at (-30.5,-71) {计算芯片\\\footnotesize CPU、GPU、NPU};
+  \node[blkw, minimum width=27.5mm, minimum height=12mm] (M) at (0,-71) {存储\\\footnotesize HBM、DRAM、SSD};
+  \node[blkw, minimum width=27.5mm, minimum height=12mm] (N) at (30.5,-71) {互联\\\footnotesize PCIe、NVLink、IB};
+  % 层间箭头与说明
+  \foreach \a/\b/\t in {L1/L2/调用模型与服务, L2/L3/张量算子与计算图, L3/L4/内核执行与数据搬运} {
+    \draw[flow] ([xshift=-30mm]\a.south) -- ([xshift=-30mm]\b.north)
+      node[midway, right, note] {\t};
+  }
+  \draw[flow, <-] ([xshift=30mm]L1.south) -- ([xshift=30mm]L2.north) node[midway, left, note] {提供训练与推理能力};
+  \draw[flow, <-] ([xshift=30mm]L2.south) -- ([xshift=30mm]L3.north) node[midway, left, note] {提供可编程接口};
+  \draw[flow, <-] ([xshift=30mm]L3.south) -- ([xshift=30mm]L4.north) node[midway, left, note] {提供算力、容量与带宽};
+  % 需求标签（左侧）
+  \foreach \n/\t in {L1/用得上, L2/易表达、可扩展, L3/发挥硬件效率} {
+    \node[note, anchor=east, align=right] at ([xshift=-3mm]\n.west) {\t};
+  }
+  \node[note, anchor=east, align=right] at ([xshift=-3mm]L4.west) {算得快\\存得下\\传得动};
+  \node[note, anchor=south, font=\figfont\footnotesize\bfseries] at (-58,8) {需求};
+  % 章节对应（右侧）
+  \foreach \n/\t in {L1/4.5\,节, L2/4.3、4.4\,节, L3/4.2.4\,小节, L4/4.2.1\textendash{}4.2.3\,小节} {
+    \node[note, anchor=west, align=left] at ([xshift=3mm]\n.east) {\t};
+  }
+  \node[note, anchor=south, font=\figfont\footnotesize\bfseries] at (58,8) {本章位置};
+\end{tikzpicture}
+\caption{大模型计算系统的四层结构。左侧为各层满足的需求，右侧为对应的章节；向下的箭头表示上层向下层提交的工作，向上的箭头表示下层向上层提供的能力}
+\label{fig:overview}
+\end{figure}

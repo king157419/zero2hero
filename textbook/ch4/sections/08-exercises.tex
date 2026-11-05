@@ -1,0 +1,28 @@
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\markright{习题}
+
+\begin{enumerate}[label=\thechapter.\arabic*,leftmargin=2.6em,itemsep=4pt]
+  \item （估算）一个 13B 参数的模型，分别以 BF16、INT8 和 4 位精度存储时，模型权重各约占多少 GB？为什么实际运行需要更多显存？
+  \item （Roofline）某 GPU 峰值算力为 \SI{300}{TFLOP/s}，显存带宽为 \SI{1.5}{TB/s}。求其拐点算术强度。批大小为 1 的解码阶段与长输入的预填充阶段，分别落在 Roofline 的哪个区域？
+  \item （概念）两块显卡的 FP16 峰值算力接近，但运行同一个 7B 模型时，单请求的输出速度相差明显。请列出至少三种可能的原因。
+  \item （概念）PCIe、NVLink 和 InfiniBand 分别位于数据通路的哪个层次？RDMA 与它们是什么关系？
+  \item （计算）按 BF16 混合精度与 Adam 的配置，估算 13B 模型全参数训练所需的模型状态显存；若使用 16 张卡并采用 ZeRO-3，每张卡约需多少显存？
+  \item （辨析）普通数据并行与 ZeRO-3 在显存占用上的根本区别是什么？ZeRO-3 的代价是什么？
+  \item （计算）某模型有 40 层，KV 头数为 8，每头 128 维，以 BF16 存储 KV 缓存。若要在 \SI{40}{GB} 的可用显存中同时处理 20 个请求，每个请求的序列长度最多为多少？
+  \item （辨析）为什么采用连续批处理通常能提高总吞吐，却不能保证每个请求的 TTFT 都降低？
+  \item （设计）为企业内部的知识助手进行选型时，应优先考虑微调还是 RAG？请说明判断依据。
+  \item （设计）参照第\,\ref{sec:case}\,节，为“200 人同时在线的编程作业答疑助手”给出一个自上而下的设计方案，并指出最可能成为瓶颈的环节。
+\end{enumerate}
+
+\subsection*{部分习题提示}
+\begin{small}
+\begin{description}[leftmargin=2.6em, labelwidth=2.2em, font=\normalfont\heiti]
+  \item[4.1] 由式\,\eqref{eq:weight-mem}，BF16 约 \SI{26}{GB}，INT8 约 \SI{13}{GB}，4 位约 \SI{6.5}{GB}。实际运行还需存放量化元数据、KV 缓存、运行时缓冲区和临时张量。
+  \item[4.2] $I^{*}=300\times10^{12}/1.5\times10^{12}=200$\,FLOP/byte。批大小为 1 的解码阶段 $I\approx1$，访存受限；长输入的预填充阶段 $I\approx T$，输入足够长时计算受限。
+  \item[4.3] 可从显存带宽、内核实现效率、KV 缓存读取效率、批大小以及是否发生 CPU 卸载等方面分析。
+  \item[4.5] 模型状态约 $13\times10^9\times16\approx\SI{208}{GB}$；ZeRO-3 下每卡约 $208/16=\SI{13}{GB}$，另需激活值与通信缓冲区。
+  \item[4.7] 每 token 每请求的 KV 缓存为 $2\times40\times8\times128\times2=\SI{163840}{B}$，则 $T\le 40\times10^{9}/(20\times163840)\approx 12\,200$。
+  \item[4.8] 考虑多个请求共享资源导致的排队、调度顺序和 KV 缓存占用。
+\end{description}
+\end{small}

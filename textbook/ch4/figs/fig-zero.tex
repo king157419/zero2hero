@@ -1,0 +1,30 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig]
+\begin{axis}[
+  xbar stacked, bar width=4.5mm,
+  width=0.82\linewidth, height=5.0cm,
+  xmin=0, xmax=125, ymin=0.4, ymax=4.6,
+  xlabel={每张 GPU 上的模型状态显存 / GB},
+  label style={font=\figfont\small}, tick label style={font=\figfont\small},
+  ytick={1,2,3,4}, yticklabels={ZeRO-3,ZeRO-2,ZeRO-1,数据并行},
+  axis line style={figline}, tick style={figline},
+  legend style={font=\figfont\footnotesize, draw=none, at={(0.5,1.03)}, anchor=south, legend columns=3, /tikz/every even column/.append style={column sep=8pt}},
+  legend cell align=left,
+  clip=false,
+]
+  \addplot[fill=figline, draw=figline] coordinates {(14,4) (14,3) (14,2) (1.75,1)};
+  \addplot[fill=rulegray!45, draw=figline] coordinates {(14,4) (14,3) (1.75,2) (1.75,1)};
+  \addplot[fill=accentpale, draw=accent] coordinates {(84,4) (10.5,3) (10.5,2) (10.5,1)};
+  \legend{参数（BF16）, 梯度（BF16）, 优化器状态与主权重（FP32）}
+  \draw[warn, dashed, line width=0.8pt] (axis cs:80,0.4) -- (axis cs:80,4.6);
+  \node[note, text=warn, anchor=south west, font=\figfont\scriptsize] at (axis cs:81,0.45) {单卡 80 GB};
+  \node[note, anchor=west] at (axis cs:113,4) {112};
+  \node[note, anchor=west] at (axis cs:39.5,3) {38.5};
+  \node[note, anchor=west] at (axis cs:27.3,2) {26.3};
+  \node[note, anchor=west] at (axis cs:15,1) {14};
+\end{axis}
+\end{tikzpicture}
+\caption{7B 模型在 8 张 GPU 上采用不同 ZeRO 阶段时，每张卡的模型状态显存（BF16 混合精度 + Adam，未计激活值与通信缓冲区）}
+\label{fig:zero}
+\end{figure}

@@ -1,0 +1,35 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  % 两栏对齐：左栏为设计环节，右栏为本案例取值；整体以 x=0 为中心
+  \node[note, font=\figfont\footnotesize\bfseries] at (-16,9) {设计环节};
+  \node[note, font=\figfont\footnotesize\bfseries] at (32,9) {本案例中的取值};
+  \foreach \i/\t/\c in {
+      0/业务需求/{200 名学生，高峰 30 路并发\\回答注明出处，数据不外传},
+      1/服务指标/{P95 TTFT ≤ 2 s，输出 ≥ 15 token/s\\引用可核对},
+      2/模型与推理引擎/{RAG 工作流 + 8B 开源模型\\vLLM 类推理引擎},
+      3/显存与带宽估算/{4 位权重约 5 GB\\KV 缓存每请求约 0.5 GiB},
+      4/硬件与网络/{单张 24 GB 显卡\\显存带宽约 1 TB/s}} {
+    \ifnum\i=3
+      \node[blka, minimum width=32mm, minimum height=10mm] (s\i) at (-16,-\i*14) {\t};
+    \else
+      \node[blk, minimum width=32mm, minimum height=10mm] (s\i) at (-16,-\i*14) {\t};
+    \fi
+    \node[blkw, draw=rulegray, minimum width=50mm, minimum height=10mm, font=\figfont\footnotesize, align=left, text width=46mm] (v\i) at (32,-\i*14) {\c};
+    \draw[densely dotted, rulegray, line width=0.6pt] (s\i.east) -- (v\i.west);
+  }
+  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,3}
+    \draw[flow] (s\i.south) -- (s\j.north);
+  % 实测反馈回路（左侧）
+  \node[blkw, minimum width=15mm, minimum height=10mm, font=\figfont\footnotesize, align=center] (m) at (-50,-35) {实测\\验证};
+  \draw[->, dashed, line width=0.6pt] (s4.west) -| (m.south);
+  \draw[->, dashed, line width=0.6pt] (m.north) |- (s1.west);
+  % 居中图例
+  \begin{scope}[shift={(0,-67)}]
+    \draw[flow] (-40,0) -- (-34,0); \node[note, anchor=west, font=\figfont\scriptsize] at (-33,0) {设计方向：自上而下};
+    \draw[->, dashed, line width=0.6pt] (2,0) -- (8,0); \node[note, anchor=west, font=\figfont\scriptsize] at (9,0) {用测量结果修正指标与方案};
+  \end{scope}
+\end{tikzpicture}
+\caption{自上而下的系统设计流程及其在课程知识问答助手中的取值。高亮的估算环节决定了方案能否成立}
+\label{fig:case-flow}
+\end{figure}

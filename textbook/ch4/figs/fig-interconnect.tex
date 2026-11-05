@@ -1,0 +1,38 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  \foreach \s/\nm in {-1/A, 1/B} {
+    \begin{scope}[shift={(\s*36,0)}]
+      \node[grp, minimum width=62mm, minimum height=44mm] (box\nm) at (0,0) {};
+      \node[anchor=north west, font=\figfont\footnotesize\bfseries] at (box\nm.north west) {服务器 \nm};
+      % NVSwitch
+      \node[blka, minimum width=44mm, minimum height=6mm, inner sep=1pt, font=\figfont\footnotesize] (sw\nm) at (0,9) {NVSwitch};
+      % GPU ×4（示意，实际常为 8）
+      \foreach \i in {0,...,3} {
+        \node[blk, minimum width=9mm, minimum height=7mm, inner sep=1pt, font=\figfont\footnotesize] (g\nm\i) at (-16.5+\i*11,-1) {GPU};
+        \draw[accent, line width=1.4pt] (g\nm\i.north) -- (g\nm\i.north |- sw\nm.south);
+      }
+      \node[font=\figfont\scriptsize, anchor=west] at (22,-1) {×8};
+      % PCIe 总线
+      \draw[figline, line width=0.6pt] (-24,-10) -- (24,-10);
+      \foreach \i in {0,...,3} \draw[figline] (g\nm\i.south) -- (g\nm\i.south |- 0,-10);
+      \node[blkw, minimum width=14mm, minimum height=6mm, inner sep=1pt, font=\figfont\footnotesize] (cpu\nm) at (-12,-17) {CPU};
+      \node[blkw, minimum width=14mm, minimum height=6mm, inner sep=1pt, font=\figfont\footnotesize] (nic\nm) at (12,-17) {网卡};
+      \draw[figline] (cpu\nm.north) -- (cpu\nm.north |- 0,-10);
+      \draw[figline] (nic\nm.north) -- (nic\nm.north |- 0,-10);
+    \end{scope}
+  }
+  % IB 交换机
+  \node[blkw, minimum width=26mm, minimum height=6mm, font=\figfont\footnotesize] (ib) at (0,-32) {InfiniBand 交换机};
+  \draw[ink, line width=1.0pt, dashed] (nicA.south) |- (ib.west);
+  \draw[ink, line width=1.0pt, dashed] (nicB.south) |- (ib.east);
+  % 图例
+  \begin{scope}[shift={(-66,-41)}]
+    \draw[accent, line width=1.4pt] (0,0) -- (7,0); \node[note, anchor=west] at (8,0) {NVLink：机内 GPU 间，约 900 GB/s};
+    \draw[figline, line width=0.6pt] (60,0) -- (67,0); \node[note, anchor=west] at (68,0) {PCIe：主机与设备间，约 64 GB/s};
+    \draw[ink, line width=1.0pt, dashed] (0,-5) -- (7,-5); \node[note, anchor=west] at (8,-5) {InfiniBand + RDMA：跨节点，约 50 GB/s（400 Gb/s）每端口};
+  \end{scope}
+\end{tikzpicture}
+\caption{单机内与跨节点的典型数据通路（示意）。机内 GPU 经 NVLink/NVSwitch 互联，GPU 与 CPU、网卡之间经 PCIe 连接，不同服务器之间经 InfiniBand 网络通信。带宽为 H100 一代硬件的数量级参考值，具体取决于配置}
+\label{fig:interconnect}
+\end{figure}

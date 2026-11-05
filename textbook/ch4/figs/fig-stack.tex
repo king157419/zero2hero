@@ -1,0 +1,35 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  \def\cw{27}  % 列宽
+  \def\rh{9.5} % 行距
+  % 列标题
+  \foreach \c/\t in {0/NVIDIA GPU, 1/华为昇腾 NPU, 2/寒武纪 MLU}
+    \node[font=\figfont\footnotesize\bfseries] at (\c*30,6) {\t};
+  % 行
+  \foreach \r/\lab/\a/\b/\cc in {
+      0/深度学习框架/PyTorch 等/PyTorch 等/PyTorch 等,
+      1/算子库与编译器/{cuBLAS、cuDNN}/{CANN 算子库}/CNNL,
+      2/集合通信库/NCCL/HCCL/CNCL,
+      3/运行时与驱动/{CUDA Runtime}/{AscendCL 运行时}/{CNRT、CNDrv},
+      4/硬件/GPU/NPU/MLU} {
+    \node[note, anchor=east] at (-17,-\r*\rh) {\lab};
+    \foreach \c/\txt in {0/\a,1/\b,2/\cc} {
+      \ifnum\r=0
+        \node[blkw, minimum width=\cw mm, minimum height=7mm, inner sep=1pt, font=\figfont\footnotesize] at (\c*30,-\r*\rh) {\txt};
+      \else\ifnum\r=4
+        \node[blk, minimum width=\cw mm, minimum height=7mm, inner sep=1pt, font=\figfont\footnotesize] at (\c*30,-\r*\rh) {\txt};
+      \else
+        \node[blka, minimum width=\cw mm, minimum height=7mm, inner sep=1pt, font=\figfont\footnotesize, line width=0.5pt] at (\c*30,-\r*\rh) {\txt};
+      \fi\fi
+    }
+  }
+  % 软件栈括号
+  \draw[decorate, decoration={brace, amplitude=3pt}, line width=0.6pt]
+    (75,-0.5*\rh-0.3*\rh) -- (75,-3.5*\rh+0.1*\rh) node[midway, right=3pt, note, align=left] {计算\\软件栈};
+  % 调用方向
+  \draw[->, line width=0.7pt, ink] (-42,1) -- (-42,-38) node[midway, left, note, text width=4mm, align=center] {调\\用\\方\\向};
+\end{tikzpicture}
+\caption{计算软件栈的层次与三种平台的对应组件。一次矩阵乘法调用自上而下依次经过各层；不同平台的组件职责相似，但实现与行为并不完全等价}
+\label{fig:stack}
+\end{figure}

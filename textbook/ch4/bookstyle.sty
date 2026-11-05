@@ -1,0 +1,240 @@
+% bookstyle.sty —— 教材版式
+% 版心：16 开（185mm × 260mm）；黑白为主，图中仅用一种强调色
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bookstyle}[2026/11/04 textbook style]
+
+% ---------- 页面 ----------
+\RequirePackage[paperwidth=185mm,paperheight=260mm,
+  top=24mm,bottom=22mm,inner=22mm,outer=20mm,
+  headsep=6mm,footskip=10mm]{geometry}
+
+% ---------- 字体 ----------
+% 正文宋体，强调/标题黑体，定义与引述楷体；西文 Times 风格，数学 TeX Gyre Termes Math
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{unicode-math}
+% 西文与数学字体随 TeX Live 发行（按文件名加载，不依赖 fontconfig）
+\setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular,
+  BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[Extension=.otf, Scale=0.92, UprightFont=*-regular,
+  BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\setmonofont{lmmono10-regular.otf}[Scale=0.95]
+\setmathfont{texgyretermes-math.otf}
+% 中文字体：宋体 / 黑体 / 楷体 / 仿宋 / 微软雅黑（图中文字）
+% 路径为本地 Overleaf 容器中的字体目录；如迁移到其他环境，修改 \zhfontpath 即可
+\providecommand{\zhfontpath}{/usr/share/fonts/windows/}
+\setCJKmainfont{simsun.ttc}[Path=\zhfontpath, FontIndex=0,
+  BoldFont=simhei.ttf, ItalicFont=simkai.ttf]
+\setCJKsansfont{simhei.ttf}[Path=\zhfontpath, BoldFont=simhei.ttf]
+\setCJKmonofont{simfang.ttf}[Path=\zhfontpath]
+\setCJKfamilyfont{zhsong}{simsun.ttc}[Path=\zhfontpath, FontIndex=0, BoldFont=simhei.ttf]
+\setCJKfamilyfont{zhhei}{simhei.ttf}[Path=\zhfontpath]
+\setCJKfamilyfont{zhkai}{simkai.ttf}[Path=\zhfontpath]
+\setCJKfamilyfont{zhfs}{simfang.ttf}[Path=\zhfontpath]
+\setCJKfamilyfont{zhyahei}{msyh.ttc}[Path=\zhfontpath, FontIndex=0,
+  BoldFont=msyhbd.ttc, BoldFeatures={FontIndex=0}]
+\newcommand{\songti}{\CJKfamily{zhsong}}
+\newcommand{\heiti}{\CJKfamily{zhhei}}
+\newcommand{\kaishu}{\CJKfamily{zhkai}}
+\newcommand{\fangsong}{\CJKfamily{zhfs}}
+% 图中文字：中西文统一用微软雅黑（nature-figure：一种字族）；图中不用数学模式，变量与符号直接用文本
+\newfontfamily\figlatin{msyh.ttc}[Path=\zhfontpath, FontIndex=0,
+  BoldFont=msyhbd.ttc, BoldFeatures={FontIndex=0}]
+\newcommand{\figfont}{\figlatin\CJKfamily{zhyahei}}
+% 图中字号只有三级：大 8.5pt（层名/标题）、中 7.5pt（一般标注）、小 6.5pt（次要注记）
+\newcommand{\figsizes}{%
+  \def\baselinestretch{1}%
+  \renewcommand{\normalsize}{\fontsize{8.5}{11.5}\selectfont}%
+  \renewcommand{\small}{\fontsize{8.5}{11.5}\selectfont}%
+  \renewcommand{\footnotesize}{\fontsize{7.5}{10.2}\selectfont}%
+  \renewcommand{\scriptsize}{\fontsize{6.5}{8.8}\selectfont}%
+  \renewcommand{\tiny}{\fontsize{6.5}{8.8}\selectfont}}
+\linespread{1.42}
+\setlength{\parskip}{0pt}
+
+% 强调：统一用黑体（不使用“部分加粗”的伪粗体）
+\renewcommand{\emph}[1]{{\heiti #1}}
+\newcommand{\term}[1]{{\heiti #1}}        % 首次出现的术语
+\newcommand{\en}[1]{\textrm{#1}}           % 英文原名
+
+% ---------- 颜色 ----------
+\RequirePackage{xcolor}
+\definecolor{ink}{HTML}{1A1A1A}
+\definecolor{rulegray}{HTML}{8C8C8C}
+\definecolor{boxgray}{HTML}{F3F3F1}
+\definecolor{figfill}{HTML}{EDEDEA}
+\definecolor{figline}{HTML}{4D4D4D}
+\definecolor{accent}{HTML}{2E7D78}      % 图中唯一强调色
+\definecolor{accentpale}{HTML}{DCEDEB}
+\definecolor{warn}{HTML}{B23A2E}        % 仅用于瓶颈/错误
+\color{ink}
+
+% ---------- 标题 ----------
+\ctexset{
+  chapter = {
+    name = {第,章},
+    number = \arabic{chapter},
+    format = \raggedright,
+    nameformat = \fontsize{15pt}{20pt}\selectfont\heiti,
+    numberformat = \fontsize{15pt}{20pt}\selectfont,
+    titleformat = \fontsize{24pt}{32pt}\selectfont\heiti,
+    aftername = \par\vspace{4pt},
+    beforeskip = 18pt,
+    afterskip = 30pt,
+    pagestyle = chapterfirst,
+  },
+  section = {
+    format = \fontsize{15pt}{22pt}\selectfont\heiti\raggedright,
+    aftername = \hspace{1em},
+    beforeskip = 22pt plus 4pt minus 2pt,
+    afterskip = 12pt,
+  },
+  subsection = {
+    format = \fontsize{12pt}{18pt}\selectfont\heiti\raggedright,
+    aftername = \hspace{1em},
+    beforeskip = 16pt plus 3pt minus 2pt,
+    afterskip = 8pt,
+  },
+  subsubsection = {
+    format = \normalsize\heiti\raggedright,
+    number = {},
+    aftername = {},
+    beforeskip = 10pt,
+    afterskip = 4pt,
+  },
+  paragraph = {
+    format = \normalsize\heiti,
+    afterskip = 1em,
+    indent = 2em,
+  },
+}
+\setcounter{secnumdepth}{2}
+
+\RequirePackage{etoolbox}
+
+% ---------- 页眉页脚 ----------
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{第\,\thechapter\,章\quad #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\quad #1}}
+\fancyhead[LE]{\small\thepage\hspace{2em}\leftmark}
+\fancyhead[RO]{\small\rightmark\hspace{2em}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{chapterfirst}{%
+  \fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\small\thepage}}
+
+% ---------- 列表、表格、图注 ----------
+\RequirePackage{enumitem}
+\setlist{itemsep=1pt,topsep=4pt,parsep=0pt,leftmargin=2.4em}
+\setlist[enumerate,1]{label=(\arabic*)}
+\RequirePackage{booktabs,tabularx,multirow,array,makecell,longtable}
+\renewcommand{\arraystretch}{1.25}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\RequirePackage{caption}
+\captionsetup{font={small},labelfont={small,bf},labelsep=quad,
+  figurename=图,tablename=表,skip=6pt,justification=centering}
+\captionsetup[table]{position=top}
+\renewcommand{\thefigure}{\thechapter-\arabic{figure}}
+\renewcommand{\thetable}{\thechapter-\arabic{table}}
+\renewcommand{\theequation}{\thechapter-\arabic{equation}}
+\RequirePackage{float}
+\RequirePackage{graphicx}
+
+% ---------- 绘图 ----------
+\RequirePackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,shapes.geometric,decorations.pathreplacing}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18,
+  every axis/.append style={
+    xticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}},
+    yticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}}}}
+\tikzset{
+  fig/.style={execute at begin picture={\figsizes}, font=\figfont\small, line width=0.6pt, draw=figline,
+    >={Stealth[length=5pt,width=4pt]}},
+  blk/.style={draw=figline, fill=figfill, rounded corners=1.5pt, align=center,
+    inner sep=4pt, minimum height=8mm},
+  blkw/.style={draw=figline, fill=white, rounded corners=1.5pt, align=center,
+    inner sep=4pt, minimum height=8mm},
+  blka/.style={draw=accent, fill=accentpale, rounded corners=1.5pt, align=center,
+    inner sep=4pt, minimum height=8mm, line width=0.8pt},
+  grp/.style={draw=rulegray, rounded corners=2pt, inner sep=6pt},
+  flow/.style={->, draw=figline, line width=0.7pt},
+  note/.style={font=\figfont\footnotesize, align=center, text=ink},
+}
+
+% ---------- 文本框 ----------
+\RequirePackage[most]{tcolorbox}
+% 节首导引：需求—方案—效果
+\newtcolorbox{guide}{enhanced, breakable, colback=boxgray, colframe=boxgray,
+  boxrule=0pt, leftrule=2pt, colframe=ink, arc=0pt, outer arc=0pt,
+  left=8pt, right=8pt, top=5pt, bottom=5pt, before skip=8pt, after skip=10pt,
+  fontupper=\small}
+\newcommand{\guideitem}[2]{\noindent{\heiti #1}\quad #2\par}
+% 例题
+\newtcolorbox[auto counter, number within=chapter,
+  number freestyle={\noexpand\thechapter-\noexpand\arabic{\tcbcounter}}]{example}[2][]{%
+  enhanced, breakable, label={#2},
+  colback=white, colframe=rulegray, boxrule=0.4pt, arc=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, before skip=10pt, after skip=10pt,
+  title={例\,\thetcbcounter\quad #1}, coltitle=ink, colbacktitle=white,
+  fonttitle=\heiti, attach title to upper, after title={\par\smallskip}}
+% 辨析（常见误区）
+\newtcolorbox{pitfall}{enhanced, breakable, colback=white, colframe=ink,
+  boxrule=0pt, toprule=0.6pt, bottomrule=0.6pt, arc=0pt,
+  left=4pt, right=4pt, top=5pt, bottom=5pt, before skip=10pt, after skip=10pt,
+  fontupper=\small, title={辨析}, coltitle=ink, colbacktitle=white,
+  fonttitle=\small\heiti, attach title to upper, after title={\quad}}
+% 本节要点
+\newtcolorbox{keypoints}{enhanced, breakable, colback=boxgray, colframe=boxgray,
+  boxrule=0pt, arc=0pt, left=8pt, right=8pt, top=5pt, bottom=5pt,
+  before skip=10pt, after skip=6pt, fontupper=\small,
+  title={本节要点}, coltitle=ink, colbacktitle=boxgray,
+  fonttitle=\small\heiti, attach title to upper, after title={\par}}
+
+% ---------- 代码 ----------
+\RequirePackage{listings}
+\lstset{basicstyle=\ttfamily\small, columns=fullflexible, keepspaces=true,
+  frame=lines, framerule=0.4pt, rulecolor=\color{rulegray},
+  xleftmargin=1em, xrightmargin=1em, aboveskip=8pt, belowskip=8pt,
+  commentstyle=\color{rulegray}, showstringspaces=false,
+  numbers=none, breaklines=true}
+
+% ---------- 数学与单位 ----------
+\RequirePackage{siunitx}
+\sisetup{group-separator={\,}, detect-all}
+
+% ---------- 引用与链接 ----------
+\RequirePackage[numbers,sort&compress,square,super]{natbib}
+\setlength{\bibsep}{2pt plus 1pt}
+\renewcommand{\bibsection}{\section*{参考文献}\markright{参考文献}}
+\RequirePackage{xurl}
+\RequirePackage[hidelinks,bookmarksnumbered]{hyperref}
+
+% ---------- 其他 ----------
+\RequirePackage{needspace}
+% 标题不落在页底：节前至少留 10 行，小节前至少留 6 行
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{6\baselineskip}}{}{}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.75}
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+
+% 节首“定位图”：在四层体系中高亮本节所处层次
+% 参数：1=应用系统工具 2=训练/推理框架 3=驱动与计算软件栈 4=算力资源
+\newcommand{\locator}[1]{%
+  \begin{tikzpicture}[fig, font=\figfont\scriptsize, baseline=(current bounding box.center)]
+    \foreach \i/\t in {1/应用系统工具,2/训练与推理框架,3/驱动与计算软件栈,4/算力资源} {
+      \ifnum\i=#1
+        \node[blka, minimum width=26mm, minimum height=4.2mm, inner sep=1pt] at (0,-\i*0.5) {\t};
+      \else
+        \node[blkw, draw=rulegray, minimum width=26mm, minimum height=4.2mm, inner sep=1pt, text=rulegray] at (0,-\i*0.5) {\t};
+      \fi
+    }
+  \end{tikzpicture}}
+
+\endinput

@@ -1,0 +1,37 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig]
+\begin{axis}[
+  width=0.86\linewidth, height=6.2cm,
+  xmode=log, ymode=log, log basis x=10, log basis y=10,
+  xmin=0.3, xmax=10000, ymin=1, ymax=3000,
+  xlabel={算术强度 I / (FLOP/byte)},
+  ylabel={可达性能 / TFLOP/s},
+  label style={font=\figfont\small}, tick label style={font=\figfont\small},
+  axis line style={figline}, tick style={figline},
+  xtick={1,10,100,1000,10000}, ytick={1,10,100,1000},
+  xticklabels={1,10,100,{1\,000},{10\,000}}, yticklabels={1,10,100,{1\,000}},
+  minor tick num=0, clip=false,
+]
+  % 屋顶线：min(989, 3.35 I)
+  \addplot[draw=ink, line width=1.1pt, domain=0.3:295, samples=2] {3.35*x};
+  \addplot[draw=ink, line width=1.1pt, domain=295:10000, samples=2] {989};
+  % 拐点
+  \draw[dashed, rulegray] (axis cs:295,1) -- (axis cs:295,989);
+  \node[note, anchor=south west, inner sep=2pt] at (axis cs:360,1.5) {拐点 I\textsuperscript{*} ≈ 295};
+  \node[note, anchor=south] at (axis cs:2300,1050) {计算受限区：P\textsubscript{peak}};
+  \node[note, anchor=south west] at (axis cs:0.4,40) {访存受限区：I\,·\,B\textsubscript{mem}};
+  % 解码（批大小 1）
+  \addplot[only marks, mark=*, mark size=2.4pt, warn] coordinates {(1,3.35)};
+  \node[note, anchor=west, text=warn] at (axis cs:1.25,2.4) {解码，B = 1：I ≈ 1};
+  % 解码（批大小 64）
+  \addplot[only marks, mark=*, mark size=2.4pt, figline] coordinates {(64,214)};
+  \node[note, anchor=east] at (axis cs:52,240) {解码，B = 64：I ≈ 64};
+  % 预填充
+  \addplot[only marks, mark=*, mark size=2.4pt, accent] coordinates {(2048,989)};
+  \node[note, anchor=north, text=accent] at (axis cs:2048,700) {预填充，T = 2048};
+\end{axis}
+\end{tikzpicture}
+\caption{Roofline 模型示意。以峰值算力约 \SI{989}{TFLOP/s}、显存带宽约 \SI{3.35}{TB/s} 的 GPU 为例；坐标为对数刻度，各点为数量级估计}
+\label{fig:roofline}
+\end{figure}

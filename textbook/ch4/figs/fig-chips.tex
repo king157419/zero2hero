@@ -1,0 +1,39 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  % CPU：少量复杂核心 + 大缓存
+  \begin{scope}[shift={(-48,0)}]
+    \draw[figline, fill=white] (-17,-14) rectangle (17,14);
+    \foreach \x/\y in {-8/7,8/7,-8/-1,8/-1}
+      \draw[fill=figfill] (\x-6,\y-3.5) rectangle (\x+6,\y+3.5);
+    \foreach \x/\y in {-8/7,8/7,-8/-1,8/-1} \node[font=\figfont\scriptsize] at (\x,\y) {核心};
+    \draw[fill=white, draw=rulegray] (-14,-12) rectangle (14,-6);
+    \node[font=\figfont\scriptsize] at (0,-9) {大容量缓存};
+    \node[anchor=north] at (0,-16) {CPU};
+    \node[note, anchor=north] at (0,-21) {少量复杂核心};
+  \end{scope}
+  % GPU：大量简单核心
+  \begin{scope}[shift={(0,0)}]
+    \draw[figline, fill=white] (-17,-14) rectangle (17,14);
+    \foreach \i in {0,...,7} \foreach \j in {0,...,6}
+      \draw[fill=figfill, line width=0.3pt] (-15+\i*3.8,-12+\j*3.8) rectangle ++(3,3);
+    \node[anchor=north] at (0,-16) {GPU};
+    \node[note, anchor=north] at (0,-21) {大量简单并行单元};
+  \end{scope}
+  % NPU：矩阵运算阵列
+  \begin{scope}[shift={(48,0)}]
+    \draw[figline, fill=white] (-17,-14) rectangle (17,14);
+    \foreach \i in {0,...,5} \foreach \j in {0,...,5}
+      \draw[fill=accentpale, draw=accent, line width=0.3pt] (-12+\i*4.2,-12+\j*4.2) rectangle ++(3.4,3.4);
+    \foreach \j in {0,...,5} \draw[->, accent, line width=0.4pt] (-16,-10.3+\j*4.2) -- (-12.4,-10.3+\j*4.2);
+    \node[anchor=north] at (0,-16) {NPU / ASIC};
+    \node[note, anchor=north] at (0,-21) {专用矩阵运算阵列};
+  \end{scope}
+  % 光谱箭头
+  \draw[<->, line width=0.7pt] (-65,-30) -- (65,-30);
+  \node[note, anchor=north west] at (-65,-31) {通用性、灵活性更强};
+  \node[note, anchor=north east] at (65,-31) {专用计算效率更高};
+\end{tikzpicture}
+\caption{三类计算芯片的结构取舍（示意）。从左到右，芯片的通用性逐渐降低，矩阵运算的吞吐与能效逐渐提高}
+\label{fig:chips}
+\end{figure}

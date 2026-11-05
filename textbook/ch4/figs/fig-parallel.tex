@@ -1,0 +1,56 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  % 三个面板共用同一网格：设备框高 36 mm（y = -18 ~ 18），层的行高 5.5 mm，数据框在 y = -12
+  \tikzset{lay/.style={draw=figline, fill=figfill, minimum width=14mm, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
+           half/.style={draw=accent, fill=accentpale, minimum width=7mm, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
+           dat/.style={draw=figline, fill=white, rounded corners=1pt, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
+           dev/.style={draw=rulegray, rounded corners=1.5pt, minimum width=18mm, minimum height=36mm},
+           gpu/.style={font=\figfont\scriptsize, anchor=south}}
+  \def\row#1{(13.5-#1*5.5)}   % 第 #1 层的 y 坐标：8, 2.5, -3, -8.5
+  % ---------- (a) 数据并行 ----------
+  \begin{scope}[shift={(-48,0)}]
+    \foreach \g/\x in {1/-12, 2/12} {
+      \node[dev] (a\g) at (\x,0) {};
+      \node[gpu] at (a\g.north) {GPU\,\g};
+      \foreach \l in {1,...,4} \node[lay] at (\x,{13.5-\l*5.5}) {第\,\l\,层};
+      \node[dat, minimum width=14mm] at (\x,-14) {数据 \g};
+    }
+    \draw[<->, accent, line width=0.9pt] (-3,0) -- (3,0);
+    \node[note, font=\figfont\scriptsize, text=accent] at (0,-23) {梯度 All-Reduce};
+    \node[font=\figfont\footnotesize, anchor=north] at (0,-27) {(a) 数据并行：复制模型};
+  \end{scope}
+  % ---------- (b) 张量并行 ----------
+  \begin{scope}[shift={(0,0)}]
+    \node[dev, minimum width=24mm] (tp) at (0,0) {};
+    \node[gpu] at (-5.5,18) {GPU\,1};
+    \node[gpu] at ( 5.5,18) {GPU\,2};
+    \draw[densely dashed, rulegray] (0,17) -- (0,-10.5);
+    \foreach \l in {1,...,4} {
+      \node[half] at (-5.5,{13.5-\l*5.5}) {\l\,a};
+      \node[half] at ( 5.5,{13.5-\l*5.5}) {\l\,b};
+      \draw[<->, warn, line width=0.6pt] (-1.8,{13.5-\l*5.5}) -- (1.8,{13.5-\l*5.5});
+    }
+    \node[dat, minimum width=18mm] at (0,-14) {同一批数据};
+    \node[note, font=\figfont\scriptsize, text=warn] at (0,-23) {每层都要交换结果};
+    \node[font=\figfont\footnotesize, anchor=north] at (0,-27) {(b) 张量并行：切分层内矩阵};
+  \end{scope}
+  % ---------- (c) 流水线并行 ----------
+  \begin{scope}[shift={(48,0)}]
+    \foreach \g/\x in {1/-12, 2/12} {
+      \node[dev] (p\g) at (\x,0) {};
+      \node[gpu] at (p\g.north) {GPU\,\g};
+    }
+    \node[lay] at (-12,8)   {第\,1\,层};
+    \node[lay] at (-12,2.5) {第\,2\,层};
+    \node[lay] at ( 12,2.5) {第\,3\,层};
+    \node[lay] at ( 12,-3)  {第\,4\,层};
+    \node[dat, minimum width=14mm] at (-12,-14) {数据};
+    \draw[->, accent, line width=0.9pt] (-5,2.5) -- (5,2.5);
+    \node[note, font=\figfont\scriptsize, text=accent] at (0,-23) {阶段间传递激活};
+    \node[font=\figfont\footnotesize, anchor=north] at (0,-27) {(c) 流水线并行：按层切分};
+  \end{scope}
+\end{tikzpicture}
+\caption{三种基本并行方式的切分对象（以 2 张 GPU、4 层模型为例）。红色箭头表示频繁通信，应放在高带宽链路上}
+\label{fig:parallel}
+\end{figure}

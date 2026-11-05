@@ -1,0 +1,43 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig, x=1mm, y=1mm]
+  \tikzset{tok/.style={draw=figline, fill=white, minimum size=4.2mm, inner sep=0pt, font=\figfont\footnotesize},
+           newtok/.style={draw=accent, fill=accentpale, minimum size=4.2mm, inner sep=0pt, font=\figfont\footnotesize}}
+  % ---------- 计算行：整体以 x=0 为中心，范围约 -55 ~ 55 ----------
+  \node[blk, minimum width=38mm, minimum height=9mm] (pf) at (-36,0) {预填充\\[-1pt]\footnotesize 并行处理全部输入};
+  \foreach \i in {1,...,5} {
+    \node[tok] (x\i) at (-57+\i*5,14) {x\textsubscript{\i}};
+    \draw[->, line width=0.4pt] (x\i.south) -- (x\i.south |- pf.north);
+  }
+  \node[newtok] (y1) at (-21,14) {y\textsubscript{1}};
+  \draw[->, line width=0.4pt] (y1.south |- pf.north) -- (y1.south);
+  \foreach \k [evaluate=\k as \n using int(\k+1)] in {1,...,5} {
+    \pgfmathsetmacro{\xx}{-6+(\k-1)*12}
+    \node[blk, minimum width=9mm, minimum height=9mm, inner sep=1pt, font=\figfont\scriptsize] (dc\k) at (\xx,0) {解码};
+    \node[newtok] (y\n) at (\xx,14) {y\textsubscript{\n}};
+    \draw[->, line width=0.4pt] (dc\k.north) -- (y\n.south);
+  }
+  \draw[->, line width=0.4pt] (pf.east) -- (dc1.west);
+  \foreach \k [evaluate=\k as \n using int(\k+1)] in {1,...,4} \draw[->, line width=0.4pt] (dc\k.east) -- (dc\n.west);
+  \node[font=\figfont\small] at (51.5,0) {…};
+  \node[note, anchor=south] at (-36,17.5) {输入提示（T 个 token）};
+  \node[note, anchor=south] at (18,17.5) {逐个生成输出 token};
+  % ---------- KV 缓存：居中标注，分段表示逐步增长 ----------
+  \node[blkw, minimum width=110mm, minimum height=7mm] (kv) at (0,-16) {KV 缓存（提示部分一次写入，生成时每步追加一项）};
+  \draw[->, accent, line width=0.7pt] (pf.south) -- (pf.south |- kv.north);
+  \foreach \k in {1,...,5} \draw[<->, warn, line width=0.7pt] (dc\k.south) -- (dc\k.south |- kv.north);
+  % ---------- 时间轴与指标 ----------
+  \draw[->, line width=0.5pt, rulegray] (-55,-25) -- (57,-25) node[right, note, text=ink] {时间};
+  \draw[decorate, decoration={brace, mirror, amplitude=3pt}, line width=0.6pt] (-55,-27) -- (-17,-27)
+    node[midway, below=3pt, note] {TTFT：首 token 延迟\\[-1pt]（计算受限）};
+  \draw[decorate, decoration={brace, mirror, amplitude=3pt}, line width=0.6pt] (-10.5,-27) -- (-1.5,-27)
+    node[midway, below=3pt, note] {TPOT\\[-1pt]（访存受限）};
+  % ---------- 居中图例 ----------
+  \begin{scope}[shift={(0,-44)}]
+    \draw[->, accent, line width=0.7pt] (-44,0) -- (-38,0); \node[note, anchor=west] at (-37,0) {一次性写入提示的 K/V};
+    \draw[<->, warn, line width=0.7pt] (2,0) -- (8,0);      \node[note, anchor=west] at (9,0) {每步读取全部权重与缓存};
+  \end{scope}
+\end{tikzpicture}
+\caption{一次推理请求的两个阶段。预填充并行处理全部输入、写入 KV 缓存并给出首个 token；之后每个解码步只生成一个 token，却要读取全部权重与已有缓存}
+\label{fig:prefill}
+\end{figure}

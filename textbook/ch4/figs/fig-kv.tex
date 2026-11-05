@@ -1,0 +1,25 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fig]
+\begin{axis}[
+  width=0.8\linewidth, height=5.6cm,
+  xmin=0, xmax=32, ymin=0, ymax=100,
+  xlabel={序列长度 T / K token}, ylabel={KV 缓存 / GiB},
+  label style={font=\figfont\small}, tick label style={font=\figfont\small},
+  xtick={0,4,8,16,24,32}, ytick={0,16,32,64,96},
+  axis line style={figline}, tick style={figline},
+  restrict y to domain=0:100, clip=true,
+]
+  \addplot[draw=rulegray, line width=1pt, domain=0:32, samples=2] {0.125*x};
+  \addplot[draw=figline, line width=1pt, domain=0:32, samples=2] {2*x};
+  \addplot[draw=accent, line width=1.2pt, domain=0:12.5, samples=2] {8*x};
+  \addplot[draw=warn, dashed, line width=0.8pt, domain=0:32, samples=2] {64};
+  \node[note, anchor=south east, text=warn] at (axis cs:31.5,64) {扣除权重后的可用显存 ≈ 64 GB};
+  \node[note, anchor=east, text=accent] at (axis cs:8.2,74) {B = 64};
+  \node[note, anchor=north west] at (axis cs:22,40) {B = 16};
+  \node[note, anchor=south east] at (axis cs:31,5) {B = 1};
+\end{axis}
+\end{tikzpicture}
+\caption{例\,\ref{ex:kv} 中 8B 模型的 KV 缓存随序列长度 $T$ 与并发请求数 $B$ 的变化（BF16）。曲线与虚线的交点给出了该配置下能够支撑的最大上下文长度}
+\label{fig:kv}
+\end{figure}

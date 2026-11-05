@@ -1,0 +1,73 @@
+\section*{本章术语}
+\addcontentsline{toc}{section}{本章术语}
+\markright{本章术语}
+
+{\small
+\begin{longtable}{@{}p{30mm} p{58mm} p{40mm}@{}}
+\toprule
+\heiti 缩写/术语 & \heiti 英文全称 & \heiti 中文 \\
+\midrule
+\endhead
+ASIC & Application-Specific Integrated Circuit & 专用集成电路 \\
+CPU / GPU / NPU & Central / Graphics / Neural Processing Unit & 中央/图形/神经网络处理器 \\
+HBM & High Bandwidth Memory & 高带宽内存 \\
+TSV & Through-Silicon Via & 硅通孔 \\
+PCIe & Peripheral Component Interconnect Express & 高速外设互联总线 \\
+RDMA & Remote Direct Memory Access & 远程直接内存访问 \\
+RoCE & RDMA over Converged Ethernet & 基于以太网的 RDMA \\
+Roofline & Roofline Model & 屋顶线模型 \\
+DP / TP / PP / EP & Data / Tensor / Pipeline / Expert Parallelism & 数据/张量/流水线/专家并行 \\
+ZeRO & Zero Redundancy Optimizer & 零冗余优化器 \\
+FSDP & Fully Sharded Data Parallel & 全分片数据并行 \\
+KV Cache & Key-Value Cache & 键值缓存 \\
+TTFT & Time To First Token & 首 token 延迟 \\
+TPOT & Time Per Output Token & 每 token 输出时间 \\
+GQA / MQA & Grouped-Query / Multi-Query Attention & 分组查询/多查询注意力 \\
+RAG & Retrieval-Augmented Generation & 检索增强生成 \\
+LoRA & Low-Rank Adaptation & 低秩适配 \\
+\bottomrule
+\end{longtable}
+}
+
+\begin{thebibliography}{99}
+\small
+
+\bibitem{zhao2024llm} 赵鑫, 李军毅, 周昆, 唐天一, 文继荣. 大语言模型[M]. 北京: 高等教育出版社, 2024.
+
+\bibitem{zhang2023d2l} Zhang A, Lipton Z C, Li M, Smola A J. Dive into Deep Learning[M]. Cambridge: Cambridge University Press, 2023. \url{https://d2l.ai}
+
+\bibitem{goodfellow2016deep} Goodfellow I, Bengio Y, Courville A. Deep Learning[M]. Cambridge, MA: MIT Press, 2016.
+
+\bibitem{hwu2026pmpp} Hwu W W, Kirk D B, El Hajj I. Programming Massively Parallel Processors: A Hands-on Approach[M]. 5th ed. Cambridge, MA: Morgan Kaufmann, 2026.
+
+\bibitem{kaplan2020scaling} Kaplan J, McCandlish S, Henighan T, et al. Scaling Laws for Neural Language Models[EB/OL]. arXiv:2001.08361, 2020.
+
+\bibitem{williams2009roofline} Williams S, Waterman A, Patterson D. Roofline: An Insightful Visual Performance Model for Multicore Architectures[J]. Communications of the ACM, 2009, 52(4): 65--76.
+
+\bibitem{nvidia2023h100} NVIDIA. NVIDIA H100 Tensor Core GPU Datasheet[EB/OL]. 2023. \url{https://www.nvidia.com/en-us/data-center/h100/}
+
+\bibitem{nvidia2024cuda} NVIDIA. CUDA C++ Programming Guide[EB/OL]. \url{https://docs.nvidia.com/cuda/cuda-c-programming-guide/}
+
+\bibitem{paszke2019pytorch} Paszke A, Gross S, Massa F, et al. PyTorch: An Imperative Style, High-Performance Deep Learning Library[C]//Advances in Neural Information Processing Systems 32. 2019: 8024--8035.
+
+\bibitem{ansel2024pytorch2} Ansel J, Yang E, He H, et al. PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation[C]//Proceedings of ASPLOS. 2024: 929--947.
+
+\bibitem{rajbhandari2020zero} Rajbhandari S, Rasley J, Ruwase O, He Y. ZeRO: Memory Optimizations Toward Training Trillion Parameter Models[C]//Proceedings of SC20. 2020: 1--16.
+
+\bibitem{shoeybi2019megatron} Shoeybi M, Patwary M, Puri R, et al. Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism[EB/OL]. arXiv:1909.08053, 2019.
+
+\bibitem{hu2021lora} Hu E J, Shen Y, Wallis P, et al. LoRA: Low-Rank Adaptation of Large Language Models[EB/OL]. arXiv:2106.09685, 2021.
+
+\bibitem{dettmers2023qlora} Dettmers T, Pagnoni A, Holtzman A, Zettlemoyer L. QLoRA: Efficient Finetuning of Quantized LLMs[EB/OL]. arXiv:2305.14314, 2023.
+
+\bibitem{dao2022flashattention} Dao T, Fu D Y, Ermon S, et al. FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness[C]//Advances in Neural Information Processing Systems 35. 2022.
+
+\bibitem{kwon2023vllm} Kwon W, Li Z, Zhuang S, et al. Efficient Memory Management for Large Language Model Serving with PagedAttention[C]//Proceedings of SOSP. 2023: 611--626.
+
+\bibitem{yu2022orca} Yu G I, Jeong J S, Kim G W, et al. Orca: A Distributed Serving System for Transformer-Based Generative Models[C]//Proceedings of OSDI. 2022: 521--538.
+
+\bibitem{milvus2024} Milvus. What is Milvus?[EB/OL]. \url{https://milvus.io/docs/overview.md}
+
+\bibitem{anthropic2024agents} Anthropic. Building Effective Agents[EB/OL]. 2024. \url{https://www.anthropic.com/research/building-effective-agents}
+
+\end{thebibliography}
