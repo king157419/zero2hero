@@ -25,17 +25,26 @@ website:
     style: floating
     collapse-level: 1
     contents:
-      - text: "第 4 章　大模型计算系统"
+      - text: "本章导读"
         href: index.qmd
-      - s4-1.qmd
-      - s4-2.qmd
-      - s4-3.qmd
-      - s4-4.qmd
-      - s4-5.qmd
-      - s4-6.qmd
-      - s4-7.qmd
-      - exercises.qmd
-      - references.qmd
+      - text: "4.1　大模型对计算系统的要求"
+        href: s4-1.qmd
+      - text: "4.2　算力资源"
+        href: s4-2.qmd
+      - text: "4.3　深度学习框架"
+        href: s4-3.qmd
+      - text: "4.4　推理服务"
+        href: s4-4.qmd
+      - text: "4.5　应用系统工具"
+        href: s4-5.qmd
+      - text: "4.6　综合案例"
+        href: s4-6.qmd
+      - text: "4.7　本章小结与展望"
+        href: s4-7.qmd
+      - text: "习题"
+        href: exercises.qmd
+      - text: "术语与参考文献"
+        href: references.qmd
     tools:
       - icon: file-earmark-pdf
         href: 第4章_大模型计算系统.pdf
@@ -50,8 +59,9 @@ format:
     number-sections: false
     html-math-method: mathjax
     include-after-body:
-      - text: '<script src="widgets.js"></script>'
+      - text: '<script src="toc.js"></script><script src="widgets.js"></script>'
     resources:
       - widgets.js
+      - toc.js
       - 第4章_大模型计算系统.pdf
       - figs/*.svg

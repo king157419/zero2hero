@@ -85,3 +85,26 @@ main p a:not([href^="http"]), .figcap a { white-space: nowrap; }
 }
 main table > :not(caption) > * > * { border-bottom-width: 0 !important; }
 main table thead th { border-bottom: .8px solid var(--ink) !important; }
+
+// ---------- 目录 ----------
+.sidebar-title { font-family: $headings-font-family; letter-spacing: 0; font-size: 1.05rem; }
+#quarto-sidebar .sidebar-item { margin: 0; }
+#quarto-sidebar .sidebar-item-container .sidebar-link { padding: .32rem 0 .32rem .7rem; border-left: 2px solid transparent; line-height: 1.5; }
+#quarto-sidebar .sidebar-link.active { border-left-color: var(--accent); background: none; }
+#quarto-sidebar .sidebar-link.active .ttxt, #quarto-sidebar .sidebar-link.active .tnum { color: var(--accent); }
+#quarto-sidebar .sidebar-item-text { font-size: .9rem; color: var(--ink); }
+.tline { display: flex !important; gap: .55em; align-items: baseline; }
+.tline .tnum { flex: 0 0 auto; min-width: 1.8em; font-family: "Times New Roman", Times, serif; color: #666; }
+.tline .ttxt { flex: 1 1 auto; }
+.tline.tchap .tnum { display: none; }
+.tline.tchap .ttxt { font-family: $headings-font-family; }
+#quarto-sidebar .tsep { margin-top: .5rem !important; padding-top: .5rem; border-top: .6px solid #D6D6D3; }
+#quarto-sidebar .tsep .tnum, #quarto-sidebar .tsep ~ .sidebar-item .tnum { display: none; }
+// 右侧“本页目录”
+#TOC { font-size: .84rem; }
+#toc-title { font-family: $headings-font-family; font-size: .9rem; margin-bottom: .4rem; }
+#TOC ul { padding-left: 0; }
+#TOC li a.nav-link { padding: .22rem 0 .22rem .7rem; border-left: 2px solid #E2E2DF; line-height: 1.5; color: #444; }
+#TOC li a.nav-link.active { border-left-color: var(--accent); color: var(--accent); }
+#TOC .tnum { min-width: 2.6em; }
+#TOC, #TOC *, #quarto-sidebar, #quarto-sidebar * { text-align: left !important; text-justify: auto; }
