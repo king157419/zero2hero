@@ -15,8 +15,8 @@
   % GPU：大量简单核心
   \begin{scope}[shift={(0,0)}]
     \draw[figline, fill=white] (-17,-14) rectangle (17,14);
-    \foreach \i in {0,...,7} \foreach \j in {0,...,6}
-      \draw[fill=figfill, line width=0.3pt] (-15+\i*3.8,-12+\j*3.8) rectangle ++(3,3);
+    \foreach \i in {0,...,7} \foreach \j in {0,...,5}
+      \draw[fill=figfill, line width=0.3pt] (-14.8+\i*3.8,-11+\j*3.8) rectangle ++(3,3);
     \node[anchor=north] at (0,-16) {GPU};
     \node[note, anchor=north] at (0,-21) {大量简单并行单元};
   \end{scope}

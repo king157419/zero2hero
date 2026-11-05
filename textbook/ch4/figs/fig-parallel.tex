@@ -3,7 +3,7 @@
 \begin{tikzpicture}[fig, x=1mm, y=1mm]
   % 三个面板共用同一网格：设备框高 36 mm（y = -18 ~ 18），层的行高 5.5 mm，数据框在 y = -12
   \tikzset{lay/.style={draw=figline, fill=figfill, minimum width=14mm, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
-           half/.style={draw=accent, fill=accentpale, minimum width=7mm, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
+           half/.style={draw=accent, fill=accentpale, minimum width=8mm, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
            dat/.style={draw=figline, fill=white, rounded corners=1pt, minimum height=4.2mm, inner sep=0pt, font=\figfont\scriptsize},
            dev/.style={draw=rulegray, rounded corners=1.5pt, minimum width=18mm, minimum height=36mm},
            gpu/.style={font=\figfont\scriptsize, anchor=south}}
@@ -22,16 +22,16 @@
   \end{scope}
   % ---------- (b) 张量并行 ----------
   \begin{scope}[shift={(0,0)}]
-    \node[dev, minimum width=24mm] (tp) at (0,0) {};
-    \node[gpu] at (-5.5,18) {GPU\,1};
-    \node[gpu] at ( 5.5,18) {GPU\,2};
-    \draw[densely dashed, rulegray] (0,17) -- (0,-10.5);
+    \node[dev, minimum width=30mm] (tp) at (0,0) {};
+    \node[gpu] at (-7.5,18) {GPU\,1};
+    \node[gpu] at ( 7.5,18) {GPU\,2};
+    \draw[densely dashed, rulegray] (0,16) -- (0,-10.5);
     \foreach \l in {1,...,4} {
-      \node[half] at (-5.5,{13.5-\l*5.5}) {\l\,a};
-      \node[half] at ( 5.5,{13.5-\l*5.5}) {\l\,b};
-      \draw[<->, warn, line width=0.6pt] (-1.8,{13.5-\l*5.5}) -- (1.8,{13.5-\l*5.5});
+      \node[half] at (-7.5,{13.5-\l*5.5}) {\l\,a};
+      \node[half] at ( 7.5,{13.5-\l*5.5}) {\l\,b};
+      \draw[<->, warn, line width=0.6pt] (-3.1,{13.5-\l*5.5}) -- (3.1,{13.5-\l*5.5});
     }
-    \node[dat, minimum width=18mm] at (0,-14) {同一批数据};
+    \node[dat, minimum width=22mm] at (0,-14) {同一批数据};
     \node[note, font=\figfont\scriptsize, text=warn] at (0,-23) {每层都要交换结果};
     \node[font=\figfont\footnotesize, anchor=north] at (0,-27) {(b) 张量并行：切分层内矩阵};
   \end{scope}
