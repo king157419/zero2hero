@@ -3,9 +3,7 @@
 
 \begin{guide}
 \begin{minipage}[c]{0.66\linewidth}
-\guideitem{需求}{在线服务要求首字出现快、输出流畅，同时要用有限的显卡为尽可能多的用户提供服务。}
-\guideitem{方案}{把推理拆成预填充与解码两个阶段分别分析；用 KV 缓存避免重复计算，再用 FlashAttention、PagedAttention、连续批处理和量化分别缓解不同的瓶颈。}
-\guideitem{效果}{用 TTFT、TPOT、吞吐和尾延迟等指标衡量；各项优化作用于不同位置，可以叠加使用，但彼此不能替代。}
+\noindent 模型训练好之后，要面对的是真实用户：首字要出得快，输出要流畅，而显卡数量有限，还要尽量服务更多的人。从哪里入手？本节先把推理拆成预填充与解码两个阶段分别分析，再看 KV 缓存如何避免重复计算，以及 FlashAttention、PagedAttention、连续批处理和量化各自缓解哪一个瓶颈。效果用 TTFT、TPOT、吞吐和尾延迟等指标衡量；各项优化作用于不同环节，可以叠加使用，但彼此不能替代。
 \end{minipage}\hfill
 \begin{minipage}[c]{0.3\linewidth}\centering\locator{2}\end{minipage}
 \end{guide}
@@ -26,11 +24,11 @@
 \subsection{KV 缓存：用存储换计算}
 \label{subsec:kvcache}
 
-\paragraph{需求} 在注意力计算中，每个新 token 都要与之前所有 token 的 Key 和 Value 做运算。如果每生成一个 token 都重新计算全部历史 token 的 Key 和 Value，总计算量将随序列长度呈平方增长。
+进入解码阶段后，每个新 token 都要与之前所有 token 的 Key 和 Value 做注意力运算。如果每生成一个 token 都把全部历史 token 的 Key 和 Value 重新算一遍，总计算量将随序列长度呈平方增长。这种重复能否避免？
 
-\paragraph{方案} 历史 token 的 Key 和 Value 一旦算出就不会改变，因此可以把它们保存下来，每步只为新 token 计算一次并追加到缓存中。这就是 \term{KV 缓存}（\en{KV cache}）。需要强调的是，KV 缓存保存的是注意力计算所需的中间状态，而不是已经生成好的答案。
+注意到历史 token 的 Key 和 Value 一旦算出就不会改变，因此可以把它们保存下来，每步只为新 token 计算一次并追加到缓存中。这就是 \term{KV 缓存}（\en{KV cache}）。需要强调的是，KV 缓存保存的是注意力计算所需的中间状态，而不是已经生成好的答案。
 
-\paragraph{代价} KV 缓存用显存换取计算，其大小可估算为
+省下的计算要用显存来换。KV 缓存的大小可估算为
 \begin{equation}
   M_{\mathrm{KV}} \approx 2 \times L \times H_{\mathrm{KV}} \times d_{\mathrm{head}} \times T \times B \times b_{\mathrm{KV}},
   \label{eq:kv}
