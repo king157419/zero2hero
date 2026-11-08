@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4.1 大模型对计算系统提出的要求 – 大模型计算系统</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./s4-2.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./s4-1.html">4.1　大模型对计算系统的要求</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">大模型计算系统</a> 
+        <div class="sidebar-tools-main">
+    <a href="./第4章_大模型计算系统.pdf" title="下载 PDF 版" class="quarto-navigation-tool px-1" aria-label="下载 PDF 版"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">4.1　大模型对计算系统的要求</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#两个典型场景" id="toc-两个典型场景" class="nav-link active" data-scroll-target="#两个典型场景">4.1.1　两个典型场景</a></li>
+  <li><a href="#subsec-three-quantities" id="toc-subsec-three-quantities" class="nav-link" data-scroll-target="#subsec-three-quantities">4.1.2　三个基本量的估算</a></li>
+  <li><a href="#subsec-roofline" id="toc-subsec-roofline" class="nav-link" data-scroll-target="#subsec-roofline">4.1.3　瓶颈判断工具：算术强度与 Roofline 模型</a></li>
+  <li><a href="#subsec-four-layers" id="toc-subsec-four-layers" class="nav-link" data-scroll-target="#subsec-four-layers">4.1.4　从需求到方案：计算系统的四层结构</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">4.1　大模型对计算系统提出的要求</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="bookbox guide">
+<p>动手选硬件、写代码之前，先要算清楚一笔账：大模型到底要计算多少、存储多少、搬运多少？本节用参数量 <span class="math inline">\(N\)</span>、每个 token 的计算量和每次计算的数据搬运量做数量级估算，再借助 Roofline 模型判断瓶颈落在哪里。结论是：大模型同时受到算力、存储容量、存储带宽和设备互联四方面约束，计算系统的四层结构正是由此而来。</p>
+</div>
+<section id="两个典型场景" class="level2">
+<h2 class="anchored" data-anchor-id="两个典型场景">4.1.1　两个典型场景</h2>
+<p>先看两个场景。</p>
+<p><strong>场景一：训练。</strong>某团队希望用 <span class="math inline">\(2\times10^{12}\)</span> 个 token 的语料，从头训练一个 70 亿参数（7B）的模型。他们需要知道：单张显卡的显存能否容纳模型？训练需要多长时间？需要多少张显卡？</p>
+<p><strong>场景二：推理。</strong>训练好的模型部署为在线问答服务，同时有上百名用户提问。服务方关心的是：用户需要等待多久才能看到第一个输出 token？每秒能输出多少个 token？一台服务器能同时服务多少用户？</p>
+<p>这两个问题看似不同，背后却涉及同样的三个基本量：<strong>存储量</strong>（模型与中间状态占多少字节）、<strong>计算量</strong>（需要多少次浮点运算）和<strong>数据搬运量</strong>（运算时要在存储与计算单元之间移动多少字节）。下面逐一估算。</p>
+</section>
+<section id="subsec-three-quantities" class="level2">
+<h2 class="anchored" data-anchor-id="subsec-three-quantities">4.1.2　三个基本量的估算</h2>
+<p><strong>存储量</strong>　 设模型有 <span class="math inline">\(N\)</span> 个参数，每个参数用 <span class="math inline">\(b\)</span> 位表示，则仅权重就至少占用 <span class="math display">\[M_{\mathrm{weight}} = \frac{N\,b}{8}\ \text{字节}.
+\tag{4-1}\]</span> 7B 模型若以 16 位浮点数（FP16 或 BF16）存储，需要 <span class="math inline">\(7\times10^{9}\times 2 = 14\times10^{9}\)</span> 字节，约 14 GB；若量化为 4 位，仅权重约 3.5 GB。训练时还要额外保存梯度和优化器状态，所需存储往往是权重本身的数倍（详见第 <a href="./s4-3.html#subsec-train-mem">4.3.3</a> 小节）。</p>
+<p><strong>计算量</strong>　 对于 Transformer 结构的模型，处理一个 token 的前向计算约需 <span class="math inline">\(2N\)</span> 次浮点运算（每个参数参与一次乘法和一次加法）；训练时还要做反向传播，计算量约为前向的两倍，因此每个训练 token 合计约 <span class="math inline">\(6N\)</span> 次浮点运算<sup><a href="./references.html#ref-5">[5]</a></sup>。于是训练总计算量可估算为 <span class="math display">\[C_{\mathrm{train}} \approx 6\,N\,D,
+\tag{4-2}\]</span> 其中 <span class="math inline">\(D\)</span> 为训练 token 总数。</p>
+<div id="ex-gpus" class="bookbox example">
+<div class="boxtitle">
+<p>例 4-1　训练需要多少张卡</p>
+</div>
+<p>按场景一，<span class="math inline">\(C_{\mathrm{train}}\approx 6\times7\times10^{9}\times2\times10^{12}=8.4\times10^{22}\)</span> 次浮点运算。一张数据中心级 GPU 的 BF16 稠密峰值算力约为 <span class="math inline">\(10^{15}\)</span> FLOP/s 量级（例如 NVIDIA H100 SXM 约 <span class="math inline">\(9.9\times10^{14}\)</span> FLOP/s<sup><a href="./references.html#ref-7">[7]</a></sup>）。实际训练中能达到峰值的 40% 左右已属较高水平，即有效算力约 <span class="math inline">\(4\times10^{14}\)</span> FLOP/s，则 <span class="math display">\[t_{\text{单卡}} \approx \frac{8.4\times10^{22}}{4\times10^{14}} \approx 2.1\times10^{8}\ \text{s} \approx 6.7\ \text{年}.\]</span> 若使用 1024 张 GPU 并行训练，且并行效率理想，耗时可缩短到约 2.4 天。这说明：<strong>大模型训练通常需要多卡乃至多机的分布式计算</strong>，设备之间如何交换数据因此成为核心问题。</p>
+</div>
+<p><strong>数据搬运量</strong>　 计算单元只能处理已经送达的数据。推理时每生成一个新 token，都要把全部权重从显存读入计算单元一次：对于 14 GB 权重的 7B 模型，就意味着每个 token 至少读取 14 GB 数据。若显存带宽为 3.35 TB/s，则单个请求逐 token 生成的速度上限约为 <span class="math display">\[\frac{3.35\times10^{12}\ \text{B/s}}{14\times10^{9}\ \text{B/token}} \approx 240\ \text{token/s}.\]</span> 该上限主要不由芯片峰值算力决定，而由<strong>存储带宽</strong>决定。可见，衡量计算系统时不能只看算力，还必须同时考察数据供给是否及时。</p>
+</section>
+<section id="subsec-roofline" class="level2">
+<h2 class="anchored" data-anchor-id="subsec-roofline">4.1.3　瓶颈判断工具：算术强度与 Roofline 模型</h2>
+<p>为判断一项计算究竟受算力限制还是受访存限制，引入<strong>算术强度</strong>（arithmetic intensity）：记一次计算的浮点运算次数为 <span class="math inline">\(F\)</span>，需要在存储与计算单元之间搬运的字节数为 <span class="math inline">\(Q\)</span>，则 <span class="math display">\[I = \frac{F}{Q}\quad(\text{FLOP/byte}).
+\tag{4-3}\]</span> 设硬件峰值算力为 <span class="math inline">\(P_{\mathrm{peak}}\)</span>，存储带宽为 <span class="math inline">\(B_{\mathrm{mem}}\)</span>。计算单元每秒最多完成 <span class="math inline">\(P_{\mathrm{peak}}\)</span> 次运算，而存储系统每秒最多供给 <span class="math inline">\(B_{\mathrm{mem}}\)</span> 字节数据、支撑 <span class="math inline">\(I\cdot B_{\mathrm{mem}}\)</span> 次运算，二者取较小者，即得 <strong>Roofline 模型</strong><sup><a href="./references.html#ref-6">[6]</a></sup>给出的可达性能上界： <span class="math display">\[P_{\mathrm{attainable}} \le \min\bigl(P_{\mathrm{peak}},\; I\cdot B_{\mathrm{mem}}\bigr).
+\tag{4-4}\]</span> 两条直线相交处的算术强度 <span class="math inline">\(I^{*}=P_{\mathrm{peak}}/B_{\mathrm{mem}}\)</span> 称为<strong>拐点</strong>。<span class="math inline">\(I&lt;I^{*}\)</span> 时性能受带宽限制，称为<strong>访存受限</strong>（memory-bound）；<span class="math inline">\(I&gt;I^{*}\)</span> 时性能受峰值算力限制，称为<strong>计算受限</strong>（compute-bound）。以前述 GPU 为例，<span class="math inline">\(I^{*}\approx 9.9\times10^{14}/3.35\times10^{12}\approx 295\)</span> FLOP/byte。</p>
+<div id="figure-roofline" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/fig-roofline.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:88.5%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 4-1　Roofline 模型示意。以峰值算力约 989 TFLOP/s、显存带宽约 3.35 TB/s 的 GPU 为例；坐标为对数刻度，各点为数量级估计</p>
+</div>
+</div>
+<div class="widget" data-widget="roofline"></div>
+<p>将 Roofline 模型用于推理的两个阶段（图 <a href="./s4-1.html#figure-roofline">4-1</a>），可以得到一个重要结论。读入一次 16 位权重（2 字节）后，若只为一个 token 做 2 次运算，算术强度约为 <span class="math inline">\(1\)</span> FLOP/byte，远低于拐点；若一次读入后同时为 <span class="math inline">\(T\)</span> 个 token 复用，算术强度约为 <span class="math inline">\(T\)</span>。因此：</p>
+<ul>
+<li><p><strong>预填充</strong>（一次性处理用户输入的全部 token，<span class="math inline">\(T\)</span> 可达数千）的算术强度高，通常<strong>计算受限</strong>；</p></li>
+<li><p><strong>逐 token 解码</strong>（每步只生成一个 token）的算术强度很低，通常<strong>访存受限</strong>；把多个请求合并成批次（批大小为 <span class="math inline">\(B\)</span>）可使算术强度提高到约 <span class="math inline">\(B\)</span>。</p></li>
+</ul>
+<p>这就解释了一个常见现象：同一张显卡处理长输入（预填充阶段）时吞吐较高，而逐 token 解码时吞吐却较低——原因不是算力不足，而是每生成一个 token 都要重新读取大量权重和缓存。第 <a href="./s4-4.html">4.4</a> 节介绍的许多推理优化技术，正是围绕这一点展开的。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>Roofline 模型给出的是性能<strong>上界</strong>，不能用来精确预测实际性能。它的价值在于快速判断主要瓶颈：对访存受限的任务，提升峰值算力作用有限；对计算受限的任务，提升带宽同样作用有限。</p>
+</div>
+</section>
+<section id="subsec-four-layers" class="level2">
+<h2 class="anchored" data-anchor-id="subsec-four-layers">4.1.4　从需求到方案：计算系统的四层结构</h2>
+<p>综合以上估算，大模型对计算系统的需求可以归纳为四条：</p>
+<ol type="1">
+<li><p><strong>算得快</strong>——提供足够的浮点算力，并让算力被充分利用；</p></li>
+<li><p><strong>存得下、送得及</strong>——有足够的存储容量容纳权重和中间状态，并有足够的带宽及时供给数据；</p></li>
+<li><p><strong>传得动</strong>——当一张卡不够用时，多张卡、多台机器之间能高效交换数据；</p></li>
+<li><p><strong>用得上</strong>——开发者能方便地表达模型、训练模型，用户能方便地调用模型。</p></li>
+</ol>
+<p>没有哪一个部件能单独满足这四条需求，于是形成了层次化的解决方案（图 <a href="./s4-1.html#figure-overview">4-2</a>）：底层的<strong>算力资源</strong>（芯片、存储、互联）提供物理能力；<strong>驱动与计算软件栈</strong>把硬件能力开放为可编程接口；<strong>训练与推理框架</strong>让开发者用张量运算表达模型，并自动完成求导、并行与调度；最上层的<strong>应用系统工具</strong>把模型组装成可部署、可管理的产品。每一层都向上层隐藏下层的复杂性，同时受到下层能力的约束。</p>
+<div id="figure-overview" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/fig-overview.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:96.7%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 4-2　大模型计算系统的四层结构。左侧为各层满足的需求，右侧为对应的章节；向下的箭头表示上层向下层提交的工作，向上的箭头表示下层向上层提供的能力</p>
+</div>
+</div>
+<p>表 <a href="./s4-1.html#tab-roadmap">4-1</a> 给出了本章各节与这四层结构的对应关系。阅读时可以随时回到图 <a href="./s4-1.html#figure-overview">4-2</a>，确认当前内容处在哪一层、解决的是哪一类需求。</p>
+<div id="tab-roadmap" class="booktab">
+<div class="tabcap">
+<p>表 4-1　本章内容与系统层次的对应关系</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">节</th>
+<th style="text-align: left;">所处层次</th>
+<th style="text-align: left;">回答的核心问题</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="./s4-2.html">4.2</a>算力资源</td>
+<td style="text-align: left;">算力资源、驱动与软件栈</td>
+<td style="text-align: left;">计算在哪里执行？数据如何存取和传输？</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="./s4-3.html">4.3</a>深度学习框架</td>
+<td style="text-align: left;">训练与推理框架</td>
+<td style="text-align: left;">如何方便地表达模型？单卡放不下时如何训练？</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="./s4-4.html">4.4</a>推理服务 训</td>
+<td style="text-align: left;">练与推理框架 如</td>
+<td style="text-align: left;">何让模型又快又省地回答大量请求？</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="./s4-5.html">4.5</a>应用系统工具 应</td>
+<td style="text-align: left;">用系统工具 如</td>
+<td style="text-align: left;">何把模型变成可使用、可管理的产品？</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="./s4-6.html">4.6</a>综合案例</td>
+<td style="text-align: left;">全部层次</td>
+<td style="text-align: left;">面对一个具体需求，如何自上而下地完成选型？</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="本章导读">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">本章导读</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./s4-2.html" class="pagination-link" aria-label="4.2　算力资源">
+        <span class="nav-page-text">4.2　算力资源</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script src="toc.js"></script><script src="widgets.js"></script>
+
+
+
+
+</body></html>
