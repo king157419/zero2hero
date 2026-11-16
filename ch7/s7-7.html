@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7.7 Loop Engineering：让执行结果改变下一步 – 大语言模型原理与技术</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../ch7/s7-8.html" rel="next">
+<link href="../ch7/s7-6.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-7.html">7.7　Loop Engineering：让执行结果改变下一步</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">大语言模型原理与技术</a> 
+        <div class="sidebar-tools-main">
+    <a href="../大语言模型原理与技术_全书.pdf" title="下载全书 PDF" class="quarto-navigation-tool px-1" aria-label="下载全书 PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">全书导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">第 1 章　大语言模型的由来与现状</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false" aria-label="展开或折叠此栏: 第 1 章　大语言模型的由来与现状">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.3　大语言模型如何工作</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.4　当前技术版图</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5　应用现状与典型模式</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.6　局限、风险与治理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考与练��</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">第 2 章　大语言模型的底层原理与技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="展开或折叠此栏: 第 2 章　大语言模型的底层原理与技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1　底层逻辑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2　重要概念</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3　模型分类</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4　模型构建</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">第 3 章　大语言模型的预训练、微调与推理</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false" aria-label="展开或折叠此栏: 第 3 章　大语言模型的预训练、微调与推理">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3　预训练数据工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6　参数高效微调技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8　大语言模型推理原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.9　推理性能与优化技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.12　本章小结与习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">第 4 章　大模型计算系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false" aria-label="展开或折叠此栏: 第 4 章　大模型计算系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1　大模型对计算系统提出的要求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源：让计算算得快、存得下、传得动</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架：把算法组织成可执行的计算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务：让模型又快又省地回答请求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具：从模型到产品</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例：课程知识问答助手的系统设计</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch5/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">第 5 章　检索增强生成</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="展开或折叠此栏: 第 5 章　检索增强生成">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3　一条流水线的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.9　工程里的十个坑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">延伸阅读</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch6/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">第 6 章　智能体</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="展开或折叠此栏: 第 6 章　智能体">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.1　概述</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.2　核心组件</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.3　工作原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.4　关键能力</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.5　相关技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.6　Agentic AI：从单个智能体到智能体系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.7　本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.8　习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch7/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">第 7 章　Coding Agent 工程技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="true" aria-label="展开或折叠此栏: 第 7 章　Coding Agent 工程技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1　从代码生成到 Coding Agent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.4　Context Engineering：为下一步决策准备信息</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.5　Harness Engineering：把模型的动作接入可控环境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.9　安全与可信交付：把信任边界放在工具之前</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch8/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">第 8 章　记忆系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false" aria-label="展开或折叠此栏: 第 8 章　记忆系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1　理解记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2　当前记忆系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3　基于认知学的记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4　应用：智能个人助手</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考资料</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#一个有效循环包含哪些状态" id="toc-一个有效循环包含哪些状态" class="nav-link active" data-scroll-target="#一个有效循环包含哪些状态">7.7.1　一个有效循环包含哪些状态</a></li>
+  <li><a href="#每一轮都要形成可解释的决策" id="toc-每一轮都要形成可解释的决策" class="nav-link" data-scroll-target="#每一轮都要形成可解释的决策">7.7.2　每一轮都要形成可解释的决策</a></li>
+  <li><a href="#失败要先分类再决定重试或换方案" id="toc-失败要先分类再决定重试或换方案" class="nav-link" data-scroll-target="#失败要先分类再决定重试或换方案">7.7.3　失败要先分类，再决定重试或换方案</a></li>
+  <li><a href="#从局部验证走到真正完成" id="toc-从局部验证走到真正完成" class="nav-link" data-scroll-target="#从局部验证走到真正完成">7.7.4　从局部验证走到真正完成</a></li>
+  <li><a href="#一条简短轨迹时区错误如何缩小" id="toc-一条简短轨迹时区错误如何缩小" class="nav-link" data-scroll-target="#一条简短轨迹时区错误如何缩小">7.7.5　一条简短轨迹：时区错误如何缩小</a></li>
+  <li><a href="#长任务人工接管与多-agent-反馈" id="toc-长任务人工接管与多-agent-反馈" class="nav-link" data-scroll-target="#长任务人工接管与多-agent-反馈">7.7.6　长任务、人工接管与多 Agent 反馈</a></li>
+  <li><a href="#把循环写成可执行规则" id="toc-把循环写成可执行规则" class="nav-link" data-scroll-target="#把循环写成可执行规则">7.7.7　把循环写成可执行规则</a></li>
+  <li><a href="#小结循环的质量取决于反馈能否收敛" id="toc-小结循环的质量取决于反馈能否收敛" class="nav-link" data-scroll-target="#小结循环的质量取决于反馈能否收敛">7.7.8　小结：循环的质量取决于反馈能否收敛</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-7.html">7.7　Loop Engineering：让执行结果改变下一步</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">7.7　Loop Engineering：让执行结果改变下一步</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>前面三类工程已经给 Agent 指定任务、准备信息并提供受控工具。接下来需要解决的是时间上的问题：<strong>第一步做完以后，怎样决定第二步？</strong>模型调用工具、工具返回结果、模型再作判断，这个过程通常称为 Agent Loop。Claude Code 的官方文档用”获取上下文、采取行动、验证结果”说明这一循环；具体阶段可以交错进行。课程在此使用 <strong>Loop Engineering</strong> 一词，强调循环的状态、反馈、停止和恢复都需要设计。<u>Claude Code 工作机制</u></p>
+<section id="一个有效循环包含哪些状态" class="level2">
+<h2 class="anchored" data-anchor-id="一个有效循环包含哪些状态">7.7.1　一个有效循环包含哪些状态</h2>
+<p>最简的工具循环是”模型提出工具调用，系统执行，将结果发回模型，直到模型不再调用工具”。这个形式只解决了消息往返。真实开发任务还要判断：测试是否满足验收标准、是否正在等用户批准、是否达到重试上限、任务是否因环境问题受阻。因此，应当显式保存任务状态，而非把全部进展藏在聊天记录里。Anthropic 的工具文档也把”模型请求、应用执行、结果返回”写成清楚的往返过程；应用还需处理非工具调用的其他停止原因。<u>Anthropic 工具循环说明</u></p>
+<p>本章采用下面的教学状态机。它不对应某个产品的内部枚举，而是用来说明转移条件。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>状态</strong></th>
+<th><strong>含义</strong></th>
+<th><strong>允许的下一步</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>READY</td>
+<td>已收到任务，工作区和边界待核对</td>
+<td>读取项目、确认任务合同</td>
+</tr>
+<tr class="even">
+<td>WORKING</td>
+<td>正在读取、修改或执行检查</td>
+<td>根据结果继续、转入验证或待批准</td>
+</tr>
+<tr class="odd">
+<td>VERIFYING</td>
+<td>功能已实现，正在检查完成条件</td>
+<td>通过则完成；失败则回到工作中</td>
+</tr>
+<tr class="even">
+<td>WAITING_FOR_USER</td>
+<td>需要澄清或批准外部动作</td>
+<td>等待决定，不能擅自执行待批准动作</td>
+</tr>
+<tr class="odd">
+<td>BLOCKED</td>
+<td>当前环境或权限使工作无法继续</td>
+<td>报告证据和解除条件</td>
+</tr>
+<tr class="even">
+<td>COMPLETED</td>
+<td>验收证据齐全</td>
+<td>输出交付报告，停止任务</td>
+</tr>
+</tbody>
+</table>
+<p>状态迁移需要<strong>明确的触发事实</strong>。例如，“相关测试失败”使任务从 VERIFYING 回到 WORKING；“即将向真实邮箱发送内容”使任务进入 WAITING_FOR_USER；“测试、构建、Diff 审查均符合任务合同”才允许进入 COMPLETED。模型可以建议状态变化，运行系统应检查证据后再提交变化。若仅凭模型生成”我已经完成”就设置 COMPLETED，完成门禁没有实际作用。</p>
+</section>
+<section id="每一轮都要形成可解释的决策" class="level2">
+<h2 class="anchored" data-anchor-id="每一轮都要形成可解释的决策">7.7.2　每一轮都要形成可解释的决策</h2>
+<p>一次有效迭代可以拆成五步：<strong>读取上轮结果、确定当前主要问题、选择最小有用动作、执行并记录、判断去向</strong>。这与 PPT 的循环配置相对应。它的目标不是限制 Agent 一轮只能调用一个工具，而是保证下一步能够追溯到新证据。</p>
+<p>“选择最小有用动作”可以用一个简单原则操作：优先选择<strong>能减少当前不确定性、成本又较低</strong>的动作。代码出现类型错误，先读报错行和相关类型；一个单元测试失败，先跑该测试并检查断言；相关检查通过后，再扩大到完整测试与构建。若每改一行都运行全部端到端测试，延迟很高；若只跑小测试就结束，回归风险仍在。检查应从局部定位逐步扩展到交付验证。</p>
+<p>为使这条原则可执行，Agent 可以在每轮记录三句话：<strong>我改了什么；我看到了什么；这为何支持下一步。</strong>例如，“修改时间转换函数；相关测试仍相差八小时；需要检查输入时间戳是否已带时区”。记录的作用是保留因果链，避免长任务中回到早已失败的假设。证据应指向命令、文件版本或工具结果，而不只是一段推理文本。</p>
+</section>
+<section id="失败要先分类再决定重试或换方案" class="level2">
+<h2 class="anchored" data-anchor-id="失败要先分类再决定重试或换方案">7.7.3　失败要先分类，再决定重试或换方案</h2>
+<p>“失败”不是单一事件。不同原因应通向不同分支。下表给出一种用于编程任务的处理规则。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>结果</strong></th>
+<th><strong>首先检查</strong></th>
+<th><strong>合理动作</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>工具参数错误</td>
+<td>Schema、必填字段、目标路径</td>
+<td>修正参数，不修改业务代码</td>
+</tr>
+<tr class="even">
+<td>权限拒绝</td>
+<td>动作范围、审批状态</td>
+<td>请求授权或报告阻塞，不换路径绕过</td>
+</tr>
+<tr class="odd">
+<td>网络超时</td>
+<td>服务状态、请求是否可能已生效</td>
+<td>带请求 ID 限次重试，必要时先查询结果</td>
+</tr>
+<tr class="even">
+<td>依赖或环境错误</td>
+<td>lockfile、运行版本、Mock 服务</td>
+<td>修复或报告环境，不把它当业务逻辑错误</td>
+</tr>
+<tr class="odd">
+<td>测试断言失败</td>
+<td>预期值、实际值、代码版本</td>
+<td>缩小到相关函数，修改原因后重测</td>
+</tr>
+<tr class="even">
+<td>完整回归失败</td>
+<td>新旧测试差异、改动范围</td>
+<td>定位回归，再运行局部与完整检查</td>
+</tr>
+</tbody>
+</table>
+<p>重试只适合可能自行消失的暂时故障。测试断言连续给出同样结果时，原样重跑一般不会增加信息，应检查假设、扩大取证范围或请人判断。PPT 给出的”同一错误连续两次且没有新线索”是一个适合教学项目的停止阈值；生产系统可依故障率和调用成本调整，但必须有上限。对于外部写入，重试前还要确认上次请求是否已经生效，避免重复发送邮件或重复创建日历事件。</p>
+</section>
+<section id="从局部验证走到真正完成" class="level2">
+<h2 class="anchored" data-anchor-id="从局部验证走到真正完成">7.7.4　从局部验证走到真正完成</h2>
+<p>完成条件来自 7.3 节的任务合同，循环负责收集与检查证据。一个常见的验证顺序是：先运行最相关的单元测试，再运行类型检查与完整测试，随后构建、检查页面或服务行为，最后审查 Git Diff。若某个步骤失败，Loop 回到定位与修正；若步骤无法运行，状态应是 BLOCKED 或”部分验证”，而不是 COMPLETED。</p>
+<p>这里需要区分<strong>工具循环结束</strong>与<strong>工程任务完成</strong>。模型没有继续请求工具，可能只是它认为答案足够、遇到令牌或预算限制，或需要用户输入；这不证明验收条件已满足。完成门禁应独立核对：必需测试是否在当前 commit 上运行、所有关键行为是否有证据、外部写入是否获批、最终 Diff 是否落在允许范围内。OpenAI 的 Codex 目标指南同样强调，持续目标的完成必须对照文件、测试、日志或产物，而不能只凭模型的完成判断。<u>Codex 可验证目标指南</u></p>
+</section>
+<section id="一条简短轨迹时区错误如何缩小" class="level2">
+<h2 class="anchored" data-anchor-id="一条简短轨迹时区错误如何缩小">7.7.5　一条简短轨迹：时区错误如何缩小</h2>
+<p>沿用 PPT 中的提醒功能：会议于 09:00 开始，提醒应在 08:50 出现；测试实际得到 16:50。下面的轨迹只有三轮，但每轮都引入了新证据。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>轮次</strong></th>
+<th><strong>新证据</strong></th>
+<th><strong>当前判断</strong></th>
+<th><strong>下一步</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>预期 08:50，实际 16:50，正好相差八小时</td>
+<td>优先检查时间解释方式</td>
+<td>读取输入时间格式与转换函数</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>输入含 UTC 标记，代码又按本地时间二次转换</td>
+<td>找到与错误幅度一致的原因</td>
+<td>只修改转换边界，运行时间单元测试</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>时间单元测试通过</td>
+<td>局部错误已修复，仍需排除回归</td>
+<td>运行完整测试与构建，查看最终 Diff</td>
+</tr>
+</tbody>
+</table>
+<p>这个例子展示了 Loop 的核心：第一轮失败缩小问题范围，第二轮证据改变实现，第三轮通过后扩大检查范围。若第二轮修复后仍相差八小时，合理动作是重新核对假设，而不是无限次运行同一测试。案例只说明决策方法；真实时区处理还需考虑带偏移量的输入、跨日和夏令时等测试边界。</p>
+</section>
+<section id="长任务人工接管与多-agent-反馈" class="level2">
+<h2 class="anchored" data-anchor-id="长任务人工接管与多-agent-反馈">7.7.6　长任务、人工接管与多 Agent 反馈</h2>
+<p>长任务不能只设”成功”这一个退出口。至少需要三类停止条件：<strong>目标已经达到</strong>，<strong>预算或重试上限已到</strong>，<strong>下一步需要人的权限或业务判断</strong>。用户中途改动目标时，任务合同和剩余计划都要更新；用户拒绝一个动作时，Loop 应记录拒绝并选择仍在授权范围内的路径。若不具备可行路径，就应报告受阻，而不是继续尝试越过边界。</p>
+<p>多 Agent 协作也服从同一原则。父 Agent 向子 Agent 或 A2A 远端 Agent 分派任务后，等待结果属于一种状态；远端返回 working、input-required 或失败，会改变父任务下一步。子 Agent 的报告是一份待核验的证据，父 Agent 还应检查代码版本、Artifact 内容、合并冲突和整体验收。这样，协作不会把”多个 Agent 都说完成了”误写成”项目已经完成”。</p>
+<p>长任务每达到一个稳定状态，可以保存代码检查点和任务状态摘要。恢复时，先核对工作区 commit、最近一次成功检查和待批准动作，再决定是否继续。状态与证据必须同步：若文件在暂停期间被其他人改动，旧测试结果不再自动适用。Codex 的持续目标实现也把目标状态、预算、继续条件和证据审查放在会话生命周期中管理，这说明 Loop 既是模型的逐步推理，也是运行系统的调度问题。<u>Codex 可验证目标指南</u></p>
+</section>
+<section id="把循环写成可执行规则" class="level2">
+<h2 class="anchored" data-anchor-id="把循环写成可执行规则">7.7.7　把循环写成可执行规则</h2>
+<p>下面是一份教学用的循环控制伪代码，用于说明每次工具结果返回后应检查什么。它依赖前面章节的任务合同、上下文管理和 Harness，不代表某个产品的内部实现。</p>
+<blockquote class="blockquote">
+<p>while state is WORKING or VERIFYING:<br>
+observation = read_latest_result()<br>
+record(action, observation, code_revision)<br>
+if approval_required(observation): state = WAITING_FOR_USER; break<br>
+if environment_blocked(observation): state = BLOCKED; break<br>
+if same_failure_without_new_evidence &gt;= retry_limit:<br>
+change_hypothesis_or_handoff(); continue_or_stop()<br>
+if local_check_failed(observation):<br>
+choose_smallest_diagnostic_action(); state = WORKING; continue<br>
+if local_check_passed(observation) and broader_checks_missing:<br>
+run_next_broader_check(); state = VERIFYING; continue<br>
+if all_done_when_have_current_evidence() and final_diff_reviewed():<br>
+state = COMPLETED; break</p>
+</blockquote>
+<p>实现时还应为每轮记录模型调用次数、工具耗时、令牌与计算成本、失败类型和人工介入次数。它们不是完成条件的替代品，却能发现”任务虽然成功，成本却不可接受”的问题。若要比较两套 Loop 策略，应固定仓库、任务集、模型、工具和预算，分别观察成功率、完成时间、重试次数与风险动作；只展示一条成功轨迹不足以证明策略更好。</p>
+</section>
+<section id="小结循环的质量取决于反馈能否收敛" class="level2">
+<h2 class="anchored" data-anchor-id="小结循环的质量取决于反馈能否收敛">7.7.8　小结：循环的质量取决于反馈能否收敛</h2>
+<p>Loop Engineering 要写清目标、当前状态、可执行动作、反馈解释和退出规则。每一轮取得新证据，下一步据此缩小问题或扩大验证；没有新信息时停止原样重试；完成前对照任务合同检查证据；受阻时把决定交还给人。到这里，PPT 的四类工程技术形成完整链条：Prompt 定方向，Context 给依据，Harness 设边界，Loop 用反馈促收敛。下一节将在这条链上讨论 RSI：当一次任务结束后，Agent 能否把经验变成经过评估的系统改进。</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="../ch7/s7-6.html" class="pagination-link" aria-label="7.6　工具与智能体互操作：MCP、A2A">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">7.6　工具与智能体互操作：MCP、A2A</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../ch7/s7-8.html" class="pagination-link" aria-label="7.8　RSI：从任务内纠错到系统自身改进">
+        <span class="nav-page-text">7.8　RSI：从任务内纠错到系统自身改进</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script src="toc.js"></script><script src="widgets.js"></script>
+<script src="../toc.js"></script><script src="../widgets.js"></script>
+
+
+
+
+</body></html>

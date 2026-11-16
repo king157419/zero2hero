@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8.1 理解记忆 – 大语言模型原理与技术</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../ch8/s8-2.html" rel="next">
+<link href="../ch8/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-1.html">8.1　理解记忆</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">大语言模型原理与技术</a> 
+        <div class="sidebar-tools-main">
+    <a href="../大语言模型原理与技术_全书.pdf" title="下载全书 PDF" class="quarto-navigation-tool px-1" aria-label="下载全书 PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">全书导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">第 1 章　大语言模型的由来与现状</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false" aria-label="展开或折叠此栏: 第 1 章　大语言模型的由来与现状">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.3　大语言模型如何工作</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.4　当前技术版图</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5　应用现状与典型模式</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.6　局限、风险与治理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考与练��</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">第 2 章　大语言模型的底层原理与技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="展开或折叠此栏: 第 2 章　大语言模型的底层原理与技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1　底层逻辑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2　重要概念</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3　模型分类</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4　模型构建</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">第 3 章　大语言模型的预训练、微调与推理</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false" aria-label="展开或折叠此栏: 第 3 章　大语言模型的预训练、微调与推理">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3　预训练数据工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6　参数高效微调技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8　大语言模型推理原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.9　推理性能与优化技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.12　本章小结与习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">第 4 章　大模型计算系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false" aria-label="展开或折叠此栏: 第 4 章　大模型计算系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1　大模型对计算系统提出的要求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源：让计算算得快、存得下、传得动</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架：把算法组织成可执行的计算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务：让模型又快又省地回答请求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具：从模型到产品</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例：课程知识问答助手的系统设计</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch5/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">第 5 章　检索增强生成</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="展开或折叠此栏: 第 5 章　检索增强生成">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3　一条流水线的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.9　工程里的十个坑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">延伸阅读</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch6/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">第 6 章　智能体</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="展开或折叠此栏: 第 6 章　智能体">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.1　概述</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.2　核心组件</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.3　工作原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.4　关键能力</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.5　相关技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.6　Agentic AI：从单个智能体到智能体系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.7　本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.8　习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch7/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">第 7 章　Coding Agent 工程技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false" aria-label="展开或折叠此栏: 第 7 章　Coding Agent 工程技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1　从代码生成到 Coding Agent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.4　Context Engineering：为下一步决策准备信息</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.5　Harness Engineering：把模型的动作接入可控环境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.9　安全与可信交付：把信任边界放在工具之前</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch8/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">第 8 章　记忆系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="true" aria-label="展开或折叠此栏: 第 8 章　记忆系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">8.1　理解记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2　当前记忆系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3　基于认知学的记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4　应用：智能个人助手</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考资料</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#上下文窗口大一些就够了吗" id="toc-上下文窗口大一些就够了吗" class="nav-link active" data-scroll-target="#上下文窗口大一些就够了吗">8.1.1　上下文窗口大一些，就够了吗</a></li>
+  <li><a href="#窗口管理不等于记忆系统" id="toc-窗口管理不等于记忆系统" class="nav-link" data-scroll-target="#窗口管理不等于记忆系统">8.1.2　窗口管理不等于记忆系统</a></li>
+  <li><a href="#从聊天记录到状态系统" id="toc-从聊天记录到状态系统" class="nav-link" data-scroll-target="#从聊天记录到状态系统">8.1.3　从聊天记录到状态系统</a></li>
+  <li><a href="#记忆为什么重要" id="toc-记忆为什么重要" class="nav-link" data-scroll-target="#记忆为什么重要">8.1.4　记忆为什么重要</a></li>
+  <li><a href="#短期记忆与长期记忆" id="toc-短期记忆与长期记忆" class="nav-link" data-scroll-target="#短期记忆与长期记忆">8.1.5　短期记忆与长期记忆</a></li>
+  <li><a href="#三类基础记忆情景语义与程序" id="toc-三类基础记忆情景语义与程序" class="nav-link" data-scroll-target="#三类基础记忆情景语义与程序">8.1.6　三类基础记忆：情景、语义与程序</a></li>
+  <li><a href="#七类记忆及其状态含义" id="toc-七类记忆及其状态含义" class="nav-link" data-scroll-target="#七类记忆及其状态含义">8.1.7　七类记忆及其状态含义</a></li>
+  <li><a href="#记忆系统的本质是状态工程" id="toc-记忆系统的本质是状态工程" class="nav-link" data-scroll-target="#记忆系统的本质是状态工程">8.1.8　记忆系统的本质是状态工程</a></li>
+  <li><a href="#从三种实现思路看记忆系统" id="toc-从三种实现思路看记忆系统" class="nav-link" data-scroll-target="#从三种实现思路看记忆系统">8.1.9　从三种实现思路看记忆系统</a></li>
+  <li><a href="#好记忆不是把所有事情都记住" id="toc-好记忆不是把所有事情都记住" class="nav-link" data-scroll-target="#好记忆不是把所有事情都记住">8.1.10　好记忆不是把所有事情都记住</a></li>
+  <li><a href="#本节小结" id="toc-本节小结" class="nav-link" data-scroll-target="#本节小结">8.1.11　本节小结</a></li>
+  <li><a href="#思考与讨论" id="toc-思考与讨论" class="nav-link" data-scroll-target="#思考与讨论">8.1.12　思考与讨论</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-1.html">8.1　理解记忆</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">8.1　理解记忆</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>如果一位助手每次打开新对话，都要重新问你是谁、上次做到哪里、你不喜欢什么表达方式，你会觉得它不够聪明；可它可能只是没有记住。智能体的”聪明”很容易被理解成推理能力更强、工具更多或者回答更长，但在许多真实任务里，决定体验能否连续的，是它能不能保留并正确使用过去的状态。</p>
+<p>前七章已经为这个问题搭好了几块地基。第一讲把记忆和反思作为智能体的能力之一；第四讲解释了长上下文带来的显存与推理成本；第五讲讨论了 RAG 如何从外部知识库补充信息；第六讲把记忆放进智能体架构，并给出三层记忆的框架；第七讲从上下文工程的角度讨论工作集、压缩、持久化和恢复。本节不再重复这些技术细节，而是回答更靠前的问题：上下文窗口和记忆是什么关系，记忆到底是什么，记忆有哪些类型，以及一个记忆系统为什么不能只靠”多存一点”。</p>
+<p>读完后，你应当能够解释为什么更长的上下文仍不能替代记忆；区分短期记忆、长期记忆以及情景、语义、程序等不同类型；用”状态工程”的视角描述记忆从写入到遗忘的完整过程；并判断一份记忆是否真正有用。</p>
+<section id="上下文窗口大一些就够了吗" class="level2">
+<h2 class="anchored" data-anchor-id="上下文窗口大一些就够了吗">8.1.1　上下文窗口大一些，就够了吗</h2>
+<p>语言模型的上下文窗口，是它在一次请求中能够接收和处理的 token 范围。输入、历史对话、检索到的资料以及模型即将生成的输出，都要放进这个窗口。token 不等于汉字，不同模型的分词方式也不同，因此两者只能做近似换算。作为理解成本的量级参照，可以把常见上下文窗口列成下面的范围。</p>
+<p><strong>表 8-1 上下文窗口的量级参照</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 33%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Token 范围</strong></th>
+<th><strong>大致汉字区间</strong></th>
+<th><strong>典型应用场景</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8K</td>
+<td>约 1.04 万至 1.2 万字</td>
+<td>短对话、代码补全、单页文档处理</td>
+</tr>
+<tr class="even">
+<td>32K</td>
+<td>约 4.16 万至 4.8 万字</td>
+<td>长文档、复杂代码分析</td>
+</tr>
+<tr class="odd">
+<td>64K</td>
+<td>约 8.32 万至 9.6 万字</td>
+<td>合同、企业报表分析</td>
+</tr>
+<tr class="even">
+<td>128K</td>
+<td>约 16.6 万至 19.2 万字</td>
+<td>整本书总结、多轮深度对话</td>
+</tr>
+<tr class="odd">
+<td>200K</td>
+<td>约 26 万至 30 万字</td>
+<td>超长文本或海量数据分析</td>
+</tr>
+</tbody>
+</table>
+<p>看到 128K、200K 这样的数字，很容易产生一个直觉：既然窗口已经能装下一本书，何必再设计记忆系统？问题在于，能放进去不等于能用得好。长上下文中的”Lost in the Middle”现象说明，信息可能被稀释，处在中间位置的关键内容未必能被稳定利用。上下文越长，模型保持注意力的难度也越高。与此同时，首 token 延迟（TTFT）、每秒 token 数（TPS）以及从请求开始到响应结束的总时间，都会受到计算量和窗口规模的影响。</p>
+<p><strong>先看一个小案例。</strong>用户周一说：“周五下午三点前交季度汇报，结论放前面，上次的图表把月份写错了。”周二，用户让助手整理新的销售数据。如果助手没有记忆，它可能重新询问截止时间，甚至再次生成上个月出错的图表。若把全部聊天记录原封不动塞回窗口，它又要在一堆闲聊、试错和旧版本里寻找真正有关的内容。窗口变大只是给了更多房间，房间里堆什么、怎么找、过期的东西何时扔掉，仍然是另一类问题。</p>
+<p>因此，长上下文首先要面对容量之外的三个约束。第一是成本，更多 token 会带来更多计算和显存开销；第二是延迟，用户不愿意为每条短问题等待大量历史内容被重新处理；第三是可靠使用，相关内容可能被无关内容淹没。第四讲已经解释了 KV 缓存和显存代价，这里只需保留结论：窗口尺寸是一项珍贵资源，不能把”全部历史都带上”当成默认策略。</p>
+</section>
+<section id="窗口管理不等于记忆系统" class="level2">
+<h2 class="anchored" data-anchor-id="窗口管理不等于记忆系统">8.1.2　窗口管理不等于记忆系统</h2>
+<p>在单次任务中，智能体常用若干办法管理窗口。可以按时间保留最近几轮对话，也可以按重要性优先保留关键信息；可以把记忆分成短期、中期和长期，可以按主题分组并在组内分层，还可以把旧对话压缩成摘要。这些方法的共同目标，是让当前上下文尽量装下”现在最需要的内容”。</p>
+<p>这里需要区分提示词工程和上下文工程。提示词工程主要优化”怎样把任务说清楚”，关注指令、示例与输出格式；上下文工程则设计模型当前能看到什么，包括任务材料、历史、检索结果、工具状态和记忆。两者会相互影响，但只改写一句提示，无法修复缺失证据、错误记忆或混乱的工具结果。</p>
+<blockquote class="blockquote">
+<p>时间滑动窗口：保留最近发生的内容，简单但容易丢掉较早的关键约束。</p>
+<p>重要性筛选：根据任务相关性、用户关注度或风险选择内容，需要额外的判断依据。</p>
+<p>分层管理：把即时状态、阶段摘要和长期资料分开维护，降低相互干扰。</p>
+<p>主题与分组：先找到相关任务或主题，再在组内选择细节，适合项目较多的场景。</p>
+<p>摘要记忆：用较短文本保留较长时间跨度的信息，但压缩也可能损失条件、数字和例外。</p>
+</blockquote>
+<p>从上下文构建器（Context Builder）的角度看，这些方法可以进一步归纳为选择、压缩、排序和隔离四个动作。选择解决”哪些材料值得进入”，压缩解决”怎样用更少 token 保留关键约束”，排序处理关键信息在长上下文中的位置，隔离则把系统指令、用户文本、检索文档和工具结果放在不同信任层级，降低提示注入与相互污染的风险。</p>
+<p>排序常被误解为只要把规则放开头、把问题放结尾就足够。位置确实会影响注意力，但它不能替代内容筛选。一个更稳妥的上下文构建器会先检查必要条件是否齐全，再删除”可能有用”的冗余内容，处理新旧信息冲突，最后确认系统指令不可被外部文本覆盖。上下文工程的目标是提高信息密度和约束清晰度，而不是追求窗口占用率。</p>
+<p>这些策略属于上下文工程。第六讲已经讨论过保存、筛选、压缩和隔离，第七讲又把它放到单次任务的工作集管理中。它们确实能缓解窗口压力，却还没有回答一个更持久的问题：当会话结束、进程关闭、用户第二天再回来时，哪些信息应当留下来？留下以后存放在哪里？下一次凭什么找到它？找到以后，旧信息和新事实冲突又该怎么办？</p>
+<p>这就是记忆系统要接手的部分。上下文工程主要管理”这一次任务此刻需要看到什么”，记忆系统还要管理”跨会话、跨任务的状态如何长期保存和更新”。两者不是替代关系。记忆最终仍要通过检索、筛选和组装进入上下文；没有上下文工程，长期记忆可能变成负担。反过来，只做窗口裁剪，也无法形成真正的连续性。</p>
+</section>
+<section id="从聊天记录到状态系统" class="level2">
+<h2 class="anchored" data-anchor-id="从聊天记录到状态系统">8.1.3　从聊天记录到状态系统</h2>
+<p>最容易出现的误解，是把记忆等同于一份超长聊天记录，再加一个搜索框。聊天记录当然可以成为素材，但它通常充满重复、口语、临时信息和已被推翻的决定。把全部内容保存下来，只是保存了过去发生过的文本，并没有形成当前任务可以使用的状态。</p>
+<p>可以用四句话提醒我们：相似不等于有用，新鲜不等于正确，重复不等于重要，召回不等于理解。一段内容和当前问题语义相近，可能只是都在说”预算”；一条昨天刚写入的记忆，可能包含用户当场纠正前的错误；同一件事被重复提及三次，也可能只是助手在反复确认；即使系统成功找到了相关记录，模型还需要结合当前指令、证据和任务目标判断它是否仍然适用。</p>
+<p>从工程角度看，记忆是模型之外的一层可长期读写的状态系统。它可以使用文本描述文件、Markdown 文件、知识图谱、冷热分层的数据库，也可以混合使用这些载体。但”用了哪个数据库”只是实现细节，不是记忆的定义。真正关键的是，系统怎样把一次交互中的信息提取出来，怎样与已有状态合并，怎样组织索引，怎样在需要时取回，以及怎样处理遗忘和纠错。</p>
+<p>记忆也不是一个静态仓库，而是一条行动链：接收输入，提取并写入信息，完成存储与建索引，按当前任务检索和路由，筛选出可用内容并组装进上下文，再结合当前证据和指令进行判断。行动产生新的结果后，系统还要根据结果更新、压缩、过期或删除旧状态。少了后半段，记忆就只会越积越多，不会随任务成长。</p>
+<p>如果把这条行动链展开，一条可维护的记忆通常不只有文本本身，还应带有类型、时间、来源、重要性、所有者、置信度和关联链接等元数据。类型说明它是情景、语义还是程序记忆；时间和来源帮助判断新旧与可信度；所有者与作用域防止跨用户串用；链接则让检索可以沿相关记录扩展。比起只保存一段孤立文本，这些字段使后续的合并、冲突处理和删除成为可能。</p>
+<p>完整生命周期可以概括为感知、编码、巩固、存储、检索、使用、遗忘和更新。更新并不只有一种形式：彼此独立的新事件可以追加，相互替代的事实需要修正，重复的小片段可以合并，过期或已撤回的数据则应当删除。系统如果只会追加，最终就会同时保留多个互相矛盾的”当前状态”。</p>
+<p>可以把一套成熟的记忆理解为多个不同生命周期的状态系统。临时任务状态可能需要几小时后消失，用户偏好可能稳定数月，项目约定可能只在一个项目内有效，安全权限则必须有明确的来源和更新边界。它们不该被塞进同一种存储，也不该用同一条保留规则。</p>
+<p><strong>据此，可以把智能体记忆定义为：</strong>用于记录、维护与调取交互信息和历史经验的认知模块。它涵盖工作记忆与长期记忆，支持信息编码、存储、检索和动态更新，帮助智能体连续、个性化地执行任务。这里的”认知模块”是功能层面的说法，不表示系统真的拥有人脑那样的记忆机制。</p>
+<p>从一次调用看，记忆最终还要通过上下文工程进入模型视野。系统不会把整座仓库一起搬给模型，而是先判断什么与当前任务有关，再按重要度压缩、筛选和组装。因此，记忆既是一条有生命周期的信息序列，也是一组分层维护的状态。能被准确取回、正确理解并在当前任务中用上的内容，才算真正完成了记忆的闭环。</p>
+</section>
+<section id="记忆为什么重要" class="level2">
+<h2 class="anchored" data-anchor-id="记忆为什么重要">8.1.4　记忆为什么重要</h2>
+<p>记忆首先提供连续性。一个任务很少总在一次对话里完成，用户可能今天确认需求、明天补充材料、下周回来查看结果。没有记忆，智能体每次都要从零开始建立情境，用户也会不断重复已经说过的信息。</p>
+<p>其次，记忆支持个性化。用户偏好、历史约束和已经确认的决定，会影响后续回答的组织方式。不过，个性化不等于把用户的每句话都当成永久标签。一次临时要求可能只适用于当前任务，系统中的记忆需要保留适用条件和时间边界。</p>
+<p>再次，记忆让经验可以复用。失败过的工具调用路径、成功完成某类任务的流程、一个项目长期采用的规范，都可以在下一次相似任务中减少试错。这让智能体不只在单轮对话里表现得好，还能在持续工作里积累可用经验。</p>
+<p>最后，复杂自主任务需要稳定状态。计划、工具结果、阶段性决定和待办事项要在多步执行中保持一致。如果系统记不住刚刚调用了哪个工具、已经完成哪一步、哪条证据还没有验证，就很难可靠地连续行动。从这个意义上说，记忆是智能体水平的一项基础设施，而不只是一个附加的聊天功能。</p>
+</section>
+<section id="短期记忆与长期记忆" class="level2">
+<h2 class="anchored" data-anchor-id="短期记忆与长期记忆">8.1.5　短期记忆与长期记忆</h2>
+<p>按是否跨越会话，可以将智能体记忆分成短期记忆和长期记忆。这个分法很实用，因为它直接对应两种不同的生命周期。</p>
+<p>短期记忆通常也叫工作记忆，限定在当前会话中。它保存本轮交互的上下文、推理中间态和任务状态，例如用户刚上传了哪个文件、当前做到第几步、还需要调用什么工具。工作记忆受上下文窗口限制，会话结束后通常不承担跨会话持久保存的职责。</p>
+<p>工作记忆管理的重点，是让当前任务的工作集足够小、足够相关。上下文工程可以概括为缩减、卸载和隔离：缩减是压缩或去掉当前不需要的内容，卸载是把一部分状态移到外部存储，隔离则是把不同任务、不同用户的上下文分开，避免相互污染。这些策略与第六讲的保存、筛选、压缩、隔离一脉相承。</p>
+<p>长期记忆独立于即时上下文窗口，负责持久保存交互历史、用户特征和任务经验。它要支持跨会话检索与动态更新，让智能体在很久以后仍能延续一个项目、遵守一个稳定偏好，或者复用一次成功的工作方法。</p>
+<p><strong>表 8-2 短期记忆与长期记忆的比较</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 36%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>比较项</strong></th>
+<th><strong>短期记忆</strong></th>
+<th><strong>长期记忆</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>典型范围</td>
+<td>当前会话或多步任务</td>
+<td>多个会话、多个任务阶段</td>
+</tr>
+<tr class="even">
+<td>主要用途</td>
+<td>保持当前推理与执行状态</td>
+<td>延续用户、项目和经验状态</td>
+</tr>
+<tr class="odd">
+<td>容量约束</td>
+<td>直接受上下文窗口限制</td>
+<td>可扩展到外部存储，但检索难度增加</td>
+</tr>
+<tr class="even">
+<td>生命周期</td>
+<td>会话结束或任务完成后清理</td>
+<td>按事实、事件和策略分别设定保留期</td>
+</tr>
+<tr class="odd">
+<td>核心风险</td>
+<td>信息过多、注意分散</td>
+<td>陈旧、冲突、错误扩散和隐私越界</td>
+</tr>
+</tbody>
+</table>
+<p>这组区分还带来一个关键边界。长期记忆不同于 RAG：RAG 主要从外部知识库召回公共知识或文档内容，记忆更关注”这个用户、这个任务经历过什么，现在处于什么状态”。例如，从手册中查到接口如何调用，是知识召回；记住某位用户上周已经把这个接口切换成测试环境，是状态召回。两者会共享向量检索、重排序和上下文管理等工具，但回答的问题不同。</p>
+<p>这一区别也体现在系统动作上。静态 RAG 主要回答”库里哪段资料与当前提问相似”，其内容通常只读、无个人归属，也缺少随反馈改变状态的完整过程。长期记忆还要回答信息是否值得保存、是否推翻了旧结论、属于谁、何时失效，以及是否应主动遗忘。因此，把向量数据库接进模型并不自动得到长期记忆；只有把写入、时间、来源、权限、更新和治理一起纳入系统，检索层才可能成为状态系统的一部分。</p>
+<p>微调也属于另一种改动：它通过训练改变模型的知识、风格或特定行为，但训练完成后不会像外部状态那样逐条增删和审计。处理需要频繁变化的用户事实与任务进度时，外部长期记忆通常更合适；需要改变稳定的输出习惯或领域能力时，才考虑参数更新。</p>
+</section>
+<section id="三类基础记忆情景语义与程序" class="level2">
+<h2 class="anchored" data-anchor-id="三类基础记忆情景语义与程序">8.1.6　三类基础记忆：情景、语义与程序</h2>
+<p>长期记忆还可以从内容性质继续细分。认知学中一种有代表性的划分是情景记忆、语义记忆和程序记忆。它们之间的差别，不在于存放在哪个数据库，而在于记录的内容回答了什么类型的问题。</p>
+<p>情景记忆回答”过去发生过什么”。它保存会话记录、工具调用轨迹、失败路径和用户反馈。比如，助手曾经在导出报告时漏掉附件，用户随后指出问题；这段经历就是情景记忆。它适合保留事件的顺序和因果线索，常见载体包括日志、轨迹和会话历史。</p>
+<p>语义记忆回答”长期稳定的事实是什么”。它保存用户画像、项目规则、系统约定和外部事实。例如，用户习惯先看结论，某项目只使用指定模板，某个组织规定敏感数据不能上传到外部服务。语义记忆的载体可以是结构化 Profile、Schema、知识库或图谱节点。这里的”稳定”是相对任务而言的，任何事实仍然需要来源、时间和适用范围。</p>
+<p>程序记忆回答”事情通常怎么做”。它保存工作流、SOP、代码套路、工具使用经验和可复用的操作手册。例如，生成周报的标准顺序是先核对指标口径，再生成图表，最后检查日期和单位。程序记忆不只描述某个事实，还规定了行动步骤和约束。Skills、Workflow 和 CLAUDE.md 等文件都可以成为程序记忆的载体。</p>
+<p>三类记忆经常一起工作。只记事实，助手知道用户喜欢简洁，却不知道怎样组织一份合格报告；只记流程，助手会按步骤执行，却可能忽略用户的特殊情况；只有情景，助手能复述上次发生了什么，却不一定能从中抽出下一次可用的规则。真正有用的长期记忆，需要把事件沉淀成事实或方法，同时也保留证据，避免概括过头。</p>
+</section>
+<section id="七类记忆及其状态含义" class="level2">
+<h2 class="anchored" data-anchor-id="七类记忆及其状态含义">8.1.7　七类记忆及其状态含义</h2>
+<p>在情景、语义和程序三类之外，还可以进一步划分出七类记忆。这个分法更适合系统设计，因为每一类记忆都对应一种需要维护的状态。需要注意的是，它们是观察记忆的不同角度，并不要求工程系统一定建立七个互不相干的数据库。</p>
+<p><strong>表 8-3 七类记忆及其典型状态</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>记忆类型</strong></th>
+<th><strong>回答的问题</strong></th>
+<th><strong>典型状态或载体</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>工作记忆</td>
+<td>当前正在做什么，进展到哪一步</td>
+<td>当前任务、变量、短期对话、工具中间结果</td>
+</tr>
+<tr class="even">
+<td>语义记忆</td>
+<td>哪些事实和规则长期有效</td>
+<td>用户画像、Schema、项目规则、知识库、图谱节点</td>
+</tr>
+<tr class="odd">
+<td>情景记忆</td>
+<td>过去发生过哪些事件</td>
+<td>会话记录、日志、调用轨迹、失败路径、反馈</td>
+</tr>
+<tr class="even">
+<td>程序记忆</td>
+<td>这类任务应当怎样完成</td>
+<td>Skills、Workflow、SOP、代码套路、CLAUDE.md</td>
+</tr>
+<tr class="odd">
+<td>检索记忆</td>
+<td>当前任务需要从外部取回什么</td>
+<td>外部文档、知识库、向量索引、图谱检索入口</td>
+</tr>
+<tr class="even">
+<td>参数记忆</td>
+<td>模型内部已经学会了什么</td>
+<td>模型参数中内化的语言、知识和一般能力</td>
+</tr>
+<tr class="odd">
+<td>前瞻记忆</td>
+<td>未来还要完成什么</td>
+<td>任务清单、提醒、日历、尚未触发的计划</td>
+</tr>
+</tbody>
+</table>
+<p>工作记忆是当前状态。它像桌面上摊开的材料，只保留正在处理的问题和必要的中间结果。语义记忆是长期事实，情景记忆是历史事件，程序记忆是行为策略。检索记忆对应外部知识，强调信息在需要时被取回；参数记忆对应模型内化能力，通常无法像普通文件那样直接读取和局部改写；前瞻记忆保存未来任务，让系统知道后面还有哪些事情没有发生或没有完成。</p>
+<p><strong>把这七类记忆放进同一个任务里，会更容易理解。</strong>用户让工作助手准备周五的季度汇报。当前做到哪一步，属于工作记忆；用户的领导偏好看结论，项目名称和指标口径属于语义记忆；上次图表把月份写错，属于情景记忆；按什么步骤检查图表和附件，属于程序记忆；公司报告模板需要从外部知识库取回，属于检索记忆；模型本身能够理解表格和常见绘图指令，依赖参数记忆；周四晚上提醒助手做最终检查，则属于前瞻记忆。</p>
+<p>这个例子也说明，七类记忆不是一个任务只能选一种类型。一次完整任务往往同时依赖多种状态。设计系统时首先应当问：这份状态由谁写入，谁能读取，什么时候失效，出错后怎样纠正。存储形式反而可以在这些问题之后决定。例如，用户偏好既可以写成简短文本，也可以存为结构化 Profile；选择哪种实现，要看读取方式、更新频率和权限边界，而不是因为某种数据库”更像记忆”。</p>
+<p>从内容边界看，记忆通常保存可恢复的任务状态、过去经历、稳定知识、可重复流程、长期偏好，以及权限和安全边界。前三类告诉智能体现在处于什么位置、曾经发生过什么、哪些事实仍然成立；可重复流程规定怎样行动；长期偏好影响行为选择；权限与安全边界则限制哪些状态可以被读写、哪些信息不能跨任务使用。把这些内容混在同一个无差别存储里，往往会让更新和隔离变得困难。</p>
+</section>
+<section id="记忆系统的本质是状态工程" class="level2">
+<h2 class="anchored" data-anchor-id="记忆系统的本质是状态工程">8.1.8　记忆系统的本质是状态工程</h2>
+<p>到这里，可以把记忆系统的工作概括成一句话：维护智能体在执行任务时需要的状态，并让这些状态在正确的时间、以正确的形式进入当前判断。这种视角可以称为状态工程。</p>
+<p>所谓状态，不只是用户说过的几句话。它可以是当前任务进度，也可以是长期事实、历史事件、行为策略、外部知识、模型能力和未来计划。七类记忆分别对应七种状态。状态工程关心的不是”有没有保存”，而是这些状态是否完整、是否仍有效、是否来自可信来源、是否允许被某个任务读取，以及发生冲突时依据什么更新。</p>
+<p>一套可用的状态系统至少要处理五个动作。写入时，系统要从输入中提取值得保存的内容，并记录来源；合并时，要把新状态与已有状态对齐，避免产生多个互相矛盾的用户画像；组织时，要建立适合检索的索引和分组；取回时，要根据任务、作用域和风险选择内容；遗忘时，要处理过期、低价值或不允许继续保留的状态。这五个动作形成循环，而不是一次性的数据迁移。</p>
+<p>状态还需要边界。当前会话的临时猜测不应自动变成长期用户偏好；某项目中的规则不应扩散到所有项目；不同用户或不同权限空间的数据不应在检索时混在一起；涉及隐私和安全的记忆更需要在写入前判断是否应该保存。第六讲把记忆看成智能体组件，第七讲强调上下文隔离，到了这里，两者汇聚成一个系统问题：让正确的状态被正确的人、在正确的任务中使用。</p>
+<p>这也是为什么”记忆是一个自我成长的系统”这一说法有价值。它不会因为保存的数据越来越多就自然变聪明。只有当系统能从经历中提炼事实、从失败中修正流程、从反馈中调整用户模型，并根据新证据淘汰旧状态时，记忆才会随使用变得更有用。</p>
+</section>
+<section id="从三种实现思路看记忆系统" class="level2">
+<h2 class="anchored" data-anchor-id="从三种实现思路看记忆系统">8.1.9　从三种实现思路看记忆系统</h2>
+<p>可以用三种有代表性的方案，说明记忆从理念走向实现时的不同取舍。第一种是分层记忆：按时效性把内容放入不同物理存储层，检索时再结合向量相似度和 BM25 关键词匹配，例如用”向量搜索乘 0.7，加 BM25 乘 0.3”的混合策略。分层让不同生命周期的数据有不同管理方式，混合检索则同时利用语义相似和关键词命中。</p>
+<p>第二种是”文件即记忆”。代表方案把原始全文长期保存在文件中，并让”什么时候该召回”和”记忆实际保存了什么”分开处理。这样做保留了完整证据，也给召回策略留下独立调整空间；代价是文件越多，组织、检索和去重越需要投入。</p>
+<p>第三种是完全基于文件系统，把语言模型本身当作检索引擎。它实现直接，适合文件规模和任务复杂度相对可控的场景，但检索开销、上下文窗口和稳定性会形成天花板。三种思路没有谁天然更高级，它们分别把复杂度放在了不同位置。</p>
+<p>这些实现方式也提醒我们，记忆系统不应只用”存了多少”衡量。真正决定效果的是存储粒度是否合理，索引是否适合当前问题，读取是否遵循任务边界，以及系统能否处理过期和冲突。接下来讨论的设计能力，正是围绕这些环节展开。</p>
+</section>
+<section id="好记忆不是把所有事情都记住" class="level2">
+<h2 class="anchored" data-anchor-id="好记忆不是把所有事情都记住">8.1.10　好记忆不是把所有事情都记住</h2>
+<p>记忆系统追求高密度压缩，而不是全量保存。真实交互里有大量寒暄、重复确认和临时试错，它们对理解当下有用，却不必永久占用长期状态。系统应当把低密度文本提炼成可执行的事实、事件或方法，同时保留必要证据。例如，与其完整保存”用户周三上午十点说过第二句里有个’尽量’“，不如提炼成”用户希望周五前完成，周五是硬截止时间”。后一句同时包含结论和时间边界，也不容易在后续被误用。</p>
+<p>检索也不能只靠语义相似。相似内容只是一个候选入口，随后还要按任务类型、作用域、时间和风险做路由。一个关于”预算”的问题，可能同时召回财务制度、某个项目的预算表和用户的一次随口抱怨；真正适合当前任务的，往往只有其中一部分。系统需要知道哪份记忆和当前任务属于同一范围，哪个来源更新，哪类信息一旦用错会造成更大风险。</p>
+<p>遗忘是在保护注意力，不是能力缺陷。过期偏好会干扰新需求，失败路径可能不再适用，临时权限更不应无限保留。适当的遗忘减少了检索噪声，也降低了错误信息被反复使用的概率。问题不在于是否遗忘，而在于系统能否解释为什么保留、为什么删除，以及删除后还能否从原始记录恢复必要证据。</p>
+<p>冲突则是长期使用中的常态。用户上周说”回答尽量详细”，本周又说”没时间，先给三点结论”；旧项目文档中的接口参数已经被新版本替换；两条记忆分别来自用户原话和系统推测。遇到这些情况，系统不能简单选择”最新”或”最相似”的一条，而要看时间、来源、适用任务和证据强度。记忆的可靠性，往往取决于它是否保留这些判断线索。</p>
+<p>最后，系统追求的不是复制一个完整的人。所谓”数字孪生”，在可用的工程形态下，是一个在任务中维护的用户模型：它应该可解释、可更新、可纠错，让智能体知道用户在当前任务中的偏好、约束和经历，同时承认它只掌握与任务有关的一部分信息。把用户简化成一串永久标签，既容易失真，也可能越过隐私边界。</p>
+</section>
+<section id="本节小结" class="level2">
+<h2 class="anchored" data-anchor-id="本节小结">8.1.11　本节小结</h2>
+<p>上下文窗口是智能体的即时工作空间，却无法独自承担跨会话的连续性。窗口管理能缓解容量、成本和注意力问题，记忆系统则进一步维护不同生命周期的长期状态。记忆不是聊天记录、文件或向量库本身，而是一套包含写入、合并、组织、检索、使用、更新和遗忘的行动链。</p>
+<p>从时间边界看，记忆分为短期和长期；从内容性质看，可以形成情景、语义、程序等类型；从系统状态看，又可展开为工作、语义、情景、程序、检索、参数和前瞻记忆。这些划分共同指向一个核心：记忆系统的任务是维护状态，而不是堆积文本。</p>
+<p>判断一份记忆是否好，不应只看它能否被召回到，还要看它是否有用、是否及时、是否属于正确作用域、是否可纠错，以及是否会挤占当前任务真正需要的注意力。下一部分将沿着这些标准，考察当前工业界怎样实现记忆系统，以及不同实现方式各自付出了什么代价。</p>
+</section>
+<section id="思考与讨论" class="level2">
+<h2 class="anchored" data-anchor-id="思考与讨论">8.1.12　思考与讨论</h2>
+<p>1. 如果把全部聊天记录都放进一个足够大的上下文窗口，是否仍然需要长期记忆？请从成本、延迟、信息冲突和任务连续性四个角度说明。</p>
+<p>2. 为一位个人工作助手分别举出一个工作记忆、语义记忆、情景记忆、程序记忆和前瞻记忆的例子，并指出每种记忆适合保存多久。</p>
+<p>3. 用户先说”所有回答都要详细”，后又说”现在只要结论”。如果两种要求同时出现在记忆库中，系统应根据什么信息判断当前应采用哪一条？</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="../ch8/index.html" class="pagination-link" aria-label="第 8 章　记忆系统">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">第 8 章　记忆系统</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../ch8/s8-2.html" class="pagination-link" aria-label="8.2　当前记忆系统">
+        <span class="nav-page-text">8.2　当前记忆系统</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script src="toc.js"></script><script src="widgets.js"></script>
+<script src="../toc.js"></script><script src="../widgets.js"></script>
+
+
+
+
+</body></html>

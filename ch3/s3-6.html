@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3.6 参数高效微调技术 – 大语言模型原理与技术</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../ch3/s3-7.html" rel="next">
+<link href="../ch3/s3-5.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　参数高效微调技术</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">大语言模型原理与技术</a> 
+        <div class="sidebar-tools-main">
+    <a href="../大语言模型原理与技术_全书.pdf" title="下载全书 PDF" class="quarto-navigation-tool px-1" aria-label="下载全书 PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">全书导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">第 1 章　大语言模型的由来与现状</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false" aria-label="展开或折叠此栏: 第 1 章　大语言模型的由来与现状">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.3　大语言模型如何工作</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.4　当前技术版图</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5　应用现状与典型模式</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.6　局限、风险与治理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考与练��</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">第 2 章　大语言模型的底层原理与技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="展开或折叠此栏: 第 2 章　大语言模型的底层原理与技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1　底层逻辑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2　重要概念</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3　模型分类</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4　模型构建</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">第 3 章　大语言模型的预训练、微调与推理</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true" aria-label="展开或折叠此栏: 第 3 章　大语言模型的预训练、微调与推理">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3　预训练数据工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">3.6　参数高效微调技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8　大语言模型推理原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.9　推理性能与优化技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.12　本章小结与习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">第 4 章　大模型计算系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false" aria-label="展开或折叠此栏: 第 4 章　大模型计算系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1　大模型对计算系统提出的要求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源：让计算算得快、存得下、传得动</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架：把算法组织成可执行的计算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务：让模型又快又省地回答请求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具：从模型到产品</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例：课程知识问答助手的系统设计</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch5/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">第 5 章　检索增强生成</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="展开或折叠此栏: 第 5 章　检索增强生成">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3　一条流水线的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.9　工程里的十个坑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">延伸阅读</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch6/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">第 6 章　智能体</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="展开或折叠此栏: 第 6 章　智能体">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.1　概述</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.2　核心组件</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.3　工作原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.4　关键能力</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.5　相关技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.6　Agentic AI：从单个智能体到智能体系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.7　本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.8　习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch7/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">第 7 章　Coding Agent 工程技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false" aria-label="展开或折叠此栏: 第 7 章　Coding Agent 工程技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1　从代码生成到 Coding Agent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.4　Context Engineering：为下一步决策准备信息</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.5　Harness Engineering：把模型的动作接入可控环境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.9　安全与可信交付：把信任边界放在工具之前</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch8/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">第 8 章　记忆系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false" aria-label="展开或折叠此栏: 第 8 章　记忆系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1　理解记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2　当前记忆系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3　基于认知学的记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4　应用：智能个人助手</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考资料</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#为什么需要参数高效微调" id="toc-为什么需要参数高效微调" class="nav-link active" data-scroll-target="#为什么需要参数高效微调">3.6.1　为什么需要参数高效微调</a></li>
+  <li><a href="#参数高效微调的分类" id="toc-参数高效微调的分类" class="nav-link" data-scroll-target="#参数高效微调的分类">3.6.2　参数高效微调的分类</a></li>
+  <li><a href="#选取部分参数bitfit" id="toc-选取部分参数bitfit" class="nav-link" data-scroll-target="#选取部分参数bitfit">3.6.3　选取部分参数：BitFit</a></li>
+  <li><a href="#adapter-tuning" id="toc-adapter-tuning" class="nav-link" data-scroll-target="#adapter-tuning">3.6.4　Adapter Tuning</a></li>
+  <li><a href="#软提示方法" id="toc-软提示方法" class="nav-link" data-scroll-target="#软提示方法">3.6.5　软提示方法</a></li>
+  <li><a href="#lora" id="toc-lora" class="nav-link" data-scroll-target="#lora">3.6.6　LoRA</a></li>
+  <li><a href="#adalora" id="toc-adalora" class="nav-link" data-scroll-target="#adalora">3.6.7　AdaLoRA</a></li>
+  <li><a href="#qlora" id="toc-qlora" class="nav-link" data-scroll-target="#qlora">3.6.8　QLoRA</a></li>
+  <li><a href="#显存需求对比" id="toc-显存需求对比" class="nav-link" data-scroll-target="#显存需求对比">3.6.9　显存需求对比</a></li>
+  <li><a href="#方法比较" id="toc-方法比较" class="nav-link" data-scroll-target="#方法比较">3.6.10　方法比较</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　参数高效微调技术</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">3.6　参数高效微调技术</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="为什么需要参数高效微调" class="level2">
+<h2 class="anchored" data-anchor-id="为什么需要参数高效微调">3.6.1　为什么需要参数高效微调</h2>
+<p>把预训练模型在下游任务上微调，已经成为处理自然语言任务的标准范式。但随着模型越来越大，全量微调变得越来越难以承受：</p>
+<ul>
+<li><strong>显存开销大</strong>：按 3.4.6 节的估算，全量微调一个 7B 模型（混合精度 + AdamW）仅模型状态就需要约 112 GB，必须动用多张高端 GPU；</li>
+<li><strong>存储开销大</strong>：每个下游任务都要保存一份完整的模型副本。为 100 个客户各微调一个 7B 模型，就要保存 100 份、每份十几 GB 的权重；</li>
+<li><strong>容易遗忘</strong>：所有参数都被修改，模型更容易遗忘预训练获得的通用能力。</li>
+</ul>
+<p>为此，研究者提出了<strong>参数高效微调</strong>（PEFT）方法：<strong>固定预训练模型的大部分参数，仅调整其中很小一部分参数（或新增少量参数），达到接近全量微调的效果。</strong> 由于 PEFT 本质上是在原模型的基础上学习一个”增量”，它也被称为<strong>增量微调</strong>（Delta Tuning）。</p>
+</section>
+<section id="参数高效微调的分类" class="level2">
+<h2 class="anchored" data-anchor-id="参数高效微调的分类">3.6.2　参数高效微调的分类</h2>
+<p>参数高效微调方法可以大致分为三类（图 3-12）：</p>
+<ul>
+<li><strong>增加额外参数</strong>（Addition，A）：在模型中加入少量新的可训练参数，原有参数全部冻结。它又分为两小类：<strong>类适配器方法</strong>在网络内部插入小型模块，如 Adapter Tuning；<strong>软提示方法</strong>在输入或各层前加入可训练的连续向量，如 Prompt Tuning、Prefix Tuning、P-Tuning；</li>
+<li><strong>选取部分参数更新</strong>（Selection，S）：不增加参数，只选择原模型中的一小部分参数进行训练，如只训练偏置项的 BitFit；</li>
+<li><strong>引入重参数化</strong>（Reparameterization，R）：不直接修改权重，而是把权重的变化量 <span class="math inline">\(\Delta W\)</span> 用一种参数更少的形式表示，即 <span class="math inline">\(W = W_{0} + \Delta W\)</span>，如 LoRA 及其变体。</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/media/rId91.png" style="width:4.78333in;height:1.60718in" class="figure-img"></p>
+<figcaption>图3-12 参数高效微调方法的分类</figcaption>
+</figure>
+</div>
+<p>图3-12 参数高效微调方法的分类</p>
+<p>从实现上看，这些方法又可以归纳为两个方向：一是<strong>添加小型网络模块</strong>，保持基础模型不变，只为每个任务训练这些小模块（Adapter、Prefix Tuning、Prompt Tuning 等）；二是<strong>对权重的增量进行建模</strong>，不修改模型结构，只学习 <span class="math inline">\(\Delta W\)</span>（Diff Pruning、LoRA 等）。</p>
+</section>
+<section id="选取部分参数bitfit" class="level2">
+<h2 class="anchored" data-anchor-id="选取部分参数bitfit">3.6.3　选取部分参数：BitFit</h2>
+<p>BitFit 是最简单的 PEFT 方法：冻结所有权重矩阵，<strong>只训练网络中的偏置</strong>（bias）参数。对 BERT 这样的模型，偏置参数只占总参数的约 0.08%，但在许多中小规模任务上，BitFit 的效果已经接近全量微调。它的局限在于：许多现代大模型（如 LLaMA）的线性层根本不含偏置项，BitFit 也就无从下手。</p>
+</section>
+<section id="adapter-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="adapter-tuning">3.6.4　Adapter Tuning</h2>
+<p><strong>基本思想</strong>：在预训练模型的每一层中插入专门用于下游任务的小型模块（Adapter），微调时冻结模型主体，只训练这些模块，从而大幅减少训练开销。</p>
+<p><strong>结构</strong>：如图 3-13 所示，Houlsby 等人（2019）提出的方法在每个 Transformer 层中加入两个 Adapter，分别位于多头注意力之后和前馈网络之后。训练时固定原模型的参数，只训练新增的 Adapter 和层归一化参数。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/media/rId96.png" style="width:3.85in;height:3.63382in" class="figure-img"></p>
+<figcaption>图3-13 Adapter Tuning 的结构</figcaption>
+</figure>
+</div>
+<p>图3-13 Adapter Tuning 的结构</p>
+<p>每个 Adapter 是一个”瓶颈”结构：第一个前馈子层（降维投影）把维度为 <span class="math inline">\(d\)</span> 的输入投影到较低的维度 <span class="math inline">\(m\)</span>，经过非线性激活后，第二个前馈子层（升维投影）再把它映射回维度 <span class="math inline">\(d\)</span>，并通过残差连接与输入相加：</p>
+<p><span class="math inline">\(Adapter\left( \mathbf{h} \right) = \mathbf{h} + W_{up}\, f\left( W_{down}\mathbf{h} \right),\quad\quad W_{down} \in \mathbb{R}^{m \times d},\ W_{up} \in \mathbb{R}^{d \times m}\quad\)</span> (3-26)</p>
+<p>通常 <span class="math inline">\(m \ll d\)</span>，通过控制 <span class="math inline">\(m\)</span> 的大小就能控制 Adapter 的参数量，每个 Adapter 约有 <span class="math inline">\(2md\)</span> 个参数。残差连接保证了：只要把 <span class="math inline">\(W_{up}\)</span> 初始化为接近零，Adapter 在训练开始时就近似于恒等变换，不会破坏原模型。在 BERT 上，Adapter 只训练约 3.6% 的参数，就在 GLUE 基准上达到了与全量微调相差不到 0.4 个百分点的效果。</p>
+<p>Adapter 的主要缺点是<strong>增加了推理时延</strong>：新增的模块串行地插在网络中，推理时无法省去，在逐 Token 生成的场景下，这种额外开销会被放大。</p>
+</section>
+<section id="软提示方法" class="level2">
+<h2 class="anchored" data-anchor-id="软提示方法">3.6.5　软提示方法</h2>
+<p>3.5.1 节介绍的提示词工程，是用人能读懂的离散文本来引导模型，称为<strong>硬提示</strong>（Hard Prompt）。软提示方法则把提示变成了可以训练的<strong>连续向量</strong>，称为<strong>软提示</strong>（Soft Prompt）。</p>
+<p><strong>Prompt Tuning</strong> 保持基础模型的参数不变，为每个特定任务训练一小段（如 20 个）“虚拟 Token”的嵌入向量，拼接在输入序列的最前面，执行该任务时按需加载对应的软提示。若软提示长度为 <span class="math inline">\(l\)</span>、隐藏层维度为 <span class="math inline">\(d\)</span>，则可训练参数只有 <span class="math inline">\(l \times d\)</span> 个。Lester 等人（2021）发现，随着模型规模增大到百亿参数以上，Prompt Tuning 的效果逐渐接近全量微调；但在较小的模型上，它与全量微调的差距明显。</p>
+<p><strong>Prefix Tuning</strong> 不只在输入层，而是在<strong>每一层</strong>注意力的 Key 和 Value 前面都加上一段可训练的前缀向量，相当于在不改变大模型的前提下，为每一层的上下文添加适当的”条件”，引导模型表现得更好。由于直接优化前缀向量容易不稳定，Prefix Tuning 通常先用一个小型多层感知机生成前缀，训练完成后再丢弃这个网络，只保留前缀。</p>
+<p><strong>P-Tuning</strong> 用一个小型的提示编码器（如 LSTM 或 MLP）来生成连续提示，使各个虚拟 Token 之间相互关联；其后的 P-Tuning v2 借鉴了 Prefix Tuning 的思路，在每一层都加入提示，从而在不同规模的模型和更多类型的任务上都取得了接近全量微调的效果。</p>
+<p>软提示方法的优点是参数量极小、不改变模型结构；缺点是占用了一部分上下文长度，训练也不如其他方法稳定。</p>
+</section>
+<section id="lora" class="level2">
+<h2 class="anchored" data-anchor-id="lora">3.6.6　LoRA</h2>
+<p><strong>1．基本思想</strong></p>
+<p><strong>LoRA</strong>（Low-Rank Adaptation，低秩适配）由 Hu 等人于 2021 年提出，是目前应用最广泛的参数高效微调方法。它的出发点是一个观察：神经网络中有大量借助矩阵乘法实现的全连接层，预训练模型适配到特定下游任务时，权重的<strong>变化量</strong>并不需要是”满秩”的，而是具有很低的<strong>本征秩</strong>（Intrinsic Rank）。换言之，虽然大模型参数很多，但针对一个具体任务，真正需要调整的”方向”只有少数几个。</p>
+<p>因此，LoRA 不直接更新原始权重 <span class="math inline">\(W_{0}\)</span>，而是用两个小矩阵的乘积来表示权重的变化量：</p>
+<p><span class="math inline">\(W = W_{0} + \Delta W = W_{0} + BA,\quad\quad B \in \mathbb{R}^{d \times r},\ A \in \mathbb{R}^{r \times k},\ r \ll \min(d,k)\quad\)</span> (3-27)</p>
+<p>如图 3-14 所示，LoRA 在原始权重旁边增加一条”旁路”：矩阵 <span class="math inline">\(A\)</span> 负责<strong>降维</strong>，把输入从 <span class="math inline">\(k\)</span> 维压缩到 <span class="math inline">\(r\)</span> 维；矩阵 <span class="math inline">\(B\)</span> 负责<strong>升维</strong>，再映射回 <span class="math inline">\(d\)</span> 维；中间维度 <span class="math inline">\(r\)</span> 就是所谓的”秩”，用来模拟本征秩。前向计算变为</p>
+<p><span class="math inline">\(\mathbf{h} = W_{0}\mathbf{x} + \Delta W\mathbf{x} = W_{0}\mathbf{x} + \frac{\alpha}{r}BA\mathbf{x}\quad\)</span> (3-28)</p>
+<p>其中 <span class="math inline">\(\alpha\)</span> 是一个缩放系数，用来在改变 <span class="math inline">\(r\)</span> 时保持更新幅度大致稳定。训练时 <span class="math inline">\(W_{0}\)</span> 冻结，只有 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 接收梯度。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/media/rId101.png" style="width:4.08333in;height:2.57713in" class="figure-img"></p>
+<figcaption>图3-14 LoRA 的结构</figcaption>
+</figure>
+</div>
+<p>图3-14 LoRA 的结构</p>
+<p><strong>2．初始化</strong></p>
+<p><span class="math inline">\(A\)</span> 用随机高斯分布初始化，<span class="math inline">\(B\)</span> 初始化为零矩阵。这样在训练开始时 <span class="math inline">\(BA = 0\)</span>，模型的输出与原预训练模型完全一致，微调从一个”不破坏原模型”的起点平稳开始。</p>
+<p><strong>3．参数量</strong></p>
+<p>原始权重矩阵有 <span class="math inline">\(d \times k\)</span> 个参数，而 LoRA 只需训练 <span class="math inline">\(r \times (d + k)\)</span> 个参数。以 <span class="math inline">\(d = k = 4096\)</span>、<span class="math inline">\(r = 8\)</span> 为例：</p>
+<p><span class="math display">\[\frac{r(d + k)}{dk} = \frac{8 \times (4096 + 4096)}{4096 \times 4096} = \frac{65536}{16777216} \approx 0.39\%\]</span></p>
+<p><strong>【例 3-3】</strong> 对 LLaMA-7B（32 层，<span class="math inline">\(h = 4096\)</span>，前馈网络中间维度 11008）应用 <span class="math inline">\(r = 8\)</span> 的 LoRA，分别计算以下两种设置下的可训练参数量：（1）只作用于注意力的 <span class="math inline">\(W_{q}\)</span> 和 <span class="math inline">\(W_{v}\)</span>（LoRA 原论文的设置）；（2）作用于全部 7 个线性层（<span class="math inline">\(W_{q}\)</span>、<span class="math inline">\(W_{k}\)</span>、<span class="math inline">\(W_{v}\)</span>、<span class="math inline">\(W_{o}\)</span> 及前馈网络的三个矩阵）。</p>
+<p><strong>解：</strong>（1）每层两个 <span class="math inline">\(4096 \times 4096\)</span> 的矩阵，每个需 <span class="math inline">\(8 \times (4096 + 4096) = 65536\)</span> 个参数，32 层共 <span class="math inline">\(2 \times 65536 \times 32 \approx 4.2 \times 10^{6}\)</span> 个，约占 67 亿参数的 0.06%。</p>
+<p>（2）注意力的 4 个矩阵每层共 <span class="math inline">\(4 \times 65536 = 262144\)</span> 个参数；前馈网络的 3 个矩阵（<span class="math inline">\(4096 \times 11008\)</span> 或 <span class="math inline">\(11008 \times 4096\)</span>）每个需 <span class="math inline">\(8 \times (4096 + 11008) = 120832\)</span> 个，共 362496 个。每层合计 624640 个，32 层共约 <span class="math inline">\(2.0 \times 10^{7}\)</span> 个，约占 0.3%。</p>
+<p><strong>4．LoRA 的优势</strong></p>
+<ul>
+<li><strong>训练开销小</strong>：可训练参数通常不到原模型的 1%，梯度和优化器状态的显存几乎可以忽略。LoRA 论文报告，在 GPT-3 175B 上，可训练参数减少了约 10000 倍，训练显存减少约 2/3；</li>
+<li><strong>效果好</strong>：在众多数据集上，LoRA 只训练极少量参数，性能就能与全量微调相当，在某些任务上甚至更好；</li>
+<li><strong>无额外推理时延</strong>：训练完成后，可以把 <span class="math inline">\(\frac{\alpha}{r}BA\)</span> 直接加到 <span class="math inline">\(W_{0}\)</span> 上，合并成一个与原来形状相同的矩阵 <span class="math inline">\(W\)</span>，推理时与原模型的计算量完全一样。这是它相对于 Adapter 的重要优势；</li>
+<li><strong>便于多任务切换</strong>：每个任务只需保存一组几十 MB 大小的 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span> 矩阵，同一个基础模型可以按需加载不同的 LoRA 模块，服务多个任务或用户。</li>
+</ul>
+</section>
+<section id="adalora" class="level2">
+<h2 class="anchored" data-anchor-id="adalora">3.6.7　AdaLoRA</h2>
+<p>LoRA 为所有被适配的权重矩阵设定了相同的秩 <span class="math inline">\(r\)</span>，但不同层、不同矩阵对下游任务的重要性显然不同。<strong>AdaLoRA</strong>（Adaptive LoRA）据此<strong>动态调整各增量矩阵的秩</strong>：为关键的增量矩阵分配较高的秩，以捕捉更精细、更具任务特性的信息；同时降低较不重要矩阵的秩，以防止过拟合并节省计算预算。</p>
+<p>具体做法是，以<strong>奇异值分解</strong>（SVD）的形式对增量进行参数化：</p>
+<p><span class="math inline">\(\Delta W = P\Lambda Q,\quad\quad P \in \mathbb{R}^{d \times r},\ \Lambda = diag\left( \lambda_{1},\ldots,\lambda_{r} \right),\ Q \in \mathbb{R}^{r \times k}\quad\)</span> (3-29)</p>
+<p>训练中根据重要性指标裁剪掉不重要的奇异值 <span class="math inline">\(\lambda_{i}\)</span>（置为零），但保留对应的奇异向量，以便将来有需要时恢复。由于对大矩阵做精确的 SVD 计算代价很高，AdaLoRA 并不真正进行分解，而是在训练损失中加入一个正则项，约束 <span class="math inline">\(P\)</span> 和 <span class="math inline">\(Q\)</span> 近似正交：</p>
+<p><span class="math inline">\(R(P,Q) = \left. \parallel P^{\top}P - I \right.\parallel_{F}^{2} + \left. \parallel QQ^{\top} - I \right.\parallel_{F}^{2}\quad\)</span> (3-30)</p>
+<p>这样既避免了大量的 SVD 计算，又稳定了训练。</p>
+</section>
+<section id="qlora" class="level2">
+<h2 class="anchored" data-anchor-id="qlora">3.6.8　QLoRA</h2>
+<p>LoRA 虽然大幅减少了梯度和优化器状态的显存，但冻结的基础模型本身仍要以 16 位精度加载：7B 模型约 14 GB，65B 模型约 130 GB。<strong>QLoRA</strong>（Quantized LoRA）由 Dettmers 等人于 2023 年提出，其核心思想是：<strong>把冻结的基础模型量化到 4 位存储，再在其上训练 16 位精度的 LoRA 模块。</strong> 前向和反向计算时，4 位权重被临时反量化为 BF16 参与运算，梯度则只流向 LoRA 参数。QLoRA 引入了三项关键技术：</p>
+<p><strong>（1）4 位 NormalFloat（NF4）。</strong> 预训练模型的权重近似服从均值为零的正态分布。普通的 4 位整数（INT4）把 16 个量化等级均匀地分布在取值区间上，而 NF4 按照<strong>标准正态分布的分位数</strong>来设置这 16 个等级，使每个等级覆盖的权重数量大致相同。对于正态分布的权重，这是信息论意义上最优的 4 位数据类型，其实证效果优于 4 位整数和 4 位浮点数（FP4）。量化时，权重按 64 个一组（块）进行处理：先用块内绝对值的最大值 <span class="math inline">\(c\)</span> 把权重缩放到 <span class="math inline">\(\lbrack - 1,1\rbrack\)</span>，再把每个值映射到最接近的 NF4 等级 <span class="math inline">\(q_{j}\)</span>，只存储等级的 4 位编号；反量化时有</p>
+<p><span class="math inline">\(\widehat{w} = c \cdot q_{j}\quad\)</span> (3-31)</p>
+<p><strong>（2）双重量化（Double Quantization）。</strong> 每 64 个权重需要额外保存一个 32 位的缩放常数 <span class="math inline">\(c\)</span>，平均每个参数多占 <span class="math inline">\(32/64 = 0.5\)</span> 位。双重量化把这些常数<strong>再量化一次</strong>（以 256 个为一组量化为 8 位），使额外开销降至约 <span class="math inline">\(8/64 + 32/(64 \times 256) \approx 0.127\)</span> 位/参数。对 65B 模型而言，这一项就能节省约 3 GB 显存。</p>
+<p><strong>（3）分页优化器（Paged Optimizer）。</strong> 训练中偶尔会因为长序列等原因出现显存使用峰值而导致内存溢出。分页优化器利用 NVIDIA 的统一内存特性，在 GPU 显存紧张时自动把优化器状态分页换出到 CPU 内存，需要时再换回，从而避免训练因显存不足而中断。</p>
+<p>借助这些技术，QLoRA 首次实现了在<strong>单张 48 GB 显卡</strong>上微调 650 亿参数的模型，而且效果与 16 位全量微调基本相当。用 QLoRA 训练的 Guanaco 模型在当时的对话基准上达到了 ChatGPT 约 99% 的水平。QLoRA 让个人开发者和学生在消费级显卡上微调大模型成为可能。</p>
+</section>
+<section id="显存需求对比" class="level2">
+<h2 class="anchored" data-anchor-id="显存需求对比">3.6.9　显存需求对比</h2>
+<p><strong>【例 3-4】</strong> 对一个 7B 模型进行微调，比较全量微调与 PEFT 所需显存（不计激活值）。设基础模型以 FP32 加载，PEFT 新增的可训练参数为原模型的 2.5%，同样以 FP32 训练、使用 AdamW 优化器。</p>
+<p><strong>解：</strong> 全量微调时，权重 28 GB，梯度 28 GB，AdamW 的 <span class="math inline">\(\mathbf{m}\)</span>、<span class="math inline">\(\mathbf{v}\)</span> 两个状态 56 GB，合计 112 GB。</p>
+<p>使用 PEFT 时，基础模型冻结，只占权重 28 GB，没有梯度和优化器状态；新增参数为 <span class="math inline">\(7 \times 10^{9} \times 2.5\% = 1.75 \times 10^{8}\)</span> 个，其权重、梯度各占 0.7 GB，两个优化器状态共占 1.4 GB，合计 2.8 GB。总计约 <span class="math inline">\(28 + 2.8 = 30.8\)</span> GB，约为全量微调的 27%。</p>
+<p>可以看到，PEFT 节省的主要是<strong>梯度和优化器状态</strong>。若进一步把基础模型改用 BF16 加载，显存还能再减半。图 3-15 对比了更贴近实际的三种配置：混合精度全量微调、BF16 底座的 LoRA、NF4 底座的 QLoRA（LoRA 均作用于全部线性层，<span class="math inline">\(r = 16\)</span>，可训练参数约 4000 万个）。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/media/rId107.png" style="width:4.43333in;height:2.275in" class="figure-img"></p>
+<figcaption>图3-15 微调 7B 模型的显存对比（不含激活值与框架开销）</figcaption>
+</figure>
+</div>
+<p>图3-15 微调 7B 模型的显存对比（不含激活值与框架开销）</p>
+<p>需要注意，上述估算没有计入激活值：即使基础模型冻结，反向传播时梯度仍要穿过整个网络才能到达各层的 LoRA 模块，因此激活值并不会因为使用 PEFT 而减少。实际微调时，通常还要配合激活重计算等技术来控制显存。</p>
+</section>
+<section id="方法比较" class="level2">
+<h2 class="anchored" data-anchor-id="方法比较">3.6.10　方法比较</h2>
+<p>表 3-11 总结了本节介绍的几种参数高效微调方法。</p>
+<p>表3-11 参数高效微调方法的比较</p>
+<table class="caption-top table">
+<caption>表3-11 参数高效微调方法的比较</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 23%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>类别</th>
+<th>可训练参数的位置</th>
+<th>典型参数占比</th>
+<th>推理是否增加开销</th>
+<th>主要特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BitFit</td>
+<td>S</td>
+<td>原有的偏置项</td>
+<td>约 0.1%</td>
+<td>否</td>
+<td>最简单；依赖模型含有偏置</td>
+</tr>
+<tr class="even">
+<td>Adapter</td>
+<td>A</td>
+<td>每层插入的瓶颈模块</td>
+<td>0.5%～5%</td>
+<td>是（串行模块）</td>
+<td>效果稳定；有额外时延</td>
+</tr>
+<tr class="odd">
+<td>Prompt Tuning</td>
+<td>A</td>
+<td>输入层前的软提示</td>
+<td>&lt;0.01%</td>
+<td>略增（占用上下文）</td>
+<td>参数最少；小模型上效果较差</td>
+</tr>
+<tr class="even">
+<td>Prefix Tuning / P-Tuning v2</td>
+<td>A</td>
+<td>每层 K、V 前的前缀</td>
+<td>0.1%～1%</td>
+<td>略增（占用上下文）</td>
+<td>适用面更广；训练不够稳定</td>
+</tr>
+<tr class="odd">
+<td>LoRA</td>
+<td>R</td>
+<td>权重旁路的低秩矩阵</td>
+<td>0.1%～1%</td>
+<td>否（可合并）</td>
+<td>效果好、使用最广</td>
+</tr>
+<tr class="even">
+<td>AdaLoRA</td>
+<td>R</td>
+<td>秩自适应的增量矩阵</td>
+<td>与 LoRA 相当</td>
+<td>否（可合并）</td>
+<td>按重要性分配参数预算</td>
+</tr>
+<tr class="odd">
+<td>QLoRA</td>
+<td>R</td>
+<td>4 位底座上的 LoRA</td>
+<td>与 LoRA 相当</td>
+<td>视部署方式而定</td>
+<td>显存最省，单卡可调大模型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>【小结】</strong> 参数高效微调的共同思路是”冻结大部分，只学一点点”。在当前实践中，LoRA 及其量化版本 QLoRA 是最常用的选择：它们不改变模型结构、不增加推理开销，又能把微调大模型的门槛从多卡集群降低到单张显卡。</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="../ch3/s3-5.html" class="pagination-link" aria-label="3.5　大语言模型微调与领域适配">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.5　大语言模型微调与领域适配</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../ch3/s3-7.html" class="pagination-link" aria-label="3.7　大语言模型对齐技术">
+        <span class="nav-page-text">3.7　大语言模型对齐技术</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script src="toc.js"></script><script src="widgets.js"></script>
+<script src="../toc.js"></script><script src="../widgets.js"></script>
+
+
+
+
+</body></html>

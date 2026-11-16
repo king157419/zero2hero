@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8.4 应用：智能个人助手 – 大语言模型原理与技术</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../ch8/s8-5.html" rel="next">
+<link href="../ch8/s8-3.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-4.html">8.4　应用：智能个人助手</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">大语言模型原理与技术</a> 
+        <div class="sidebar-tools-main">
+    <a href="../大语言模型原理与技术_全书.pdf" title="下载全书 PDF" class="quarto-navigation-tool px-1" aria-label="下载全书 PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">全书导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">第 1 章　大语言模型的由来与现状</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false" aria-label="展开或折叠此栏: 第 1 章　大语言模型的由来与现状">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.3　大语言模型如何工作</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.4　当前技术版图</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5　应用现状与典型模式</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.6　局限、风险与治理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考与练��</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">第 2 章　大语言模型的底层原理与技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="展开或折叠此栏: 第 2 章　大语言模型的底层原理与技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1　底层逻辑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2　重要概念</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3　模型分类</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4　模型构建</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">第 3 章　大语言模型的预训练、微调与推理</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false" aria-label="展开或折叠此栏: 第 3 章　大语言模型的预训练、微调与推理">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3　预训练数据工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6　参数高效微调技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8　大语言模型推理原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.9　推理性能与优化技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.12　本章小结与习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">第 4 章　大模型计算系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false" aria-label="展开或折叠此栏: 第 4 章　大模型计算系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1　大模型对计算系统提出的要求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源：让计算算得快、存得下、传得动</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架：把算法组织成可执行的计算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务：让模型又快又省地回答请求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具：从模型到产品</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例：课程知识问答助手的系统设计</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch5/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">第 5 章　检索增强生成</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="展开或折叠此栏: 第 5 章　检索增强生成">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3　一条流水线的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.9　工程里的十个坑</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">思考题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">延伸阅读</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch6/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">第 6 章　智能体</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="展开或折叠此栏: 第 6 章　智能体">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.1　概述</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.2　核心组件</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.3　工作原理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.4　关键能力</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.5　相关技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.6　Agentic AI：从单个智能体到智能体系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.7　本章小结</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.8　习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch7/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">第 7 章　Coding Agent 工程技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false" aria-label="展开或折叠此栏: 第 7 章　Coding Agent 工程技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1　从代码生成到 Coding Agent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.4　Context Engineering：为下一步决策准备信息</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.5　Harness Engineering：把模型的动作接入可控环境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.9　安全与可信交付：把信任边界放在工具之前</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch8/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">第 8 章　记忆系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="true" aria-label="展开或折叠此栏: 第 8 章　记忆系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1　理解记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2　当前记忆系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3　基于认知学的记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">8.4　应用：智能个人助手</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本章参考资料</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#从语言模型到个人助手的能力层级" id="toc-从语言模型到个人助手的能力层级" class="nav-link active" data-scroll-target="#从语言模型到个人助手的能力层级">8.4.1　从语言模型到个人助手的能力层级</a></li>
+  <li><a href="#从生成回答到完成任务的闭环" id="toc-从生成回答到完成任务的闭环" class="nav-link" data-scroll-target="#从生成回答到完成任务的闭环">8.4.2　从生成回答到完成任务的闭环</a></li>
+  <li><a href="#建立面向个人的上下文模型" id="toc-建立面向个人的上下文模型" class="nav-link" data-scroll-target="#建立面向个人的上下文模型">8.4.3　建立面向个人的上下文模型</a></li>
+  <li><a href="#主动性决定何时说何时做何时问" id="toc-主动性决定何时说何时做何时问" class="nav-link" data-scroll-target="#主动性决定何时说何时做何时问">8.4.4　主动性：决定何时说、何时做、何时问</a></li>
+  <li><a href="#意图分析与澄清先弄清要做什么" id="toc-意图分析与澄清先弄清要做什么" class="nav-link" data-scroll-target="#意图分析与澄清先弄清要做什么">8.4.5　意图分析与澄清：先弄清要做什么</a></li>
+  <li><a href="#工具运行时与长时任务" id="toc-工具运行时与长时任务" class="nav-link" data-scroll-target="#工具运行时与长时任务">8.4.6　工具、运行时与长时任务</a></li>
+  <li><a href="#身份权限与可撤销的委托" id="toc-身份权限与可撤销的委托" class="nav-link" data-scroll-target="#身份权限与可撤销的委托">8.4.7　身份、权限与可撤销的委托</a></li>
+  <li><a href="#主要挑战与应对" id="toc-主要挑战与应对" class="nav-link" data-scroll-target="#主要挑战与应对">8.4.8　主要挑战与应对</a></li>
+  <li><a href="#个人助手的参考架构" id="toc-个人助手的参考架构" class="nav-link" data-scroll-target="#个人助手的参考架构">8.4.9　个人助手的参考架构</a></li>
+  <li><a href="#连续案例一次周五聚餐安排" id="toc-连续案例一次周五聚餐安排" class="nav-link" data-scroll-target="#连续案例一次周五聚餐安排">8.4.10　连续案例：一次周五聚餐安排</a></li>
+  <li><a href="#从工具到代表自主程度的分阶段演进" id="toc-从工具到代表自主程度的分阶段演进" class="nav-link" data-scroll-target="#从工具到代表自主程度的分阶段演进">8.4.11　从工具到代表：自主程度的分阶段演进</a></li>
+  <li><a href="#评估个人助手" id="toc-评估个人助手" class="nav-link" data-scroll-target="#评估个人助手">8.4.12　评估个人助手</a></li>
+  <li><a href="#本章回顾" id="toc-本章回顾" class="nav-link" data-scroll-target="#本章回顾">8.4.13　本章回顾</a></li>
+  <li><a href="#思考与讨论" id="toc-思考与讨论" class="nav-link" data-scroll-target="#思考与讨论">8.4.14　思考与讨论</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-4.html">8.4　应用：智能个人助手</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">8.4　应用：智能个人助手</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>把前面的内容串起来，个人助手可以看成一种长期围绕同一个人运行的任务系统。单纯的大语言模型擅长根据当前输入生成回答，而个人助手还要知道用户正在长期做什么、过去发生过什么、下一步是否应该主动行动，以及在动作用户的账号或资源之前是否需要得到授权。这种变化也可以理解为状态生命周期的延长：第一代关注对话，第二代关注任务，第三代开始围绕一个人持续维护目标、偏好与承诺。衡量价值的单位也因此发生变化：从”回答是否像样”转向”用户能否放心把一件事交给它完成”。</p>
+<p>这种转变不能简单归结为”给模型加记忆和工具”。记忆、规划、执行、主动性、权限和审计需要组成一个可运行的整体。任何一项缺失，都可能让助手看起来聪明却不可用。比如，它会制定计划却无法读取日历，或者能够调用支付接口却没有明确的额度边界。</p>
+<section id="从语言模型到个人助手的能力层级" class="level2">
+<h2 class="anchored" data-anchor-id="从语言模型到个人助手的能力层级">8.4.1　从语言模型到个人助手的能力层级</h2>
+<p>可以按照状态生命周期和行动权限，把相关系统分成四个层级。层级越高，系统掌握的状态越持久、能够采取的动作越多，对信任和治理的要求也越高。这并不是产品成熟度的唯一标准，也不表示每一类应用都必须走到最高层。</p>
+<p><strong>表 8-9 语言模型、聊天助手、任务智能体与个人助手</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>层级</strong></th>
+<th><strong>状态范围</strong></th>
+<th><strong>主要行为</strong></th>
+<th><strong>核心能力</strong></th>
+<th><strong>主要短板</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>大语言模型</td>
+<td>一次请求内的输入与输出</td>
+<td>理解并生成文本</td>
+<td>语言、推理与一般知识</td>
+<td>不会自行持续行动，也缺少可靠外部状态</td>
+</tr>
+<tr class="even">
+<td>聊天助手</td>
+<td>一段会话</td>
+<td>围绕当前话题连续回答</td>
+<td>会话上下文、指令跟随、可用性</td>
+<td>跨会话连续性弱，个人状态难以稳定维护</td>
+</tr>
+<tr class="odd">
+<td>任务智能体</td>
+<td>一项任务的执行过程</td>
+<td>规划、调用工具、观察结果并交付</td>
+<td>目标分解、工具执行、错误处理</td>
+<td>任务结束后状态可能被清理，个人理解有限</td>
+</tr>
+<tr class="even">
+<td>个人助手</td>
+<td>以用户为中心的长期状态</td>
+<td>理解目标、主动建议、获授权后执行</td>
+<td>个人上下文、记忆、主动性、执行与信任</td>
+<td>隐私、权限、责任和长期一致性最复杂</td>
+</tr>
+</tbody>
+</table>
+<p>任务智能体和聊天助手之间的差别，不只是回答长短。任务智能体需要把目标变成步骤，从工具返回的真实结果中观察进展，并在条件变化时修改计划。[19]个人助手又把任务范围扩展到多个会话和长期目标，因此还必须解决”这个任务对当前用户意味着什么”和”什么结果值得替用户执行”这两个问题。</p>
+<p>Agent 也不是任何情况下的最佳形态。流程稳定、输入输出明确的任务更适合固定工作流，因为可预测、容易测试；只有步骤难以预先写死、需要根据环境反馈改变路径时，动态智能体才更有价值。个人助手尤其需要在”自主执行”和”停下来确认”之间设置停止条件，不能把更长、更复杂的循环当成更高智能。[25]</p>
+</section>
+<section id="从生成回答到完成任务的闭环" class="level2">
+<h2 class="anchored" data-anchor-id="从生成回答到完成任务的闭环">8.4.2　从生成回答到完成任务的闭环</h2>
+<p>大语言模型的典型过程是接收提示、生成结果。个人助手面对的任务则更像一个循环：理解当前目标，读取必要状态，提出计划，调用工具，观察真实结果，再决定继续、重试、修改计划或停止。ReAct 一类方法把推理与行动交替起来，正是为了让模型不只”想”，还要根据工具返回的环境信息校正下一步。[19]</p>
+<p>这个循环至少增加五项系统改动。第一，助手要有明确的任务目标，而不是只收到一句要生成什么。第二，它要保存计划、变量、工具结果和未完成步骤。第三，它要通过浏览器、代码执行、日历或业务 API 改变外部状态。第四，它要处理失败、超时、权限拒绝和重复调用。第五，它要在达成目标或触发风险条件时停止，而不是无限尝试。</p>
+<p>任务闭环还意味着模型输出与行动分开。模型可以建议发一封邮件，但邮件发送、付款或删除文件必须经过独立的工具调用和权限检查。这种分工让每一步行动都有可观察记录，也使系统能在执行前暂停确认，而不是把自然语言里的一句”已经完成”误当成真实结果。</p>
+</section>
+<section id="建立面向个人的上下文模型" class="level2">
+<h2 class="anchored" data-anchor-id="建立面向个人的上下文模型">8.4.3　建立面向个人的上下文模型</h2>
+<p>通用聊天助手理解的是当前提示，个人助手还需要理解一个持续变化的人。个人上下文可以粗略分成四层：偏好、关系与承诺、行为方式、长期目标。偏好回答”喜欢什么”，关系和承诺回答”与谁有关、答应过什么”，行为方式回答”怎样权衡和决策”，长期目标则回答”几个月后仍然在意什么”。</p>
+<p>四层的实现难度并不相同。为餐厅打上”喜欢安静”的标签相对简单；记住用户向客户承诺过某项交付，就需要实体、时间和责任关系；推断用户在价格与品质冲突时如何取舍，则需要多次行为证据；理解职业、健康或财务目标，更容易受到信息不完整、偏好变化和表达歧义的影响。因此，个人模型不能被简化为一张永久不变的画像。</p>
+<p>更可靠的做法，是把个人上下文表示为可查询、可纠正的状态集合。每条状态记录至少应包含内容、来源、时间、适用范围和置信度。用户明确说过的偏好，与系统从一次行为中猜测的偏好，不应拥有相同权重；只属于某项目的规则，也不应扩散到所有任务。当用户查看、修改或删除个人数据时，系统还要让相关记忆和后续建议同步更新。</p>
+<p>个性化还会产生反向风险。模型可能用刻板印象填补缺失信息，也可能在用户已经变化后继续沿用旧偏好。个人助手需要区分稳定偏好、当前情境和一次性选择，并在关键场景中说明依据。例如，“根据你上次提到的预算范围”比悄悄假定一个预算更容易让用户发现错误。</p>
+</section>
+<section id="主动性决定何时说何时做何时问" class="level2">
+<h2 class="anchored" data-anchor-id="主动性决定何时说何时做何时问">8.4.4　主动性：决定何时说、何时做、何时问</h2>
+<p>个人助手与普通聊天工具最明显的差别之一，是它可以在用户没有明确指令时采取行动。但主动不等于频繁推送。系统至少要做三组判断：是否有足够证据认为用户需要帮助，当前时机是否合适，以及介入应该停留在提醒、建议还是直接执行。早期混合主动式界面研究已经指出，系统在何时介入时，应权衡推断错误的代价、用户注意力的成本以及澄清信息的价值。[20]</p>
+<p>异步优先是一条实用的工程原则。能在后台完成的读取、整理、比较和起草，不必占住用户正在进行的交互；真正需要用户决定的，才进入提醒或确认。这样可以减少响应等待，也能把高成本计算放到空闲时段。但异步任务必须有期限、优先级、取消机制和失败通知，否则只是把等待从一个地方挪到了另一个地方。</p>
+<p>另一个原则是设置中断预算。提醒次数不是越多越好，连续追问会消耗用户耐心，也会降低后续提示的可信度。系统应当优先选择那些一旦得到澄清就能明显改变行动的问题，而不是把所有缺失字段都填满。在低风险任务中可以采用默认值并明确说明；在支付、发送、删除等高风险任务中，默认值不能替代授权。</p>
+<p>主动性还必须尊重用户设定的边界：哪些时段可以提醒，哪些联系人不能自动联系，哪些操作必须确认。这些边界本身属于个人上下文，但它们的优先级通常高于便利性。人机交互研究也强调，系统应让用户理解能力范围、保持控制并能够纠正结果。[21]一个只在用户愿意被打扰时出现的助手，往往比一个不断证明自己”很主动”的助手更有用。</p>
+</section>
+<section id="意图分析与澄清先弄清要做什么" class="level2">
+<h2 class="anchored" data-anchor-id="意图分析与澄清先弄清要做什么">8.4.5　意图分析与澄清：先弄清要做什么</h2>
+<p>个人助手的输入通常不完整。用户说”周五晚上订那家店”，可能缺少餐厅名称、同行者、预算或时间；“订周五的会议室”看似具体，仍可能存在时区、线上或线下、是否邀请外部人员等歧义。歧义可能来自句法结构、词语多义，也可能来自缺失的语境。模型如果直接补出一个唯一解释，后面的计划越完整，偏离目标的风险越大。</p>
+<p>常见处理方式有三种。查询改写利用历史上下文把请求改写成更明确的版本；穷举解释会同时说明几种可能，让用户自行选择；主动澄清则直接询问关键缺失项。三者各有代价。改写可能悄悄把假设变成事实，穷举解释会增加阅读负担，主动澄清则会打断用户。因此，澄清不应成为固定交互习惯，而应是一项成本收益判断。</p>
+<p>工程上可以把意图拆成槽位：目标、对象、时间、地点、范围、约束、风险容忍度和审批方式。每个槽位标记为显式给出、可高置信推断、仍有歧义或关键信息缺失。普通咨询可以带着假设继续，并标明假设；高影响行动一旦涉及不可逆结果，就应在执行前确认关键槽位。这样做比笼统地问”你具体想要什么”更容易回答，也更容易在日志中定位误解决发生在哪一步。</p>
+<p>同时需要承认，模型有时倾向于生成一个看似合理的答案，而不会主动指出自己不确定。歧义检测最好由显式规则、独立性检查或经过验证的分类器共同支持，不能完全依赖模型”自觉”。当用户给出的条件彼此冲突时，系统也应先说清冲突，而不是选择其中一个条件继续执行。</p>
+</section>
+<section id="工具运行时与长时任务" class="level2">
+<h2 class="anchored" data-anchor-id="工具运行时与长时任务">8.4.6　工具、运行时与长时任务</h2>
+<p>个人助手要把计划变成结果，就需要访问文件、日历、邮件、浏览器、业务系统和支付接口。Model Context Protocol（MCP）等连接协议尝试把”模型怎样发现并调用外部资源”抽象成统一接口，减少每个应用单独适配的成本。[22]但标准化连接只解决工具接入问题，并不会自动解决工具代表的权限、数据范围和操作后果。</p>
+<p>从普通 API 调用走向个人助手运行时，系统还要长期运行、保存任务状态并在崩溃后恢复。例如，一个跨三天完成的旅行规划可能需要保留已经确认的日期、候选航班、用户预算和尚未完成的支付步骤。运行时因此需要任务队列、并发控制、重试策略、资源配额、日志和成本归因。否则，长任务一旦中断，用户看到的就是重复提问、重复执行或状态丢失。</p>
+<p>执行环境还需要隔离。浏览器操作、代码执行和第三方工具都可能在沙箱外造成真实影响，因此系统应明确每个任务可以访问哪些文件、域名、账号和网络资源。工具返回的内容也可能包含恶意指令，不能因为它在”工具结果”字段里就默认为高可信。最安全的做法是把数据内容和控制指令分开处理，并在执行高风险动作前重新检查授权，而不是把整段网页文本直接当成新的系统命令。</p>
+</section>
+<section id="身份权限与可撤销的委托" class="level2">
+<h2 class="anchored" data-anchor-id="身份权限与可撤销的委托">8.4.7　身份、权限与可撤销的委托</h2>
+<p>个人助手代表用户行动时，必须同时回答三个不同的问题：它是不是被认可的代理，它代表哪个用户，它此刻被允许做什么。只验证代理身份，并不能说明这次付款或邮件发送符合用户授权；只检查用户登录状态，也不能证明当前动作来自用户配置的代理。身份、权限和操作范围需要分开管理。</p>
+<p>一个实用的设计是按风险分配自主程度。低风险读取可以自动完成，改变外部状态的动作需要明确授权，高影响或不可逆动作则需要更严格的确认。下面的梯度可以作为设计起点，具体层级应随任务和用户策略调整。</p>
+<p><strong>表 8-10 个人助手的委托梯度</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>自主等级</strong></th>
+<th><strong>允许的行为</strong></th>
+<th><strong>典型例子</strong></th>
+<th><strong>必要控制</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>禁止接入</td>
+<td>完全不能访问外部系统</td>
+<td>生产数据库、敏感凭证</td>
+<td>网络与工具白名单</td>
+</tr>
+<tr class="even">
+<td>只读检索</td>
+<td>可以搜索和查看公开或已授权信息</td>
+<td>查营业时间、搜索资料</td>
+<td>作用域与隐私过滤</td>
+</tr>
+<tr class="odd">
+<td>登录后查看</td>
+<td>使用用户身份读取私人信息</td>
+<td>查看日历与订单状态</td>
+<td>最小权限与读取审计</td>
+</tr>
+<tr class="even">
+<td>确认后执行</td>
+<td>可以起草或预订，但须用户确认</td>
+<td>发邮件、订餐、提交表单</td>
+<td>预览、确认、权限失效</td>
+</tr>
+<tr class="odd">
+<td>完全代理</td>
+<td>在预设边界内自主完成一类任务</td>
+<td>固定预算内续订服务</td>
+<td>额度、期限、回滚与监控</td>
+</tr>
+</tbody>
+</table>
+<p>每一级都需要”可以撤销”的能力。授权应有期限，凭证应可单独吊销，已经执行的动作应尽可能提供撤销或补偿路径。审计记录不能只保存最终回答，还要保存谁发起了任务、依据了哪些个人状态、调用了什么工具、是否经过确认，以及失败后采取了什么处理。这既是安全要求，也是责任划分和事后纠错的依据。</p>
+<p>确认机制也有边界。如果系统对每个小步骤都弹窗，用户会形成机械批准的”确认疲劳”，高风险提示反而失去作用。更合理的方式是按风险聚合确认，在一次预览中展示关键动作、金额、接收方和不可逆后果；低风险步骤则通过权限策略预先授权。</p>
+</section>
+<section id="主要挑战与应对" class="level2">
+<h2 class="anchored" data-anchor-id="主要挑战与应对">8.4.8　主要挑战与应对</h2>
+<p>个人助手面临的许多问题不能靠更换更大的模型解决。模型能力可以提高理解与规划质量，却无法独自决定谁有权替用户付款，也无法保证第三方接口永远可用。系统需要把能力问题、工程问题和治理问题分开处理。</p>
+<p><strong>表 8-11 个人助手的主要挑战与工程应对</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>挑战</strong></th>
+<th><strong>典型表现</strong></th>
+<th><strong>可能后果</strong></th>
+<th><strong>应对方向</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>主动性失控</td>
+<td>频繁提醒、在错误时机执行</td>
+<td>打扰用户、削弱信任</td>
+<td>中断预算、异步优先、风险分级</td>
+</tr>
+<tr class="even">
+<td>个性化失真</td>
+<td>沿用旧偏好、从刻板印象推断</td>
+<td>建议不相关或冒犯用户</td>
+<td>来源与置信度、期限、可纠正画像</td>
+</tr>
+<tr class="odd">
+<td>记忆治理不足</td>
+<td>无法解释来源、删除后仍被召回</td>
+<td>隐私风险和错误扩散</td>
+<td>可查看、可删除、可导出、级联更新</td>
+</tr>
+<tr class="even">
+<td>意图误判</td>
+<td>把歧义补成单一解释</td>
+<td>执行了错误任务</td>
+<td>槽位检查、关键歧义澄清、执行前预览</td>
+</tr>
+<tr class="odd">
+<td>工具与供应链风险</td>
+<td>恶意网页指令、接口失效、重复调用</td>
+<td>越权、数据泄露、重复扣款</td>
+<td>隔离环境、幂等设计、内容与指令分离</td>
+</tr>
+<tr class="even">
+<td>责任边界模糊</td>
+<td>用户、模型、平台均不完全负责</td>
+<td>损害发生后难以追责</td>
+<td>操作日志、审批链、明确的代理条款</td>
+</tr>
+<tr class="odd">
+<td>成本与可靠性</td>
+<td>长时间运行、频繁检索和浏览器操作</td>
+<td>单位用户成本过高、服务中断</td>
+<td>预算控制、缓存、回收、故障降级</td>
+</tr>
+<tr class="even">
+<td>评估错位</td>
+<td>只看使用时长或回答质量</td>
+<td>忽略是否真正节省用户精力</td>
+<td>任务成功、委托量、错误代价和恢复能力共同评估</td>
+</tr>
+</tbody>
+</table>
+<p>安全与治理还需要外部框架提供底线。NIST 生成式人工智能风险管理框架强调治理、测量、管理和持续监控；OWASP 对生成式 AI 应用的威胁分类则提示了提示注入、敏感信息泄露、过度代理等风险。[23][24]这些风险在个人助手中会叠加成链式后果：一段被污染的网页可能诱导工具调用，工具又可能访问私人文件，最终以用户身份发出消息。因此，单点内容过滤不够，每次扩权、执行和外部数据进入都要重新检查。</p>
+<p>记忆能力越强，隐私问题越不能留到产品上线后再补。系统保存敏感偏好或身份信息前，应取得知情与授权；用户需要能够查看、纠正和彻底删除自己的记忆；多用户和多租户环境中的检索还必须严格隔离，不能因为向量相似或配置错误把用户 A 的记录交给用户 B。删除也不能只移除当前可见文本，还要处理索引、缓存、派生摘要、关联图和备份中的副本。</p>
+</section>
+<section id="个人助手的参考架构" class="level2">
+<h2 class="anchored" data-anchor-id="个人助手的参考架构">8.4.9　个人助手的参考架构</h2>
+<p>把上述能力组合起来，可以得到一个分层的参考架构。各层之间不是单向流水线，而是通过状态和事件相互反馈。例如，工具执行失败会回到规划层，权限拒绝会触发澄清，用户的纠正又会更新个人上下文。</p>
+<p><strong>表 8-12 个人助手的参考架构</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>层次</strong></th>
+<th><strong>主要职责</strong></th>
+<th><strong>关键输出</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>交互层</td>
+<td>接收文本、语音、图片、邮件和事件提醒</td>
+<td>统一的任务请求与当前情境</td>
+</tr>
+<tr class="even">
+<td>意图与授权层</td>
+<td>识别目标、检查歧义、读取用户审批策略</td>
+<td>可执行任务与授权边界</td>
+</tr>
+<tr class="odd">
+<td>个人上下文与记忆层</td>
+<td>维护偏好、关系、承诺、行为和目标状态</td>
+<td>带来源、时效与范围的个人状态</td>
+</tr>
+<tr class="even">
+<td>规划层</td>
+<td>拆解目标、选择工具、设定停止条件</td>
+<td>可检查的计划与备选路径</td>
+</tr>
+<tr class="odd">
+<td>执行运行时</td>
+<td>调用 API、浏览器、文件与计算环境</td>
+<td>真实工具结果与副作用记录</td>
+</tr>
+<tr class="even">
+<td>治理与审计层</td>
+<td>身份、权限、确认、日志、回滚和监控</td>
+<td>可追溯、可撤销的行动轨迹</td>
+</tr>
+<tr class="odd">
+<td>运行与评估层</td>
+<td>调度长时任务、控制成本、衡量任务效果</td>
+<td>可靠性指标与持续改进依据</td>
+</tr>
+</tbody>
+</table>
+<p>这个架构中，记忆并不是独立于行动之外的资料库。个人状态会影响意图分析，意图分析决定检索范围，检索结果进入计划，执行反馈又产生新的记忆。同样，安全也不是最后的过滤器，而应贯穿身份、检索、规划、工具调用和输出全过程。</p>
+</section>
+<section id="连续案例一次周五聚餐安排" class="level2">
+<h2 class="anchored" data-anchor-id="连续案例一次周五聚餐安排">8.4.10　连续案例：一次周五聚餐安排</h2>
+<p>周一早上，用户对助手说：“帮我安排周五和客户吃饭，别太贵，环境安静一点。”如果这是一个普通语言模型，它可能会写出一份建议清单；如果是一个任务智能体，它可以搜索餐厅并尝试预订；而个人助手还要知道这次客户是谁、用户过去的预算习惯、同行者饮食限制、周五日程和支付政策。</p>
+<p>助手先读取日历，发现用户周五下午还有一场可能延时的评审，因此提出把晚餐时间放在 18:30 以后。它从个人状态中找到客户上次提到的饮食限制，但把这条信息标为”来自两个月前的会议”，没有直接当作确定事实。随后它搜索交通方便、安静且人均预算合适的餐厅，并只向用户询问一个会显著改变结果的问题：“客户是否有新的饮食要求，还是沿用上次记录？”</p>
+<p>在用户确认后，助手生成两个方案并调用地图和预订工具。由于用户的授权政策规定”可查看和准备，但产生费用前必须确认”，它先展示餐厅、时间、人数、取消规则和预估金额。用户确认后，助手才提交预订，并把确认号、取消期限和同行者信息写入项目状态。若预订接口失败，它可以继续搜索备选，但不能虚构”已订好”，也不能未经确认改用用户电话或账号联系商家。</p>
+<p>周五结束后，助手根据用户反馈更新偏好：如果用户选择靠窗位置并明确说”以后聚餐优先靠窗”，这条偏好可以保留；如果只是当天顺口提了一句，则不应升级为长期规则。这次事件还可以用于评估：最终是否按时完成预订、用户被打断几次、是否发生越权、失败后是否恢复，以及总共花了多少检索和运行成本。</p>
+</section>
+<section id="从工具到代表自主程度的分阶段演进" class="level2">
+<h2 class="anchored" data-anchor-id="从工具到代表自主程度的分阶段演进">8.4.11　从工具到代表：自主程度的分阶段演进</h2>
+<p>个人助手的发展可以按照系统承担的范围分成几个阶段。早期是”智能体作为工具”，系统在明确任务中调用 API 或代码；随后是”智能体作为工作者”，在专业环境中交付完整成果；再往后是”智能体作为助手”，持续理解个人状态并管理跨应用任务；更高阶段是”智能体作为代表”，在用户授权下沟通、协商和完成交易。</p>
+<p>这条路径不是所有产品都必须走完的路线，也不必绑定某个具体年份。它描述的是责任逐步增加：每提升一级，系统就需要更长的状态保存、更大的工具权限和更成熟的审计机制。如果身份、支付、撤销和责任制度没有同步成熟，系统停在”半自主、强授权、可审计”的阶段反而更合适。</p>
+<p>判断一个个人助手是否值得信任，不应只看它是否演示过复杂操作，而要看它在普通任务中是否稳定，在不确定时是否愿意停下，在犯错后是否能够发现、解释和恢复。自主程度是一种可配置的产品选择，而不是越自动越高明。</p>
+</section>
+<section id="评估个人助手" class="level2">
+<h2 class="anchored" data-anchor-id="评估个人助手">8.4.12　评估个人助手</h2>
+<p>传统模型评测常看准确率、困惑度或回答偏好，个人助手还必须评价完整任务。至少要分别测量任务结果、用户投入、主动性与安全。任务结果包括是否完成、耗时、成本和失败恢复；用户投入包括澄清次数、确认负担和人工接管；主动性与安全则包括是否在合适时机介入、是否越权、是否可撤销。</p>
+<p>“委托了多少小时或多少决策”可以作为价值指标，但单独使用会鼓励系统承担更多任务，而不顾风险。更完整的评价应把委托量与实际成功、用户校正和事故成本放在一起。一个助手完成了十项小任务但造成一次错误付款，不能因为调用次数多就得到更高评价。</p>
+<p>不同基准所得分数也不能直接横向比较。模拟环境、任务难度、是否允许调用工具、是否有人工接管和失败成本都可能不同。教材使用案例或论文数据时，应同时说明数据来源、任务条件和评价单位；对个人助手而言，最有说服力的证据仍是开放环境中的长期任务表现与可重复的失败分析。</p>
+</section>
+<section id="本章回顾" class="level2">
+<h2 class="anchored" data-anchor-id="本章回顾">8.4.13　本章回顾</h2>
+<p>本章从”理解记忆”出发，先说明上下文窗口和聊天记录为什么不能替代状态系统，再考察 MemGPT/Letta、Mem0/Mem0g、Generative Agents、MemoryBank、A-MEM 等代表性实现，随后借助认知心理学解释感觉记忆、工作记忆、长时记忆以及编码、巩固和提取。最后，本章把这些机制放回智能个人助手这一应用场景。</p>
+<p>贯穿全章的主线是：记忆的价值不在于保存了多少文本，而在于能否围绕用户目标维护可靠、可更新、可追溯、可授权使用的状态。模型能力决定系统能不能理解和规划，记忆决定它能否延续，工具决定它能否行动，而权限、审计和信任决定这些行动是否可以真正交给它。</p>
+<p>因此，个人助手的竞争并不只是模型分数竞争。更强模型可能改善理解和生成，但如果缺少合适的个人状态、权限边界和失败恢复，它仍然只是一个偶尔好用的聊天入口。一个真正可靠的个人助手，应当让用户清楚知道它记得什么、准备做什么、已经做了什么，以及在何时可以撤回。</p>
+</section>
+<section id="思考与讨论" class="level2">
+<h2 class="anchored" data-anchor-id="思考与讨论">8.4.14　思考与讨论</h2>
+<p>1. 为什么”模型能够规划”并不等于”个人助手可以自主执行”？请结合工具返回、停止条件和权限边界说明。</p>
+<p>2. 在订餐案例中，哪些步骤适合后台自动完成，哪些步骤必须让用户确认？请根据风险、可逆性和用户注意力设计一条授权规则。</p>
+<p>3. 如果个人助手长期记住了错误偏好，用户应如何发现并纠正？系统又应怎样避免把一次临时选择变成永久标签？</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="../ch8/s8-3.html" class="pagination-link" aria-label="8.3　基于认知学的记忆">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8.3　基于认知学的记忆</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../ch8/s8-5.html" class="pagination-link" aria-label="本章参考资料">
+        <span class="nav-page-text">本章参考资料</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script src="toc.js"></script><script src="widgets.js"></script>
+<script src="../toc.js"></script><script src="../widgets.js"></script>
+
+
+
+
+</body></html>
