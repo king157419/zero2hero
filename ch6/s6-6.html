@@ -795,10 +795,10 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-three" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-three">6.6.2　生成式 AI、智能体与 Agentic AI</h2>
-<p>三者常被混为一谈，但在功能、运行机制和自主性上是逐级递进的（表 <a href="../ch6/s6-6.html#c6-tab-three">6-13</a>，据 Sapkota 等人的对照<sup><a href="../ch6/references.html#ref-31">[31]</a></sup>整理）。</p>
+<p>三者常被混为一谈，但在功能、运行机制和自主性上是逐级递进的（表 <a href="../ch6/s6-6.html#c6-tab-three">6-12</a>，据 Sapkota 等人的对照<sup><a href="../ch6/references.html#ref-31">[31]</a></sup>整理）。</p>
 <div id="c6-tab-three" class="booktab">
 <div class="tabcap">
-<p>表 6-13　生成式 AI、智能体与 Agentic AI 的对照</p>
+<p>表 6-12　生成式 AI、智能体与 Agentic AI 的对照</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -891,7 +891,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>表中可以读出一条演进主线：<strong>从“生成内容”到“执行任务”，再到“组织任务”</strong>。三者不是替代关系：Agentic AI 系统内部仍由生成式模型驱动，每个成员也仍是一个单独的智能体循环；它增加的是“组织层”。打个比方，生成式 AI 像一位博学的顾问，问什么答什么；智能体像一位能干的助理，说要什么它去办；Agentic AI 像一个项目团队，说清目标后团队自己分工、互相检查、汇总交付。团队的优势不在于单个成员更强，而在于分工、复核和并行；团队也有团队的毛病——沟通成本、责任分散，以及“集体幻觉”：成员共享同一个错误前提，或相互引用彼此的输出而没有独立证据，错误被反复确认而不是被纠正。表 <a href="../ch6/s6-6.html#c6-tab-three">6-13</a> 中的自主性高低指典型情形，实际系统的自主程度可以按第 <a href="../ch6/s6-4.html#c6-subsec-autonomy">6.4.1</a> 小节的等级配置。</p>
+<p>表中可以读出一条演进主线：<strong>从“生成内容”到“执行任务”，再到“组织任务”</strong>。三者不是替代关系：Agentic AI 系统内部仍由生成式模型驱动，每个成员也仍是一个单独的智能体循环；它增加的是“组织层”。打个比方，生成式 AI 像一位博学的顾问，问什么答什么；智能体像一位能干的助理，说要什么它去办；Agentic AI 像一个项目团队，说清目标后团队自己分工、互相检查、汇总交付。团队的优势不在于单个成员更强，而在于分工、复核和并行；团队也有团队的毛病——沟通成本、责任分散，以及“集体幻觉”：成员共享同一个错误前提，或相互引用彼此的输出而没有独立证据，错误被反复确认而不是被纠正。表 <a href="../ch6/s6-6.html#c6-tab-three">6-12</a> 中的自主性高低指典型情形，实际系统的自主程度可以按第 <a href="../ch6/s6-4.html#c6-subsec-autonomy">6.4.1</a> 小节的等级配置。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>“Agentic”还有一个更宽的用法：泛指系统具有能动性的程度，单个智能体也可以说“很 agentic”。本节的 Agentic AI 采用较窄的含义，专指由多个智能体协作完成复杂目标的系统。阅读资料时要先分清作者用的是哪种含义。</p>
@@ -988,7 +988,7 @@ window.Quarto = {
 <li><p><strong>攻击面扩大</strong>：每个智能体、工具和通信通道都是潜在入口，一个被注入恶意指令的网页可能影响整个系统。防御：最小权限、网络隔离、输入净化、输出审查、严格区分数据与指令。</p></li>
 <li><p><strong>难以调试</strong>：多智能体的交互关系可能极其复杂。生产系统必须内建<strong>分布式追踪</strong>：为每个任务分配追踪编号（trace ID），记录每个智能体的输入、输出、工具调用和耗时。</p></li>
 </ul>
-<p>责任归属同样是问题：系统自主做出一连串决策后，谁对结果负责——设定目标的人、部署系统的组织、模型提供方？法律上尚无定论，工程上可以先做到：明确责任边界，保留完整审计日志，高风险决策强制人工确认，并向用户披露系统的自主程度（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-8</a>）。</p>
+<p>责任归属同样是问题：系统自主做出一连串决策后，谁对结果负责——设定目标的人、部署系统的组织、模型提供方？法律上尚无定论，工程上可以先做到：明确责任边界，保留完整审计日志，高风险决策强制人工确认，并向用户披露系统的自主程度（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-7</a>）。</p>
 <p>评估也要更立体，至少包含四类指标：<strong>效果</strong>（任务成功率、子目标完成率）、<strong>效率</strong>（轮数、时延、token 成本）、<strong>稳健性</strong>（输入扰动下的表现、异常恢复率）、<strong>安全</strong>（越权尝试拦截率、注入攻击成功率、人工干预率）。只报告成功率的评估不完整，因为它看不出系统在少见情形和对抗条件下的行为。</p>
 </section>
 <section id="c6-subsec-future" class="level2">

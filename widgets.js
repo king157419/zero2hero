@@ -6,7 +6,7 @@
 (function () {
   "use strict";
   const C = { ink: "#1A1A1A", rule: "#8C8C8C", grid: "#E2E2DF", fill: "#EDEDEA", line: "#4D4D4D",
-              accent: "#2E7D78", pale: "#DCEDEB", warn: "#B23A2E", dark: "#4A4A4A", mid: "#BDBDBD" };
+              accent: "#2F5D8A", pale: "#E3EBF4", warn: "#B23A2E", dark: "#4A4A4A", mid: "#BDBDBD" };
   const NS = "http://www.w3.org/2000/svg";
   const FS = 1.2; // SVG 字号整体放大系数
   const HALO = { stroke: "#fff", "stroke-width": 4, "paint-order": "stroke", "stroke-linejoin": "round" };

@@ -747,27 +747,7 @@ ul.task-list li input[type="checkbox"] {
 
 <p>打开一个对话式人工智能助手，同一个输入框里可以让它改一段代码、总结一份五十页的报告、看懂一张手机拍的发票，还可以让它自己去搜索资料、调用日历安排会议。几年前，这些任务分别需要专门的程序；今天，它们背后往往是同一个<strong>大语言模型</strong>（Large Language Model，LLM）。读者自然会问：这个“模型”到底是什么？它凭什么能做这么多不同的事？它是怎样一步步发展出来的？现在发展到了哪一步，又有哪些做不好、不能放心交给它的事情？</p>
 <p>本章回答这几个问题，同时为全书画一张地图。全书按“模型是什么 → 怎么造 → 怎么跑 → 怎么用”组织（图 <a href="../ch1/index.html#c1-fig-bookmap">1-1</a>）：第 1、2 章说明大语言模型是什么、依据什么原理工作；第 3 章讲如何用数据把模型“训练”出来，以及训练好的模型如何生成回答；第 4 章讲支撑训练和运行的计算系统；第 5～8 章讲如何把模型组装成能检索资料、能调用工具、能长期记住用户的应用。读完本章，读者应当知道每一项技术处在这张地图的什么位置，后面各章再逐块展开。</p>
-<div id="c1-fig-bookmap" class="bookfig">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figs/ch1-bookmap.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:94.6%"></p>
-</figure>
-</div>
-<div class="figcap">
-<p>图 1-1　全书知识地图。左侧是全书的四个部分，行间箭头标出下一部分用到上一部分的什么产出；第 7 章讲编程智能体（Coding Agent）的工程实现。带强调色的框是本章</p>
-</div>
-</div>
 <p>本章自身的结构见图 <a href="../ch1/index.html#c1-fig-chapmap">1-2</a>。第 <a href="../ch1/s1-1.html">1.1</a> 节先厘清人工智能、生成式人工智能、大语言模型等一组容易混用的概念；第 <a href="../ch1/s1-2.html">1.2</a> 节用一次完整的“提问—回答”说明大语言模型怎样工作；有了这个机制，第 <a href="../ch1/s1-3.html">1.3</a> 节再回头看它的由来：每一代方法解决了上一代的什么问题，又留下了什么问题；第 <a href="../ch1/s1-4.html">1.4</a> 节梳理截至 2026 年 11 月的技术版图；第 <a href="../ch1/s1-5.html">1.5</a> 节和第 <a href="../ch1/s1-6.html">1.6</a> 节分别讨论应用现状与风险治理。</p>
-<div id="c1-fig-chapmap" class="bookfig">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figs/ch1-chapmap.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.0%"></p>
-</figure>
-</div>
-<div class="figcap">
-<p>图 1-2　本章知识地图。箭头表示阅读顺序及前后两节的衔接关系</p>
-</div>
-</div>
 <div class="bookbox guide">
 <p><strong>学习目标</strong>　学完本章，读者应能够：</p>
 <ol type="1">
@@ -778,6 +758,26 @@ ul.task-list li input[type="checkbox"] {
 <li><p>估算一个模型的权重存储量和训练计算量，判断它为什么需要多卡计算系统；</p></li>
 <li><p>针对一个具体应用场景，指出适合交给模型的环节、必须保留人工判断的环节，以及需要采取的风险控制措施。</p></li>
 </ol>
+</div>
+<div id="c1-fig-bookmap" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch1-bookmap.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:94.6%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 1-1　全书知识地图。左侧是全书的四个部分，行间箭头标出下一部分用到上一部分的什么产出；第 7 章讲编程智能体（Coding Agent）的工程实现。带强调色的框是本章</p>
+</div>
+</div>
+<div id="c1-fig-chapmap" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch1-chapmap.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 1-2　本章知识地图。箭头表示阅读顺序及前后两节的衔接关系</p>
+</div>
 </div>
 
 

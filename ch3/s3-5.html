@@ -946,7 +946,7 @@ window.Quarto = {
 5 &amp; 对比：混合精度 + AdamW &amp; <span class="math inline">\(7\times10^{9}\times(2+2+12)\)</span> &amp; 112 GB &amp; 表 <a href="../ch3/s3-5.html#c3-tab-bytes">3-7</a> 最后一行<br>
 </p>
 </div>
-<p>数据流向参数量 × 每参数字节数 → 权重、梯度、优化器状态三项 → 相加得模型状态。 两种 SGD 结果的差别只在于是否计入动量。常见教学资料说“SGD 的优化器显存与模型大小一样”，指的就是带动量的 SGD，结果是 84 GB；若用不带动量的纯 SGD，结果是 56 GB。答题时应写明采用哪一种。实际训练几乎都用带动量的 SGD 或 AdamW，所以按 84 GB 估算更贴近实际，这也是第 <a href="../ch4/s4-3.html#subsec-train-mem">4.3.3</a> 小节例题采用的口径。</p>
+<p>数据流向参数量 × 每参数字节数 → 权重、梯度、优化器状态三项 → 相加得模型状态。 两种 SGD 结果的差别只在于是否计入动量。常听到的“SGD 的优化器显存与模型大小一样”，指的就是带动量的 SGD，结果是 84 GB；若用不带动量的纯 SGD，结果是 56 GB。估算时应写明采用哪一种。实际训练几乎都用带动量的 SGD 或 AdamW，所以按 84 GB 估算更贴近实际，这也是第 <a href="../ch4/s4-3.html#subsec-train-mem">4.3.3</a> 小节例题采用的口径。</p>
 </div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>

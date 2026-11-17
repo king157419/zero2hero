@@ -793,10 +793,10 @@ window.Quarto = {
 <section id="c6-subsec-autonomy" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-autonomy">6.4.1　自主性：从逐步指令到目标委托</h2>
 <p><strong>自主性</strong>（autonomy）指在没有持续人工干预的情况下，根据自身目标和对环境的感知，独立做出决策并执行行动的能力。它是其他能力发挥作用的前提：一个需要用户逐步指挥的系统，单步能力再强，也无法接受“把这件事办了”式的委托。</p>
-<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-8</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
+<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-7</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
 <div id="c6-tab-autonomy" class="booktab">
 <div class="tabcap">
-<p>表 6-8　智能体自主性的五个等级（据 Feng 等人的划分）</p>
+<p>表 6-7　智能体自主性的五个等级（据 Feng 等人的划分）</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -940,10 +940,10 @@ window.Quarto = {
 <p>为什么必须用工具？其一，模型的知识有截止日期，也接触不到实时、私有的数据，不知道今天的票价、库存和天气；其二，模型不擅长精确计算和大规模数据处理；其三，预订、发信、改签都需要能改变外部状态的接口。</p>
 <p><strong>函数调用的机制</strong>　 当前的主流做法是<strong>函数调用</strong>（Function Calling），OpenAI 于 2023 年 6 月在其 API 中推出<sup><a href="../ch6/references.html#ref-14">[14]</a></sup>，此后各家模型陆续提供了类似能力（名称有 tool use、function calling 等，接口格式不完全统一）。流程分四步：开发者用 JSON Schema（描述 JSON 数据结构的规范）写出每个工具的名称、用途和参数，随请求一起交给模型；模型判断需要用工具时，不输出普通文字，而是输出一个结构化的调用请求，例如 <code>{"name": "search_hotels", "arguments": {"max_price": 600}}</code>；应用程序解析请求、执行函数；执行结果作为新的消息送回模型，模型据此继续。关键在于<strong>模型只生成调用意图，执行权始终在应用程序手中</strong>，这为参数校验、权限控制和审计留下了空间。模型学会何时调用、怎样填参数，依靠的是带工具调用示例的训练数据，Toolformer<sup><a href="../ch6/references.html#ref-15">[15]</a></sup>等工作较早探索了让模型自己学会调用外部 API，思路与后来的函数调用相通，但并非同一机制。</p>
 <p>工具调用的质量取决于三件事：<strong>工具说明</strong>（模型能否判断何时该用它）、<strong>参数设计</strong>（模型能否一次填对）、<strong>错误处理</strong>（失败后模型能否自己改正）。第一项最容易被低估：一个叫 <code>query</code> 的工具，模型猜不出它查的是订单还是库存；叫 <code>search_orders_by_customer_id</code>，误用的可能就小得多（当然仍需配合准确的说明和参数定义）。</p>
-<p><strong>Function Calling、MCP 与 A2A</strong>　 函数调用解决了“模型怎样表达调用意图”，但每个应用都要自己为每个工具写一遍接入代码。2024 年 11 月 Anthropic 发布的 <strong>MCP</strong>（Model Context Protocol，模型上下文协议）<sup><a href="../ch6/references.html#ref-16">[16]</a></sup>把工具和数据源的接入标准化：工具提供方实现一个 MCP 服务器，任何支持 MCP 的应用都能发现并调用它的工具。2025 年 4 月 Google 发布的 <strong>A2A</strong>（Agent2Agent，智能体间协议）<sup><a href="../ch6/references.html#ref-17">[17]</a></sup>则面向另一种关系：一个智能体如何发现另一个智能体的能力、把任务委托给它、接收结果。A2A 于 2025 年 6 月交由 Linux 基金会托管<sup><a href="../ch6/references.html#ref-18">[18]</a></sup>；MCP 于 2025 年 12 月捐赠给 Linux 基金会新成立的智能体人工智能基金会（Agentic AI Foundation，AAIF）<sup><a href="../ch6/references.html#ref-19">[19]</a></sup>。三者的关系见表 <a href="../ch6/s6-4.html#c6-tab-protocols">6-9</a>。</p>
+<p><strong>Function Calling、MCP 与 A2A</strong>　 函数调用解决了“模型怎样表达调用意图”，但每个应用都要自己为每个工具写一遍接入代码。2024 年 11 月 Anthropic 发布的 <strong>MCP</strong>（Model Context Protocol，模型上下文协议）<sup><a href="../ch6/references.html#ref-16">[16]</a></sup>把工具和数据源的接入标准化：工具提供方实现一个 MCP 服务器，任何支持 MCP 的应用都能发现并调用它的工具。2025 年 4 月 Google 发布的 <strong>A2A</strong>（Agent2Agent，智能体间协议）<sup><a href="../ch6/references.html#ref-17">[17]</a></sup>则面向另一种关系：一个智能体如何发现另一个智能体的能力、把任务委托给它、接收结果。A2A 于 2025 年 6 月交由 Linux 基金会托管<sup><a href="../ch6/references.html#ref-18">[18]</a></sup>；MCP 于 2025 年 12 月捐赠给 Linux 基金会新成立的智能体人工智能基金会（Agentic AI Foundation，AAIF）<sup><a href="../ch6/references.html#ref-19">[19]</a></sup>。三者的关系见表 <a href="../ch6/s6-4.html#c6-tab-protocols">6-8</a>。</p>
 <div id="c6-tab-protocols" class="booktab">
 <div class="tabcap">
-<p>表 6-9　Function Calling、MCP 与 A2A 的定位</p>
+<p>表 6-8　Function Calling、MCP 与 A2A 的定位</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -1012,10 +1012,10 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-extend" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-extend">6.4.8　七项能力如何补足 LLM</h2>
-<p>把七项能力放在一起看，它们共同指向一个结论：<strong>智能体不是 LLM 的替代品，而是 LLM 的扩展装置</strong>。表 <a href="../ch6/s6-4.html#c6-tab-extend">6-10</a> 把 LLM 的局限与对应的能力逐项列出（个别局限由多项能力共同补足），归纳起来有五个方面：克服静态知识、实现与外界的动态交互；从“辅助”走向“执行”，赋予模型行动能力；扩展记忆与上下文管理；实现自主规划与目标导向的行为；以及增强鲁棒性与可靠性。最后一项不是某一种能力单独做到的，而是推理、工具使用在第 <a href="../ch6/s6-3.html">6.3</a> 节的闭环中配合校验与反思实现的。</p>
+<p>把七项能力放在一起看，它们共同指向一个结论：<strong>智能体不是 LLM 的替代品，而是 LLM 的扩展装置</strong>。表 <a href="../ch6/s6-4.html#c6-tab-extend">6-9</a> 把 LLM 的局限与对应的能力逐项列出（个别局限由多项能力共同补足），归纳起来有五个方面：克服静态知识、实现与外界的动态交互；从“辅助”走向“执行”，赋予模型行动能力；扩展记忆与上下文管理；实现自主规划与目标导向的行为；以及增强鲁棒性与可靠性。最后一项不是某一种能力单独做到的，而是推理、工具使用在第 <a href="../ch6/s6-3.html">6.3</a> 节的闭环中配合校验与反思实现的。</p>
 <div id="c6-tab-extend" class="booktab">
 <div class="tabcap">
-<p>表 6-10　智能体能力对 LLM 局限的补充</p>
+<p>表 6-9　智能体能力对 LLM 局限的补充</p>
 </div>
 <table class="caption-top table">
 <thead>

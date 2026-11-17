@@ -835,10 +835,10 @@ window.Quarto = {
 <section id="c6-subsec-others" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-others">6.5.5　其他使能技术</h2>
 <p><strong>计算机视觉</strong>（computer vision）使智能体能“看见”并理解视觉环境，识别物体、场景、人脸等。视觉语言模型让智能体可以直接读截图、表格、图表和扫描件，很多企业流程的入口恰恰是一张扫描件或一个网页界面。<strong>机器人流程自动化</strong>（RPA）自动执行基于规则的重复性操作，例如数据录入、表单处理；它通过软件模拟人在界面上的点击和输入，依赖固定的界面元素定位，界面一改版就会失效。它与智能体互补：智能体通过工具调用触发 RPA 脚本，RPA 提供稳定的“手”，智能体提供灵活的“脑”，在没有 API 的老旧系统里，“智能体决策 + RPA 执行”常是唯一可行的方案。<strong>云计算</strong>为智能体的训练、部署和扩展提供算力、存储和弹性；智能体的主要开销是模型调用，并随任务轮数增长（例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a>），成本控制需要专门设计。<strong>边缘计算</strong>（edge computing，其中面向 AI 的部分常称边缘 AI）把 AI 处理能力部署到靠近数据源的设备上，减少对云端连接的依赖，提高实时性和数据隐私性，对机器人和隐私敏感场景往往是刚需。</p>
-<p>表 <a href="../ch6/s6-5.html#c6-tab-tech">6-11</a> 汇总了各项技术与智能体组件的对应关系。</p>
+<p>表 <a href="../ch6/s6-5.html#c6-tab-tech">6-10</a> 汇总了各项技术与智能体组件的对应关系。</p>
 <div id="c6-tab-tech" class="booktab">
 <div class="tabcap">
-<p>表 6-11　使能技术与智能体组件的对应关系</p>
+<p>表 6-10　使能技术与智能体组件的对应关系</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -939,10 +939,10 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-frameworks" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-frameworks">6.5.7　开发框架</h2>
-<p>循环、工具调用、记忆、多智能体协作等常用模式，在 2023—2025 年间沉淀为一批开发框架。框架把重复的“脚手架”固化下来，让开发者专注于任务逻辑；风险在于<strong>抽象泄漏</strong>——当框架的默认行为不符合需求时，开发者不得不深入框架内部修改。表 <a href="../ch6/s6-5.html#c6-tab-frameworks">6-12</a> 对照了五个常用框架，其中除“特性”“典型场景”外都是可以查证的事实。框架迭代很快，表中状态截至 2026 年 11 月，选型时应以官方文档和实际测试为准。</p>
+<p>循环、工具调用、记忆、多智能体协作等常用模式，在 2023—2025 年间沉淀为一批开发框架。框架把重复的“脚手架”固化下来，让开发者专注于任务逻辑；风险在于<strong>抽象泄漏</strong>——当框架的默认行为不符合需求时，开发者不得不深入框架内部修改。表 <a href="../ch6/s6-5.html#c6-tab-frameworks">6-11</a> 对照了五个常用框架，其中除“特性”“典型场景”外都是可以查证的事实。框架迭代很快，表中状态截至 2026 年 11 月，选型时应以官方文档和实际测试为准。</p>
 <div id="c6-tab-frameworks" class="booktab">
 <div class="tabcap">
-<p>表 6-12　常用智能体开发框架对照（事实列，状态截至 2026 年 11 月）</p>
+<p>表 6-11　常用智能体开发框架对照（事实列，状态截至 2026 年 11 月）</p>
 </div>
 <table class="caption-top table">
 <thead>

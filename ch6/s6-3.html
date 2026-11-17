@@ -934,10 +934,10 @@ window.Quarto = {
 <section id="c6-subsec-division" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-division">6.3.3　LLM 与 Agent 框架的分工</h2>
 <p>既然模型足够强，能不能把所有事都交给它？实践表明不行。语言模型擅长<strong>语义上的判断</strong>，例如“这句话是不是在要求退款”；不擅长<strong>状态上的保证</strong>，例如“这个订单是否已经付过款”。把后者交给模型，等于让一个概率系统承担确定性的职责。</p>
-<p>因此智能体由两部分组成：LLM 负责理解、分析和推理；<strong>Agent 框架</strong>提供让“思考结果”变成实际行动的脚手架——工具接口、执行循环和状态管理。具体而言，框架还承担三件 LLM 自身做不到的事：<strong>记忆管理</strong>，通过外接向量数据库、知识图谱等记忆模块，弥补上下文窗口有限、无法长期记忆的不足；<strong>工具使用编排</strong>，定义可供模型选择的工具集并管理调用过程；<strong>多轮交互与任务持续</strong>，在长时间、多步骤的任务中维护任务状态，协调模型在不同阶段的参与，保证任务连贯并最终完成。表 <a href="../ch6/s6-3.html#c6-tab-division">6-7</a> 列出了分工。</p>
+<p>因此智能体由两部分组成：LLM 负责理解、分析和推理；<strong>Agent 框架</strong>提供让“思考结果”变成实际行动的脚手架——工具接口、执行循环和状态管理。具体而言，框架还承担三件 LLM 自身做不到的事：<strong>记忆管理</strong>，通过外接向量数据库、知识图谱等记忆模块，弥补上下文窗口有限、无法长期记忆的不足；<strong>工具使用编排</strong>，定义可供模型选择的工具集并管理调用过程；<strong>多轮交互与任务持续</strong>，在长时间、多步骤的任务中维护任务状态，协调模型在不同阶段的参与，保证任务连贯并最终完成。表 <a href="../ch6/s6-3.html#c6-tab-division">6-6</a> 列出了分工。</p>
 <div id="c6-tab-division" class="booktab">
 <div class="tabcap">
-<p>表 6-7　LLM 与 Agent 框架的分工</p>
+<p>表 6-6　LLM 与 Agent 框架的分工</p>
 </div>
 <table class="caption-top table">
 <thead>
