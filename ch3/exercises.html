@@ -794,13 +794,14 @@ window.Quarto = {
 <li><p>（计算）对 13B 模型做 PEFT，底座以 FP32 加载并冻结，新增可训练参数为原模型的 1%，同样以 FP32 训练、使用 AdamW，不计激活值。求所需显存，并与全量微调比较。</p></li>
 <li><p>（计算）某模型 32 层、8 个 KV 头、每头 128 维，以 FP16 存储 KV 缓存。每个用户上下文 8192 个 token，同时服务 16 个用户。(1) KV 缓存共需多少显存？(2) 若该模型为 13B、以 FP16 推理，开销按 10% 计，推理显存共约多少？</p></li>
 <li><p>（计算）FP16 的 7B 模型（约 14 GB）在内存带宽约 400 GB/s 的设备上运行，估算单请求解码速度上限。量化到 4 位（约 4 GB）后呢？</p></li>
-<li><p>（计算）沿用例 <a href="../ch3/s3-10.html#c3-ex-batch">3-8</a> 的条件，求批大小 <span class="math inline">\(B=24\)</span> 时每步读取量、每步耗时、系统吞吐和每用户速度。</p></li>
+<li><p>（计算）沿用例 <a href="../ch3/s3-10.html#c3-ex-batch">3-10</a> 的条件，求批大小 <span class="math inline">\(B=24\)</span> 时每步读取量、每步耗时、系统吞吐和每用户速度。</p></li>
 <li><p>（计算）将权重 <span class="math inline">\((0.5,\,-0.25,\,0.1,\,-1.0)\)</span> 用对称线性量化为 INT8（取值 <span class="math inline">\(-127\sim127\)</span>），求缩放因子、量化后的整数和反量化后的值。</p></li>
 <li><p>（计算）投机解码中每个候选被接受的概率 <span class="math inline">\(\alpha=0.6\)</span>，每轮提出 <span class="math inline">\(k=3\)</span> 个候选。目标模型每次前向平均产出多少个 token？</p></li>
 <li><p>（辨析）某一步的候选概率为 <span class="math inline">\((0.5,\,0.2,\,0.15,\,0.1,\,0.05)\)</span>。Top-K（<span class="math inline">\(k=2\)</span>）和 Top-P（<span class="math inline">\(p=0.8\)</span>）分别保留哪几个候选？如果降低温度，Top-P 保留的候选数会怎样变化？</p></li>
 <li><p>（辨析）DPO 为什么不需要单独训练奖励模型？与基于 PPO 的 RLHF 相比，它有哪些优缺点？RLHF 为什么要加 KL 惩罚？</p></li>
 <li><p>（概念）什么情况下应该优先选择提示词工程、检索增强生成或微调？各举一个例子。</p></li>
 <li><p>（概念）推理模型通过生成更长的思维链提高准确率。从本章推理性能的角度看，这会带来哪些新的挑战？</p></li>
+<li><p>（计算）奖励模型对两组回答的打分为：甲组 <span class="math inline">\((r_w,r_l)=(1.2,\,0.2)\)</span>，乙组 <span class="math inline">\((0.1,\,0.9)\)</span>。分别求 <span class="math inline">\(\sigma(\Delta)\)</span>、损失和对 <span class="math inline">\(r_w\)</span> 的梯度；说明哪一组的梯度更大，为什么。</p></li>
 <li><p>（设计）参照第 <a href="../ch3/s3-12.html">3.12</a> 节，为你所在专业设计一个问答模型的完整方案，估算所需的数据、算力和部署显存，并指出最可能成为瓶颈的环节。</p></li>
 </ol>
 <section id="部分习题提示" class="level2 unnumbered">
@@ -861,7 +862,11 @@ window.Quarto = {
 </dd>
 <dt>3.17</dt>
 <dd>
-Top-K 保留前 2 个；Top-P：<span class="math inline">\(0.5+0.2=0.7&lt;0.8\)</span>，再加 0.15 得 0.85，保留前 3 个。降低温度使分布更尖，Top-P 保留的候选数减少（或不变）。
+<p>Top-K 保留前 2 个；Top-P：<span class="math inline">\(0.5+0.2=0.7&lt;0.8\)</span>，再加 0.15 得 0.85，保留前 3 个。降低温度使分布更尖，Top-P 保留的候选数减少（或不变）。</p>
+</dd>
+<dt>3.21</dt>
+<dd>
+甲组：<span class="math inline">\(\Delta=1.2-0.2=1.0\)</span>，<span class="math inline">\(\sigma(1.0)=1/(1+e^{-1})\approx0.731\)</span>，损失 <span class="math inline">\(-\ln0.731\approx0.313\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.731)=-0.269\)</span>。乙组：<span class="math inline">\(\Delta=0.1-0.9=-0.8\)</span>，<span class="math inline">\(\sigma(-0.8)\approx0.310\)</span>，损失 <span class="math inline">\(-\ln0.310\approx1.171\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.310)=-0.690\)</span>。乙组梯度更大：乙组把较好的回答排在了较差的回答之后（<span class="math inline">\(\Delta&lt;0\)</span>），错判概率 <span class="math inline">\(1-\sigma(\Delta)\)</span> 高，更新力度大；甲组已分对，力度小。
 </dd>
 </dl>
 </div>

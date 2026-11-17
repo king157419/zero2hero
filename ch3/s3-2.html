@@ -818,7 +818,7 @@ window.Quarto = {
 </div>
 </div>
 <p><strong>自回归语言建模</strong>　 <strong>自回归语言模型</strong>（autoregressive language model）把一段文本的联合概率按从左到右的顺序分解为条件概率的乘积： <span class="math display">\[P(x_1,x_2,\dots,x_T)=\prod_{t=1}^{T}P(x_t\mid x_{&lt;t}),
-\tag{3-1}\]</span> 其中 <span class="math inline">\(x_t\)</span> 是第 <span class="math inline">\(t\)</span> 个 token，<span class="math inline">\(x_{&lt;t}\)</span> 是 <span class="math inline">\(x_1,\dots,x_{t-1}\)</span> 的简写。训练希望真实文本的概率尽可能大，等价于最小化负对数似然： <span class="math display">\[\mathcal{L}_{\mathrm{AR}}(\theta)=-\frac{1}{T}\sum_{t=1}^{T}\log P_\theta(x_t\mid x_{&lt;t}),
+\tag{3-1}\]</span> 其中 <span class="math inline">\(x_t\)</span> 是第 <span class="math inline">\(t\)</span> 个 token，<span class="math inline">\(x_{&lt;t}\)</span> 是 <span class="math inline">\(x_1,\dots,x_{t-1}\)</span> 的简写（<span class="math inline">\(t=1\)</span> 时前文为空，实现中以序列起始符充当前文，所以求和有 <span class="math inline">\(T\)</span> 项）。训练希望真实文本的概率尽可能大，等价于最小化负对数似然： <span class="math display">\[\mathcal{L}_{\mathrm{AR}}(\theta)=-\frac{1}{T}\sum_{t=1}^{T}\log P_\theta(x_t\mid x_{&lt;t}),
 \tag{3-2}\]</span> <span class="math inline">\(\theta\)</span> 为模型参数。把真实的下一个 token 看作一个 one-hot 分布（该 token 处为 1、其余为 0），这个损失就是它与模型预测分布之间的<strong>交叉熵</strong>（cross entropy）。为保证预测第 <span class="math inline">\(t\)</span> 个位置时“看不到答案”，解码器使用<strong>因果掩码</strong>（causal mask），让每个位置只能关注左侧的 token。有了因果掩码，长 <span class="math inline">\(T\)</span> 的序列<strong>只需一次前向计算</strong>就能同时得到全部 <span class="math inline">\(T\)</span> 个位置的预测和损失，训练效率很高。GPT 系列、LLaMA、Qwen、DeepSeek 等生成式模型都用这一目标。</p>
 <p><strong>掩码语言建模</strong>　 <strong>掩码语言模型</strong>（Masked Language Model，MLM）随机选取一部分 token 作为预测目标，把它们遮住，让模型根据左右两侧的上下文还原。BERT 选取 15% 的 token，其中 80% 替换为特殊符号 <code>[MASK]</code>、10% 替换为随机 token、10% 保持不变，以免模型只在见到 <code>[MASK]</code> 时才去预测： <span class="math display">\[\mathcal{L}_{\mathrm{MLM}}(\theta)=-\sum_{i\in\mathcal{M}}\log P_\theta(x_i\mid\tilde{\boldsymbol{x}}),
 \tag{3-3}\]</span> <span class="math inline">\(\mathcal{M}\)</span> 是被遮盖位置的集合，<span class="math inline">\(\tilde{\boldsymbol{x}}\)</span> 是遮盖后的序列。由于能同时利用两侧上下文，用 MLM 训练的编码器（如 BERT）擅长文本分类、实体识别等<strong>理解类</strong>任务，但不擅长从左到右生成长文本。</p>
@@ -839,7 +839,7 @@ window.Quarto = {
 </section>
 <section id="规模定律模型多大数据多少才合适" class="level2">
 <h2 class="anchored" data-anchor-id="规模定律模型多大数据多少才合适">3.2.4　规模定律：模型多大、数据多少才合适</h2>
-<p>既然预训练要“数据多、模型大”，给定一笔算力预算，应该训练多大的模型、用多少数据？<strong>规模定律</strong>（scaling law，也译缩放定律）回答这个问题。第 2 章讲过它描述的现象，这里关注怎样用它做决策。</p>
+<p>既然预训练要“数据多、模型大”，给定一笔算力预算，应该训练多大的模型、用多少数据？<strong>规模定律</strong>（scaling law，也译缩放定律）回答这个问题。第 <a href="../ch2/s2-4.html">2.4</a> 节讲过它描述的现象，这里关注怎样用它做决策。</p>
 <p><strong>损失随规模呈幂律下降</strong>　 Kaplan 等人（2020）发现<sup><a href="../ch3/references.html#ref-6">[6]</a></sup>，在其他因素不构成瓶颈时，测试损失 <span class="math inline">\(L\)</span> 与参数量 <span class="math inline">\(N\)</span>、训练 token 数 <span class="math inline">\(D\)</span>、训练算力 <span class="math inline">\(C\)</span> 分别近似满足幂律： <span class="math display">\[L(N)\approx\Bigl(\frac{N_c}{N}\Bigr)^{\alpha_N},\qquad
   L(D)\approx\Bigl(\frac{D_c}{D}\Bigr)^{\alpha_D},\qquad
   L(C)\approx\Bigl(\frac{C_c}{C}\Bigr)^{\alpha_C},

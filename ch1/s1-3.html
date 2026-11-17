@@ -790,7 +790,7 @@ window.Quarto = {
 </div>
 <section id="c1-subsec-ngram" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-ngram">1.3.1　统计语言模型：用计数估计概率</h2>
-<p>用概率描述语言的想法可以追溯到 20 世纪初。1906 年，俄国数学家马尔可夫提出了<strong>马尔可夫链</strong>：下一个状态只取决于当前状态，与更早的历史无关；1913 年他用这一方法统计了普希金诗体小说中元音与辅音的交替规律。1948 年，香农在奠定信息论的论文中，用只看前一两个字母或单词的马尔可夫模型生成了“近似英语”的文字，并用概率度量语言的不确定性<sup><a href="../ch1/references.html#ref-9">[9]</a></sup>。</p>
+<p>用概率描述语言的想法可以追溯到 20 世纪初。1906 年，俄国数学家马尔可夫提出了<strong>马尔可夫链</strong>：下一个状态只取决于当前状态，与更早的历史无关；1913 年他用这一方法统计了普希金诗体小说中元音与辅音的交替规律。1948 年，香农在奠定信息论的论文中，用只看前一两个字母或单词的马尔可夫模型生成了“近似英语”的文字，并用概率度量语言的不确定性<sup><a href="../ch1/references.html#ref-10">[10]</a></sup>。</p>
 <p>在此基础上形成的 <strong>n 元语法</strong>（n-gram）模型做了一个简化：预测下一个词元时，只看它前面的 <span class="math inline">\(n-1\)</span> 个词元， <span class="math display">\[P(x_t\mid x_{&lt;t}) \approx P(x_t\mid x_{t-n+1},\ldots,x_{t-1}),
 \tag{1-2}\]</span> 而这个条件概率直接用语料中的出现次数来估计。以 <span class="math inline">\(n=3\)</span>（三元语法）为例： <span class="math display">\[P(\text{北京}\mid\text{我},\text{爱})=\frac{\text{“我爱北京”出现的次数}}{\text{“我爱”出现的次数}}.\]</span> n 元语法简单、可解释、计算快，从 1970 年代起长期用于语音识别和机器翻译，后来也用于输入法联想。同一时期发展起来的还有<strong>隐马尔可夫模型</strong>（Hidden Markov Model，HMM）：它假设我们观察到的序列（例如一段语音的声学特征）是由一串看不见的状态（例如音素）按马尔可夫链逐个产生的。HMM 的数学理论由鲍姆（Leonard Baum）等人在 1960 年代建立，1970 年代起成为语音识别的主流方法，2010 年代初起逐渐被深度神经网络取代。</p>
 <p>n 元语法的根本问题是<strong>数据稀疏</strong>：可能的词元组合多到语料根本覆盖不了。</p>
@@ -839,25 +839,25 @@ window.Quarto = {
 </section>
 <section id="c1-subsec-neural" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-neural">1.3.2　神经语言模型：从计数到向量</h2>
-<p>解决相似性问题的关键一步发生在 2003 年。本吉奥（Yoshua Bengio）等人提出<strong>神经概率语言模型</strong><sup><a href="../ch1/references.html#ref-10">[10]</a></sup>：给每个词学习一个实数向量（即第 <a href="../ch1/s1-2.html#c1-subsec-autoregressive">1.2.2</a> 小节所说的词嵌入），再用神经网络根据前几个词的向量计算下一个词的概率。意思相近的词在训练中会得到相近的向量，“北京”学到的规律因此能自动迁移到“上海”，没见过的组合也能得到合理的概率。2013 年，Word2Vec 等方法使大规模训练词向量变得廉价，“国王 − 男人 + 女人 ≈ 女王”这样的向量运算让分布式表示广为人知。</p>
-<p>另一个问题是只能看前面固定几个词。<strong>循环神经网络</strong>（Recurrent Neural Network，RNN）每读入一个词就更新一次内部状态，理论上可以把任意长的历史都“记”在这个状态里；<strong>长短期记忆网络</strong>（Long Short-Term Memory，LSTM）用门控结构控制记住什么、忘掉什么，缓解了长序列训练中的梯度消失<sup><a href="../ch1/references.html#ref-11">[11]</a></sup>。2014 年，<strong>序列到序列</strong>（Sequence to Sequence，Seq2Seq）模型用一个编码器循环网络读入整句原文、一个解码器循环网络逐词生成译文<sup><a href="../ch1/references.html#ref-12">[12]</a></sup>；同年（2014 年）提出的<strong>注意力机制</strong>让解码器在生成每个词时直接回看原文中最相关的位置，而不是只依赖编码器最后那一个状态<sup><a href="../ch1/references.html#ref-13">[13]</a></sup>，神经机器翻译由此迅速超过了统计机器翻译。</p>
+<p>解决相似性问题的关键一步发生在 2003 年。本吉奥（Yoshua Bengio）等人提出<strong>神经概率语言模型</strong><sup><a href="../ch1/references.html#ref-11">[11]</a></sup>：给每个词学习一个实数向量（即第 <a href="../ch1/s1-2.html#c1-subsec-autoregressive">1.2.2</a> 小节所说的词嵌入），再用神经网络根据前几个词的向量计算下一个词的概率。意思相近的词在训练中会得到相近的向量，“北京”学到的规律因此能自动迁移到“上海”，没见过的组合也能得到合理的概率。2013 年，Word2Vec 等方法使大规模训练词向量变得廉价，“国王 − 男人 + 女人 ≈ 女王”这样的向量运算让分布式表示广为人知。</p>
+<p>另一个问题是只能看前面固定几个词。<strong>循环神经网络</strong>（Recurrent Neural Network，RNN）每读入一个词就更新一次内部状态，理论上可以把任意长的历史都“记”在这个状态里；<strong>长短期记忆网络</strong>（Long Short-Term Memory，LSTM）用门控结构控制记住什么、忘掉什么，缓解了长序列训练中的梯度消失<sup><a href="../ch1/references.html#ref-12">[12]</a></sup>。2014 年，<strong>序列到序列</strong>（Sequence to Sequence，Seq2Seq）模型用一个编码器循环网络读入整句原文、一个解码器循环网络逐词生成译文<sup><a href="../ch1/references.html#ref-13">[13]</a></sup>；2014 年提出、2015 年正式发表的<strong>注意力机制</strong>让解码器在生成每个词时直接回看原文中最相关的位置，而不是只依赖编码器最后那一个状态<sup><a href="../ch1/references.html#ref-14">[14]</a></sup>，神经机器翻译由此迅速超过了统计机器翻译。</p>
 <p>循环结构仍然留下两个问题：第一，必须读完第 <span class="math inline">\(t-1\)</span> 个词才能处理第 <span class="math inline">\(t\)</span> 个词，计算无法在序列方向上并行，难以充分利用擅长大规模并行计算的 GPU（Graphics Processing Unit，图形处理器）；第二，相隔很远的两个词之间的信息要经过很多步传递，仍会衰减。</p>
 </section>
 <section id="c1-subsec-transformer" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-transformer">1.3.3　Transformer：并行处理长距离依赖</h2>
-<p>2017 年，谷歌的瓦斯瓦尼（Ashish Vaswani）等人提出 <strong>Transformer</strong><sup><a href="../ch1/references.html#ref-14">[14]</a></sup>，完全去掉了循环结构，只用注意力。在<strong>自注意力</strong>中，每个位置生成三个向量：查询 <span class="math inline">\(Q\)</span>（我在找什么）、键 <span class="math inline">\(K\)</span>（我能提供什么）和值 <span class="math inline">\(V\)</span>（我的内容）；用查询与所有位置的键计算匹配程度作为权重，再对值加权求和。任意两个位置之间都只隔“一步”，长距离依赖不再衰减；所有位置的计算可以同时进行，训练能充分利用 GPU 的并行能力。注意力、多头机制、位置编码和整层结构的细节见第 2 章。</p>
+<p>2017 年，谷歌的瓦斯瓦尼（Ashish Vaswani）等人提出 <strong>Transformer</strong><sup><a href="../ch1/references.html#ref-15">[15]</a></sup>，完全去掉了循环结构，只用注意力。在<strong>自注意力</strong>中，每个位置生成三个向量：查询 <span class="math inline">\(Q\)</span>（我在找什么）、键 <span class="math inline">\(K\)</span>（我能提供什么）和值 <span class="math inline">\(V\)</span>（我的内容）；用查询与所有位置的键计算匹配程度作为权重，再对值加权求和。任意两个位置之间都只隔“一步”，长距离依赖不再衰减；所有位置的计算可以同时进行，训练能充分利用 GPU 的并行能力。注意力、多头机制、位置编码和整层结构的细节见第 2 章。</p>
 <p>Transformer 有三种用法：只用编码器（如 BERT，同时看左右两侧上下文，适合理解类任务）、只用解码器（如 GPT 系列，只看左侧上文，适合生成）、编码器加解码器（如谷歌的 T5 模型，适合翻译等“输入一段、输出一段”的任务）。今天的主流大语言模型几乎都是<strong>只用解码器</strong>的结构，正好对应第 <a href="../ch1/s1-2.html#c1-subsec-autoregressive">1.2.2</a> 小节的自回归生成。</p>
 </section>
 <section id="c1-subsec-scale" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-scale">1.3.4　预训练与规模化：从专用模型到通用模型</h2>
 <p>在此之前，自然语言处理的惯例是“一个任务一个模型”：做情感分类就标注一批情感数据训练一个模型，做命名实体识别再标注另一批。2018 年起，<strong>预训练</strong>范式改变了这一点：先在海量无标注文本上训练一个通用模型，再用少量标注数据<strong>微调</strong>，或者干脆只用提示，就能适配各种下游任务。</p>
 <ul>
-<li><p>2018 年 6 月，OpenAI 发布 GPT（Generative Pre-trained Transformer，生成式预训练 Transformer，约 1.17 亿参数），用从左到右的下一个词元预测做预训练<sup><a href="../ch1/references.html#ref-15">[15]</a></sup>；</p></li>
-<li><p>2018 年 10 月，谷歌发布 BERT（Bidirectional Encoder Representations from Transformers），用<strong>遮蔽语言建模</strong>（Masked Language Modeling，MLM，随机遮住一些词让模型根据两侧上下文猜回来）做预训练，刷新了 11 项理解类任务的纪录<sup><a href="../ch1/references.html#ref-16">[16]</a></sup>；</p></li>
+<li><p>2018 年 6 月，OpenAI 发布 GPT（Generative Pre-trained Transformer，生成式预训练 Transformer，约 1.17 亿参数），用从左到右的下一个词元预测做预训练<sup><a href="../ch1/references.html#ref-16">[16]</a></sup>；</p></li>
+<li><p>2018 年 10 月，谷歌发布 BERT（Bidirectional Encoder Representations from Transformers），用<strong>遮蔽语言建模</strong>（Masked Language Modeling，MLM，随机遮住一些词让模型根据两侧上下文猜回来）做预训练，刷新了 11 项理解类任务的纪录<sup><a href="../ch1/references.html#ref-17">[17]</a></sup>；</p></li>
 <li><p>2019 年 2 月的 GPT-2（15 亿参数）显示，不经微调也能完成一些任务；</p></li>
 <li><p>2020 年 5 月的 GPT-3（1750 亿参数）显示，只要在输入中写明任务说明并给几个示例，不更新任何参数就能完成翻译、问答、两三位数的加减法等多种任务<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>。这种能力称为<strong>上下文学习</strong>（In-Context Learning，ICL）。</p></li>
 </ul>
-<p>为什么越做越大？2020 年，卡普兰（Jared Kaplan）等人发现<strong>缩放定律</strong>：在相当大的范围内，模型的测试损失随参数量 <span class="math inline">\(N\)</span>、训练数据量 <span class="math inline">\(D\)</span> 和计算量 <span class="math inline">\(C\)</span> 的增加按幂律平稳下降，可以提前预测<sup><a href="../ch1/references.html#ref-17">[17]</a></sup>。2022 年，DeepMind 的 Chinchilla 研究修正了“参数优先”的做法：在计算量固定时，参数量和训练词元数应同比例增加，大约每个参数配 20 个训练词元；按此训练的 700 亿参数的 Chinchilla 胜过了 2800 亿参数、但数据不足的 Gopher<sup><a href="../ch1/references.html#ref-18">[18]</a></sup>。缩放定律的形式和推导见第 2 章，训练算力与显存的估算见第 3、4 章。</p>
+<p>为什么越做越大？2020 年，卡普兰（Jared Kaplan）等人发现<strong>缩放定律</strong>：在相当大的范围内，模型的测试损失随参数量 <span class="math inline">\(N\)</span>、训练数据量 <span class="math inline">\(D\)</span> 和计算量 <span class="math inline">\(C\)</span> 的增加按幂律平稳下降，可以提前预测<sup><a href="../ch1/references.html#ref-18">[18]</a></sup>。2022 年，DeepMind 的 Chinchilla 研究修正了“参数优先”的做法：在计算量固定时，参数量和训练词元数应同比例增加，大约每个参数配 20 个训练词元；按此训练的 700 亿参数的 Chinchilla 胜过了 2800 亿参数、但数据不足的 Gopher<sup><a href="../ch1/references.html#ref-19">[19]</a></sup>。缩放定律的形式和推导见第 2 章，训练算力与显存的估算见第 3、4 章。</p>
 <div id="c1-ex-gpt3" class="bookbox example">
 <div class="boxtitle">
 <p>例 1-4　GPT-3 有多大、训练要算多少</p>
@@ -914,10 +914,11 @@ window.Quarto = {
 <p><strong>数据流向</strong>：参数量 →（× 字节数）存储量；参数量 × 词元数 →（× 6）计算量 →（÷ 算力）时间；参数量 →（× 20）计算最优词元数。</p>
 <p>步骤 2 的结果与 GPT-3 论文报告的 <span class="math inline">\(3.14\times10^{23}\)</span> FLOPs 吻合。三个结论：350 GB 的权重放不进任何一张单卡（目前单卡显存约 80～288 GB），训练时还要再存梯度和优化器状态；单卡训练要几十年，必须上千张卡并行——这两点正是第 4 章计算系统要解决的问题；而按 Chinchilla 的标准，GPT-3 的训练数据只有“应有”的约十分之一，后来的模型因此普遍用更多数据训练更小的模型。</p>
 </div>
-<p>规模扩大后，人们还观察到一种现象：某些任务（如多位数加法、多步推理题）的成绩在模型较小时接近随机，规模越过某个点后突然明显提高，这被称为<strong>涌现能力</strong>（emergent abilities）<sup><a href="../ch1/references.html#ref-19">[19]</a></sup>。</p>
+<div class="widget" data-widget="c1scale"></div>
+<p>规模扩大后，人们还观察到一种现象：某些任务（如多位数加法、多步推理题）的成绩在模型较小时接近随机，规模越过某个点后突然明显提高，这被称为<strong>涌现能力</strong>（emergent abilities）<sup><a href="../ch1/references.html#ref-20">[20]</a></sup>。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p>“涌现”描述的是评测曲线的形状，不等于模型突然获得了某种新能力。后续研究指出，许多“突变”与评测指标有关：如果用“完全答对才得分”这样的离散指标，平滑的进步也会显得像突然跳变；换成按部分正确程度计分的连续指标，曲线往往变得平滑<sup><a href="../ch1/references.html#ref-20">[20]</a></sup>。更稳妥的说法是：规模扩大会提升模型的表示能力和上下文学习能力，但提升的幅度和形态因任务而异，不能据此推断“再大一些就会出现通用智能”。</p>
+<p>“涌现”描述的是评测曲线的形状，不等于模型突然获得了某种新能力。后续研究指出，许多“突变”与评测指标有关：如果用“完全答对才得分”这样的离散指标，平滑的进步也会显得像突然跳变；换成按部分正确程度计分的连续指标，曲线往往变得平滑<sup><a href="../ch1/references.html#ref-21">[21]</a></sup>。更稳妥的说法是：规模扩大会提升模型的表示能力和上下文学习能力，但提升的幅度和形态因任务而异，不能据此推断“再大一些就会出现通用智能”。</p>
 </div>
 </section>
 <section id="c1-subsec-align" class="level2">
@@ -933,9 +934,9 @@ window.Quarto = {
 </section>
 <section id="c1-subsec-reasoning" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-reasoning">1.3.6　推理模型与智能体：2024 年以来</h2>
-<p>2024 年 9 月，OpenAI 发布 o1 预览版（正式版于同年 12 月发布），开启了<strong>推理模型</strong>这一类型：模型在给出答案前，先生成一段很长的“思考过程”，尝试多种思路、检查并修正中间结果。这相当于把更多计算花在推理（inference）阶段，称为<strong>推理时计算</strong>（test-time compute）的扩展：除了“训练时多算”（扩大预训练规模），“回答时多想”成为提升能力的第二条途径，在数学、编程和科学问题上效果尤其明显。训练这类模型的关键方法之一，是在答案可以自动验证的任务上，用“最终答案是否正确”作为奖励做强化学习，通常还配合监督微调等步骤。2025 年 1 月，DeepSeek 公开发布推理模型 DeepSeek-R1 的权重和训练方法，表明这一路线可以用较低成本复现<sup><a href="../ch1/references.html#ref-21">[21]</a></sup>。此后 o3、o4-mini（2025 年 4 月）、Claude 4 系列（2025 年 5 月）、GPT-5（2025 年 8 月）等模型都把“是否深度思考、思考多久”作为可调的能力。</p>
+<p>2024 年 9 月，OpenAI 发布 o1 预览版（正式版于同年 12 月发布），开启了<strong>推理模型</strong>这一类型：模型在给出答案前，先生成一段很长的“思考过程”，尝试多种思路、检查并修正中间结果。这相当于把更多计算花在推理（inference）阶段，称为<strong>推理时计算</strong>（test-time compute）的扩展：除了“训练时多算”（扩大预训练规模），“回答时多想”成为提升能力的第二条途径，在数学、编程和科学问题上效果尤其明显。训练这类模型的关键方法之一，是在答案可以自动验证的任务上，用“最终答案是否正确”作为奖励做强化学习，通常还配合监督微调等步骤。2025 年 1 月，DeepSeek 公开发布推理模型 DeepSeek-R1 的权重和训练方法，表明这一路线可以用较低成本复现<sup><a href="../ch1/references.html#ref-22">[22]</a></sup>。此后 o3、o4-mini（2025 年 4 月）、Claude 4 系列（2025 年 5 月）、GPT-5（2025 年 8 月）等模型都把“是否深度思考、思考多久”作为可调的能力。</p>
 <p>与此同时，模型被越来越多地接入工具：搜索网页、执行代码、操作电脑界面、调用企业系统。2024 年 10 月，Anthropic 推出让模型通过截图和鼠标键盘操作电脑的“计算机使用”能力；编程智能体可以连续数小时自主修改代码、运行测试。大语言模型的角色从“回答问题”扩展为“完成任务”，这就是第 <a href="../ch1/s1-4.html#c1-subsec-agent">1.4.3</a> 小节和第 6、7 章讨论的<strong>智能体</strong>。</p>
-<p><strong>生成式人工智能的其他路线</strong>　 大语言模型只是生成式人工智能的一条主线。图像、音频和视频的生成主要沿另外几条路线发展：2013 年提出的<strong>变分自编码器</strong>（Variational Autoencoder，VAE）学习把数据压缩成一个连续的隐空间再从中采样生成；2014 年古德费洛（Ian Goodfellow）等人提出的<strong>生成对抗网络</strong>（Generative Adversarial Network，GAN）让一个生成器与一个判别器对抗训练——生成器努力造出以假乱真的样本，判别器努力分辨真假，二者在对抗中共同进步，使生成图像的逼真度大幅提高<sup><a href="../ch1/references.html#ref-22">[22]</a></sup>；2020 年起，<strong>扩散模型</strong>（diffusion model）先把训练图像一步步加噪直到变成纯噪声，再训练网络学习“逐步去除噪声”的反向过程，生成时从随机噪声出发反复去噪得到图像，成为文生图、文生视频的主流方法。2021 年 1 月，OpenAI 的 DALL·E 展示了根据文字描述生成图像的能力，此后文字与图像、视频的生成逐步汇入多模态大模型。</p>
+<p><strong>生成式人工智能的其他路线</strong>　 大语言模型只是生成式人工智能的一条主线。图像、音频和视频的生成主要沿另外几条路线发展：2013 年提出的<strong>变分自编码器</strong>（Variational Autoencoder，VAE）学习把数据压缩成一个连续的隐空间再从中采样生成；2014 年古德费洛（Ian Goodfellow）等人提出的<strong>生成对抗网络</strong>（Generative Adversarial Network，GAN）让一个生成器与一个判别器对抗训练——生成器努力造出以假乱真的样本，判别器努力分辨真假，二者在对抗中共同进步，使生成图像的逼真度大幅提高<sup><a href="../ch1/references.html#ref-23">[23]</a></sup>；2020 年起，<strong>扩散模型</strong>（diffusion model）先把训练图像一步步加噪直到变成纯噪声，再训练网络学习“逐步去除噪声”的反向过程，生成时从随机噪声出发反复去噪得到图像，成为文生图、文生视频的主流方法。2021 年 1 月，OpenAI 的 DALL·E 展示了根据文字描述生成图像的能力，此后文字与图像、视频的生成逐步汇入多模态大模型。</p>
 <p>图 <a href="../ch1/s1-3.html#c1-fig-timeline">1-7</a> 和表 <a href="../ch1/s1-3.html#c1-tab-history">1-4</a> 把这条链条汇总起来：每一阶段的“遗留问题”正是下一阶段要解决的问题。</p>
 <div id="c1-fig-timeline" class="bookfig">
 <div class="quarto-figure quarto-figure-center">

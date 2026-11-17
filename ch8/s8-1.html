@@ -899,13 +899,14 @@ window.Quarto = {
 <p><strong>数据从哪来</strong>：0.6 token/字取自 DeepSeek 文档的换算<sup><a href="../ch8/references.html#ref-1">[1]</a></sup>；第 2 步各数为模型结构参数，代入式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 并取 <span class="math inline">\(T=1\)</span>、<span class="math inline">\(B=1\)</span>；第 4 步的 0.54 GB 精确值为 <span class="math inline">\(5.37\times10^{8}\)</span> 字节；第 5 步的 64 GB 是显存减去权重，未计运行时开销，因此结果偏乐观，并向下取整；第 6、7 步只计了 <span class="math inline">\(2N\)</span> 的线性部分，没有计注意力随 <span class="math inline">\(T^{2}\)</span> 增长的那部分，序列越长低估越多。</p>
 <p><strong>结论</strong>：带全部历史时，单个请求的 KV 缓存是乙的约 29 倍，一张卡只能同时服务 4 个用户，每次提问还要多等约 4.6 s。而且这还没算成本以外的五类代价。推理引擎的前缀缓存可以在两次请求开头完全相同的部分上免去重复的预填充计算（历史只在末尾追加时能命中，中间一改就失效），但缓存本身仍占显存，也解决不了噪声、冲突和中间遗忘。</p>
 </div>
+<div class="widget" data-widget="c8cost"></div>
 <p>因此，窗口尺寸是一项珍贵资源，“把全部历史都带上”不能当成默认策略。窗口变大只是给了更多房间；房间里放什么、怎么找、过期的东西何时扔掉，是另一类问题。</p>
 </section>
 <section id="c8-subsec-ctx" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-ctx">8.1.2　上下文工程：决定这一次看到什么</h2>
 <p>先把问题说清楚。模型每次生成输出 <span class="math inline">\(y\)</span>，依据的只有拼接起来的上下文 <span class="math inline">\(c\)</span>： <span class="math display">\[P(y \mid c),\qquad c=\bigl[\,c_{\mathrm{sys}};\ c_{\mathrm{hist}};\ c_{\mathrm{ret}};\ c_{\mathrm{mem}};\ c_{\mathrm{user}}\,\bigr],
 \tag{8-1}\]</span> 其中 <span class="math inline">\(c_{\mathrm{sys}}\)</span> 为系统指令与角色设定，<span class="math inline">\(c_{\mathrm{hist}}\)</span> 为本次会话的历史，<span class="math inline">\(c_{\mathrm{ret}}\)</span> 为检索到的外部资料，<span class="math inline">\(c_{\mathrm{mem}}\)</span> 为从记忆系统取回的条目，<span class="math inline">\(c_{\mathrm{user}}\)</span> 为当前用户输入。式 <a href="../ch8/s8-1.html#c8-eq-ctx">（8-1）</a> 说明了一条朴素的规则：<strong>不在当前上下文里的信息，对这一次推理相当于不存在</strong>。模型参数里学到的一般知识除外，但它记不住某位用户上周说过什么。</p>
-<p>决定 <span class="math inline">\(c\)</span> 里放什么，就是<strong>上下文工程</strong>（context engineering）的工作，它的细节在第 7 章展开。这里只区分它和<strong>提示词工程</strong>（prompt engineering），见表 <a href="../ch8/s8-1.html#c8-tab-prompt-ctx">8-2</a>。</p>
+<p>决定 <span class="math inline">\(c\)</span> 里放什么，就是<strong>上下文工程</strong>（context engineering）的工作，它的细节在第 <a href="../ch7/s7-4.html">7.4</a> 节展开。这里只区分它和<strong>提示词工程</strong>（prompt engineering），见表 <a href="../ch8/s8-1.html#c8-tab-prompt-ctx">8-2</a>。</p>
 <div id="c8-tab-prompt-ctx" class="booktab">
 <div class="tabcap">
 <p>表 8-2　提示词工程与上下文工程</p>
@@ -942,7 +943,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>上下文工程常归纳为四个动作：<strong>选择</strong>（Select），从大量对话与文档中挑出当前任务真正必需的信息；<strong>压缩</strong>（Compress），用摘要或删减在减少 token 的同时保留关键约束；<strong>排序</strong>（Order），把系统规则和关键材料放在开头、结尾等模型更容易利用的位置；<strong>隔离</strong>（Isolate），把系统指令、不可信的用户文本、第三方检索结果分开标注，降低提示注入的风险。管理会话历史时常用的几种做法都可以归到这四个动作里：时间滑动窗口（只留最近几轮，属于选择）、按重要性筛选（选择）、把旧对话压成摘要（压缩）、按主题分组再取组内细节（选择）、把即时状态与阶段摘要分层维护（隔离）。</p>
+<p>上下文工程常归纳为四个动作：<strong>选择</strong>（Select），从大量对话与文档中挑出当前任务真正必需的信息；<strong>压缩</strong>（Compress），用摘要或删减在减少 token 的同时保留关键约束；<strong>排序</strong>（Order），把系统规则和关键材料放在开头、结尾等模型更容易利用的位置；<strong>隔离</strong>（Isolate），把系统指令、不可信的用户文本、第三方检索结果分开标注，降低提示注入的风险。管理会话历史时常用的几种做法都可以归到这四个动作里：时间滑动窗口（只留最近几轮，属于选择）、按重要性筛选（选择）、把旧对话压成摘要（压缩）、按主题分组再取组内细节（选择）、把即时状态与阶段摘要分层存放、互不覆盖（隔离）。</p>
 <p>在系统里执行这四个动作的模块叫<strong>上下文构建器</strong>（Context Builder）。一次请求的处理顺序是：接收用户输入；读取当前会话状态和记忆片段；检索外部知识库；由上下文构建器做选择、压缩、排序与隔离；组装成最终提示交给模型。组装前它要过一遍检查清单：必要条件是否齐全？只是“可能有用”的冗余是否已剔除？是否存在版本冲突或已失效的约束？系统指令是否保持最高优先级？</p>
 <p>看一个例子。学生问课程助手：“考试是哪一天？”</p>
 <ul>
@@ -1226,7 +1227,7 @@ window.Quarto = {
 </section>
 <section id="c8-subsec-rag" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-rag">8.1.5　长期记忆与 RAG、长上下文、微调</h2>
-<p>长期记忆最容易和第 5 章的<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）混为一谈，因为二者都“从外部取回内容放进上下文”。先简要回顾 RAG 的流程：离线阶段把文档清洗、保留标题结构、附上作者与日期等元数据，再切成块（固定长度切块、按文档结构切块或按语义切块），用嵌入模型把每块编码成向量存入向量数据库；在线阶段改写用户问题，用稀疏检索（如 BM25，按词频与逆文档频率给关键词匹配打分，擅长专有名词、编号和精确数字）和稠密检索（向量相似度，擅长同义改写）召回候选，再用交叉编码器（把问题与候选片段拼在一起送入模型打分，比分别编码更准但更慢）重排序，取少量片段装进上下文生成回答。RAG 答错通常出在六处：库里根本没有答案、切块切断了关键条件、措辞差异太大没召回、召回了相似但错误的内容、模型无视了上下文中的证据、召回了旧版本而缺少时间判断。这些机制的细节见第 5 章。</p>
+<p>长期记忆最容易和第 <a href="../ch5/s5-2.html">5.2</a> 节的<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）混为一谈，因为二者都“从外部取回内容放进上下文”。先简要回顾 RAG 的流程：离线阶段把文档清洗、保留标题结构、附上作者与日期等元数据，再切成块（固定长度切块、按文档结构切块或按语义切块），用嵌入模型把每块编码成向量存入向量数据库；在线阶段改写用户问题，用稀疏检索（如 BM25，按词频与逆文档频率给关键词匹配打分，擅长专有名词、编号和精确数字）和稠密检索（向量相似度，擅长同义改写）召回候选，再用交叉编码器（把问题与候选片段拼在一起送入模型打分，比分别编码更准但更慢）重排序，取少量片段装进上下文生成回答。RAG 答错通常出在六处：库里根本没有答案、切块切断了关键条件、措辞差异太大没召回、召回了相似但错误的内容、模型无视了上下文中的证据、召回了旧版本而缺少时间判断。这些机制的细节见第 <a href="../ch5/s5-2.html">5.2</a> 节。</p>
 <div id="c8-tab-routes" class="booktab">
 <div class="tabcap">
 <p>表 8-8　长上下文、RAG、微调与长期记忆</p>
@@ -1244,7 +1245,7 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">长上下文</td>
 <td style="text-align: left;">单次推理中通读大量材料</td>
-<td style="text-align: left;">不需要“更新”，但每次请求都要重新付全部 token 的计算</td>
+<td style="text-align: left;">不需要“更新”，但每次请求通常都要重新付全部 token 的预填充计算（前缀缓存只能复用开头不变的部分）</td>
 <td style="text-align: left;">无，会话结束即消失</td>
 </tr>
 <tr class="even">

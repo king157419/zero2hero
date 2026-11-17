@@ -788,7 +788,7 @@ window.Quarto = {
 </div>
 <section id="模型结构回顾与参数量估算" class="level2">
 <h2 class="anchored" data-anchor-id="模型结构回顾与参数量估算">3.4.1　模型结构回顾与参数量估算</h2>
-<p>按使用 Transformer 的方式，模型分为三类（详见第 2 章）：<strong>仅编码器</strong>（如 BERT），适合理解类任务；<strong>编码器—解码器</strong>（如 T5），适合翻译、摘要等序列到序列任务；<strong>仅解码器</strong>（如 GPT、LLaMA、Qwen），适合生成任务，是当前大语言模型的主流。一个解码器层由以下组件构成：</p>
+<p>按使用 Transformer 的方式，模型分为三类（详见第 <a href="../ch2/s2-5.html">2.5</a> 节）：<strong>仅编码器</strong>（如 BERT），适合理解类任务；<strong>编码器—解码器</strong>（如 T5），适合翻译、摘要等序列到序列任务；<strong>仅解码器</strong>（如 GPT、LLaMA、Qwen），适合生成任务，是当前大语言模型的主流。一个解码器层由以下组件构成：</p>
 <ul>
 <li><p><strong>多头自注意力</strong>：每个位置从多个“视角”同时关注上下文，捕捉多样的依赖关系；</p></li>
 <li><p><strong>前馈网络</strong>：对每个位置独立做非线性变换，常用的激活函数有 ReLU、GELU、SwiGLU；</p></li>
@@ -800,7 +800,7 @@ window.Quarto = {
 \tag{3-9}\]</span> <span class="math inline">\(2\lvert\mathcal{V}\rvert d\)</span> 是输入嵌入层与输出层的参数（二者共享权重时为 <span class="math inline">\(\lvert\mathcal{V}\rvert d\)</span>）。归一化层和偏置的参数相对很少，忽略不计。</p>
 <div id="c3-ex-params" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-1　LLaMA-7B 有多少参数</p>
+<p>例 3-2　LLaMA-7B 有多少参数</p>
 </div>
 <p>LLaMA-7B 的结构为 <span class="math inline">\(L=32\)</span>，<span class="math inline">\(d=4096\)</span>，<span class="math inline">\(\lvert\mathcal{V}\rvert=32\,000\)</span>，嵌入层与输出层不共享权重。用式 <a href="../ch3/s3-4.html#c3-eq-params">（3-9）</a> 估算参数量。</p>
 <div class="cthreecalc">

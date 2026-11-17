@@ -845,7 +845,7 @@ while state.status == RUNNING:                                 # 编排
 <li><p><strong>项目知识</strong>：仓库约定和稳定事实，写在受版本控制的文件里，例如 <code>AGENTS.md</code>（多个 Agent 产品共同识别的项目说明文件，现由 Linux 基金会旗下的 Agentic AI Foundation 托管其约定）和 <code>CLAUDE.md</code>（Claude Code 读取的项目说明文件）；</p></li>
 <li><p><strong>跨任务经验</strong>：用户偏好、历史结论、可复用的操作方法，需要注明来源、适用范围和失效条件。</p></li>
 </ul>
-<p>不同产品的落地方式不同，但思路一致：先在外部持久化，再有选择地注入上下文。记忆的分类、存取和代表性系统见第 8 章。</p>
+<p>不同产品的落地方式不同，但思路一致：先在外部持久化，再有选择地注入上下文。记忆的分类见第 <a href="../ch8/s8-1.html#c8-subsec-types">8.1.4</a> 小节，存取方式和代表性系统见第 <a href="../ch8/s8-2.html">8.2</a> 节。</p>
 </section>
 <section id="c7-subsec-products" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-products">7.2.3　主流产品把各层放在哪里</h2>
@@ -909,7 +909,7 @@ while state.status == RUNNING:                                 # 编排
 <ul>
 <li><p><strong>长期运行</strong>：开源的 OpenClaw（2025 年 11 月首发，曾名 Clawdbot、Moltbot）以一个长驻的网关（Gateway）进程连接多个聊天渠道，把消息路由给 Agent，并带有持久记忆和定时触发。任务从任何渠道进入后，仍要关联到具体工作区和权限配置，不能因为来自已连接的渠道就默认获得仓库写权限。</p></li>
 <li><p><strong>经验积累</strong>：Nous Research 开源的 Hermes Agent 区分“已知什么”（事实性记忆）和“遇到某类任务怎样做”（技能），能从执行经验中生成并修订技能。技能文件变了，不等于系统变好了；要判断是否真有改进，见第 <a href="../ch7/s7-8.html">7.8</a> 节。</p></li>
-<li><p><strong>办公与个人事务</strong>：腾讯 WorkBuddy（2026 年 3 月上线）处理授权目录中的办公文件，Meta 的个人 Agent Muse（2026 年 9 月发布，与上文的 Muse Code 同属 Meta 的 Muse 品牌，但是不同的产品）在独立虚拟机里运行并对敏感动作要求审批。与代码仓库不同，发邮件、下单这类业务动作有外部副作用，无法用代码差异和版本控制撤销，风险边界也就不同。</p></li>
+<li><p><strong>办公与个人事务</strong>：腾讯 WorkBuddy（2026 年 3 月上线，据 IT之家转述腾讯云官方公众号消息<sup><a href="../ch7/references.html#ref-26">[26]</a></sup>）处理授权目录中的办公文件，Meta 的个人 Agent Muse（2026 年 9 月发布，与上文的 Muse Code 同属 Meta 的 Muse 品牌，但是不同的产品）在独立虚拟机里运行并对敏感动作要求审批。与代码仓库不同，发邮件、下单这类业务动作有外部副作用，无法用代码差异和版本控制撤销，风险边界也就不同。</p></li>
 </ul>
 </section>
 <section id="c7-subsec-stack" class="level2">

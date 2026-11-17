@@ -788,7 +788,7 @@ window.Quarto = {
 </div>
 <section id="c5-subsec-kg" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-kg">5.5.1　知识图谱：用实体和关系表示知识</h2>
-<p><strong>知识图谱</strong>（Knowledge Graph，KG）把知识表示为由节点和边构成的网络：节点是<strong>实体</strong>（人、公司、产品、法规条款），边是实体之间的<strong>关系</strong>（任职于、控股、引用、生效于）。每条事实是一个<strong>三元组</strong>（主体，关系，客体），例如（张三，任职于，A 公司）、（A 公司，子公司属于，B 集团）。检索时，系统先在问题中识别出实体，并把它链接到图谱中对应的节点（<strong>实体链接</strong>），再沿着边走若干步，把沿途的事实收集起来交给模型组织答案。沿多条边连续推理称为<strong>多跳推理</strong>（multi-hop reasoning）。以开头的供应商问题为例：先查“采购额最高的供应商”得到 A 公司，沿“子公司属于”边找到 B 集团，再沿“受到处罚”边查 B 集团去年的记录——三跳中的每一步都依赖上一步的结果，而向量检索只会在一个平面上找“最像问题的段落”。</p>
+<p><strong>知识图谱</strong>（Knowledge Graph，KG）把知识表示为由节点和边构成的网络：节点是<strong>实体</strong>（人、公司、产品、法规条款），边是实体之间的<strong>关系</strong>（任职于、控股、引用、生效于）。每条事实是一个<strong>三元组</strong>（主体，关系，客体），例如（张三，任职于，A 公司）、（A 公司，隶属于，B 集团）。检索时，系统先在问题中识别出实体，并把它链接到图谱中对应的节点（<strong>实体链接</strong>），再沿着边走若干步，把沿途的事实收集起来交给模型组织答案。沿多条边连续推理称为<strong>多跳推理</strong>（multi-hop reasoning）。以开头的供应商问题为例：先查“采购额最高的供应商”得到 A 公司，沿“隶属于”边找到 B 集团，再沿“受到处罚”边查 B 集团去年的记录——三跳中的每一步都依赖上一步的结果，而向量检索只会在一个平面上找“最像问题的段落”。</p>
 <p>把知识图谱和向量嵌入结合起来，可以为检索带来七项能力（表 <a href="../ch5/s5-5.html#c5-tab-kg-gain">5-8</a>），它们分别对应第 <a href="../ch5/s5-3.html#c5-subsec-five-limits">5.3.1</a> 小节中向量检索的不足。</p>
 <div id="c5-tab-kg-gain" class="booktab">
 <div class="tabcap">
@@ -912,7 +912,7 @@ window.Quarto = {
 </section>
 <section id="c5-subsec-symbolic" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-symbolic">5.5.4　统计学习与符号表示</h2>
-<p>GraphRAG 背后还有一个更一般的问题。深度学习的主流是<strong>连接主义</strong>：知识分布在大量参数中，靠统计规律泛化；以 Hinton 为代表的研究者长期认为，智能应当从数据中学习得来，而不必依赖人工设计的符号规则。<strong>符号主义</strong>则认为，智能需要显式的符号、规则和结构。RAG 尤其是 GraphRAG 的实践给出了一种折中：大模型（统计学习）负责理解和生成语言，知识图谱（符号表示）负责记住事实、约束关系、提供可解释的推理路径。二者单独都不足以支撑可靠的语言智能，结合起来则可以互相弥补弱点。</p>
+<p>GraphRAG 背后还有一个更一般的问题。深度学习的主流是<strong>连接主义</strong>：知识分布在大量参数中，靠统计规律泛化，主张智能可以从数据中学习得来，而不必依赖人工设计的符号规则。<strong>符号主义</strong>则认为，智能需要显式的符号、规则和结构。RAG 尤其是 GraphRAG 的实践给出了一种折中：大模型（统计学习）负责理解和生成语言，知识图谱（符号表示）负责记住事实、约束关系、提供可解释的推理路径。二者单独都不足以支撑可靠的语言智能，结合起来则可以互相弥补弱点。</p>
 
 
 </section>

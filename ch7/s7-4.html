@@ -941,6 +941,7 @@ window.Quarto = {
 <p><strong>数据流向</strong>：邮件、日历、待办、旧对话 → 四道筛选器 → 只留今日、高优先级、未完成、与当前问题相关的部分 → 组装成约 <span class="math inline">\(10^{4}\)</span> token 的工作集。</p>
 <p><strong>结论</strong>：全部加载用掉约八成窗口，留给代码和测试输出的空间只剩约 <span class="math inline">\(4.1\times10^{4}\)</span> token，而且无关邮件与关键规则争夺注意力；最小工作集只占 5%，30 轮的累计输入量相差约 16 倍（<span class="math inline">\(4.77\times10^{6}\div3.0\times10^{5}\)</span>）。按 token 计费时，成本也大致按这个比例变化。前缀缓存（复用相同开头的 KV 缓存）可以降低重复部分的计算（见第 <a href="../ch7/s7-11.html">7.11</a> 节），但不能解决注意力被稀释的问题。</p>
 </div>
+<div class="widget" data-widget="c7budget"></div>
 </section>
 <section id="c7-subsec-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-pipeline">7.4.3　一条上下文处理流水线</h2>
@@ -969,10 +970,10 @@ window.Quarto = {
 <section id="c7-subsec-memory" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-memory">7.4.4　记忆要分层，旧结论不是新事实</h2>
 <p>长任务、跨会话任务都需要记忆。第 <a href="../ch7/s7-2.html#c7-subsec-state">7.2.2</a> 小节已经区分了会话状态、项目知识和跨任务经验三层；对上下文工程来说，关键是它们<strong>进入窗口前</strong>都要复核。项目规则适合写在受版本控制的文件里，未来的 Agent 和人都能看到；自动记忆更适合保存经验性线索，使用前要核对当前仓库。历史记录说“日历接口返回 UTC 时间”，而代码已改成携带时区的时间对象，那么当前的类型定义和测试结果优先。</p>
-<p>保存记忆时还要防止把不可信的内容“洗成”长期规则。邮件、网页、仓库里的第三方文件可能写着诱导 Agent 改变目标或泄露信息的文字。它们可以作为数据被读取，但不能因为出现在工具结果里就覆盖用户指令；从这些来源提炼的经验要保留原始出处并经过验证。记忆系统的完整设计见第 8 章。</p>
+<p>保存记忆时还要防止把不可信的内容“洗成”长期规则。邮件、网页、仓库里的第三方文件可能写着诱导 Agent 改变目标或泄露信息的文字。它们可以作为数据被读取，但不能因为出现在工具结果里就覆盖用户指令；从这些来源提炼的经验要保留原始出处并经过验证。记忆系统的完整设计见第 <a href="../ch8/s8-2.html">8.2</a> 节。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p><strong>上下文窗口、外部记忆、KV 缓存</strong>是三回事。<strong>上下文窗口</strong>是模型单次调用能接收的输入长度上限，每次调用都要重新填入内容，上一次填了什么不会自动保留。<strong>外部记忆</strong>是存在磁盘或数据库里、跨调用保存、按需取回的内容，进入窗口前仍要检索、筛选和授权。<strong>KV 缓存</strong>（Key-Value Cache，键值缓存）是推理引擎在每一层注意力中为已处理的 token 保存的键（Key）和值（Value）向量，生成后续 token 时不必重算它们（第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节）；它能降低长上下文推理的开销，却不会判断旧事实是否可靠，也代替不了任务状态和长期记忆。第 <a href="../ch7/s7-11.html">7.11</a> 节还会从部署角度比较这几种缓存。</p>
+<p><strong>上下文窗口、外部记忆、KV 缓存</strong>是三回事。<strong>上下文窗口</strong>是模型单次调用能接收的输入长度上限，逻辑上每次调用都要重新提供全部输入，上一次填了什么不会自动保留（推理引擎可以复用相同开头的中间结果，但这不改变窗口容量，也不替你记住内容）。<strong>外部记忆</strong>是存在磁盘或数据库里、跨调用保存、按需取回的内容，进入窗口前仍要检索、筛选和授权。<strong>KV 缓存</strong>（Key-Value Cache，键值缓存）是推理引擎在每一层注意力中为已处理的 token 保存的键（Key）和值（Value）向量，生成后续 token 时不必重算它们（第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节）；它减少相同前缀的重复预填充计算和首 token 延迟，却不减少对全部上下文做注意力计算的开销，也不会判断旧事实是否可靠，也代替不了任务状态和长期记忆。第 <a href="../ch7/s7-11.html">7.11</a> 节还会从部署角度比较这几种缓存。</p>
 </div>
 </section>
 <section id="c7-subsec-ctx-pack" class="level2">

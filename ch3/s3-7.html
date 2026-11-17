@@ -820,7 +820,7 @@ window.Quarto = {
 <p><strong>BitFit</strong>　 最简单的 PEFT：冻结所有权重矩阵，<strong>只训练偏置</strong>（bias）<sup><a href="../ch3/references.html#ref-29">[29]</a></sup>。BERT 的偏置参数不到总参数的 0.1%，但在许多中小规模任务上，BitFit 的效果已接近全量微调。局限是许多现代大模型（如 LLaMA）的线性层根本没有偏置项，BitFit 无从下手。</p>
 <p><strong>Adapter Tuning</strong>　 在预训练模型的每一层插入专门用于下游任务的小模块（Adapter），微调时冻结主体，只训练这些模块<sup><a href="../ch3/references.html#ref-28">[28]</a></sup>。如图 <a href="../ch3/s3-7.html#c3-fig-adapter">3-13</a>，每个 Transformer 层在注意力之后和前馈网络之后各加一个 Adapter，训练时只更新 Adapter 和层归一化参数。每个 Adapter 是一个瓶颈结构：降维投影把 <span class="math inline">\(d\)</span> 维输入压到 <span class="math inline">\(m\)</span> 维，经非线性激活后，升维投影再映射回 <span class="math inline">\(d\)</span> 维，并通过残差连接与输入相加： <span class="math display">\[\mathrm{Adapter}(\boldsymbol{h})=\boldsymbol{h}+W_{\mathrm{up}}\,f(W_{\mathrm{down}}\boldsymbol{h}),\qquad
   W_{\mathrm{down}}\in\mathbb{R}^{m\times d},\ W_{\mathrm{up}}\in\mathbb{R}^{d\times m}.
-\tag{3-23}\]</span> 通常 <span class="math inline">\(m\ll d\)</span>，调节 <span class="math inline">\(m\)</span> 就能控制参数量，每个 Adapter 约 <span class="math inline">\(2md\)</span> 个参数。残差连接保证：只要把 <span class="math inline">\(W_{\mathrm{up}}\)</span> 初始化为接近零，Adapter 一开始就近似恒等变换，不会破坏原模型。一般引入 0.5%～5% 的参数，就能达到与全量微调相差不到 1% 的性能；在 BERT 上只训练约 3.6% 的参数，GLUE 得分与全量微调相差不到 0.4 个百分点。Adapter 的主要缺点是<strong>增加推理时延</strong>：新增模块串行插在网络中，推理时省不掉，逐 token 生成时这一开销会被放大。</p>
+\tag{3-23}\]</span> 通常 <span class="math inline">\(m\ll d\)</span>，调节 <span class="math inline">\(m\)</span> 就能控制参数量，每个 Adapter 约 <span class="math inline">\(2md\)</span> 个参数。残差连接保证：只要把 <span class="math inline">\(W_{\mathrm{up}}\)</span> 初始化为接近零，Adapter 一开始就近似恒等变换，不会破坏原模型。一般引入 0.5%～5% 的参数，就能达到与全量微调相差不到 1% 的性能；在 BERT 上只训练约 3.6% 的参数，GLUE 得分与全量微调相差约 0.4 个百分点以内。Adapter 的主要缺点是<strong>增加推理时延</strong>：新增模块串行插在网络中，推理时省不掉，逐 token 生成时这一开销会被放大。</p>
 <div id="c3-fig-adapter" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -858,15 +858,16 @@ window.Quarto = {
 </div>
 </div>
 <p><strong>参数量</strong>　 原权重有 <span class="math inline">\(d\times k\)</span> 个参数，LoRA 只训练 <span class="math inline">\(r(d+k)\)</span> 个。<span class="math inline">\(d=k=4096\)</span>、<span class="math inline">\(r=8\)</span> 时，比例为 <span class="math inline">\(\bigl(8\times(4096+4096)\bigr)\div(4096\times4096)=65\,536\div16\,777\,216\approx0.39\%\)</span>。</p>
+<p><strong>LoRA 的优点</strong>　 <strong>训练开销小</strong>：可训练参数通常不到原模型的 1%，它们的梯度和优化器状态几乎可以忽略；LoRA 论文报告，在 GPT-3 175B 上可训练参数减少约 10 000 倍，训练时的 GPU 显存需求降为约三分之一。<strong>效果好</strong>：在众多数据集上与全量微调相当，有时更好。<strong>无额外推理时延</strong>：训练完成后把 <span class="math inline">\(\frac{\alpha}{r}BA\)</span> 加到 <span class="math inline">\(W_0\)</span> 上，合并成一个形状不变的矩阵，推理计算量与原模型完全相同——这是它相对 Adapter 的重要优势。<strong>便于多任务切换</strong>：每个任务只需保存一组几十 MB 的 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span>，同一个底座可以按需加载不同的 LoRA 模块。</p>
 <div id="c3-ex-lora" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-5　LoRA 的可训练参数量</p>
+<p>例 3-6　LoRA 的可训练参数量</p>
 </div>
 <p>对 LLaMA-7B（32 层，<span class="math inline">\(d=4096\)</span>，前馈网络中间维度 <span class="math inline">\(d_{\mathrm{ff}}=11\,008\)</span>）应用 <span class="math inline">\(r=8\)</span> 的 LoRA。计算两种设置下的可训练参数量：(1) 只作用于注意力的 <span class="math inline">\(W_Q\)</span>、<span class="math inline">\(W_V\)</span>（LoRA 原论文的设置）；(2) 作用于全部 7 个线性层（<span class="math inline">\(W_Q\)</span>、<span class="math inline">\(W_K\)</span>、<span class="math inline">\(W_V\)</span>、<span class="math inline">\(W_O\)</span> 和前馈网络的三个矩阵）。</p>
 <div class="cthreecalc">
 <p>1 &amp; 一个 <span class="math inline">\(4096\times4096\)</span> 矩阵 &amp; <span class="math inline">\(8\times(4096+4096)\)</span> &amp; 65 536 &amp; 式 <a href="../ch3/s3-7.html#c3-eq-lora">（3-24）</a>，<span class="math inline">\(r(d+k)\)</span><br>
 2 &amp; 设置 (1) 全模型 &amp; <span class="math inline">\(2\times65\,536\times32\)</span> &amp; <span class="math inline">\(4.2\times10^{6}\)</span> &amp; 每层 2 个矩阵，共 32 层<br>
-3 &amp; 设置 (1) 占比 &amp; <span class="math inline">\((4.2\times10^{6})\div(6.7\times10^{9})\)</span> &amp; 0.06% &amp; 总参数见例 <a href="../ch3/s3-4.html#c3-ex-params">3-1</a><br>
+3 &amp; 设置 (1) 占比 &amp; <span class="math inline">\((4.2\times10^{6})\div(6.7\times10^{9})\)</span> &amp; 0.06% &amp; 总参数见例 <a href="../ch3/s3-4.html#c3-ex-params">3-2</a><br>
 4 &amp; 注意力 4 个矩阵 &amp; <span class="math inline">\(4\times65\,536\)</span> &amp; 262 144 &amp; 步骤 1 × 4<br>
 5 &amp; 一个前馈矩阵 &amp; <span class="math inline">\(8\times(4096+11\,008)\)</span> &amp; 120 832 &amp; <span class="math inline">\(4096\times11\,008\)</span> 或其转置<br>
 6 &amp; 前馈 3 个矩阵 &amp; <span class="math inline">\(3\times120\,832\)</span> &amp; 362 496 &amp; SwiGLU 有三个矩阵<br>
@@ -876,7 +877,6 @@ window.Quarto = {
 </div>
 <p>数据流向每个矩阵的形状 <span class="math inline">\((d,k)\)</span> 与秩 <span class="math inline">\(r\)</span> → 每矩阵 <span class="math inline">\(r(d+k)\)</span> → 乘每层矩阵数 → 乘层数 → 除以总参数量。 若把秩提高到 <span class="math inline">\(r=16\)</span>，参数量翻倍，设置 (2) 约为 4000 万个，这是后面显存对比所用的配置。</p>
 </div>
-<p><strong>LoRA 的优点</strong>　 <strong>训练开销小</strong>：可训练参数通常不到原模型的 1%，它们的梯度和优化器状态几乎可以忽略；LoRA 论文报告，在 GPT-3 175B 上可训练参数减少约 10 000 倍，训练时的 GPU 显存需求降为约三分之一。<strong>效果好</strong>：在众多数据集上与全量微调相当，有时更好。<strong>无额外推理时延</strong>：训练完成后把 <span class="math inline">\(\frac{\alpha}{r}BA\)</span> 加到 <span class="math inline">\(W_0\)</span> 上，合并成一个形状不变的矩阵，推理计算量与原模型完全相同——这是它相对 Adapter 的重要优势。<strong>便于多任务切换</strong>：每个任务只需保存一组几十 MB 的 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span>，同一个底座可以按需加载不同的 LoRA 模块。</p>
 <p><strong>AdaLoRA</strong>　 LoRA 给所有被适配的矩阵设定相同的秩 <span class="math inline">\(r\)</span>，但不同层、不同矩阵对任务的重要性不同。<strong>AdaLoRA</strong>（Adaptive LoRA）据此<strong>动态分配秩</strong><sup><a href="../ch3/references.html#ref-34">[34]</a></sup>：给关键的增量矩阵分配较高的秩，以捕捉更精细、更具任务特性的信息；降低次要矩阵的秩，以防过拟合、节省预算。具体做法是以<strong>奇异值分解</strong>（Singular Value Decomposition，SVD）的形式参数化增量： <span class="math display">\[\Delta W=P\Lambda Q,\qquad P\in\mathbb{R}^{d\times r},\ \Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_r),\ Q\in\mathbb{R}^{r\times k},
 \tag{3-26}\]</span> 训练中按重要性指标把不重要的奇异值 <span class="math inline">\(\lambda_i\)</span> 置零，但保留对应的奇异向量，以便以后需要时恢复。对大矩阵做精确 SVD 代价很高，AdaLoRA 并不真正分解，而是在损失中加一个正则项约束 <span class="math inline">\(P\)</span>、<span class="math inline">\(Q\)</span> 近似正交： <span class="math display">\[R(P,Q)=\lVert P^{\top}P-I\rVert_F^{2}+\lVert QQ^{\top}-I\rVert_F^{2},
 \tag{3-27}\]</span> 既省去了大量 SVD 计算，又稳定了训练。</p>
@@ -884,7 +884,7 @@ window.Quarto = {
 <section id="qlora把冻结的底座量化到-4-位" class="level2">
 <h2 class="anchored" data-anchor-id="qlora把冻结的底座量化到-4-位">3.7.6　QLoRA：把冻结的底座量化到 4 位</h2>
 <p>LoRA 大幅减少了梯度和优化器状态，但冻结的底座仍以 16 位加载：7B 模型约 14 GB，65B 模型约 130 GB。<strong>QLoRA</strong>（Quantized LoRA）<sup><a href="../ch3/references.html#ref-35">[35]</a></sup>的核心是：<strong>把冻结的底座量化到 4 位存储，在其上训练 16 位的 LoRA 模块</strong>。前向和反向时，4 位权重被临时反量化为 BF16 参与运算，梯度只流向 LoRA 参数。它引入了三项技术（量化的一般原理见第 <a href="../ch3/s3-10.html">3.10</a> 节）。</p>
-<p><strong>4 位 NormalFloat（NF4）</strong>　 预训练权重近似服从均值为零的正态分布。普通 4 位整数（INT4）把量化等级均匀分布在取值区间上，而 NF4 按<strong>标准正态分布的分位数</strong>设置 16 个等级，使每个等级覆盖的权重数大致相同（图 <a href="../ch3/s3-7.html#c3-fig-nf4">3-15</a>）。对正态分布的权重，这是信息论意义上最优的 4 位数据类型，实测效果优于 INT4 和 4 位浮点（FP4）。量化时权重按 64 个一块处理：先用块内绝对值最大值 <span class="math inline">\(c\)</span> 把权重缩放到 <span class="math inline">\([-1,1]\)</span>，再映射到最近的 NF4 等级 <span class="math inline">\(q_j\)</span>，只存 4 位编号；反量化时 <span class="math inline">\(\hat{w}=c\cdot q_j\)</span>。</p>
+<p><strong>4 位 NormalFloat（NF4）</strong>　 预训练权重近似服从均值为零的正态分布。普通 4 位整数（INT4）把量化等级均匀分布在取值区间上，而 NF4 按<strong>标准正态分布的分位数</strong>设置 16 个等级，并保证 0 能被精确表示，使每个等级覆盖的权重数大致相同（图 <a href="../ch3/s3-7.html#c3-fig-nf4">3-15</a>）。对正态分布的权重，这是信息论意义上最优的 4 位数据类型，实测效果优于 INT4 和 4 位浮点（FP4）。量化时权重按 64 个一块处理：先用块内绝对值最大值 <span class="math inline">\(c\)</span> 把权重缩放到 <span class="math inline">\([-1,1]\)</span>，再映射到最近的 NF4 等级 <span class="math inline">\(q_j\)</span>，只存 4 位编号；反量化时 <span class="math inline">\(\hat{w}=c\cdot q_j\)</span>。</p>
 <div id="c3-fig-nf4" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -892,10 +892,10 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-15　INT4 与 NF4 的量化等级（各点为可表示的值）。INT4 的 15 个等级等间距分布；NF4 的 16 个等级按标准正态分布的分位数设置，在权重密集的 0 附近更密、在两端更疏，使每个等级覆盖的权重数量大致相同</p>
+<p>图 3-15　INT4 与 NF4 的量化等级（各点为可表示的值）。INT4 取对称区间 −7～7，共 15 个等级，等间距分布；NF4 的 16 个等级按标准正态分布的分位数设置，在权重密集的 0 附近更密、在两端更疏，使每个等级覆盖的权重数量大致相同</p>
 </div>
 </div>
-<p><strong>双重量化</strong>　 每 64 个权重要额外存一个 32 位缩放常数 <span class="math inline">\(c\)</span>，平均每参数多占 <span class="math inline">\(32/64=0.5\)</span> 位。<strong>双重量化</strong>（double quantization）把这些常数<strong>再量化一次</strong>（每 256 个一组量化为 8 位），额外开销降到约 <span class="math inline">\(8/64+32/(64\times256)\approx0.127\)</span> 位/参数。对 65B 模型，这一项就能节省约 3 GB。</p>
+<p><strong>双重量化</strong>　 每 64 个权重要额外存一个 32 位缩放常数 <span class="math inline">\(c\)</span>，平均每参数多占 <span class="math inline">\(32/64=0.5\)</span> 位。<strong>双重量化</strong>（double quantization）把这些常数<strong>再量化一次</strong>（每 256 个常数为一组，常数本身量化为 8 位，每组再多存一个 32 位缩放因子），额外开销降到约 <span class="math inline">\(8/64+32/(64\times256)\approx0.127\)</span> 位/参数。对 65B 模型，这一项就能节省约 3 GB。</p>
 <p><strong>分页优化器</strong>　 训练中偶尔会因长序列等原因出现显存峰值而溢出。<strong>分页优化器</strong>（paged optimizer）利用 NVIDIA 的统一内存特性，在显存紧张时自动把优化器状态换出到 CPU 内存，需要时再换回，避免训练中断。</p>
 <p>借助这些技术，QLoRA 首次在<strong>单张 48 GB 显卡</strong>上微调了 650 亿参数的模型，效果与 16 位全量微调基本相当；用它训练的 Guanaco 在当时的 Vicuna 对话基准上达到 ChatGPT 约 99% 的水平。QLoRA 让个人开发者和学生也能在消费级显卡上微调大模型。</p>
 </section>
@@ -903,7 +903,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="显存对比">3.7.7　显存对比</h2>
 <div id="c3-ex-peftmem" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-6　全量微调与 PEFT 的显存</p>
+<p>例 3-7　全量微调与 PEFT 的显存</p>
 </div>
 <p>微调一个 7B 模型，不计激活值。基础模型以 FP32 加载；PEFT 新增的可训练参数为原模型的 2.5%，同样以 FP32 训练、使用 AdamW。比较全量微调与 PEFT 所需显存。</p>
 <div class="cthreecalc">
@@ -930,6 +930,7 @@ window.Quarto = {
 <p>图 3-16　微调 7B 模型所需的模型状态显存（不含激活值与框架开销）。LoRA 作用于全部线性层，<span class="math inline">\(r=16\)</span>，约 4000 万个可训练参数，按 16 字节/参数计；NF4 底座按每参数约 4.127 位计</p>
 </div>
 </div>
+<div class="widget" data-widget="c3train"></div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>PEFT 不会减少激活值。底座虽然冻结，反向传播时梯度仍要穿过整个网络才能到达各层的 LoRA 模块，激活值必须照常保存。实际微调时，通常还要配合激活重计算来控制显存。</p>
@@ -981,7 +982,7 @@ window.Quarto = {
 <td style="text-align: left;">Prefix / P-Tuning v2</td>
 <td style="text-align: center;">A</td>
 <td style="text-align: left;">每层的前缀向量（深层提示）</td>
-<td style="text-align: left;">0.1%～1%</td>
+<td style="text-align: left;">约 0.1%～1%</td>
 <td style="text-align: left;">略增（占上下文）</td>
 <td style="text-align: left;">适用面更广；训练不够稳定</td>
 </tr>

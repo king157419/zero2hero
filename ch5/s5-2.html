@@ -910,7 +910,7 @@ window.Quarto = {
 </section>
 <section id="c5-subsec-embed" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-embed">5.2.2　向量化与向量数据库</h2>
-<p><strong>向量化（步骤③）</strong>　 输入是文本块，输出是一个 <span class="math inline">\(d\)</span> 维实数向量，称为该文本块的<strong>嵌入</strong>（embedding）。嵌入模型通常是 BERT（Bidirectional Encoder Representations from Transformers）一类的 Transformer 编码器：它读入整段文字，把各 token 的隐藏状态汇聚成一个固定长度的向量（取特殊的 [CLS] 位置的隐藏状态，或对各位置做平均池化，取决于模型训练时的约定），<span class="math inline">\(d\)</span> 就是模型输出的隐藏维度，常见取值为 768、1024 或 3072。训练时，嵌入模型被要求让“问题—相关段落”这样的正样本对向量靠近、无关样本对向量远离，因此语义相近的文本在向量空间中距离近。例如“苹果很好吃”与“苹果发布了新手机”都含“苹果”，但一个训练良好的嵌入模型会把前者放在水果、食物附近，把后者放在科技产品附近——它并不“理解”苹果，而是从大量语料中学到两种语境下的上下文完全不同。</p>
+<p><strong>向量化（步骤③）</strong>　 输入是文本块，输出是一个 <span class="math inline">\(d\)</span> 维实数向量，称为该文本块的<strong>嵌入</strong>（embedding）。嵌入模型通常是以 BERT（Bidirectional Encoder Representations from Transformers）为代表的 Transformer 编码器（近年也有基于解码器架构改造的嵌入模型）：它读入整段文字，把各 token 的隐藏状态汇聚成一个固定长度的向量（取特殊的 [CLS] 位置的隐藏状态，或对各位置做平均池化，取决于模型训练时的约定），<span class="math inline">\(d\)</span> 就是模型输出的隐藏维度，常见取值为 768、1024 或 3072。训练时，嵌入模型被要求让“问题—相关段落”这样的正样本对向量靠近、无关样本对向量远离，因此语义相近的文本在向量空间中距离近。例如“苹果很好吃”与“苹果发布了新手机”都含“苹果”，但一个训练良好的嵌入模型会把前者放在水果、食物附近，把后者放在科技产品附近——它并不“理解”苹果，而是从大量语料中学到两种语境下的上下文完全不同。</p>
 <p>衡量两个向量 <span class="math inline">\(\boldsymbol{u}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 有多相似，最常用的是<strong>余弦相似度</strong>（cosine similarity），即两向量夹角的余弦： <span class="math display">\[\cos(\boldsymbol{u},\boldsymbol{v}) = \frac{\boldsymbol{u}\cdot\boldsymbol{v}}{\lVert\boldsymbol{u}\rVert\,\lVert\boldsymbol{v}\rVert}
   = \frac{\sum_{i=1}^{d}u_i v_i}{\sqrt{\sum_{i=1}^{d}u_i^2}\,\sqrt{\sum_{i=1}^{d}v_i^2}} .
 \tag{5-2}\]</span> 取值越接近 1，方向越一致。工程上也用点积或欧氏距离；若向量预先归一化为单位长度，三者给出的排序相同。应使用嵌入模型训练时采用的那种度量。</p>
@@ -957,7 +957,7 @@ window.Quarto = {
 <td style="text-align: left;">对照：原文总量</td>
 <td style="text-align: left;"><span class="math inline">\(42\,000\times500\times3\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(6.3\times10^{7}\)</span> B <span class="math inline">\(\approx\)</span> 0.06 GB</td>
-<td style="text-align: left;">UTF-8 中一个汉字 3 字节</td>
+<td style="text-align: left;">UTF-8 中一个汉字 3 字节；按块数乘块长估算，重叠部分被重复计入</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">4</td>
@@ -991,7 +991,7 @@ window.Quarto = {
 </section>
 <section id="c5-subsec-retrieve" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-retrieve">5.2.3　检索：从问题到候选片段</h2>
-<p>用户提问后，系统先用<strong>同一个</strong>嵌入模型把问题编码为查询向量（步骤⑤）。必须是同一个模型：用模型 A 建库、用模型 B 查询，两组向量不在同一个空间里，距离没有意义。随后在向量索引中做相似度检索（步骤⑥），取出与查询向量最接近的前 <span class="math inline">\(k\)</span> 个块，再根据索引记录取回它们的原文与元数据，作为上下文交给生成阶段。这里的 <span class="math inline">\(k\)</span> 是检索返回条数，注意与解码时 Top-K 采样的 <span class="math inline">\(k\)</span>（第 3 章）区分。</p>
+<p>用户提问后，系统先用<strong>同一个</strong>嵌入模型把问题编码为查询向量（步骤⑤）。必须是同一个模型：用模型 A 建库、用模型 B 查询，两组向量不在同一个空间里，距离没有意义。随后在向量索引中做相似度检索（步骤⑥），取出与查询向量最接近的前 <span class="math inline">\(k\)</span> 个块，再根据索引记录取回它们的原文与元数据，作为上下文交给生成阶段。这里的 <span class="math inline">\(k\)</span> 是检索返回条数，注意与解码时 Top-K 采样的 <span class="math inline">\(k\)</span>（第 <a href="../ch3/s3-9.html#c3-subsec-decoding">3.9.5</a> 小节）区分。</p>
 <p><span class="math inline">\(k\)</span> 的取值是一个权衡：<span class="math inline">\(k\)</span> 太小容易漏掉相关块，<span class="math inline">\(k\)</span> 太大则混入噪声、挤占上下文。工程上常见的做法是先粗召回较多候选（例如 50～150 个），再用重排模型精选（第 <a href="../ch5/s5-4.html#c5-subsec-rerank">5.4.4</a> 小节），最后把 5～20 个块交给模型。</p>
 <p>向量数据库不是唯一的数据源。表 <a href="../ch5/s5-2.html#c5-tab-sources">5-3</a> 列出 RAG 管道中常见的四类数据源，成熟系统往往同时使用多种，再合并结果（第 <a href="../ch5/s5-4.html">5.4</a> 节）。</p>
 <div id="c5-tab-sources" class="booktab">
@@ -1060,7 +1060,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 5-3　上下文里能放几个块</p>
 </div>
-<p>某模型的上下文窗口为 8192 个 token。系统指令约 400 token，问题及其改写约 100 token，保留的多轮对话历史约 1200 token，为回答预留 1500 token。每个块 500 字，按该模型分词器约 1.4 字/token 计，约 360 token；每块再附编号、来源、日期约 30 token。最多能放几个块？</p>
+<p>某模型的上下文窗口为 8192 个 token。系统指令约 400 token，问题及其改写约 100 token，保留的多轮对话历史约 1200 token，为回答预留 1500 token。每个块 500 字，本例<strong>假设</strong>该模型的分词器平均约 1.4 字/token（实际比值因分词器与文本而异），约 360 token；每块再附编号、来源、日期约 30 token。最多能放几个块？</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1104,6 +1104,7 @@ window.Quarto = {
 </table>
 <p><strong>数据流向</strong>：窗口 → 减去固定开销 → 材料预算 → 除以每块长度 → 块数上限。实际取 <span class="math inline">\(k\)</span> 时还应低于上限、留出余量，因为“字/token”的比值随分词器和文本内容变化（英文、数字、代码与中文都不同）。若窗口扩大到 32K，块数上限可达约 75，但第 <a href="../ch5/s5-3.html#c5-subsec-lost">5.3.2</a> 小节会看到，放得下不等于用得好。</p>
 </div>
+<div class="widget" data-widget="c5chunk"></div>
 <p><strong>一个完整的例子</strong>　 把以上步骤串起来（示例为虚构）。员工问：“我们公司 2026 年出差住宿的报销上限是多少？”系统把问题编码为向量，在制度库中召回《差旅管理办法（2026 修订）》《财务报销常见问题》等片段，取最相关的 5 段，按上面的模板拼装提示词；模型回答“一线城市每晚不超过 600 元，其他城市不超过 450 元 [1]”，检查机制确认这句话能在片段 [1] 中找到依据，回答附上原文链接返回给员工。整个过程中模型参数没有任何变化，但回答正确且可以核查。</p>
 
 

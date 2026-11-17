@@ -864,7 +864,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>换入换出怎样触发？队列管理器监视窗口占用：达到“警告阈值”（论文举例为窗口的 70%）时，向模型插入一条“内存压力”提示，让它抓紧把重要信息写进工作上下文或归档存储；达到“刷新阈值”（例如 100%）时，按比例（例如一半）移出最早的消息，写入回忆存储，并更新递归摘要。模型每次函数调用后可以要求立即继续执行下一步（类似操作系统的分页调度），也可以交出控制权、等待下一个事件（论文称为 yield）。这种“模型发起调用—系统执行—结果回到模型”的循环，正是第 6 章所讲的智能体循环在记忆管理上的应用。</p>
+<p>换入换出怎样触发？队列管理器监视窗口占用：达到“警告阈值”（论文举例为窗口的 70%）时，向模型插入一条“内存压力”提示，让它抓紧把重要信息写进工作上下文或归档存储；达到“刷新阈值”（例如 100%）时，按比例（例如一半）移出最早的消息，写入回忆存储，并更新递归摘要。模型每次函数调用后可以要求立即继续执行下一步（类似操作系统的分页调度），也可以交出控制权、等待下一个事件（论文称为 yield）。这种“模型发起调用—系统执行—结果回到模型”的循环，正是第 <a href="../ch6/s6-3.html">6.3</a> 节所讲的智能体循环在记忆管理上的应用。</p>
 <p>在多会话聊天的“深度记忆检索”（Deep Memory Retrieval，DMR）任务中，模型要回答关于很早以前会话的问题。论文报告，GPT-4 单独作答的准确率为 32.1%，加上 MemGPT 后为 92.5%<sup><a href="../ch8/references.html#ref-6">[6]</a></sup>。代价也很明显：记忆质量取决于模型是否在正确时机写入和检索，函数调用能力弱的模型（论文中的 GPT-3.5）表现明显变差；模型也常在没翻完归档存储时就停止检索。</p>
 <p>2024 年 9 月，MemGPT 的开源项目并入 Letta 公司，代码和包名改为 Letta<sup><a href="../ch8/references.html#ref-7">[7]</a></sup>。Letta 把工作上下文进一步拆成多个<strong>记忆块</strong>（memory block），每块有标签、字数上限和当前值，例如“用户偏好”一块、“当前任务”一块，代理可以有针对性地改写其中一块，开发者也更容易看懂当前记忆。2025 年 4 月，该团队提出<strong>睡眠期计算</strong>（sleep-time compute）<sup><a href="../ch8/references.html#ref-8">[8]</a></sup>：在用户还没提问的空闲时段，另一个“睡眠期代理”预先整理上下文、推断可能的问题，并改写主代理的记忆块。论文在改造过的数学推理任务上报告，达到同样准确率所需的测试时计算约减少到原来的五分之一。代价是后台计算仍要花钱，异步写入还会带来时序问题：主代理可能在整理完成之前又产生了新信息。</p>
 <div class="bookbox pitfall">
@@ -980,6 +980,7 @@ window.Quarto = {
 <p><strong>数据从哪来</strong>：衰减因子 0.995、重要性 1～10、权重均为 1 取自论文<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>；三条记忆的具体数值为本题设定。<span class="math inline">\(0.995^{20}=\mathrm{e}^{20\ln0.995}\approx\mathrm{e}^{-0.100}\approx0.905\)</span>，<span class="math inline">\(0.995^{100}\approx\mathrm{e}^{-0.501}\approx0.606\)</span>。</p>
 <p><strong>结论</strong>：排序为 <span class="math inline">\(m_1&gt;m_3&gt;m_2\)</span>，派对计划被取回。若只看新近性，排第一的会是刚吃的早饭 <span class="math inline">\(m_2\)</span>；若只看相关性，<span class="math inline">\(m_1\)</span> 虽仍第一，但 <span class="math inline">\(m_2\)</span> 与 <span class="math inline">\(m_3\)</span> 的差距无法反映“分手”与“早饭”这类重要性差别。多信号打分正是为了避免任何一个信号单独主导。注意归一化是在候选集合内做的，换一批候选，同一条记忆的归一化分数就会变。</p>
 </div>
+<div class="widget" data-widget="c8ga"></div>
 <p>光有检索还不够。当最近一批经历的重要性之和超过阈值（论文取 150）时，系统触发<strong>反思</strong>（reflection）：读取最近约 100 条记忆，让模型提出三个高层问题，再检索相关记忆回答，得出“Klaus 致力于研究”这类带引用的高层判断，并写回记忆流。实际运行中，角色大约每天反思两三次。<strong>计划</strong>（planning）则自上而下展开：先把一天粗分成五到八段，再细化到小时，最后细化到 5～15 分钟的动作；遇到新的观察时可以修改计划。于是形成一个闭环（图 <a href="../ch8/s8-2.html#c8-fig-ga">8-5</a>）：经历写入记忆流，记忆经反思生成概括，概括和检索结果影响计划，计划执行又产生新经历。</p>
 <div id="c8-fig-ga" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
@@ -997,7 +998,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="c8-subsec-memorybank">8.2.5　MemoryBank：记忆会遗忘，也会被强化</h2>
 <p>中山大学等单位的研究者在 2023 年 5 月提出 MemoryBank，论文后来发表于 AAAI 2024<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>。它面向长期陪伴类聊天：保存每天的对话、每日事件摘要和逐步更新的用户画像（性格、兴趣等），用双塔稠密检索把相关记忆取回当前对话。与只会追加的方案相比，它最大的不同是给每条记忆设了生命周期。</p>
 <p>这个生命周期借鉴了<strong>艾宾浩斯遗忘曲线</strong>：记忆随时间衰减，复习会让它衰减得更慢。MemoryBank 用的保留率公式是 <span class="math display">\[R=\mathrm{e}^{-t/S},
-\tag{8-4}\]</span> 其中 <span class="math inline">\(R\)</span> 为保留率（0～1），<span class="math inline">\(t\)</span> 为距上次学习或回忆经过的时间，<span class="math inline">\(S\)</span> 为记忆强度。论文把 <span class="math inline">\(S\)</span> 设为离散值：一条记忆首次出现时 <span class="math inline">\(S=1\)</span>；每当它在对话中被回忆一次，<span class="math inline">\(S\)</span> 加 1，同时 <span class="math inline">\(t\)</span> 归零<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>。论文没有限定 <span class="math inline">\(t\)</span> 的单位，本书按“天”计。</p>
+\tag{8-4}\]</span> 其中 <span class="math inline">\(R\)</span> 为保留率（0～1），<span class="math inline">\(t\)</span> 为距上次学习或回忆经过的时间，<span class="math inline">\(S\)</span> 为记忆强度。论文把 <span class="math inline">\(S\)</span> 设为离散值：一条记忆首次出现时 <span class="math inline">\(S=1\)</span>；每当它在对话中被回忆一次，<span class="math inline">\(S\)</span> 加 1，同时 <span class="math inline">\(t\)</span> 归零<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>。论文没有限定 <span class="math inline">\(t\)</span> 的单位；下面的算例和图中按“天”计，这是本书自定的取法，单位取小时或周，同一个公式对应的真实遗忘速度就完全不同。</p>
 <div id="c8-ex-forget" class="bookbox example">
 <div class="boxtitle">
 <p>例 8-4　遗忘曲线与强化</p>
@@ -1058,6 +1059,7 @@ window.Quarto = {
 <p>图 8-6　MemoryBank 的遗忘曲线 <span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span>。灰线为从未被回忆的记忆；青绿线在第 1、3 天各被回忆一次，每次回忆使保留率回到 1、强度 S 加 1，此后衰减变慢（数值见例 <a href="../ch8/s8-2.html#c8-ex-forget">8-4</a>）</p>
 </div>
 </div>
+<div class="widget" data-widget="c8forget"></div>
 <p>这种机制让记忆库不会无限膨胀，也让常用信息更容易留下。但它也暴露了一个长期问题：遗忘规则是一种<strong>预测</strong>，不是事实。某个偏好很久没被提起，不代表它已失效（例如“对花生严重过敏”）；一次情绪化的表达也不该成为稳定画像。论文本身也说明，这是一个探索性的、高度简化的模型。实际系统常把遗忘曲线与重要性、用户的显式标记结合使用。</p>
 </section>
 <section id="c8-subsec-amem" class="level2">
@@ -1090,7 +1092,7 @@ window.Quarto = {
 <li><p><strong>LongMem</strong>（2023）<sup><a href="../ch8/references.html#ref-15">[15]</a></sup>：主语言模型保持冻结，旁边接一个可训练的残差<strong>旁路网络</strong>（SideNet），把很长的历史以注意力键值对的形式缓存进记忆库，需要时取回并融合进当前层。它把记忆做进模型的运行机制，记忆长度可扩展到约 6.5 万个 token。</p></li>
 <li><p><strong>HippoRAG</strong>（2024）<sup><a href="../ch8/references.html#ref-16">[16]</a></sup>：受海马体为大脑皮层记忆建立索引的理论启发，用开放信息抽取（Open Information Extraction，OpenIE）从文本中抽出实体和三元组，建成知识图谱；检索时以问题中的实体为起点运行个性化 PageRank（Personalized PageRank，PPR），让相关性沿图传播，从而一步找到需要多跳才能串起来的事实。论文报告在多跳问答上最多提升 20%，且比迭代检索方法 IRCoT 便宜 10～30 倍、快 6～13 倍。</p></li>
 <li><p><strong>Zep 与 Graphiti</strong>（2025）<sup><a href="../ch8/references.html#ref-17">[17]</a></sup>：用<strong>时序知识图谱</strong>记录事实的有效期。例如（用户 A，偏好，Java）的有效期为 2024—2025，（用户 A，偏好，Python）为 2025 至今。新事实到来时，旧关系被标记为失效而非删除，因此既能回答“现在用什么”，也能回答“以前用什么、何时改的”。论文报告其在 DMR 上的准确率为 94.8%，对照的是 MemGPT 论文中最好的一组结果（配 GPT-4 Turbo 时为 93.4%，与前文配 GPT-4 时的 92.5% 是不同的基座模型），在 LongMemEval 基准上准确率最多提高 18.5%，响应延迟降低约 90%。</p></li>
-<li><p><strong>MemOS</strong>（2025）<sup><a href="../ch8/references.html#ref-18">[18]</a></sup>：把记忆当作和算力、存储同等的系统资源来调度，统一管理三类记忆：<strong>明文记忆</strong>（文档、知识图谱等外部可读内容）、<strong>激活记忆</strong>（KV 缓存等推理时的中间状态）和<strong>参数记忆</strong>（权重及 LoRA 等增量参数）。三类记忆都封装成带来源、版本等元数据的 MemCube，可以组合、迁移，也可以相互转化：常用的明文内容可以预先算成 KV 缓存，稳定的知识可以蒸馏进参数。它还考虑多个智能体之间的记忆隔离、共享与生命周期审计（图 <a href="../ch8/s8-2.html#c8-fig-memos">8-8</a>）。</p></li>
+<li><p><strong>MemOS</strong>（2025）<sup><a href="../ch8/references.html#ref-18">[18]</a></sup>：把记忆当作和算力、存储同等的系统资源来调度，统一管理三类记忆：<strong>明文记忆</strong>（文档、知识图谱等外部可读内容）、<strong>激活记忆</strong>（KV 缓存等推理时的中间状态）和<strong>参数记忆</strong>（权重及 LoRA 等增量参数）。这是论文第 4.1 节的划分（截至 2026 年 11 月的 arXiv 各版本均如此）。部分介绍资料把<strong>图结构记忆</strong>单列为第四类，凑成参数、激活、明文、图结构四类；论文中图结构只是组织明文记忆的一种方式，并未单列，所以本书按论文取三类，读到四类说法时可理解为把明文记忆按组织形式又拆了一层。三类记忆都封装成带来源、版本等元数据的 MemCube，可以组合、迁移，也可以相互转化：常用的明文内容可以预先算成 KV 缓存，稳定的知识可以蒸馏进参数。它还考虑多个智能体之间的记忆隔离、共享与生命周期审计（图 <a href="../ch8/s8-2.html#c8-fig-memos">8-8</a>）。</p></li>
 </ul>
 <div id="c8-fig-memos" class="bookfig">
 <div class="quarto-figure quarto-figure-center">

@@ -795,11 +795,11 @@ window.Quarto = {
 \tag{3-17}\]</span> <span class="math inline">\(n_{\mathrm{GPU}}\)</span> 为 GPU 数量，<span class="math inline">\(P_{\mathrm{peak}}\)</span> 为单卡在所用精度下的理论峰值算力（FLOP/s），<strong>模型算力利用率</strong>（Model FLOPs Utilization，MFU）是实际有效算力占峰值的比例。由于通信、访存和调度开销，大规模训练的 MFU 通常只有 30%～60%。</p>
 <div id="c3-ex-flops" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-2　从论文数据反推 MFU</p>
+<p>例 3-3　从论文数据反推 MFU</p>
 </div>
 <p>LLaMA-7B 的参数量约 <span class="math inline">\(6.7\times10^{9}\)</span>，训练 <span class="math inline">\(1.0\times10^{12}\)</span> 个 token，使用 NVIDIA A100-80GB（BF16 稠密峰值 312 TFLOP/s），论文报告消耗 82 432 GPU 小时<sup><a href="../ch3/references.html#ref-5">[5]</a></sup>。估算训练期间的 MFU。</p>
 <div class="cthreecalc">
-<p>1 &amp; 训练计算量 &amp; <span class="math inline">\(6\times(6.7\times10^{9})\times(1.0\times10^{12})\)</span> &amp; <span class="math inline">\(4.0\times10^{22}\)</span> FLOPs &amp; 式 <a href="../ch3/s3-5.html#c3-eq-6nd">（3-16）</a>；<span class="math inline">\(N\)</span> 见例 <a href="../ch3/s3-4.html#c3-ex-params">3-1</a>，<span class="math inline">\(D\)</span> 来自论文<br>
+<p>1 &amp; 训练计算量 &amp; <span class="math inline">\(6\times(6.7\times10^{9})\times(1.0\times10^{12})\)</span> &amp; <span class="math inline">\(4.0\times10^{22}\)</span> FLOPs &amp; 式 <a href="../ch3/s3-5.html#c3-eq-6nd">（3-16）</a>；<span class="math inline">\(N\)</span> 见例 <a href="../ch3/s3-4.html#c3-ex-params">3-2</a>，<span class="math inline">\(D\)</span> 来自论文<br>
 2 &amp; GPU 秒数 &amp; <span class="math inline">\(82\,432\times3600\)</span> &amp; <span class="math inline">\(2.97\times10^{8}\)</span> s &amp; 论文报告的 GPU 小时 × 每小时 3600 秒<br>
 3 &amp; 单卡有效算力 &amp; <span class="math inline">\((4.0\times10^{22})\div(2.97\times10^{8})\)</span> &amp; <span class="math inline">\(1.35\times10^{14}\)</span> FLOP/s &amp; 总计算量 ÷ 总 GPU 秒<br>
 4 &amp; MFU &amp; <span class="math inline">\((1.35\times10^{14})\div(312\times10^{12})\)</span> &amp; 约 43% &amp; A100 的 BF16 稠密峰值<br>
@@ -933,7 +933,7 @@ window.Quarto = {
 \tag{3-19}\]</span> 即 FP32（<span class="math inline">\(Q=32\)</span>）每参数 4 字节、16 位每参数 2 字节，与第 4 章式 <a href="../ch4/s4-1.html#eq-weight-mem">（4-1）</a> 一致；梯度与权重同样大；优化器状态则按“几倍模型大小”计算。</p>
 <div id="c3-ex-trainmem" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-3　7B 模型全精度训练要多少显存</p>
+<p>例 3-4　7B 模型全精度训练要多少显存</p>
 </div>
 <p>用 FP32 全精度、SGD 优化器训练（或全量微调）一个 <span class="math inline">\(7\times10^{9}\)</span> 参数的模型，不计激活值，模型状态需要多少显存？再与混合精度 + AdamW 比较。</p>
 <div class="cthreecalc">
@@ -956,7 +956,7 @@ window.Quarto = {
 \tag{3-20}\]</span> <span class="math inline">\(T\)</span> 为序列长度，<span class="math inline">\(B\)</span> 为批大小，<span class="math inline">\(H\)</span> 为注意力头数。括号中第二项来自注意力分数矩阵，随序列长度平方增长。</p>
 <div id="c3-ex-act" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-4　LLaMA-7B 训练的激活值</p>
+<p>例 3-5　LLaMA-7B 训练的激活值</p>
 </div>
 <p>用混合精度 + AdamW 训练 LLaMA-7B（<span class="math inline">\(L=32\)</span>，<span class="math inline">\(d=4096\)</span>，<span class="math inline">\(H=32\)</span>），序列长度 <span class="math inline">\(T=2048\)</span>，批大小 <span class="math inline">\(B=1\)</span>。估算总显存。</p>
 <div class="cthreecalc">
@@ -976,7 +976,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-8　用 BF16 混合精度 + AdamW 训练 LLaMA-7B 的显存构成（序列长度 2048，按例 <a href="../ch3/s3-5.html#c3-ex-act">3-4</a> 估算，未计临时缓冲区）。模型状态固定为约 112 GB，激活值随批大小线性增长，激活重计算可把它压到 1 GB 以内</p>
+<p>图 3-8　用 BF16 混合精度 + AdamW 训练 LLaMA-7B 的显存构成（序列长度 2048，按例 <a href="../ch3/s3-5.html#c3-ex-act">3-5</a> 估算，未计临时缓冲区）。模型状态固定为约 112 GB，激活值随批大小线性增长，激活重计算可把它压到 1 GB 以内</p>
 </div>
 </div>
 <p>减少激活值显存的常用方法是<strong>激活重计算</strong>（activation recomputation，也称梯度检查点、激活检查点）：前向时只保存每层的输入，反向时把该层的前向重新算一遍，恢复所需的激活值。这样每层只需保存约 <span class="math inline">\(2TBd\)</span> 字节（上例中 32 层合计约 0.54 GB），代价是多做约一次前向计算，总计算量增加约三分之一。</p>
@@ -986,14 +986,14 @@ window.Quarto = {
 <p>上面两笔账说明，7B 模型已经既算不完又装不下；千亿参数时问题严重得多。大模型训练的挑战常被概括为“四堵墙”：</p>
 <ul>
 <li><p><strong>内存墙</strong>：显存装不下模型状态和激活值。2000 亿参数的模型不做任何显存优化时，仅模型状态就要 <span class="math inline">\((2\times10^{11})\times16\)</span> 字节 <span class="math inline">\(=3200\,\text{GB}\)</span>，加上激活值超过 3500 GB，相当于数十张 80 GB 显卡的总显存。</p></li>
-<li><p><strong>性能墙</strong>：即使装得下，单卡算力也远远不够（例 <a href="../ch3/s3-5.html#c3-ex-flops">3-2</a>），需要芯片足够强，也需要调度与各种并行优化足够高效。</p></li>
+<li><p><strong>性能墙</strong>：即使装得下，单卡算力也远远不够（例 <a href="../ch3/s3-5.html#c3-ex-flops">3-3</a>），需要芯片足够强，也需要调度与各种并行优化足够高效。</p></li>
 <li><p><strong>通信墙</strong>：计算分到多张卡后，卡间要频繁交换梯度、参数和激活值。通信量取决于参数量、计算类型、数据量、集群带宽拓扑和通信策略，设计不当时 GPU 大部分时间在等通信。</p></li>
 <li><p><strong>调优墙</strong>：在数千个节点上同时保证计算的正确性、性能和可用性极其困难，任何一张卡故障都可能中断训练，手工设计的分布式方案难以面面俱到。</p></li>
 </ul>
 <p><strong>分布式训练</strong>把训练任务分解为多个子任务，分配到多个计算设备上并行执行。按切分对象不同，有表 <a href="../ch3/s3-5.html#c3-tab-parallel">3-8</a> 所列的几种方式；它们的机制、ZeRO 各阶段的显存公式与示意图见第 <a href="../ch4/s4-3.html#subsec-parallel">4.3.4</a> 小节和图 <a href="../ch4/s4-3.html#figure-parallel">4-7</a>、图 <a href="../ch4/s4-3.html#figure-zero">4-8</a>。</p>
 <div id="c3-tab-parallel" class="booktab">
 <div class="tabcap">
-<p>表 3-8　分布式训练的并行方式（机制详见第 4 章）</p>
+<p>表 3-8　分布式训练的并行方式（机制详见第 4 章第 <a href="../ch4/s4-3.html">4.3</a> 节）</p>
 </div>
 <table class="caption-top table">
 <thead>

@@ -791,7 +791,7 @@ window.Quarto = {
 <p><strong>人工智能</strong>（Artificial Intelligence，AI）研究如何让机器完成通常需要人类智能才能完成的任务，例如感知、推理、规划、交流和行动<sup><a href="../ch1/references.html#ref-1">[1]</a></sup>。它是一个按<strong>目标</strong>界定的研究领域，并不指某一种算法。实现这个目标有两种基本思路。一种是由人写规则：例如早期的垃圾邮件过滤器由工程师列出“含有‘中奖’且含有链接就判为垃圾邮件”这样的条件，再由程序逐条匹配。规则清楚易懂，但现实情况千变万化，规则永远写不全。另一种是让机器从数据中学规律，这就是机器学习。</p>
 <p><strong>机器学习</strong>（Machine Learning，ML）不要求开发者为每种情形写规则，而是给出大量样本（例如一百万封标注过“垃圾/正常”的邮件），让算法自动调整一个带参数的函数，使它在这些样本上尽量答对，并期望它在没见过的新样本上也答对。模型“学到”的东西就保存在这些参数里。</p>
 <p><strong>深度学习</strong>（Deep Learning，DL）是机器学习的一类方法，所用的函数是由很多层简单变换叠起来的<strong>神经网络</strong>。层数多带来的好处是：网络能够从原始数据（像素、声波、文字编号）开始逐层提炼出越来越抽象的<strong>表示</strong>，不必再由人设计特征<sup><a href="../ch1/references.html#ref-2">[2]</a></sup>。2010 年代以来，语音识别、图像识别和机器翻译的性能跃升，主要都来自深度学习。</p>
-<p>三者是层层包含的关系：人工智能范围最广，机器学习是实现它的主要途径，深度学习又是机器学习中最成功的一类方法（图 <a href="../ch1/s1-1.html#c1-fig-concepts">1-3</a>）。大语言模型是一个深度神经网络，因此位于这一谱系之内。神经网络本身如何计算、如何训练，是第 2 章的内容。</p>
+<p>三者是层层包含的关系：人工智能范围最广，机器学习是实现它的主要途径，深度学习又是机器学习中最成功的一类方法（图 <a href="../ch1/s1-1.html#c1-fig-concepts">1-3</a>）。大语言模型是一个深度神经网络，因此位于这一谱系之内。神经网络本身如何计算、如何训练，见第 <a href="../ch2/s2-1.html">2.1</a> 节。</p>
 <div id="c1-fig-concepts" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -852,7 +852,7 @@ window.Quarto = {
 </section>
 <section id="c1-subsec-llm" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-llm">1.1.3　大语言模型、基础模型与多模态模型</h2>
-<p><strong>大语言模型</strong>　 <strong>大语言模型</strong>是以文本为主要处理对象、参数规模很大、在海量文本上训练出来的深度神经网络。这个定义包含四个要素：它是一个<strong>深度学习模型</strong>（几乎都采用 Transformer 这种神经网络结构，第 <a href="../ch1/s1-3.html#c1-subsec-transformer">1.3.3</a> 小节介绍它的由来，第 2 章讲它的机制）；它从<strong>大量文本数据</strong>中学习语言的规律和其中蕴含的知识；它具备<strong>自然语言理解与生成</strong>能力；同一个模型可以完成问答、摘要、翻译、信息抽取、写代码等多种<strong>自然语言任务</strong>。</p>
+<p><strong>大语言模型</strong>　 <strong>大语言模型</strong>是以文本为主要处理对象、参数规模很大、在海量文本上训练出来的深度神经网络。这个定义包含四个要素：它是一个<strong>深度学习模型</strong>（几乎都采用 Transformer 这种神经网络结构，第 <a href="../ch1/s1-3.html#c1-subsec-transformer">1.3.3</a> 小节介绍它的由来，它的机制见第 <a href="../ch2/s2-3.html">2.3</a> 节）；它从<strong>大量文本数据</strong>中学习语言的规律和其中蕴含的知识；它具备<strong>自然语言理解与生成</strong>能力；同一个模型可以完成问答、摘要、翻译、信息抽取、写代码等多种<strong>自然语言任务</strong>。</p>
 <p>“大”首先指参数多。业内常用“7B”“70B”这样的写法表示参数量，其中 B 是英文 billion（十亿）的缩写，7B 即 <span class="math inline">\(7\times10^{9}\)</span> 个参数。2020 年的 GPT-3 有 1750 亿个参数<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>，此后的前沿模型普遍在千亿到万亿量级。但参数量不是唯一标准：训练数据的数量与质量、训练计算量和训练方法共同决定能力，一个数据充足、训练得当的小模型可以胜过训练不足的大模型（第 <a href="../ch1/s1-3.html#c1-subsec-scale">1.3.4</a> 小节）。</p>
 <p><strong>基础模型</strong>　 2021 年，斯坦福大学的研究者提出<strong>基础模型</strong>（Foundation Model）一词，指在广泛数据上大规模训练、之后可以通过提示或微调适配多种下游任务的模型<sup><a href="../ch1/references.html#ref-4">[4]</a></sup>。这个词强调的是模型的<strong>用法</strong>：先花大成本训练一个通用的“底座”，再由许多应用在它上面搭建。它也提醒了一个风险：底座的缺陷（偏见、错误知识、安全漏洞）会被所有下游应用继承。</p>
 <p><strong>多模态模型</strong>　 <strong>多模态模型</strong>把处理对象从文本扩展到图像、音频、视频等其他“模态”的数据。一种常见做法是：用一个专门的编码器把图像切成小块并转换成一串向量，使它们和文字词元处在同一个表示空间里，再与文字一起送入语言模型统一处理；需要输出图像或语音时，再接上相应的生成模块。这样构成的系统称为<strong>多模态大模型</strong>（Multimodal LLM，MLLM），只处理图像和文字的又常称<strong>视觉语言模型</strong>（Vision-Language Model，VLM）。它能完成看图描述、图表与文档理解、视频理解、语音对话等任务。多模态模型通常以大语言模型为语言与推理的核心，但并不只是“给语言模型开一个图片入口”：不同模态的数据如何对齐、如何评测，都比纯文本复杂得多。</p>

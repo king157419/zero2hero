@@ -787,7 +787,7 @@ window.Quarto = {
 </div>
 <section id="c5-subsec-hallucination" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-hallucination">5.1.1　模型为什么会自信地答错</h2>
-<p>先看模型是怎样“知道”一件事的。语言模型在训练时只做一件事：给定前文 <span class="math inline">\(x_{&lt;t}\)</span>，提高真实下一个 token <span class="math inline">\(x_t\)</span> 的条件概率 <span class="math inline">\(P(x_t\mid x_{&lt;t})\)</span>。训练语料中反复出现的事实，会以统计规律的形式沉淀在模型参数 <span class="math inline">\(\theta\)</span> 里；回答问题时，模型把问题当作前文，逐个 token 选出最可能的续写。这里有两个关键点：第一，参数在训练结束时就固定了，此后发生的事模型无从知道；第二，训练目标衡量的是续写是否符合语料的统计规律（“像不像”），并不直接检验内容是否属实（“对不对”）。当问题落在模型没见过的范围时，它仍然会按统计规律给出一段最像答案的文字，而不会自动停下来说“我不知道”。由此产生的、语气自信但内容不真实的输出称为<strong>幻觉</strong>（hallucination），其成因与分类见第 2 章。</p>
+<p>先看模型是怎样“知道”一件事的。语言模型在训练时只做一件事：给定前文 <span class="math inline">\(x_{&lt;t}\)</span>，提高真实下一个 token <span class="math inline">\(x_t\)</span> 的条件概率 <span class="math inline">\(P(x_t\mid x_{&lt;t})\)</span>。训练语料中反复出现的事实，会以统计规律的形式沉淀在模型参数 <span class="math inline">\(\theta\)</span> 里；回答问题时，模型把问题当作前文，逐个 token 选出最可能的续写。这里有两个关键点：第一，参数在训练结束时就固定了，此后发生的事模型无从知道；第二，训练目标衡量的是续写是否符合语料的统计规律（“像不像”），并不直接检验内容是否属实（“对不对”）。当问题落在模型没见过的范围时，它仍然会按统计规律给出一段最像答案的文字，而不会自动停下来说“我不知道”。由此产生的、语气自信但内容不真实的输出称为<strong>幻觉</strong>（hallucination），其成因与分类见第 <a href="../ch2/s2-4.html#c2-subsec-hallucination">2.4.7</a> 小节。</p>
 <p>在企业和专业场景中，这一机制表现为三类具体问题（表 <a href="../ch5/s5-1.html#c5-tab-three">5-1</a>）。</p>
 <div id="c5-tab-three" class="booktab">
 <div class="tabcap">
@@ -828,7 +828,7 @@ window.Quarto = {
 </section>
 <section id="c5-subsec-why-not-ft" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-why-not-ft">5.1.2　为什么不直接微调</h2>
-<p>一个直接的想法是<strong>微调</strong>（fine-tuning）：把企业文档整理成训练数据，在现有模型上继续训练，让模型“记住”这些知识（微调方法见第 3 章）。这条路在“记住不断变化的事实”上有三个障碍：</p>
+<p>一个直接的想法是<strong>微调</strong>（fine-tuning）：把企业文档整理成训练数据，在现有模型上继续训练，让模型“记住”这些知识（微调方法见第 <a href="../ch3/s3-6.html">3.6</a> 节）。这条路在“记住不断变化的事实”上有三个障碍：</p>
 <ul>
 <li><p><strong>更新成本高</strong>：每次知识变化都要重新准备数据、训练和评测，算力与人力开销都不小；</p></li>
 <li><p><strong>更新周期长</strong>：从制度发布到模型上线往往要几天到几周，而知识库更新可以按小时计；</p></li>
@@ -844,7 +844,7 @@ window.Quarto = {
 <li><p><strong>增强</strong>（Augment）：输入问题与片段，按提示词模板拼装成上下文，输出一段完整的提示词；</p></li>
 <li><p><strong>生成</strong>（Generate）：输入提示词，由大模型生成回答，并标注所依据片段的编号。</p></li>
 </ol>
-<p>模型参数始终不变。用考试打比方，这相当于把闭卷考试改成开卷考试：考生还是那个考生，但答题前桌上已经放好了相关的几页资料。</p>
+<p>生成模型的参数始终不变。用考试打比方，这相当于把闭卷考试改成开卷考试：考生还是那个考生，但答题前桌上已经放好了相关的几页资料。</p>
 <p><strong>来历</strong>　 这一思路由 Facebook AI Research（现 Meta AI）的 Lewis 等人在 2020 年提出<sup><a href="../ch5/references.html#ref-3">[3]</a></sup>。他们把知识分为两类：存放在模型权重里的<strong>参数化记忆</strong>（parametric memory），以及存放在外部索引里、可以随时替换的<strong>非参数化记忆</strong>（non-parametric memory）。具体实现中，非参数化记忆是把维基百科切成约 2100 万个 100 词段落后建立的稠密向量索引，检索器采用 DPR（Dense Passage Retrieval，稠密段落检索）模型<sup><a href="../ch5/references.html#ref-4">[4]</a></sup>，即用两个编码器分别把问题和段落编码成向量，生成器采用预训练的序列到序列模型 BART；检索器的查询编码器与生成器端到端联合训练，文档编码器与索引则保持固定。论文比较了两种用法：<strong>RAG-Sequence</strong> 在生成整个答案时使用同一批检索段落；<strong>RAG-Token</strong> 在生成每个 token 时都可以依据不同的段落。该模型在三个开放域问答数据集上取得了当时的最好成绩，生成的文本也比纯参数模型更具体、更符合事实。同一时期，Google 的 REALM<sup><a href="../ch5/references.html#ref-5">[5]</a></sup> 把检索器引入了预训练阶段。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>

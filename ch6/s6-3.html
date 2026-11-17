@@ -812,7 +812,7 @@ window.Quarto = {
 <li><p><strong>行动</strong>：生成文本回复、调用 API、更新数据库、给出建议或对数据分类；对机器人而言则是在物理空间中移动。</p></li>
 </ul>
 <p>行动之后，智能体继续感知环境变化，并据此调整后续决策，形成反馈循环。</p>
-<p>闭环的价值在于<strong>纠错</strong>。一次 LLM 调用是开环的：输出不会回到输入端，它无从知道自己错在哪里。闭环系统在每一轮都能用真实观测检验上一步的预期：预期“这个接口返回车次列表”，实际却返回“无权限”，智能体就能发现前提不成立并调整。</p>
+<p>闭环的价值在于<strong>纠错</strong>。一次 LLM 调用是开环的：输出的后果不会回到输入端，它无从知道自己错在哪里。闭环系统在每一轮都能用真实观测检验上一步的预期：预期“这个接口返回车次列表”，实际却返回“无权限”，智能体就能发现前提不成立并调整。</p>
 </section>
 <section id="c6-subsec-react" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-react">6.3.2　ReAct：把推理与行动交织起来</h2>
@@ -823,7 +823,6 @@ window.Quarto = {
 <li><p><strong>观察</strong>（Observation）：工具返回的结果，由框架写回上下文。</p></li>
 </ul>
 <p>下面是差旅智能体处理“下周三去上海开一天会，预算三千”的一条完整轨迹。设今天是周四（11 月 12 日），用户常驻北京，会议在浦东，上午 9 点开始，下午 5 点结束；可用工具有 <code>get_policy</code>（查报销制度）、<code>search_trains</code>、<code>search_flights</code>、<code>search_hotels</code>、<code>calc</code>（计算）、<code>ask_user</code>（请用户确认）和 <code>book</code>（提交预订）。</p>
-<div class="center">
 <div class="tabular">
 <p>ll<br>
 思考 1 &amp; 会议 9 点开始，当天早上出发赶不上，需要前一晚到达并住一晚。先查报销上限，避免方案不能报销。<br>
@@ -838,7 +837,7 @@ window.Quarto = {
 思考 4 &amp; 乙酒店无窗，排除。核算总价：车票 1324 元 + 住宿 548 元 + 市内交通预估 200 元。<br>
 行动 4 &amp; <code>calc("1324 + 548 + 200")</code><br>
 观察 4 &amp; 2072<br>
-思考 5 &amp; 总价 2072 元，低于 3000 元预算；住宿 548 元/晚、高铁二等座都符合报销制度。订票会产生费用，属于不可撤销的操作，先请用户确认。<br>
+思考 5 &amp; 总价 2072 元，低于 3000 元预算；住宿 548 元/晚、高铁二等座都符合报销制度。订票会产生费用，取消还可能有损失，属于高风险操作，先请用户确认。<br>
 行动 5 &amp; <code>ask_user("方案：17 日乘车次 A 去、18 日乘车次 B 回，住甲酒店一晚，合计约 2072 元。是否预订？")</code><br>
 观察 5 &amp; 用户：可以，订吧。<br>
 思考 6 &amp; 用户已确认，提交预订。<br>
@@ -847,8 +846,7 @@ window.Quarto = {
 回复 &amp; 已为您订好：17 日车次 A 去上海，住甲酒店一晚；18 日车次 B 返京。合计约 2072 元，订单号如下……<br>
 </p>
 </div>
-</div>
-<p>这条轨迹体现了闭环的几个要点：思考 1 根据会议时间推出“需要前一晚到达”这个隐含约束；思考 2 说明了为什么先查高铁，并把会场到车站的时间算进返程条件；思考 3 从记忆中取出用户偏好并写进查询条件；行动 4 把算术交给计算工具；思考 5 在不可撤销的操作之前停下来请用户确认。车次、票价、酒店都是演示用的假设数据，实际系统中由工具实时返回。图 <a href="../ch6/s6-3.html#c6-fig-react">6-5</a> 给出这一循环的结构。</p>
+<p>这条轨迹体现了闭环的几个要点：思考 1 根据会议时间推出“需要前一晚到达”这个隐含约束；思考 2 说明了为什么先查高铁，并把会场到车站的时间算进返程条件；思考 3 从记忆中取出用户偏好并写进查询条件；行动 4 把算术交给计算工具；思考 5 在高风险操作之前停下来请用户确认。车次、票价、酒店都是演示用的假设数据，实际系统中由工具实时返回。图 <a href="../ch6/s6-3.html#c6-fig-react">6-5</a> 给出这一循环的结构。</p>
 <div id="c6-fig-react" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -929,16 +927,17 @@ window.Quarto = {
 <p>图 6-6　例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 中每次模型调用的输入 token 数。柱高为该次调用读入的全部上下文（数字为 token 数）；已有轨迹逐轮累积，使累计输入随轮数按平方增长</p>
 </div>
 </div>
-<p>例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 说明，智能体的主要开销在<strong>反复输入的上下文</strong>，而不是模型写出的文字。这与推理系统的工作方式直接相关：每次调用都要先对输入做预填充，再逐 token 解码（第 4 章第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节），7 次串行调用的时延是 7 段“预填充 + 解码”之和。每次调用的输入都以上一次的全部输入为开头、只在末尾追加新内容，因此推理服务可以复用这段公共前缀的 KV 缓存（第 4 章第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节），只对新增部分做预填充；部分模型服务也对命中缓存的输入按较低价格计费。降低成本的另外两条路是压缩轨迹（第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节）和减少轮数（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。</p>
+<div class="widget" data-widget="c6tokens"></div>
+<p>例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 说明，智能体的主要开销在<strong>反复输入的上下文</strong>，而不是模型写出的文字。这与推理系统的工作方式直接相关：每次调用都要先对输入做预填充（即一次性处理全部输入 token），再逐 token 解码（第 4 章第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节），7 次串行调用的时延是 7 段“预填充 + 解码”之和。每次调用的输入都以上一次的全部输入为开头、只在末尾追加新内容，因此推理服务可以复用这段公共前缀的 KV 缓存（Key-Value cache，键值缓存；第 4 章第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节），只对新增部分做预填充；部分模型服务也对命中缓存的输入按较低价格计费。降低成本的另外两条路是压缩轨迹（第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节）和减少轮数（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。</p>
 <p><strong>ReAct 之外的形态</strong>　 ReAct 不是唯一的组织方式。<strong>计划—执行</strong>（Plan-and-Execute）先让模型一次写出完整计划，再逐步执行，必要时才重新规划<sup><a href="../ch6/references.html#ref-9">[9]</a></sup>，适合步骤清楚的任务，调用次数也更少；<strong>Reflexion</strong><sup><a href="../ch6/references.html#ref-3">[3]</a></sup>在一次尝试失败后让模型用文字总结教训并写入记忆，下次尝试时参考，适合可以反复尝试的任务；<strong>思维树</strong><sup><a href="../ch6/references.html#ref-10">[10]</a></sup>在思考层面展开多个候选并评估、回溯，适合需要探索的解谜类任务。它们的共同点是把隐含的推理写成可检查的中间结构，区别在于写出的粒度和时机。</p>
 </section>
 <section id="c6-subsec-division" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-division">6.3.3　LLM 与 Agent 框架的分工</h2>
 <p>既然模型足够强，能不能把所有事都交给它？实践表明不行。语言模型擅长<strong>语义上的判断</strong>，例如“这句话是不是在要求退款”；不擅长<strong>状态上的保证</strong>，例如“这个订单是否已经付过款”。把后者交给模型，等于让一个概率系统承担确定性的职责。</p>
-<p>因此智能体由两部分组成：LLM 负责理解、分析和推理；<strong>Agent 框架</strong>提供让“思考结果”变成实际行动的脚手架——工具接口、执行循环和状态管理。具体而言，框架还承担三件 LLM 自身做不到的事：<strong>记忆管理</strong>，通过外接向量数据库、知识图谱等记忆模块，弥补上下文窗口有限、无法长期记忆的不足；<strong>工具使用编排</strong>，定义可供模型选择的工具集并管理调用过程；<strong>多轮交互与任务持续</strong>，在长时间、多步骤的任务中维护任务状态，协调模型在不同阶段的参与，保证任务连贯并最终完成。表 <a href="../ch6/s6-3.html#c6-tab-division">6-6</a> 列出了分工。</p>
+<p>因此智能体由两部分组成：LLM 负责理解、分析和推理；<strong>Agent 框架</strong>提供让“思考结果”变成实际行动的脚手架——工具接口、执行循环和状态管理。具体而言，框架还承担三件 LLM 自身做不到的事：<strong>记忆管理</strong>，通过外接向量数据库、知识图谱等记忆模块，弥补上下文窗口有限、无法长期记忆的不足；<strong>工具使用编排</strong>，定义可供模型选择的工具集并管理调用过程；<strong>多轮交互与任务持续</strong>，在长时间、多步骤的任务中维护任务状态，协调模型在不同阶段的参与，保证任务连贯并最终完成。表 <a href="../ch6/s6-3.html#c6-tab-division">6-7</a> 列出了分工。</p>
 <div id="c6-tab-division" class="booktab">
 <div class="tabcap">
-<p>表 6-6　LLM 与 Agent 框架的分工</p>
+<p>表 6-7　LLM 与 Agent 框架的分工</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -1041,6 +1040,7 @@ window.Quarto = {
 </table>
 <p><strong>数据流向</strong>：单步成功率 → 连乘得到任务成功率；校验把“看不见的失败”变成“可重试的失败”，以约 5% 的额外调用把成功率从约 60% 提高到约 97.5%。</p>
 </div>
+<div class="widget" data-widget="c6rel"></div>
 <p>例 <a href="../ch6/s6-3.html#c6-ex-reliability">6-2</a> 说明了长任务难做的原因，也指出了两条并行的改进方向：<strong>减少步数</strong>（更好的规划、合并工具）和<strong>提高单步可靠性</strong>（校验、重试、更专一的工具）。它依赖“失败能被发现”这一前提：校验不到位时，重试就无从谈起。</p>
 <p><strong>人机协同</strong>　 人的注意力是稀缺资源。如果系统事无巨细都请求确认，用户很快会习惯性地点“同意”，安全性反而下降。合理的做法是按风险分级：低风险操作自动执行、事后告知；中风险操作执行前给出预览；高风险操作逐项确认，并说明理由。这与第 <a href="../ch6/s6-2.html#c6-subsec-env">6.2.4</a> 小节的“可逆区/不可逆区”是同一思路——上面轨迹中的思考 5 就是一次高风险确认。</p>
 

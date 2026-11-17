@@ -790,7 +790,7 @@ window.Quarto = {
 <div class="bookbox guide">
 <p>回到本章开头的问题：一所高校要为一门专业课程做问答模型，部署在自己的服务器上。从选型到回答学生的第一个问题，要经过哪些步骤，每一步用到本章哪些技术、需要多少资源？本节按图 <a href="../ch3/s3-12.html#c3-fig-case">3-24</a> 的八个步骤，用前面各节的公式逐一估算。结论是：借助开源基础模型和参数高效微调，资源需求从“数百张 GPU、数月”降到“几张 GPU、几天”；决定最终效果的往往不再是算力，而是数据质量和评估的严谨程度。</p>
 </div>
-<p>学生可以随时提问课程中的概念、公式和习题思路，模型给出准确、清楚的讲解；遇到作业题时引导思路而不是直接给出答案；数据不出校园。为使估算具体，本节以 Qwen2.5-7B 的结构为例：实际参数量约 <span class="math inline">\(7.6\times10^{9}\)</span>，28 层，隐藏维度 3584，4 个 KV 头，每头 128 维。第 4 章第 <a href="../ch4/s4-6.html">4.6</a> 节为同类助手做过一次系统设计，侧重“检索 + 推理服务”；本节侧重“把模型训练出来”，两者可以组合。</p>
+<p>学生可以随时提问课程中的概念、公式和习题思路，模型给出准确、清楚的讲解；遇到作业题时引导思路而不是直接给出答案；数据不出校园。为使估算具体，本节以 Qwen2.5-7B 的结构为例，各步骤中的数据量（如 2 亿 token 的课程语料、5 万条指令数据、5000 对偏好数据）是为计算而设定的假设值，实际项目应按自己的数据替换。该模型实际参数量约 <span class="math inline">\(7.6\times10^{9}\)</span>，28 层，隐藏维度 3584，28 个查询头，4 个 KV 头，每头 128 维。第 4 章第 <a href="../ch4/s4-6.html">4.6</a> 节为同类助手做过一次系统设计，侧重“检索 + 推理服务”；本节侧重“把模型训练出来”，两者可以组合。</p>
 <div id="c3-fig-case" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -825,7 +825,7 @@ window.Quarto = {
 </section>
 <section id="第六步合并与量化" class="level2">
 <h2 class="anchored" data-anchor-id="第六步合并与量化">3.12.6　第六步：合并与量化</h2>
-<p>训练得到的 LoRA 模块按 <span class="math inline">\(W=W_0+\frac{\alpha}{r}BA\)</span> 合并回原始权重，得到与原模型结构相同、以 BF16 存储的完整模型，约 <span class="math inline">\(7.6\times10^{9}\times2\approx15.2\,\text{GB}\)</span>。再按部署方式选择量化方案：在服务器上用 vLLM 部署时，可以保持 BF16，或用 AWQ、GPTQ 量化为 4 位以容纳更多并发；若希望学生在自己的电脑上离线使用，转换为 GGUF 格式的 Q4_K_M 版本（约 4.7 GB），通过 Ollama 或 LM Studio 运行（例 <a href="../ch3/s3-11.html#c3-ex-laptop">3-10</a>）。</p>
+<p>训练得到的 LoRA 模块按 <span class="math inline">\(W=W_0+\frac{\alpha}{r}BA\)</span> 合并回原始权重，得到与原模型结构相同、以 BF16 存储的完整模型，约 <span class="math inline">\(7.6\times10^{9}\times2\approx15.2\,\text{GB}\)</span>。再按部署方式选择量化方案：在服务器上用 vLLM 部署时，可以保持 BF16，或用 AWQ、GPTQ 量化为 4 位以容纳更多并发；若希望学生在自己的电脑上离线使用，转换为 GGUF 格式的 Q4_K_M 版本（约 4.7 GB），通过 Ollama 或 LM Studio 运行（例 <a href="../ch3/s3-11.html#c3-ex-laptop">3-12</a>）。</p>
 </section>
 <section id="第七步部署与容量估算" class="level2">
 <h2 class="anchored" data-anchor-id="第七步部署与容量估算">3.12.7　第七步：部署与容量估算</h2>
@@ -833,9 +833,9 @@ window.Quarto = {
 <ul>
 <li><p>推理框架可用 90% 的显存，即 <span class="math inline">\(24\times0.9=21.6\,\text{GB}\)</span>（显卡标称的 24 GB 实为 24 GiB，约 <span class="math inline">\(25.8\times10^{9}\)</span> 字节；这里按 <span class="math inline">\(24\times10^{9}\)</span> 字节计，估算略偏保守）；</p></li>
 <li><p>权重约 15.2 GB，框架和临时张量约 1 GB，剩余 <span class="math inline">\(21.6-15.2-1=5.4\,\text{GB}\)</span> 给 KV 缓存；</p></li>
-<li><p>每 token 的 KV 缓存为 <span class="math inline">\(2\times28\times4\times128\times2=57\,344\)</span> 字节，5.4 GB 可容纳 <span class="math inline">\((5.4\times10^{9})\div57\,344\approx9.4\times10^{4}\)</span> 个 token；每段对话按占满 4096 个 token 计，约可同时服务 <span class="math inline">\(94\,000\div4096\approx23\)</span> 个对话；这是上限估算的保守情形，实际对话通常更短，能服务更多。</p></li>
+<li><p>每 token 的 KV 缓存为 <span class="math inline">\(2\times28\times4\times128\times2=57\,344\)</span> 字节，5.4 GB 可容纳 <span class="math inline">\((5.4\times10^{9})\div57\,344\approx94\,168\)</span> 个 token；每段对话按占满 4096 个 token 计，<span class="math inline">\(94\,168\div4096\approx22.99\)</span>，并发数要向下取整，最多同时容纳 22 个完整的对话；这是上限估算的保守情形，实际对话通常更短，能服务更多。</p></li>
 </ul>
-<p>以 RTX 4090 一类显卡（显存带宽约 1008 GB/s）为例，单请求解码速度上限约为 <span class="math inline">\(1008\div15.2\approx66\)</span> token/s（式 <a href="../ch3/s3-9.html#c3-eq-decode-speed">（3-35）</a>，忽略 KV 缓存的读取量）。若并发需求更高，改用 4 位量化版本：权重降到约 5 GB，KV 缓存可用约 <span class="math inline">\(21.6-5-1=15.6\,\text{GB}\)</span>，可容纳约 <span class="math inline">\(27\times10^{4}\)</span> 个 token，即约 66 个 4096 token 的对话，单请求的解码上限也随之提高。仍不够时，再考虑增加显卡、使用张量并行。</p>
+<p>以 RTX 4090 一类显卡（显存带宽约 1008 GB/s）为例，单请求解码速度上限约为 <span class="math inline">\(1008\div15.2\approx66\)</span> token/s（式 <a href="../ch3/s3-9.html#c3-eq-decode-speed">（3-35）</a>，忽略 KV 缓存的读取量）。若并发需求更高，改用 4 位量化版本：权重按 Q4_K_M 约 0.62 字节/参数计，为 <span class="math inline">\(7.6\times10^{9}\times0.62\approx4.7\,\text{GB}\)</span>（与例 <a href="../ch3/s3-11.html#c3-ex-laptop">3-12</a> 的文件大小一致），KV 缓存可用约 <span class="math inline">\(21.6-4.7-1=15.9\,\text{GB}\)</span>，可容纳 <span class="math inline">\((15.9\times10^{9})\div57\,344\approx2.77\times10^{5}\)</span> 个 token，即 <span class="math inline">\(277\,000\div4096\approx67.7\)</span>，最多约 67 个 4096 token 的对话；单请求的解码上限也随之提高到约 <span class="math inline">\(1008\div4.7\approx214\)</span> token/s。仍不够时，再考虑增加显卡、使用张量并行。</p>
 </section>
 <section id="第八步处理一次用户请求" class="level2">
 <h2 class="anchored" data-anchor-id="第八步处理一次用户请求">3.12.8　第八步：处理一次用户请求</h2>

@@ -867,14 +867,14 @@ window.Quarto = {
 <section id="c2-subsec-rnn" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-rnn">2.2.4　循环网络与注意力：处理任意长的序列</h2>
 <p>为了突破固定长度的上下文，<strong>循环神经网络</strong>（RNN）用一个隐藏状态 <span class="math inline">\(\boldsymbol{h}_t\)</span> 记住读过的内容，每读入一个词就更新一次： <span class="math display">\[\boldsymbol{h}_t = \tanh\bigl(W\boldsymbol{h}_{t-1} + U\boldsymbol{x}_t + \boldsymbol{b}\bigr).
-\tag{2-8}\]</span> 理论上 <span class="math inline">\(\boldsymbol{h}_t\)</span> 包含了从开头到当前的全部信息。但反向传播时，梯度要沿时间步一路连乘 <span class="math inline">\(W\)</span>，序列一长就会指数级地衰减或增大，这就是<strong>梯度消失</strong>与<strong>梯度爆炸</strong>。1997 年提出的<strong>长短期记忆网络</strong>（LSTM）<sup><a href="../ch2/references.html#ref-11">[11]</a></sup>用门控机制控制信息的写入、遗忘和输出，大大缓解了这一问题。2014 年的<strong>序列到序列</strong>（seq2seq）模型用一个（多层）LSTM 编码器把源句压成一个向量，再用另一个 LSTM 解码器生成译文<sup><a href="../ch2/references.html#ref-12">[12]</a></sup>，开启了神经机器翻译。</p>
-<p>seq2seq 的瓶颈很明显：无论源句多长，都要压进一个固定长度的向量。同年，巴达瑙（Dzmitry Bahdanau）等人提出<strong>注意力机制</strong><sup><a href="../ch2/references.html#ref-13">[13]</a></sup>：解码器生成每个词时，都可以回头查看编码器在所有位置上的状态，并自己决定重点看哪里——翻译“apple”时，注意力自然落在源句的“苹果”上。</p>
-<p>循环结构还有一个缺陷：第 <span class="math inline">\(t\)</span> 步必须等第 <span class="math inline">\(t-1\)</span> 步算完，无法在序列维度上并行。2017 年的 Transformer<sup><a href="../ch2/references.html#ref-14">[14]</a></sup>把这一点推到底：既然注意力已经能在任意两个位置之间直接建立联系，就把它用到同一序列内部（自注意力），干脆去掉循环。所有位置可以同时计算，GPU 的并行能力得以充分发挥，这是此后模型能够做“大”的关键前提之一。Transformer 的内部计算是第 <a href="../ch2/s2-3.html">2.3</a> 节的主题。</p>
+\tag{2-8}\]</span> 理论上 <span class="math inline">\(\boldsymbol{h}_t\)</span> 包含了从开头到当前的全部信息。但反向传播时，梯度要沿时间步一路连乘（与循环权重 <span class="math inline">\(W\)</span> 和激活函数的导数有关的）因子，序列一长就会指数级地衰减或增大，这就是<strong>梯度消失</strong>与<strong>梯度爆炸</strong>。1997 年提出的<strong>长短期记忆网络</strong>（LSTM）<sup><a href="../ch2/references.html#ref-11">[11]</a></sup>用门控机制控制信息的写入和输出，大大缓解了这一问题；决定何时丢弃旧信息的<strong>遗忘门</strong>是 Gers 等人在 2000 年补上的<sup><a href="../ch2/references.html#ref-12">[12]</a></sup>，今天通用的 LSTM 都带有遗忘门。2014 年的<strong>序列到序列</strong>（seq2seq）模型用一个（多层）LSTM 编码器把源句压成一个向量，再用另一个 LSTM 解码器生成译文<sup><a href="../ch2/references.html#ref-13">[13]</a></sup>，开启了神经机器翻译。</p>
+<p>seq2seq 的瓶颈很明显：无论源句多长，都要压进一个固定长度的向量。同年，巴达瑙（Dzmitry Bahdanau）等人提出<strong>注意力机制</strong><sup><a href="../ch2/references.html#ref-14">[14]</a></sup>：解码器生成每个词时，都可以回头查看编码器在所有位置上的状态，并自己决定重点看哪里——翻译“apple”时，注意力自然落在源句的“苹果”上。</p>
+<p>循环结构还有一个缺陷：第 <span class="math inline">\(t\)</span> 步必须等第 <span class="math inline">\(t-1\)</span> 步算完，无法在序列维度上并行。2017 年的 Transformer<sup><a href="../ch2/references.html#ref-15">[15]</a></sup>把这一点推到底：既然注意力已经能在任意两个位置之间直接建立联系，就把它用到同一序列内部（自注意力），干脆去掉循环；词序信息改由位置编码补上（第 <a href="../ch2/s2-3.html#c2-subsec-embed">2.3.2</a> 小节）。训练时所有位置可以同时计算，GPU 的并行能力得以充分发挥，这是此后模型能够做“大”的关键前提之一。Transformer 的内部计算是第 <a href="../ch2/s2-3.html">2.3</a> 节的主题。</p>
 </section>
 <section id="c2-subsec-pretrain-shift" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-pretrain-shift">2.2.5　预训练与大模型：两次范式转移</h2>
-<p>2018 年是预训练元年。ELMo 用双向 LSTM 生成随上下文变化的词向量，解决了一词多义<sup><a href="../ch2/references.html#ref-15">[15]</a></sup>；OpenAI 的 GPT-1<sup><a href="../ch2/references.html#ref-16">[16]</a></sup>和 Google 的 BERT<sup><a href="../ch2/references.html#ref-17">[17]</a></sup>则用 Transformer 在大规模无标注文本上预训练，再在具体任务的少量标注数据上微调，刷新了大多数自然语言处理基准。这是第一次范式转移：从“为每个任务设计一个模型”变为“<strong>预训练 + 微调</strong>”。</p>
-<p>2020 年的 GPT-3<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>带来了第二次范式转移。模型参数达到 1750 亿后，只需在提示中写几个示例，它就能完成翻译、问答、算术等任务，不再需要微调。2022 年 11 月，OpenAI 在 GPT-3.5 上叠加指令微调和基于人类反馈的强化学习（第 <a href="../ch2/s2-6.html">2.6</a> 节），发布了 ChatGPT。此后，Meta 的 LLaMA（2023）<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>推动了开源模型生态；OpenAI o1（2024）和 DeepSeek-R1（2025）<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>等推理模型又把重心从“训练得更大”扩展到“推理时想得更久”。图 <a href="../ch2/s2-2.html#c2-fig-history">2-3</a> 把这条演进路线分为五个阶段；表 <a href="../ch2/s2-2.html#c2-tab-paradigm">2-3</a> 则从“人主要做什么”的角度把它归为四种范式：统计语言模型属于“统计学习”，神经语言模型与序列模型两个阶段同属“深度学习”，后两个阶段分别对应两次范式转移。</p>
+<p>2018 年是预训练元年。ELMo 用双向 LSTM 生成随上下文变化的词向量，解决了一词多义<sup><a href="../ch2/references.html#ref-16">[16]</a></sup>；OpenAI 的 GPT-1<sup><a href="../ch2/references.html#ref-17">[17]</a></sup>和 Google 的 BERT<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>则用 Transformer 在大规模无标注文本上预训练，再在具体任务的少量标注数据上微调，在它们各自评测的大多数任务上取得了当时最好的成绩。这是第一次范式转移：从“为每个任务设计一个模型”变为“<strong>预训练 + 微调</strong>”。</p>
+<p>2020 年的 GPT-3<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>带来了第二次范式转移。模型参数达到 1750 亿后，只需在提示中写几个示例，它就能完成翻译、问答、算术等任务，不再需要微调。2022 年 11 月，OpenAI 在 GPT-3.5 上叠加指令微调和基于人类反馈的强化学习（第 <a href="../ch2/s2-6.html">2.6</a> 节），发布了 ChatGPT。此后，Meta 的 LLaMA（2023）<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>推动了开放权重模型生态；OpenAI o1（2024）和 DeepSeek-R1（2025）<sup><a href="../ch2/references.html#ref-21">[21]</a></sup>等推理模型又把重心从“训练得更大”扩展到“推理时想得更久”。图 <a href="../ch2/s2-2.html#c2-fig-history">2-3</a> 把这条演进路线分为五个阶段；表 <a href="../ch2/s2-2.html#c2-tab-paradigm">2-3</a> 则从“人主要做什么”的角度把它归为四种范式：统计语言模型属于“统计学习”，神经语言模型与序列模型两个阶段同属“深度学习”，后两个阶段分别对应两次范式转移。</p>
 <div id="c2-fig-history" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -931,7 +931,7 @@ window.Quarto = {
 \tag{2-9}\]</span> 其中先验 <span class="math inline">\(P(H)\)</span> 是看到证据前的信念，似然 <span class="math inline">\(P(E\mid H)\)</span> 衡量假设对证据的解释力，后验 <span class="math inline">\(P(H\mid E)\)</span> 是更新后的信念。现代<strong>决策论</strong>的核心可以概括为“概率论 + 效用理论”：先用概率刻画不确定性，再用效用衡量后果，选择期望效用最大的行动。</p>
 <p><strong>玻尔兹曼：把概率引入物理学</strong>　 玻尔兹曼用统计方法处理大量分子的运动：单个分子的轨迹无法追踪，就把它们当作随机运动，只研究微观状态的概率分布。热量不会自发地从冷物体流向热物体，并不是有一条定律“禁止”它，而是对宏观物体来说这种状态出现的概率小到可以忽略——这里起作用的是统计概率。他给出的<strong>玻尔兹曼分布</strong>是 <span class="math display">\[P(s) = \frac{e^{-E(s)/(kT_{\mathrm{K}})}}{\sum_{s'} e^{-E(s')/(kT_{\mathrm{K}})}},
 \tag{2-10}\]</span> 其中 <span class="math inline">\(E(s)\)</span> 是状态 <span class="math inline">\(s\)</span> 的能量，<span class="math inline">\(k\)</span> 是玻尔兹曼常数，<span class="math inline">\(T_{\mathrm{K}}\)</span> 是热力学温度。能量越低的状态概率越大，温度越高，各状态的概率越接近。第 <a href="../ch2/s2-3.html#c2-subsec-sampling">2.3.6</a> 小节会看到，大模型输出层把分数变成概率的公式与它形式相同，采样参数“温度”的名字就来源于此。</p>
-<p><strong>辛顿：相信神经网络的全部能力</strong>　 1985 年，辛顿与合作者提出<strong>玻尔兹曼机</strong><sup><a href="../ch2/references.html#ref-21">[21]</a></sup>：在神经元的状态变化中引入统计概率，网络达到平衡时，各状态的概率服从玻尔兹曼分布；为了让网络到达低能量的平衡状态，常配合<strong>模拟退火</strong>（先在高温下随机探索，再逐步降温收敛）。辛顿长期反对把符号规则与神经网络拼接起来的“混合模式”，坚信神经网络本身足以学会人类的智力。这一立场可以用昆虫识别花朵来理解：昆虫从没学过植物学的分类规则，却能凭经验认出花朵。这是一种彻底的经验主义立场；它与“用检索、工具、智能体框架弥补模型短板”的工程路线（第 <a href="../ch2/s2-4.html#c2-subsec-pros-cons">2.4.8</a> 小节）形成对照。</p>
+<p><strong>辛顿：相信神经网络的全部能力</strong>　 1985 年，辛顿与合作者提出<strong>玻尔兹曼机</strong><sup><a href="../ch2/references.html#ref-22">[22]</a></sup>：在神经元的状态变化中引入统计概率，网络达到平衡时，各状态的概率服从玻尔兹曼分布；为了让网络到达低能量的平衡状态，常配合<strong>模拟退火</strong>（先在高温下随机探索，再逐步降温收敛）。与把符号规则和神经网络拼接起来的“混合”路线不同，辛顿的研究始终走另一条路：不预先写入规则，让神经网络从数据中自己学出表示。这一立场可以用昆虫识别花朵来理解：昆虫从没学过植物学的分类规则，却能凭经验认出花朵。这是一种彻底的经验主义立场；它与“用检索、工具、智能体框架弥补模型短板”的工程路线（第 <a href="../ch2/s2-4.html#c2-subsec-pros-cons">2.4.8</a> 小节）形成对照。</p>
 <p>把这条思想史落到大模型上：模型从未被告知语法、事实或逻辑，它只是观察了数万亿个“前文 <span class="math inline">\(\to\)</span> 下一个词元”的样本，并最小化式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a>。它学到的正是休谟所说的“习惯性联想”的统计版本。在这个意义上，大模型确实是经验论的产物。问题的另一面是：为了把下一个词预测好，模型可能不得不在内部形成对世界的压缩表示（第 <a href="../ch2/s2-4.html#c2-subsec-compression">2.4.5</a> 小节），这使“纯粹的统计”与“理解”之间的界线变得模糊。</p>
 </section>
 <section id="c2-subsec-anti-einstein" class="level2">
@@ -945,13 +945,13 @@ window.Quarto = {
 <li><p><strong>广泛性似乎战胜了专业性</strong>：一个通用模型在许多任务上超过了为单一任务精心设计的专用系统（第 <a href="../ch2/s2-5.html#c2-subsec-vertical">2.5.5</a> 小节有反例与讨论）。</p></li>
 <li><p><strong>“GPT 是经验主义的胜利”</strong>：这是对前五点的总结。</p></li>
 </ol>
-<p>强化学习先驱萨顿（Richard Sutton）在 2019 年的短文《苦涩的教训》中给出了相近的判断<sup><a href="../ch2/references.html#ref-22">[22]</a></sup>：纵观 70 年的人工智能研究，把人类知识手工编进系统的方法短期有效，长期总是输给能随算力扩展的通用方法——搜索与学习。不过，“反爱因斯坦”并不意味着第一原理失去了价值。大模型在数学证明、精确计算等需要严格确定性的任务上仍会出错，这正是工具调用、代码解释器和检索增强生成等技术存在的理由。</p>
+<p>强化学习先驱萨顿（Richard Sutton）在 2019 年的短文《苦涩的教训》中给出了相近的判断<sup><a href="../ch2/references.html#ref-23">[23]</a></sup>：纵观 70 年的人工智能研究，把人类知识手工编进系统的方法短期有效，长期总是输给能随算力扩展的通用方法——搜索与学习。不过，“反爱因斯坦”并不意味着第一原理失去了价值。大模型在数学证明、精确计算等需要严格确定性的任务上仍会出错，这正是工具调用、代码解释器等技术存在的理由之一（知识过时和幻觉则主要由检索增强生成来缓解）。</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>
 <li><p>语言模型把文本概率分解为逐词元的条件概率，用交叉熵训练，用困惑度 <span class="math inline">\(\mathrm{PPL}=\exp(\mathcal{L})\)</span> 评价。</p></li>
-<li><p>n-gram 受困于稀疏、短上下文和不能泛化；词向量带来泛化，RNN 与注意力处理长序列，Transformer 带来并行。</p></li>
-<li><p>两次范式转移：预训练 + 微调（2018），预训练 + 提示 + 对齐（2020 年起）。</p></li>
+<li><p>n-gram 受困于稀疏、短上下文和不能泛化；词向量带来泛化，RNN 突破了固定窗口、LSTM 缓解梯度消失，注意力直接连接任意两个位置以处理长距离依赖，Transformer 带来并行。</p></li>
+<li><p>两次范式转移：预训练 + 微调（2018），预训练 + 提示 + 对齐（2020 年 GPT-3 确立提示用法，2022 年起加入对齐）。</p></li>
 </ul>
 </div>
 

@@ -797,7 +797,7 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </div>
-<p>运行时，模型遇到需要事实支撑的地方输出 Retrieve=是，触发检索；对每个检索到的段落并行生成候选续写，并输出 IsRel、IsSup、IsUse 标记；系统按这些标记的概率加权打分，选出最好的续写继续生成。与第 <a href="../ch5/s5-4.html#c5-subsec-adaptive">5.4.5</a> 小节由外部分类器决定是否检索不同，Self-RAG 把这一判断内化到模型的生成过程里：简单问题不检索，复杂问题可以在生成中多次检索。代价是需要用带反思标记的数据专门训练模型。</p>
+<p>运行时，模型遇到需要事实支撑的地方输出 Retrieve=是，触发检索；对每个检索到的段落并行生成候选续写，并输出三类标记：IsRel 评价段落与问题是否相关，IsSup 评价续写是否有该段落支持，IsUse 评价续写对问题是否有用；系统按这些标记的概率加权打分，选出最好的续写继续生成。与第 <a href="../ch5/s5-4.html#c5-subsec-adaptive">5.4.5</a> 小节由外部分类器决定是否检索不同，Self-RAG 把这一判断内化到模型的生成过程里：简单问题不检索，复杂问题可以在生成中多次检索。代价是需要用带反思标记的数据专门训练模型。</p>
 </section>
 <section id="c5-subsec-crag" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-crag">5.6.2　CRAG：查得不好，就换个地方查</h2>
@@ -817,7 +817,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="c5-subsec-agentic-rag" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-agentic-rag">5.6.4　Agentic RAG：把检索交给智能体</h2>
-<p><strong>Agentic RAG</strong> 不再把 RAG 看作一条固定流水线，而是由一个或多个<strong>智能体</strong>（agent）自主规划检索过程。智能体是能够感知环境、规划步骤、调用工具并根据结果调整行动的系统，其组成与运行机制见第 6 章。在 Agentic RAG 中，智能体反复执行“规划—行动—观察—反思”的循环（图 <a href="../ch5/s5-6.html#c5-fig-agentic">5-5</a>）：它可以决定先查哪个知识库、要不要调用业务系统接口、要不要向用户追问澄清、要不要把子任务分给其他智能体，并把已收集的证据保存在工作记忆中。</p>
+<p><strong>Agentic RAG</strong> 不再把 RAG 看作一条固定流水线，而是由一个或多个<strong>智能体</strong>（agent）自主规划检索过程。智能体是能够感知环境、规划步骤、调用工具并根据结果调整行动的系统，其组成与运行机制见第 <a href="../ch6/s6-2.html">6.2</a> 节和第 <a href="../ch6/s6-3.html">6.3</a> 节。在 Agentic RAG 中，智能体反复执行“规划—行动—观察—反思”的循环（图 <a href="../ch5/s5-6.html#c5-fig-agentic">5-5</a>）：它可以决定先查哪个知识库、要不要调用业务系统接口、要不要向用户追问澄清、要不要把子任务分给其他智能体，并把已收集的证据保存在工作记忆中。</p>
 <div id="c5-fig-agentic" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -829,7 +829,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>Agentic RAG 的能力可以分为两层。<strong>单智能体能力</strong>包括规划与调度、外部工具调用、多模态信息处理、自主决策，以及根据反馈持续学习与优化。<strong>多智能体协作</strong>则涉及智能体之间的通信、任务分解与分工、知识共享与同步、冲突解决与达成共识，例如一个智能体负责检索、一个负责核查、一个负责撰写。</p>
-<p>工具接入方面，Anthropic 于 2024 年 11 月发布的<strong>模型上下文协议</strong>（Model Context Protocol，MCP）为模型调用外部工具与数据定义了统一接口：知识库、数据库、搜索引擎、业务系统都可以封装成标准化的服务，智能体按需调用，不必为每个数据源单独编写接入代码，这就是“基于 MCP 的 RAG 系统”的含义（协议细节见第 7 章）。2025 年以来，各家推出的<strong>深度研究</strong>（deep research）类产品就是 Agentic RAG 的典型形态：用户给出一个题目，系统自行拆解问题、多轮搜索、交叉验证，最后生成带引用的报告。</p>
+<p>工具接入方面，Anthropic 于 2024 年 11 月发布的<strong>模型上下文协议</strong>（Model Context Protocol，MCP）为模型调用外部工具与数据定义了统一接口：知识库、数据库、搜索引擎、业务系统都可以封装成标准化的服务，智能体按需调用，不必为每个数据源单独编写接入代码，这就是“基于 MCP 的 RAG 系统”的含义（协议细节见第 <a href="../ch7/s7-6.html">7.6</a> 节）。2024 年底以来，多家厂商推出的<strong>深度研究</strong>（deep research）类产品就是 Agentic RAG 的典型形态：用户给出一个题目，系统自行拆解问题、多轮搜索、交叉验证，最后生成带引用的报告。</p>
 <p>能力越强，代价越大。与基础 RAG 相比，Agentic RAG 每个问题要调用多次模型和工具，延迟和成本可能高出一个数量级；多轮调用会累积错误，一步查错，后面全歪；系统行为更难预测和审计。因此它适合高价值、低频率、容错空间较大的任务，如尽职调查、科研综述、复杂故障排查、个人智能助手和垂直领域的决策支持，而不适合每天数百万次的客服自动回复。成熟的架构通常是<strong>分层</strong>的：用路由器分流，简单问题走基础 RAG，复杂问题走高级 RAG，只有最难的少数问题才交给 Agentic RAG。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>

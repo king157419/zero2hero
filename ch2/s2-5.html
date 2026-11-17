@@ -790,7 +790,7 @@ window.Quarto = {
 </div>
 <section id="c2-subsec-transformer" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-transformer">2.5.1　标准 Transformer</h2>
-<p>Transformer 由 Google 的瓦斯瓦尼（Ashish Vaswani）等人在 2017 年的论文《Attention Is All You Need》中提出，最初用于机器翻译<sup><a href="../ch2/references.html#ref-14">[14]</a></sup>。它完全去掉了循环结构，只用注意力建模序列中任意两个位置之间的关系，带来两个决定性的好处：所有位置可以并行计算，能充分利用 GPU；任意两个词元之间的计算路径长度都是 1，信息和梯度不必像 RNN 那样逐步传递，长距离依赖更容易学到（顺序信息则要靠位置编码补充）。</p>
+<p>Transformer 由 Google 的瓦斯瓦尼（Ashish Vaswani）等人在 2017 年的论文《Attention Is All You Need》中提出，最初用于机器翻译<sup><a href="../ch2/references.html#ref-15">[15]</a></sup>。它完全去掉了循环结构，只用注意力建模序列中任意两个位置之间的关系，带来两个决定性的好处：所有位置可以并行计算，能充分利用 GPU；任意两个词元之间的计算路径长度都是 1，信息和梯度不必像 RNN 那样逐步传递，长距离依赖更容易学到（顺序信息则要靠位置编码补充）。</p>
 <p>标准 Transformer 由<strong>编码器</strong>和<strong>解码器</strong>两个栈组成（图 <a href="../ch2/s2-5.html#c2-fig-transformer">2-10</a>），原论文中各 6 层，隐藏维度 <span class="math inline">\(d=512\)</span>，8 个头，FFN 中间维度 <span class="math inline">\(d_{\mathrm{ff}}=2048\)</span>。以把“我爱上海”翻译成英文为例：</p>
 <ul>
 <li><p><strong>编码器</strong>一次读入整个源句。每层由双向多头自注意力和 FFN 组成，每个位置都能看到源句的全部位置，输出源句每个词元的上下文表示。</p></li>
@@ -805,21 +805,21 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 2-10　标准 Transformer 结构（据文献 <sup><a href="../ch2/references.html#ref-14">[14]</a></sup>重绘）。信息自下而上流动；虚线为残差连接，把子层的输入直接加到输出上；青绿箭头表示编码器输出作为解码器交叉注意力的键和值</p>
+<p>图 2-10　标准 Transformer 结构（据文献 <sup><a href="../ch2/references.html#ref-15">[15]</a></sup>重绘）。信息自下而上流动；虚线为残差连接，把子层的输入直接加到输出上；青绿箭头表示编码器输出作为解码器交叉注意力的键和值</p>
 </div>
 </div>
 <p><strong>正弦位置编码</strong>　 原论文给第 <span class="math inline">\(pos\)</span> 个位置的第 <span class="math inline">\(2i\)</span> 和 <span class="math inline">\(2i+1\)</span> 维分别加上 <span class="math display">\[\mathrm{PE}_{(pos,\,2i)} = \sin\Bigl(\frac{pos}{10000^{2i/d}}\Bigr),\qquad
   \mathrm{PE}_{(pos,\,2i+1)} = \cos\Bigl(\frac{pos}{10000^{2i/d}}\Bigr).
 \tag{2-23}\]</span> 不同维度对应不同频率的正弦波，低维变化快、高维变化慢，组合起来能唯一标识每个位置；对任意固定的距离 <span class="math inline">\(k\)</span>，<span class="math inline">\(\mathrm{PE}_{pos+k}\)</span> 都可以写成 <span class="math inline">\(\mathrm{PE}_{pos}\)</span> 的一个线性变换（每对正弦、余弦维度做一次旋转），便于模型学习相对位置。</p>
-<p><strong>之后的改进</strong>　 2017 年以来，Transformer 的骨架没有大变，细节则持续改进：把归一化移到子层之前（Pre-LN，式 <a href="../ch2/s2-3.html#c2-eq-preln">（2-14）</a>），并换成计算更简单的 RMSNorm<sup><a href="../ch2/references.html#ref-36">[36]</a></sup>；用旋转位置编码 RoPE 替代正弦编码；FFN 的激活函数从 ReLU 换成 SwiGLU<sup><a href="../ch2/references.html#ref-37">[37]</a></sup>；用分组查询注意力（GQA，把查询头分成若干组，每组共享一组键和值）减少推理时 KV 缓存的显存占用<sup><a href="../ch2/references.html#ref-38">[38]</a></sup>；用<strong>混合专家</strong>（MoE）把 FFN 换成多个“专家”网络，每个词元只经过其中少数几个，使总参数量很大，而每个词元的计算量远小于同等总参数量的稠密模型<sup><a href="../ch2/references.html#ref-39">[39]</a></sup>。LLaMA、Qwen、DeepSeek 等系列各自采用了其中一部分，具体组合随版本而异。</p>
+<p><strong>之后的改进</strong>　 2017 年以来，Transformer 的骨架没有大变，细节则持续改进：把归一化移到子层之前（Pre-LN，式 <a href="../ch2/s2-3.html#c2-eq-preln">（2-14）</a>），并换成计算更简单的 RMSNorm<sup><a href="../ch2/references.html#ref-38">[38]</a></sup>；用旋转位置编码 RoPE 替代正弦编码；FFN 的激活函数从 ReLU 换成 SwiGLU<sup><a href="../ch2/references.html#ref-39">[39]</a></sup>；用分组查询注意力（GQA，把查询头分成若干组，同一组内的查询头共用一组键和值）减少推理时 KV 缓存的显存占用<sup><a href="../ch2/references.html#ref-40">[40]</a></sup>；用<strong>混合专家</strong>（MoE）把 FFN 换成多个“专家”网络，每个词元只经过其中少数几个，使总参数量很大，而每个词元的计算量远小于同等总参数量的稠密模型<sup><a href="../ch2/references.html#ref-41">[41]</a></sup>。LLaMA、Qwen、DeepSeek 等系列各自采用了其中一部分，具体组合随版本而异。</p>
 </section>
 <section id="c2-subsec-encoder" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-encoder">2.5.2　编码器模型</h2>
 <p>编码器模型只保留 Transformer 的编码器部分，注意力是<strong>双向</strong>的：每个词元都能同时看到左右两侧的上下文。它擅长“理解”，不擅长“生成”。</p>
-<p>代表模型是 Google 2018 年提出的 <strong>BERT</strong>（Bidirectional Encoder Representations from Transformers）<sup><a href="../ch2/references.html#ref-17">[17]</a></sup>。双向注意力让“预测下一个词”失去意义（下一个词已经能被看到），所以 BERT 改用<strong>掩码语言建模</strong>（Masked Language Modeling，MLM）：随机选中 15% 的词元，让模型根据上下文预测它们原来是什么。例如输入“上海是中国的 [MASK] 大城市”，目标是预测“第一”。被选中的词元中，80% 替换为 [MASK]，10% 替换为随机词元，10% 保持不变。损失在全部被选中的位置上计算。之所以不把它们全部替换为 [MASK]，是因为微调和使用时输入里没有 [MASK]；如果需要预测的位置总是 [MASK]，模型就可能只在看到 [MASK] 时才认真利用上下文，训练与使用之间出现不一致。BERT 还使用<strong>下一句预测</strong>（NSP）任务，判断两个句子在原文中是否相邻。</p>
-<p>编码器模型通常用于文本分类、情感分析、命名实体识别、抽取式问答，以及生成句向量用于语义检索；今天 RAG 系统中的向量嵌入模型和重排序模型，大多仍是编码器架构（第 5 章）。在 BERT 基础上改进的代表模型有：</p>
+<p>代表模型是 Google 2018 年提出的 <strong>BERT</strong>（Bidirectional Encoder Representations from Transformers）<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>。双向注意力让“预测下一个词”失去意义（下一个词已经能被看到），所以 BERT 改用<strong>掩码语言建模</strong>（Masked Language Modeling，MLM）：随机选中 15% 的词元，让模型根据上下文预测它们原来是什么。例如输入“上海是中国的 [MASK] 大城市”，目标是预测“第一”。被选中的词元中，80% 替换为 [MASK]，10% 替换为随机词元，10% 保持不变。损失在全部被选中的位置上计算。之所以不把它们全部替换为 [MASK]，是因为微调和使用时输入里没有 [MASK]；如果需要预测的位置总是 [MASK]，模型就可能只在看到 [MASK] 时才认真利用上下文，训练与使用之间出现不一致。BERT 还使用<strong>下一句预测</strong>（NSP）任务，判断两个句子在原文中是否相邻。</p>
+<p>编码器模型通常用于文本分类、情感分析、命名实体识别、抽取式问答，以及生成句向量用于语义检索；今天 RAG 系统中的向量嵌入模型和重排序模型，大多仍是编码器架构（第 <a href="../ch5/s5-2.html">5.2</a> 节、第 <a href="../ch5/s5-4.html">5.4</a> 节）。在 BERT 基础上改进的代表模型有：</p>
 <ul>
-<li><p><strong>RoBERTa</strong>（Facebook，2019）：去掉 NSP，使用动态掩码、更多数据、更大批次和更长训练，说明原版 BERT“训练不足”<sup><a href="../ch2/references.html#ref-40">[40]</a></sup>；</p></li>
+<li><p><strong>RoBERTa</strong>（Facebook，2019）：去掉 NSP，使用动态掩码、更多数据、更大批次和更长训练，说明原版 BERT“训练不足”<sup><a href="../ch2/references.html#ref-42">[42]</a></sup>；</p></li>
 <li><p><strong>ALBERT</strong>（Google，2019）：跨层共享参数、分解词嵌入矩阵，用更少的参数达到相近效果；</p></li>
 <li><p><strong>DistilBERT</strong>（Hugging Face，2019）：用知识蒸馏把 BERT 缩小 40%，推理快 60%，保留约 97% 的语言理解能力。</p></li>
 </ul>
@@ -832,15 +832,15 @@ window.Quarto = {
 <li><p><strong>训练信号更密集</strong>：MLM 只对约 15% 的位置计算损失，下一词元预测在每个位置都有损失，同样的数据能学到更多。</p></li>
 <li><p><strong>任务形式统一</strong>：任何任务都可以写成“给定前文，续写后文”，不需要为每个任务设计输出层，这是零样本和少样本能力的基础。</p></li>
 <li><p><strong>推理效率高</strong>：因果掩码保证已生成部分的表示不会因后文而改变，可以使用 KV 缓存（第 <a href="../ch2/s2-3.html#c2-subsec-autoregressive">2.3.7</a> 小节），生成新词元时无需重算前文。</p></li>
-<li><p><strong>经验上扩展性最好</strong>：系统比较表明，只经过无监督预训练时，用下一词元预测训练的因果解码器零样本泛化最好<sup><a href="../ch2/references.html#ref-41">[41]</a></sup>；业界的大规模实践也多选择这一架构。</p></li>
+<li><p><strong>经验上扩展性最好</strong>：系统比较表明，只经过无监督预训练时，用下一词元预测训练的因果解码器零样本泛化最好<sup><a href="../ch2/references.html#ref-43">[43]</a></sup>；业界的大规模实践也多选择这一架构。</p></li>
 </ol>
 </section>
 <section id="c2-subsec-encdec" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-encdec">2.5.4　编解码器模型</h2>
 <p>编解码器模型保留完整的标准 Transformer：编码器用双向注意力从输入中提取有用的表示，解码器通过交叉注意力读取这些表示，以此辅助并约束生成。它天然适合“输入一段、输出另一段”的任务，如翻译和摘要；在多模态领域也很常见，典型应用是<strong>视觉语言预训练</strong>（VLP）——编码器处理图像，解码器生成描述文字。代表模型有：</p>
 <ul>
-<li><p><strong>T5</strong>（Google，2019）：提出“一切都是文本到文本”，把分类、翻译、摘要统一为“输入文本、输出文本”；预训练任务是<strong>片段破坏</strong>（span corruption）——把连续的几个词元替换为一个哨兵符，让解码器还原<sup><a href="../ch2/references.html#ref-42">[42]</a></sup>；</p></li>
-<li><p><strong>BART</strong>（Facebook，2019）：用掩码、删除、打乱句序等多种方式破坏输入，训练模型还原原文，在摘要任务上表现突出<sup><a href="../ch2/references.html#ref-43">[43]</a></sup>；</p></li>
+<li><p><strong>T5</strong>（Google，2019）：提出“一切都是文本到文本”，把分类、翻译、摘要统一为“输入文本、输出文本”；预训练任务是<strong>片段破坏</strong>（span corruption）——把连续的几个词元替换为一个哨兵符，让解码器还原<sup><a href="../ch2/references.html#ref-44">[44]</a></sup>；</p></li>
+<li><p><strong>BART</strong>（Facebook，2019）：用掩码、删除、打乱句序等多种方式破坏输入，训练模型还原原文，在摘要任务上表现突出<sup><a href="../ch2/references.html#ref-45">[45]</a></sup>；</p></li>
 <li><p><strong>mT5</strong>（Google，2020）：T5 的多语言版本，覆盖 101 种语言；</p></li>
 <li><p><strong>UL2</strong>（Google，2022）：混合多种去噪目标，试图统一理解类和生成类任务；</p></li>
 <li><p><strong>Flan-T5</strong>（Google，2022）：在 T5 上用上千个任务做指令微调，显著提升了零样本能力。</p></li>
@@ -867,7 +867,7 @@ window.Quarto = {
 <td style="text-align: left;">Med-PaLM</td>
 <td style="text-align: left;">医疗</td>
 <td style="text-align: left;">Google，2022</td>
-<td style="text-align: left;">在 Flan-PaLM 上做指令提示微调，MedQA 准确率 67.6%，首次超过及格线<sup><a href="../ch2/references.html#ref-44">[44]</a></sup></td>
+<td style="text-align: left;">在 Flan-PaLM 上做指令提示微调，MedQA 准确率 67.6%，首次超过及格线<sup><a href="../ch2/references.html#ref-46">[46]</a></sup></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Med-PaLM 2</td>
@@ -885,7 +885,7 @@ window.Quarto = {
 <td style="text-align: left;">BloombergGPT</td>
 <td style="text-align: left;">金融</td>
 <td style="text-align: left;">彭博，2023</td>
-<td style="text-align: left;">500 亿参数，用约 3630 亿词元金融数据加 3450 亿词元通用数据从头训练<sup><a href="../ch2/references.html#ref-45">[45]</a></sup></td>
+<td style="text-align: left;">500 亿参数，用约 3630 亿词元金融数据加 3450 亿词元通用数据从头训练<sup><a href="../ch2/references.html#ref-47">[47]</a></sup></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FinGPT</td>
@@ -908,7 +908,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>垂直模型的前景并非没有争议。诺里（Harsha Nori）等人（2023）发现，只靠提示工程、不做领域微调的通用模型 GPT-4，在其设计的提示策略下，在 MedQA 等医学评测上已超过专门微调的 Med-PaLM 2<sup><a href="../ch2/references.html#ref-46">[46]</a></sup>。这呼应了第 <a href="../ch2/s2-2.html#c2-subsec-anti-einstein">2.2.7</a> 小节“广泛性似乎战胜了专业性”。当前更常见的做法，是在强大的通用模型上叠加领域微调和 RAG，而不是为每个行业从头训练一个模型。</p>
+<p>垂直模型的前景并非没有争议。诺里（Harsha Nori）等人（2023）发现，只靠提示工程、不做领域微调的通用模型 GPT-4，在其设计的提示策略下，在 MedQA 等医学评测上已超过专门微调的 Med-PaLM 2<sup><a href="../ch2/references.html#ref-48">[48]</a></sup>。这呼应了第 <a href="../ch2/s2-2.html#c2-subsec-anti-einstein">2.2.7</a> 小节“广泛性似乎战胜了专业性”。当前更常见的做法，是在强大的通用模型上叠加领域微调和 RAG，而不是为每个行业从头训练一个模型。</p>
 </section>
 <section id="c2-subsec-arch-compare" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-arch-compare">2.5.6　三类架构对比</h2>

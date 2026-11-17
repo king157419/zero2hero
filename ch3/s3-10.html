@@ -839,12 +839,12 @@ window.Quarto = {
 </section>
 <section id="批处理让一次读取服务多个请求" class="level2">
 <h2 class="anchored" data-anchor-id="批处理让一次读取服务多个请求">3.10.2　批处理：让一次读取服务多个请求</h2>
-<p>用第 <a href="../ch4/s4-1.html#subsec-roofline">4.1.3</a> 小节的 Roofline 模型看，线性层以 16 位精度同时处理 <span class="math inline">\(B\)</span> 个 token 时，运算量约 <span class="math inline">\(2NB\)</span>，读取权重约 <span class="math inline">\(2N\)</span> 字节，算术强度约为 <span class="math inline">\(B\)</span>。预填充一次处理数千个 token，远超拐点（H100 约 295），处于计算受限区；单请求解码时 <span class="math inline">\(B=1\)</span>，只能发挥峰值算力的约 0.3%。<strong>提高解码效率的关键，就在于提高算术强度，或减少要读取的数据量。</strong></p>
+<p>用第 <a href="../ch4/s4-1.html#subsec-roofline">4.1.3</a> 小节的 Roofline 模型看，线性层以 16 位精度同时处理 <span class="math inline">\(B\)</span> 个 token 时，运算量约 <span class="math inline">\(2NB\)</span>，读取权重约 <span class="math inline">\(2N\)</span> 字节，算术强度约为 <span class="math inline">\(B\)</span>。预填充一次处理数千个 token，远超拐点（H100 SXM 约 295，即 FP16 稠密算力约 989 TFLOP/s 除以显存带宽约 3.35 TB/s），处于计算受限区；单请求解码时 <span class="math inline">\(B=1\)</span>，只能发挥峰值算力的约 0.3%。<strong>提高解码效率的关键，就在于提高算术强度，或减少要读取的数据量。</strong></p>
 <p>最直接的办法是<strong>批处理</strong>（batching）：把多个请求合并，读一次权重同时为 <span class="math inline">\(B\)</span> 个请求各生成一个 token。在访存受限区，一个解码步的耗时约为 <span class="math display">\[t_{\text{步}}\approx\frac{M_{\mathrm{weight}}+B\times M_{\mathrm{KV}}^{\text{每请求}}}{B_{\mathrm{mem}}},
 \tag{3-40}\]</span> 即每步读一遍全部权重，再加上所有请求各自的 KV 缓存。</p>
 <div id="c3-ex-batch" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-8　批大小与吞吐</p>
+<p>例 3-10　批大小与吞吐</p>
 </div>
 <p>在显存带宽约 2.0 TB/s 的 A100-80GB 上，以 FP16 部署 LLaMA-7B（权重约 14 GB，标准多头注意力，每 token 的 KV 缓存为 K、V 两份 × 32 层 × 32 个 KV 头 × 128 维 × 2 字节，即 <span class="math inline">\(2\times32\times32\times128\times2=524\,288\)</span> 字节）。每个请求的上下文为 2048 个 token，估算不同批大小下的解码性能。</p>
 <p>每个请求的 KV 缓存为 <span class="math inline">\(524\,288\times2048\approx1.07\,\text{GB}\)</span>。以 <span class="math inline">\(B=8\)</span> 为例：每步读取 <span class="math inline">\(14+8\times1.07=22.6\,\text{GB}\)</span>，耗时 <span class="math inline">\(22.6\div2000\approx11.3\,\text{ms}\)</span>，系统吞吐 <span class="math inline">\(8\div0.0113\approx708\)</span> token/s，每个用户 <span class="math inline">\(1\div0.0113\approx89\)</span> token/s。其余批大小同理（表 <a href="../ch3/s3-10.html#c3-tab-batch">3-15</a>）。</p>
@@ -898,7 +898,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>批大小从 1 增到 32，系统吞吐提高约 10 倍，每个用户的速度只降到约三分之一。但批越大，KV 缓存越成为读取量的主体，吞吐增长趋缓，显存也很快被 KV 缓存占满（<span class="math inline">\(B=48\)</span> 时已用 65.5 GB）。<strong>KV 缓存的大小决定了推理系统的并发上限。</strong></p>
+<p>批大小从 1 增到 32，系统吞吐提高约 10 倍，每个用户的速度只降到约三分之一。但批越大，KV 缓存越成为读取量的主体，吞吐增长趋缓，显存也很快被 KV 缓存占满（<span class="math inline">\(B=48\)</span> 时权重加 KV 缓存已达 65.5 GB）。<strong>KV 缓存的大小决定了推理系统的并发上限。</strong></p>
 </div>
 <p>实际服务中请求随时到达、长短不一，简单地凑批会让先完成的请求空等。<strong>连续批处理</strong>（continuous batching）在每个解码步动态加入新请求、移出已完成的请求；<strong>PagedAttention</strong> 像操作系统分页那样按块管理 KV 缓存，减少显存浪费，使同样的显存容纳更多并发请求。它们的机制见第 <a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节。</p>
 </section>
@@ -909,21 +909,21 @@ window.Quarto = {
 \tag{3-41}\]</span> <span class="math inline">\(q_i\)</span> 是存储的整数，<span class="math inline">\(\hat{w}_i\)</span> 是计算时反量化得到的近似值。</p>
 <div id="c3-ex-quant" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-9　INT4 对称量化</p>
+<p>例 3-11　INT4 对称量化</p>
 </div>
 <p>把权重 <span class="math inline">\(\boldsymbol{w}=(0.42,\,-1.27,\,0.08,\,0.91)\)</span> 量化为 INT4（取值 <span class="math inline">\(-7\sim7\)</span>），求量化结果和误差。</p>
 <div class="cthreecalc">
 <p>1 &amp; 缩放因子 &amp; <span class="math inline">\(1.27\div(2^{3}-1)=1.27\div7\)</span> &amp; 0.181 &amp; 式 <a href="../ch3/s3-10.html#c3-eq-quant">（3-41）</a>；1.27 是绝对值最大者，<span class="math inline">\(k=4\)</span><br>
 2 &amp; 除以 <span class="math inline">\(s\)</span> &amp; <span class="math inline">\(0.42\div0.181\)</span> 等 &amp; 2.32，−7，0.44，5.02 &amp; 每个权重除以步骤 1 的 <span class="math inline">\(s\)</span><br>
 3 &amp; 四舍五入 &amp; round(·) &amp; 2，−7，0，5 &amp; 存储的 4 位整数<br>
-4 &amp; 反量化 &amp; <span class="math inline">\(0.181\times q_i\)</span> &amp; 0.363，−1.270，0，0.907 &amp; 计算时使用的近似值<br>
+4 &amp; 反量化 &amp; <span class="math inline">\((1.27\div7)\times q_i\)</span> &amp; 0.363，−1.270，0，0.907 &amp; 用未四舍五入的 <span class="math inline">\(s=1.27\div7\approx0.1814\)</span> 计算<br>
 5 &amp; 绝对误差 &amp; <span class="math inline">\(\lvert w_i-\hat{w}_i\rvert\)</span> &amp; 0.057，0，0.08，0.003 &amp; 原值减近似值<br>
 </p>
 </div>
 <p>数据流向找绝对值最大者 → 缩放因子 → 每个数除以 <span class="math inline">\(s\)</span> 后取整存储 → 用时乘回 <span class="math inline">\(s\)</span>。 绝对值较小的 0.08 被直接量化成了 0。</p>
 </div>
 <p>这个例子揭示了量化的核心难题：<strong>缩放因子由最大值决定，少数绝对值很大的“离群值”会让其余数值的精度大幅下降</strong>。假如这组数中有一个 12.7，<span class="math inline">\(s\)</span> 会变为约 1.81，其余三个数将全部量化为 0 或 <span class="math inline">\(\pm1\)</span>。研究发现，大模型的激活值中普遍存在这样的离群特征，且模型越大越明显。</p>
-<p><strong>粒度、时机与对象</strong>　 为减小离群值的影响，量化按更细的<strong>粒度</strong>进行：逐张量（整个矩阵共用一个 <span class="math inline">\(s\)</span>）、逐通道（每行或每列一个 <span class="math inline">\(s\)</span>）、逐组（每 64 或 128 个数一组）。粒度越细精度越高，但要额外存储的缩放因子越多；QLoRA 的 NF4 就采用每 64 个数一组的分块量化。按<strong>时机</strong>，分为<strong>训练后量化</strong>（Post-Training Quantization，PTQ）和<strong>量化感知训练</strong>（Quantization-Aware Training，QAT）：PTQ 直接量化训练好的模型，只需少量校准数据，成本低，是大模型最常用的方式；QAT 在训练中模拟量化误差，让模型提前适应低精度，效果更好但要重新训练。按<strong>对象</strong>，分为<strong>仅权重量化</strong>（如 W4A16：权重 4 位、激活值 16 位，计算前把权重反量化）和<strong>权重与激活值同时量化</strong>（如 W8A8：可以直接用整数矩阵乘法）。前者主要缓解显存容量和带宽压力，适合解码；后者还能利用低精度的算力优势，适合计算受限的场景。KV 缓存也可以量化（如 FP8 或 INT8），在长上下文、高并发时容纳更多请求。</p>
+<p><strong>粒度、时机与对象</strong>　 为减小离群值的影响，量化按更细的<strong>粒度</strong>进行：逐张量（整个矩阵共用一个 <span class="math inline">\(s\)</span>）、逐通道（每行或每列一个 <span class="math inline">\(s\)</span>）、逐组（每 64 或 128 个数一组）。粒度越细精度越高，但要额外存储的缩放因子越多；QLoRA 的 NF4 就采用每 64 个数一组的分块量化。按<strong>时机</strong>，分为<strong>训练后量化</strong>（Post-Training Quantization，PTQ）和<strong>量化感知训练</strong>（Quantization-Aware Training，QAT）：PTQ 直接量化训练好的模型，只需少量校准数据，成本低，是大模型最常用的方式；QAT 在训练中模拟量化误差，让模型提前适应低精度，效果更好但要重新训练。按<strong>对象</strong>，分为<strong>仅权重量化</strong>（如 W4A16：权重 4 位、激活值 16 位，在计算内核里即时把权重反量化后再参与运算）和<strong>权重与激活值同时量化</strong>（如 W8A8：可以直接用整数矩阵乘法）。前者主要缓解显存容量和带宽压力，适合解码；后者还能利用低精度的算力优势，适合计算受限的场景。KV 缓存也可以量化（如 FP8 或 INT8），在长上下文、高并发时容纳更多请求。</p>
 <p><strong>代表性方法</strong>　 下面几种方法都在对付离群值，做法不同：</p>
 <ul>
 <li><p>LLM.int8()<sup><a href="../ch3/references.html#ref-47">[47]</a></sup>：把少量离群维度保留为 16 位计算，其余用 INT8；</p></li>
@@ -974,7 +974,7 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">GGUF Q4_K_M</td>
 <td style="text-align: left;">约 0.6 字节</td>
-<td style="text-align: left;">约 4.1 GB</td>
+<td style="text-align: left;">约 4.2 GB</td>
 <td style="text-align: left;">llama.cpp 常用格式，平均约 4.8 位，含缩放因子等开销</td>
 </tr>
 </tbody>
@@ -982,7 +982,7 @@ window.Quarto = {
 </div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p>为什么量化以后“我的电脑突然能跑模型了”，而且还更快了？FP16 的 7B 模型约 14 GB，超过大多数笔记本的显存；4 位量化后只需约 4 GB，加上 KV 缓存等开销，8 GB 显存或 16 GB 统一内存的设备就能运行；每步要读的数据少了，解码速度反而更快。代价是一定的精度损失：通常 8 位几乎无损，4 位在多数任务上损失不大，3 位及以下损失明显。量化与 QLoRA 中的量化是同一类技术，前者用于部署，后者用于降低微调时底座的显存。</p>
+<p>为什么量化以后“我的电脑突然能跑模型了”，而且还更快了？FP16 的 7B 模型约 14 GB，超过大多数笔记本的显存；4 位量化后只需约 4 GB，加上 KV 缓存等开销，8 GB 显存或 16 GB 统一内存的设备就能运行；每步要读的数据少了，解码速度反而更快。代价是一定的精度损失：仅权重的 8 位量化通常几乎无损（权重与激活值同时量化 8 位，在部分模型上仍有可察觉的损失），4 位在多数任务上损失不大，3 位及以下损失明显。量化与 QLoRA 中的量化是同一类技术，前者用于部署，后者用于降低微调时底座的显存。</p>
 </div>
 </section>
 <section id="投机解码让一次前向产出多个-token" class="level2">
@@ -991,7 +991,7 @@ window.Quarto = {
 <ol type="1">
 <li><p>用小而快的<strong>草稿模型</strong>（draft model）连续生成 <span class="math inline">\(k\)</span> 个候选 token；</p></li>
 <li><p>把这 <span class="math inline">\(k\)</span> 个 token 一次性交给大的<strong>目标模型</strong>，在<strong>一次前向计算</strong>中并行算出每个位置上目标模型的分布，逐个判断是否接受；</p></li>
-<li><p>从第一个被拒绝的位置起，丢弃其后所有候选，由目标模型在该位置重新采样一个 token。</p></li>
+<li><p>从第一个被拒绝的位置起，丢弃其后所有候选，在该位置按下面的修正分布重新采样一个 token。</p></li>
 </ol>
 <div id="c3-fig-spec" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
@@ -1004,14 +1004,14 @@ window.Quarto = {
 </div>
 </div>
 <p>设草稿模型给某个 token <span class="math inline">\(x\)</span> 的概率为 <span class="math inline">\(q(x)\)</span>，目标模型给的概率为 <span class="math inline">\(p(x)\)</span>。投机采样以概率 <span class="math inline">\(\min\bigl(1,p(x)/q(x)\bigr)\)</span> 接受该 token；若拒绝，就从按 <span class="math inline">\(\max\bigl(0,p(x)-q(x)\bigr)\)</span> 归一化的分布中重新采样。可以证明，<strong>这样得到的输出分布与目标模型单独生成时完全相同</strong>：投机解码只加速，不改变结果。若每个候选被接受的概率约为 <span class="math inline">\(\alpha\)</span>，一轮提出 <span class="math inline">\(k\)</span> 个候选，则目标模型每做一次前向，平均产出的 token 数为 <span class="math display">\[\mathbb{E}[\text{每轮产出的 token 数}]=\frac{1-\alpha^{k+1}}{1-\alpha}.
-\tag{3-42}\]</span> 例如 <span class="math inline">\(\alpha=0.8\)</span>、<span class="math inline">\(k=4\)</span> 时，<span class="math inline">\((1-0.8^{5})\div(1-0.8)=(1-0.328)\div0.2\approx3.36\)</span> 个。扣除草稿模型的开销后，实际加速通常在 2～3 倍。除独立的小模型外，还可以在大模型上增加几个额外的预测头（如 Medusa、EAGLE），或利用训练时自带的多 token 预测模块（如 DeepSeek-V3 的 MTP<sup><a href="../ch3/references.html#ref-18">[18]</a></sup>）生成候选。</p>
+\tag{3-42}\]</span> 例如 <span class="math inline">\(\alpha=0.8\)</span>、<span class="math inline">\(k=4\)</span> 时，<span class="math inline">\((1-0.8^{5})\div(1-0.8)=(1-0.328)\div0.2\approx3.36\)</span> 个。扣除草稿模型的开销后，在单请求或低并发下，实际加速常见约 2～3 倍；批越大，目标模型本来就更接近算力受限，投机带来的收益越小。除独立的小模型外，还可以在大模型上增加几个额外的预测头（如 Medusa、EAGLE），或利用训练时自带的多 token 预测模块（如 DeepSeek-V3 的 MTP<sup><a href="../ch3/references.html#ref-18">[18]</a></sup>）生成候选。</p>
 </section>
 <section id="c3-subsec-other" class="level2">
 <h2 class="anchored" data-anchor-id="c3-subsec-other">3.10.5　其他手段与系统层优化</h2>
 <p><strong>CPU 卸载</strong>　 显存放不下整个模型时，框架可以只把一部分层放在 GPU 上，其余留在系统内存，由 CPU 计算或在需要时经 PCIe 传到 GPU；例如 llama.cpp 允许指定放到 GPU 上的层数。模型因此“能跑起来”，但速度大幅下降：PCIe 4.0 x16 的单向带宽约 32 GB/s，系统内存带宽通常也只有每秒几十到一百多 GB，都比显存带宽低一个数量级以上。</p>
 <p><strong>模型压缩</strong>　 除量化外，还可以从根本上减小模型：<strong>剪枝</strong>（pruning）去除不重要的权重（非结构化剪枝）或整个注意力头、通道、层（结构化剪枝），后者更容易在硬件上获得实际加速；<strong>知识蒸馏</strong>（knowledge distillation）<sup><a href="../ch3/references.html#ref-52">[52]</a></sup>用大模型（教师）的输出分布或生成的数据训练小模型（学生），许多开源小模型借此获得了远超同规模模型的效果；<strong>低秩近似</strong>用低秩矩阵近似原权重矩阵，<strong>权重共享</strong>让不同层共用一组参数，都能减少参数量。</p>
 <p><strong>系统层优化（概述）</strong>　 推理引擎还在系统层面做了大量优化，第 <a href="../ch4/s4-4.html">4.4</a> 节有详细讨论，这里只列出它们解决的问题：连续批处理减少请求空等；PagedAttention 减少 KV 缓存的显存浪费，并让相同前缀的请求共享缓存块，在此基础上的<strong>前缀缓存</strong>（如 SGLang 的 RadixAttention，用基数树记录各请求共享的前缀）直接复用已算过的前缀，跳过这部分预填充、降低 TTFT；FlashAttention<sup><a href="../ch3/references.html#ref-46">[46]</a></sup> 分块计算注意力，避免把完整的注意力矩阵写回显存，是精确计算而非近似；<strong>分块预填充</strong>（chunked prefill）把长提示切成小块，与其他请求的解码步交错执行，避免长提示“卡住”别人的解码；<strong>预填充与解码分离</strong>（PD 分离）<sup><a href="../ch3/references.html#ref-53">[53]</a></sup>用不同的 GPU 集群分别负责两个阶段，预填充完成后把 KV 缓存传给解码集群，两个阶段可以各自选择硬件和并行策略。</p>
-<p>表 <a href="../ch3/s3-10.html#c3-tab-bottleneck">3-17</a> 把本节和第 4 章的各种方法与它们针对的瓶颈对应起来。</p>
+<p>表 <a href="../ch3/s3-10.html#c3-tab-bottleneck">3-17</a> 把本节和第 4 章第 <a href="../ch4/s4-4.html">4.4</a> 节的各种方法与它们针对的瓶颈对应起来。</p>
 <div id="c3-tab-bottleneck" class="booktab">
 <div class="tabcap">
 <p>表 3-17　推理优化技术与其针对的瓶颈</p>
@@ -1088,7 +1088,7 @@ window.Quarto = {
 <ul>
 <li><p>推理性能由算力、显存容量、带宽和软件栈共同决定；解码提速靠提高算术强度或减少读取量。</p></li>
 <li><p>批处理提高吞吐，但 KV 缓存决定并发上限；量化减少读取量，难点是离群值；投机解码不改变输出分布。</p></li>
-<li><p>案例进度：课程问答模型部署时，BF16 约可同时服务 23 个对话，改用 4 位量化后约 60 个以上（第 <a href="../ch3/s3-12.html">3.12</a> 节）。</p></li>
+<li><p>案例进度：课程问答模型部署时，BF16 最多同时容纳 22 个对话，改用 4 位量化后约 67 个（按 24 GB 显卡、每段对话 4096 token 估算）（第 <a href="../ch3/s3-12.html">3.12</a> 节）。</p></li>
 </ul>
 </div>
 

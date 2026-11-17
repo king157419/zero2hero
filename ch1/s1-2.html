@@ -811,6 +811,7 @@ window.Quarto = {
 <p>图 1-5　自回归生成的一步。模型读入全部已有词元，输出词表中每个词元作为下一个词元的概率，按解码策略选出一个后追加到输入末尾，开始下一步。图中的词元编号和概率均为示意</p>
 </div>
 </div>
+<div class="widget" data-widget="c1sampling"></div>
 <p>第 4 步的“选择规则”称为<strong>解码策略</strong>。最简单的是每次选概率最高的词元（贪心解码），但这样容易产生重复、呆板的文字，所以实际系统多用<strong>采样</strong>：按概率随机抽取。三个常用参数控制抽样的随机程度：<strong>温度</strong>（temperature）<span class="math inline">\(\tau\)</span> 先把分数除以 <span class="math inline">\(\tau\)</span> 再归一化，<span class="math inline">\(\tau\)</span> 越小分布越“尖”、输出越确定，<span class="math inline">\(\tau\)</span> 越大越分散、输出越多样；<strong>Top-K</strong> 只在概率最高的 <span class="math inline">\(k\)</span> 个词元中抽取；<strong>Top-P</strong>（又称核采样）先把词元按概率从高到低排序，取累计概率首次达到或超过 <span class="math inline">\(p\)</span> 的最小集合，只在其中抽取；候选个数随分布的“尖”或“平”自动变化。这些参数只改变“从分布中怎么挑”，不改变分布本身，因此不能从根本上消除事实错误。解码策略的细节和对比见第 3 章。</p>
 <p>按照概率的链式法则，一整段序列的概率等于各步条件概率的乘积： <span class="math display">\[P(x_1,x_2,\ldots,x_T)=\prod_{t=1}^{T} P(x_t\mid x_{&lt;t}),
 \tag{1-1}\]</span> 其中 <span class="math inline">\(T\)</span> 为序列长度（词元数）。式 <a href="../ch1/s1-2.html#c1-eq-chain">（1-1）</a> 是自回归语言模型的数学基础：只要模型能给出每一步的条件概率，就既能<strong>评估</strong>一段文字有多“像人话”，也能<strong>生成</strong>新的文字。</p>
@@ -863,6 +864,7 @@ window.Quarto = {
 <p><strong>数据流向</strong>：模型每步输出一个条件概率 → 逐个相乘得到整句概率 → 取对数把连乘变成连加。</p>
 <p>一句只有 4 个词元的话，概率已经小到 <span class="math inline">\(5\times10^{-4}\)</span>；几百个词元的文章，概率会小到计算机的浮点数无法表示（下溢）。所以训练和评测时都用对数概率相加。训练时的损失函数正是真实下一个词元的负对数概率 <span class="math inline">\(-\ln P(x_t\mid x_{&lt;t})\)</span> 的平均值：模型给真实词元的概率越高，损失越小（第 3 章）。</p>
 </div>
+<div class="widget" data-widget="c1chain"></div>
 <p>训练时，模型做的是同一件事：从海量文本中取出一段，让模型在每个位置预测下一个词元，再用真实的下一个词元计算损失，通过反向传播调整参数，使真实词元的概率提高。由于任何一段文本都自带“下一个词元”这个答案，训练不需要人工标注，这是大语言模型能够利用整个互联网规模语料的关键。</p>
 </section>
 <section id="c1-subsec-param-knowledge" class="level2">
@@ -870,7 +872,7 @@ window.Quarto = {
 <p>模型在训练中见过“珠穆朗玛峰是世界最高峰”成千上万次，于是在“世界最高峰是”之后会给“珠穆朗玛峰”很高的概率。这类知识并不存放在某张表格的某一行里，而是分散地体现在数以亿计的参数中，称为<strong>参数化知识</strong>。它带来三个直接后果：</p>
 <ul>
 <li><p><strong>有截止时间</strong>：模型只知道训练数据截止之前的事；要更新知识，就得重新训练或微调，成本很高；</p></li>
-<li><p><strong>会“编造”</strong>：模型输出的是“最像真的”词元，而不是查证过的事实。遇到训练中少见的问题，它也会给出流畅但错误的回答，这称为<strong>幻觉</strong>（hallucination）。幻觉的成因见第 2 章，工程上的应对见第 <a href="../ch1/s1-6.html#c1-subsec-hallucination">1.6.1</a> 小节；</p></li>
+<li><p><strong>会“编造”</strong>：模型输出的是“最像真的”词元，而不是查证过的事实。遇到训练中少见的问题，它也会给出流畅但错误的回答，这称为<strong>幻觉</strong>（hallucination）。幻觉的成因见第 <a href="../ch2/s2-4.html#c2-subsec-hallucination">2.4.7</a> 小节，工程上的应对见第 <a href="../ch1/s1-6.html#c1-subsec-hallucination">1.6.1</a> 小节；</p></li>
 <li><p><strong>不可追溯</strong>：模型说不出某个结论来自哪份资料，也难以精确删除某条知识。</p></li>
 </ul>
 <p>与参数化知识相对，用户在一次对话中提供的文字、上传的文件，都放在模型的<strong>上下文窗口</strong>（context window）中，即模型生成每个词元时能“看到”的全部输入。上下文窗口是模型唯一的“工作区”：对话结束、内容被清出窗口后，模型并不会记住它，除非系统另行保存并在下次放回窗口（第 8 章）。第 <a href="../ch1/s1-4.html">1.4</a> 节介绍的检索增强生成、工具调用等技术，本质上都是<strong>在生成之前把可靠的信息放进上下文窗口</strong>，以弥补参数化知识的不足。</p>
@@ -903,7 +905,7 @@ window.Quarto = {
 </section>
 <section id="c1-subsec-llmos" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-llmos">1.2.5　把大语言模型看作新的“计算机内核”</h2>
-<p>理解了上下文窗口和逐词元生成，就可以借用一个流传很广的类比来记住大语言模型在一个应用系统中的位置。OpenAI 创始成员、曾任特斯拉人工智能负责人的安德烈·卡帕西（Andrej Karpathy，2026 年 5 月加入 Anthropic）在 2023 年提出：大语言模型像一种新型计算机的中央处理器，围绕它可以搭建一套“操作系统”<sup><a href="../ch1/references.html#ref-8">[8]</a></sup>。表 <a href="../ch1/s1-2.html#c1-tab-llmos">1-3</a> 列出了这个类比中各部件的对应关系。他当时以 GPT-4 Turbo 为例：可以同时处理 256 个请求（类比 256 个核；它与第 4 章所说的批处理有关，但并发请求数还受调度和显存限制，不完全等同于一次计算的批大小 <span class="math inline">\(B\)</span>），每秒生成约 20 个词元（类比 20 Hz 的时钟频率），上下文窗口 128K 词元（类比内存容量）。</p>
+<p>理解了上下文窗口和逐词元生成，就可以借用一个流传很广的类比来记住大语言模型在一个应用系统中的位置。OpenAI 创始成员、曾任特斯拉人工智能负责人的安德烈·卡帕西（Andrej Karpathy，2026 年 5 月加入 Anthropic）在 2023 年提出：大语言模型像一种新型计算机的中央处理器，围绕它可以搭建一套“操作系统”<sup><a href="../ch1/references.html#ref-8">[8]</a></sup>。表 <a href="../ch1/s1-2.html#c1-tab-llmos">1-3</a> 列出了这个类比中各部件的对应关系。他在 2023 年 11 月的一条社交媒体帖子中以 GPT-4 Turbo 为例，写出了这台“计算机”的规格<sup><a href="../ch1/references.html#ref-9">[9]</a></sup>：可以同时处理 256 个请求（类比 256 个核；它与第 4 章所说的批处理有关，但并发请求数还受调度和显存限制，不完全等同于一次计算的批大小 <span class="math inline">\(B\)</span>），每秒生成约 20 个词元（类比 20 Hz 的时钟频率），上下文窗口 128K 词元（类比内存容量）。</p>
 <div id="c1-tab-llmos" class="booktab">
 <div class="tabcap">
 <p>表 1-3　“大语言模型操作系统”类比</p>
@@ -935,7 +937,7 @@ window.Quarto = {
 <tr class="even">
 <td style="text-align: left;">磁盘与文件系统</td>
 <td style="text-align: left;">外部知识库、文件</td>
-<td style="text-align: left;">需要时检索出来放进上下文（第 5 章）</td>
+<td style="text-align: left;">需要时检索出来放进上下文（第 <a href="../ch5/s5-2.html">5.2</a> 节）</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">输入输出设备</td>
@@ -945,12 +947,12 @@ window.Quarto = {
 <tr class="even">
 <td style="text-align: left;">网络</td>
 <td style="text-align: left;">浏览器、其他模型与智能体</td>
-<td style="text-align: left;">通过工具和协议与外部系统通信（第 6、7 章）</td>
+<td style="text-align: left;">通过工具和协议与外部系统通信（第 <a href="../ch6/s6-2.html">6.2</a> 、<a href="../ch7/s7-6.html">7.6</a> 节）</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">软件接口</td>
 <td style="text-align: left;">提示词、工具调用接口</td>
-<td style="text-align: left;">用自然语言和结构化调用“编程”（第 7 章）</td>
+<td style="text-align: left;">用自然语言和结构化调用“编程”（第 <a href="../ch7/s7-3.html">7.3</a> 节）</td>
 </tr>
 </tbody>
 </table>

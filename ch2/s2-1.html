@@ -791,10 +791,10 @@ window.Quarto = {
 <section id="c2-subsec-mp" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-mp">2.1.1　从逻辑到神经元</h2>
 <p>二十世纪初，德国数学家希尔伯特（David Hilbert）提出了一个计划：找到一套有限的公理和推理规则，使全部数学都能从中严格推出，并且这套系统既<strong>完备</strong>（每个命题都能判定真假）又<strong>自洽</strong>（不会推出矛盾）。罗素（Bertrand Russell）与怀特海在 1910—1913 年出版的《数学原理》中，尝试从“与、或、非”等基本逻辑出发构造出算术。</p>
-<p>这个计划的两个目标先后被否定。1931 年，哥德尔证明了<strong>不完备定理</strong>：任何自洽且足以表达算术的形式系统，都存在系统内部既不能证明、也不能反驳的命题，“完备且自洽”不可兼得。1936 年，图灵用一台抽象的“图灵机”精确定义了什么是算法，并证明不存在一个通用算法能判定任意程序是否会停机（<strong>停机问题</strong>），从而否定了希尔伯特提出的“判定问题”——不存在一个机械方法能判定任意数学命题的真假<sup><a href="../ch2/references.html#ref-1">[1]</a></sup>。</p>
+<p>这个计划的两个目标先后被否定。1931 年，哥德尔证明了<strong>不完备定理</strong>：任何自洽且足以表达算术的形式系统，都存在系统内部既不能证明、也不能反驳的命题，“完备且自洽”不可兼得。1936 年，图灵用一台抽象的“图灵机”精确定义了什么是算法，并证明不存在一个通用算法能判定任意程序是否会停机（<strong>停机问题</strong>），由此推出，希尔伯特提出的“判定问题”——是否存在机械方法能判定任意逻辑命题可证与否——也没有肯定的答案<sup><a href="../ch2/references.html#ref-1">[1]</a></sup>。</p>
 <p>否定性的结论附带了一个肯定性的成果：“可计算”从此有了精确定义。在此基础上，神经生理学家麦卡洛克（Warren McCulloch）和数学家皮茨（Walter Pitts）于 1943 年提出了第一个神经元数学模型——<strong>M-P 模型</strong><sup><a href="../ch2/references.html#ref-2">[2]</a></sup>： <span class="math display">\[y = f\Bigl(\sum_{i=1}^{n} w_i x_i - \theta\Bigr),\qquad
   f(z)=\begin{cases}1, &amp; z\ge 0,\\ 0, &amp; z&lt;0,\end{cases}
-\tag{2-1}\]</span> 其中 <span class="math inline">\(x_i\)</span> 是输入信号，<span class="math inline">\(w_i\)</span> 是突触权重，<span class="math inline">\(\theta\)</span> 是阈值。神经元先对输入加权求和，超过阈值就输出 1（“激活”），否则输出 0。适当选取权重和阈值，单个 M-P 神经元就能实现“与”“或”“非”；把它们连成网络，就能实现任意的逻辑函数。M-P 模型的权重是人工设定的，它还不会“学”。表 <a href="../ch2/s2-1.html#c2-tab-nn-history">2-1</a> 列出了此后神经网络发展的几个里程碑。</p>
+\tag{2-1}\]</span> 其中 <span class="math inline">\(x_i\)</span> 是输入信号，<span class="math inline">\(w_i\)</span> 是突触权重，<span class="math inline">\(\theta\)</span> 是阈值。神经元先对输入加权求和，超过阈值就输出 1（“激活”），否则输出 0。适当选取权重和阈值，单个 M-P 神经元就能实现“与”“或”“非”；单个神经元只能实现线性可分的函数，把它们连成多层网络，就能实现任意的逻辑函数。M-P 模型的权重是人工设定的，它还不会“学”。表 <a href="../ch2/s2-1.html#c2-tab-nn-history">2-1</a> 列出了此后神经网络发展的几个里程碑。</p>
 <div id="c2-tab-nn-history" class="booktab">
 <div class="tabcap">
 <p>表 2-1　神经网络发展的里程碑</p>
@@ -1014,7 +1014,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="c2-subsec-optim">2.1.5　梯度下降与优化器</h2>
 <p>有了梯度，最直接的更新方式是<strong>梯度下降</strong>：<span class="math inline">\(\theta\leftarrow\theta-\eta\,\nabla_\theta\mathcal{L}\)</span>，其中 <span class="math inline">\(\theta\)</span> 代表全部参数。大模型的训练数据有万亿词元，每一步不可能遍历全部数据，于是每次随机取一小批样本，用它们的平均梯度 <span class="math inline">\(g\)</span> 代替全量梯度，这就是<strong>随机梯度下降</strong>（Stochastic Gradient Descent，SGD）： <span class="math display">\[\theta_t = \theta_{t-1} - \eta\, g_t .
 \tag{2-3}\]</span></p>
-<p>学习率 <span class="math inline">\(\eta\)</span> 的取值有讲究：太小，收敛很慢；太大，参数会越过最低点，损失反而上升甚至发散（习题 <a href="../ch2/exercises.html#c2-q-bp">{{2.2</a>）。大模型的损失曲面又极不规则，不同参数的梯度可能相差几个数量级，统一的学习率很难兼顾。因此大模型几乎都使用 <strong>Adam</strong> 优化器<sup><a href="../ch2/references.html#ref-6">[6]</a></sup>（实践中多为带解耦权重衰减的 AdamW）：它为每个参数分别维护梯度的滑动平均（一阶矩，相当于“惯性”）和梯度平方的滑动平均（二阶矩），用后者给每个参数一个自适应的步长——梯度一直很大的参数走得谨慎些，梯度很小的参数走得大胆些。Adam 的更新公式、学习率预热与衰减等细节见第 3 章。要记住的一个代价是：Adam 为每个参数多存两份状态，训练所需显存因此是权重本身的数倍（估算方法见第 <a href="../ch4/s4-3.html#subsec-train-mem">4.3.3</a> 小节）。</p>
+<p>学习率 <span class="math inline">\(\eta\)</span> 的取值有讲究：太小，收敛很慢；太大，参数会越过最低点，损失反而上升甚至发散（习题 <a href="../ch2/exercises.html#c2-q-bp">{{2.2</a>）。大模型的损失曲面又极不规则，不同参数的梯度可能相差几个数量级，统一的学习率很难兼顾。因此大模型几乎都使用 <strong>Adam</strong> 优化器<sup><a href="../ch2/references.html#ref-6">[6]</a></sup>（实践中多为带解耦权重衰减的 AdamW）：它为每个参数分别维护梯度的滑动平均（一阶矩，相当于“惯性”）和梯度平方的滑动平均（二阶矩），用后者给每个参数一个自适应的步长——梯度一直很大的参数走得谨慎些，梯度很小的参数走得大胆些。Adam 的更新公式、学习率预热与衰减等细节见第 <a href="../ch3/s3-4.html">3.4</a> 节。要记住的一个代价是：Adam 为每个参数多存两份状态，训练所需显存因此是权重本身的数倍（估算公式见第 <a href="../ch3/s3-5.html">3.5</a> 节，在分布式系统中的显存分摊见第 <a href="../ch4/s4-3.html#subsec-train-mem">4.3.3</a> 小节）。</p>
 </section>
 <section id="c2-subsec-uat" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-uat">2.1.6　万能逼近与“深度”的意义</h2>

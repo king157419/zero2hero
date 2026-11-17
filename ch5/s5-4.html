@@ -897,21 +897,21 @@ window.Quarto = {
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">2</td>
 <td style="text-align: left;"><span class="math inline">\(1\div61+1\div62\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(0.016\,39+0.016\,13=0.032\,52\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.016\,39+0.016\,13\approx0.032\,52\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">D3</td>
 <td style="text-align: left;">3</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;"><span class="math inline">\(1\div63+1\div61\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(0.015\,87+0.016\,39=0.032\,26\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.015\,87+0.016\,39\approx0.032\,27\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">D2</td>
 <td style="text-align: left;">2</td>
 <td style="text-align: left;">4</td>
 <td style="text-align: left;"><span class="math inline">\(1\div62+1\div64\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(0.016\,13+0.015\,63=0.031\,76\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.016\,13+0.015\,63\approx0.031\,75\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">D5</td>
@@ -929,9 +929,10 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>融合后前 4 名为 D1、D3、D2、D5。D5 只被 BM25 召回（例如它是唯一含“TS-999”字样的故障手册），向量检索没有找到它，但融合后它挤进了前 4 名，替换了只在向量列表中排第 4 的 D4。<strong>数据流向</strong>：两路列表 → 各自名次 → 按式 <a href="../ch5/s5-4.html#c5-eq-rrf">（5-4）</a> 求和 → 重新排序。整个计算没有用到任何一路的原始分数。</p>
+<p>表中分数均为先按分数的精确值相加、再四舍五入到 5 位小数的结果（各项分别取 5 位后相加，末位可能相差 1）。融合后前 4 名为 D1、D3、D2、D5。D5 只被 BM25 召回（例如它是唯一含“TS-999”字样的故障手册），向量检索没有找到它，但融合后它挤进了前 4 名，替换了只在向量列表中排第 4 的 D4。<strong>数据流向</strong>：两路列表 → 各自名次 → 按式 <a href="../ch5/s5-4.html#c5-eq-rrf">（5-4）</a> 求和 → 重新排序。整个计算没有用到任何一路的原始分数。</p>
 </div>
-<p><strong>多路召回与元数据过滤</strong>　 再进一步，可以同时运行多路检索：一路向量、一路关键词、一路查图数据库中的关系（第 <a href="../ch5/s5-5.html">5.5</a> 节），对图片、表格还可以加一路多模态检索，各路结果用 RRF 等方法合并。每一路都有自己的盲区，合在一起才更完整。此外，可以按元数据（日期、部门、文档类型、作者、地域）在检索前或检索时过滤候选，这称为<strong>上下文相关性过滤</strong>：例如只检索“2026 年生效”“政策类型=退货”的文档。第 <a href="../ch5/s5-3.html#c5-subsec-five-limits">5.3.1</a> 小节的退货/换货案例，正是靠元数据过滤修好的。</p>
+<div class="widget" data-widget="c5rrf"></div>
+<p><strong>多路召回与元数据过滤</strong>　 再进一步，可以同时运行多路检索：一路向量、一路关键词、一路查图数据库中的关系（第 <a href="../ch5/s5-5.html">5.5</a> 节），对图片、表格还可以加一路多模态检索，各路结果用 RRF 等方法合并。每一路都有自己的盲区，合在一起才更完整。此外，可以按元数据（日期、部门、文档类型、作者、地域）在检索前或检索时过滤候选，这称为<strong>元数据过滤</strong>（metadata filtering）：例如只检索“2026 年生效”“政策类型=退货”的文档。第 <a href="../ch5/s5-3.html#c5-subsec-five-limits">5.3.1</a> 小节的退货/换货案例，正是靠元数据过滤修好的。</p>
 </section>
 <section id="c5-subsec-rerank" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-rerank">5.4.4　检索后：融合、重排与压缩</h2>
@@ -968,8 +969,8 @@ window.Quarto = {
 <td style="text-align: left;">检索后（重排、过滤）</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">目标检索</td>
-<td style="text-align: left;">针对特定查询意图使用专门的检索器，加入领域标准优化结果</td>
+<td style="text-align: left;">意图路由检索</td>
+<td style="text-align: left;">判断查询意图，把查询路由到专门的检索器（如表格、图、代码检索）</td>
 <td style="text-align: left;">检索中</td>
 </tr>
 <tr class="even">
@@ -984,7 +985,7 @@ window.Quarto = {
 <section id="c5-subsec-adaptive" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-adaptive">5.4.5　自适应检索与持续优化</h2>
 <p>并不是所有问题都值得检索。用户说“你好”“谢谢”，或问“1 加 1 等于几”，检索纯属浪费，还可能引入干扰。<strong>自适应检索</strong>（adaptive retrieval）在检索之前加一个轻量的分类器或路由器，判断问题属于寒暄、常识还是需要外部知识；需要检索的，再决定查哪个库、查多少。这一分流能节省大量成本和延迟，第 <a href="../ch5/s5-6.html">5.6</a> 节的 Self-RAG 把这一判断交给模型自己完成。</p>
-<p>此外还有三类优化。<strong>针对具体领域的优化</strong>：在医疗、金融等领域，为特定字段设置检索权重，或用领域数据微调嵌入模型与重排模型。<strong>带反馈回路的主动学习</strong>：收集用户的点击、采纳、纠正和追问，定期回流到评估集和检索策略中，让系统随时间改进。<strong>语义哈希</strong>（semantic hashing）<sup><a href="../ch5/references.html#ref-18">[18]</a></sup>：把文档编码为紧凑的二进制向量，用汉明距离（两个二进制串不同位的个数）快速比较，以少量精度换取速度和存储，适合高并发场景（参见例 <a href="../ch5/s5-2.html#c5-ex-storage">5-2</a>）。表 <a href="../ch5/s5-4.html#c5-tab-optim">5-7</a> 汇总了常用的检索优化方法。</p>
+<p>此外还有三类优化。<strong>针对具体领域的优化</strong>：在医疗、金融等领域，为特定字段设置检索权重，或用领域数据微调嵌入模型与重排模型。<strong>带反馈回路的持续优化</strong>：收集用户的点击、采纳、纠正和追问，定期回流到评估集和检索策略中，让系统随时间改进。<strong>语义哈希</strong>（semantic hashing）<sup><a href="../ch5/references.html#ref-18">[18]</a></sup>：把文档编码为紧凑的二进制向量，用汉明距离（两个二进制串不同位的个数）快速比较，以少量精度换取速度和存储，适合高并发场景（参见例 <a href="../ch5/s5-2.html#c5-ex-storage">5-2</a>）。表 <a href="../ch5/s5-4.html#c5-tab-optim">5-7</a> 汇总了常用的检索优化方法。</p>
 <div id="c5-tab-optim" class="booktab">
 <div class="tabcap">
 <p>表 5-7　常用的检索优化方法</p>
@@ -1009,7 +1010,7 @@ window.Quarto = {
 <td style="text-align: left;"><a href="../ch5/s5-4.html#c5-subsec-rewrite">5.4.2</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">上下文相关性过滤</td>
+<td style="text-align: left;">元数据过滤</td>
 <td style="text-align: left;">按日期、地点、作者等元数据过滤，使所选内容贴近用户需求</td>
 <td style="text-align: left;"><a href="../ch5/s5-4.html#c5-subsec-hybrid">5.4.3</a></td>
 </tr>
@@ -1019,7 +1020,7 @@ window.Quarto = {
 <td style="text-align: left;">本小节</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">带反馈回路的主动学习</td>
+<td style="text-align: left;">带反馈回路的持续优化</td>
 <td style="text-align: left;">用用户反馈迭代改进检索结果，适应偏好变化</td>
 <td style="text-align: left;">本小节</td>
 </tr>

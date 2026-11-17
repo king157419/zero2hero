@@ -788,7 +788,7 @@ window.Quarto = {
 <section id="推理引擎与推理平台" class="level2">
 <h2 class="anchored" data-anchor-id="推理引擎与推理平台">3.11.1　推理引擎与推理平台</h2>
 <p><strong>推理引擎</strong>（inference engine）负责<strong>运行模型</strong>，解决“模型怎么算”：加载权重、管理运行数据，调用硬件完成预填充和解码。<strong>推理平台</strong>负责<strong>把模型用起来、管起来</strong>，解决“用户怎么方便地使用”：模型从哪里下载、怎样启动和切换、其他程序如何调用，都可以通过平台完成。一个平台通常建立在一个或多个引擎之上。打个比方，引擎是汽车的发动机，决定车能跑多快；平台是驾驶舱和仪表盘，决定开起来是否方便。<strong>平台不会给模型增加任何知识或能力</strong>，它只是省去了配置和管理工作。</p>
-<p>推理引擎主要做三件事。<strong>模型加载</strong>：识别模型结构、读取权重、为运行准备内存，决定全部由 GPU 计算还是部分交给 CPU；下载完成后要确认引擎能识别它的<strong>模型结构、文件格式和量化方式</strong>，三者缺一不可。<strong>预填充与解码</strong>：用户的问题先由分词器转换成 token，引擎在两个阶段为不同硬件选择合适的计算内核、安排计算顺序、分配临时空间，并管理 KV 缓存等运行数据。<strong>多请求调度</strong>：十个人同时提问时，决定怎样组批、何时插入新请求、显存不够时先处理谁、是否复用相同前缀的 KV 缓存；连续批处理、PagedAttention、前缀缓存都在这一层实现。</p>
+<p>推理引擎主要做三件事。<strong>模型加载</strong>：识别模型结构、读取权重、为运行准备内存，决定全部由 GPU 计算还是部分交给 CPU；下载完成后要确认引擎能识别它的<strong>模型结构、文件格式和量化方式</strong>，三者缺一不可。<strong>预填充与解码</strong>：用户的问题先由分词器转换成 token，引擎在两个阶段为不同硬件选择合适的计算内核、安排计算顺序、分配临时空间，并管理 KV 缓存等运行数据。<strong>多请求调度</strong>：十个人同时提问时，决定怎样组批、何时插入新请求、显存不够时先处理谁、是否复用相同前缀的 KV 缓存；连续批处理（调度策略）、PagedAttention（KV 缓存的分页管理）、前缀缓存（复用相同前缀的 KV 缓存）都是引擎在这一层的做法。</p>
 <p>表 <a href="../ch3/s3-11.html#c3-tab-engines">3-18</a> 列出了常用的引擎和平台（截至 2026 年 11 月）。</p>
 <div id="c3-tab-engines" class="booktab">
 <div class="tabcap">
@@ -831,8 +831,8 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">TokenSpeed^[[54]](ref</td>
 <td style="text-align: left;">erences</td>
-<td style="text-align: left;">.qmd#ref-54)^ 引擎 LightSeek 基金会 2026 年开源，面向智能体负载，调度与内核模块化</td>
-<td style="text-align: left;">智能体服务（早期项目）</td>
+<td style="text-align: left;">.qmd#ref-54)^ 引擎 非营利组织 LightSeek 基金会支持的开源项目（MIT 许可，2026 年 5 月公布），面向智能体负载；C++ 控制面负责请求与 KV 缓存管理</td>
+<td style="text-align: left;">，内核可插拔 智能体服务（早期项目）</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">LMDeploy</td>
@@ -859,10 +859,10 @@ window.Quarto = {
 <td style="text-align: left;">个人本地使用</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Lemonade</td>
-<td style="text-align: left;">平台</td>
-<td style="text-align: left;">在同一本地服务中管理模型和多种后端：llama.cpp，以及在受支持设备上的 FastFlowLM、Ryzen AI 等面向 AMD 处理器内置 NPU 的后端</td>
-<td style="text-align: left;">带 NPU 的个人电脑</td>
+<td style="text-align: left;">Lemonade^[[57]](refer</td>
+<td style="text-align: left;">ences.q</td>
+<td style="text-align: left;">md#ref-57)^ 平台 AMD 赞助的社区项目；在同一本地服务中管理模型和多种后端：llama.cpp，以及在受支持设备上的 FastFlowLM、Ryzen AI 等面向 AMD 处</td>
+<td style="text-align: left;">理器内置 NPU 的后端 带 NPU 的个人电脑</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Xinference</td>
@@ -945,12 +945,12 @@ curl http://localhost:8000/v1/chat/completions \
 <p>先判断“能不能跑”，用式 <a href="../ch3/s3-9.html#c3-eq-infer-mem">（3-37）</a> 估算显存。</p>
 <div id="c3-ex-laptop" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-10　笔记本能否运行 7B 模型</p>
+<p>例 3-12　笔记本能否运行 7B 模型</p>
 </div>
 <p>在 16 GB 统一内存的笔记本上运行 Qwen2.5-7B-Instruct 的 Q4_K_M 版本（文件约 4.7 GB），上下文设为 8192。该模型 28 层、4 个 KV 头、每头 128 维，KV 缓存以 FP16 存储，开销按 15% 计。</p>
 <div class="cthreecalc">
 <p>1 &amp; 权重 &amp; 文件大小 &amp; 4.7 GB &amp; GGUF 文件即权重（已含量化开销）<br>
-2 &amp; 每 token KV &amp; <span class="math inline">\(2\times28\times4\times128\times2\)</span> &amp; 57 344 B &amp; 式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a>；层数、KV 头数来自 <code>config.json</code><br>
+2 &amp; 每 token KV &amp; <span class="math inline">\(2\times28\times4\times128\times2\)</span> &amp; 57 344 B &amp; 式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a>：第一个 2 表示 K 和 V，末尾的 2 是 FP16 每元素字节数；层数、KV 头数来自 <code>config.json</code><br>
 3 &amp; KV 总量 &amp; <span class="math inline">\(57\,344\times8192\)</span> &amp; 0.47 GB &amp; 上下文 8192，1 个用户<br>
 4 &amp; 开销 &amp; <span class="math inline">\((4.7+0.47)\times15\%\)</span> &amp; 0.78 GB &amp; 按前两项之和的 15%<br>
 5 &amp; 合计 &amp; <span class="math inline">\(4.7+0.47+0.78\)</span> &amp; 约 6 GB &amp; 远小于 16 GB<br>

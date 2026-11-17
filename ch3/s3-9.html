@@ -838,12 +838,12 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-21　推理显存的估算流程（例 <a href="../ch3/s3-9.html#c3-ex-infermem">3-7</a>）。KV 缓存按第 4 章式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 计算；②～③ 中任何一个数取错，结果都会相差数倍</p>
+<p>图 3-21　推理显存的估算流程（例 <a href="../ch3/s3-9.html#c3-ex-infermem">3-9</a>）。KV 缓存按第 4 章式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 计算；②～③ 中任何一个数取错，结果都会相差数倍</p>
 </div>
 </div>
 <div id="c3-ex-infermem" class="bookbox example">
 <div class="boxtitle">
-<p>例 3-7　70B 模型的推理显存</p>
+<p>例 3-9　70B 模型的推理显存</p>
 </div>
 <p>LLaMA 2-70B 有 80 层、64 个注意力头、每头 128 维（隐藏维度 <span class="math inline">\(d=8192\)</span>），采用 GQA，共 8 个 KV 头。以 FP16 推理，同时服务 10 个用户，每人支持 32K 上下文，开销按前两项之和的 10% 计。分别按“不用 GQA”（把隐藏维度 8192 全部当作 KV 维度）和“实际的 GQA”估算推理显存。</p>
 <div class="cthreecalc">
@@ -859,6 +859,7 @@ window.Quarto = {
 </div>
 <p>数据流向配置文件给出层数、KV 头数、每头维度 → 每 token 的 KV → 乘上下文长度与用户数 → 加权重 → 乘 1.1 加开销。 同一道题常见三个答案，差别全在口径。(a) 把“32K”取为 <span class="math inline">\(32\,000\)</span>：KV 为 <span class="math inline">\(2\,621\,440\times32\,000\times10\approx839\,\text{GB}\)</span>，合计 <span class="math inline">\((140+839)\times1.1\approx1077\,\text{GB}\)</span>。(b) 取 <span class="math inline">\(32\,768\)</span>：如上表约 1099 GB。(c) 教学资料中常见的“KV 约 800 GB、合计约 1034 GB”：<span class="math inline">\(2\,621\,440\times32\,768\times10\)</span> 字节恰好是 800 GiB（除以 <span class="math inline">\(1024^{3}\)</span>），却与以 <span class="math inline">\(10^{9}\)</span> 计的 140 GB 权重直接相加，单位混用，所以偏小；此外，有的题目把隐藏维度写成“每层 8196 个神经元”，应为 8192。本书 GB 一律按 <span class="math inline">\(10^{9}\)</span> 字节计，因此取 (b)；若题目明确 32K = 32 000，取 (a)。更重要的是，真实的 LLaMA 2-70B 用 GQA，按 MHA 计算会把 KV 缓存高估 8 倍：此时 KV 缓存（859 GB）远超权重本身，而 GQA 下只有 107 GB。</p>
 </div>
+<div class="widget" data-widget="c3infer"></div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>长上下文不是免费的。KV 缓存与上下文长度、并发用户数都成正比。一个模型“支持 128K 上下文”，只说明它在训练和结构上能处理这么长的输入，不意味着在你的显卡上能以 128K 同时服务很多人。估算推理显存时必须同时考虑权重和 KV 缓存，并且用 <strong>KV 头数</strong>而不是查询头数代入。</p>
@@ -867,7 +868,7 @@ window.Quarto = {
 <section id="c3-subsec-decoding" class="level2">
 <h2 class="anchored" data-anchor-id="c3-subsec-decoding">3.9.5　解码策略：怎样选出下一个 token</h2>
 <p>模型每一步输出的是词表上的一个概率分布。“如何从分布中选出下一个 token”称为<strong>解码策略</strong>，它直接影响生成文本的质量和风格。这里的“解码”指选 token 的方法，与解码器（模型结构）、解码阶段（运行阶段）都不是一回事。</p>
-<p><strong>贪心解码与束搜索</strong>　 <strong>贪心解码</strong>（greedy decoding）每步选概率最大的 token： <span class="math display">\[y_t=\arg\max_{y}P(y\mid\boldsymbol{x},y_{&lt;t}).\]</span> 它简单、结果确定，但每步的局部最优不保证整体最优，还容易陷入重复。<strong>束搜索</strong>（beam search）每步保留概率最高的 <span class="math inline">\(k\)</span> 个候选序列（<span class="math inline">\(k\)</span> 称为束宽），最后选整体概率最高的序列，常用于机器翻译等有较明确标准答案的任务。在开放式生成中，这两种确定性方法生成的文本往往平淡、重复。</p>
+<p><strong>贪心解码与束搜索</strong>　 <strong>贪心解码</strong>（greedy decoding）每步选概率最大的 token： <span class="math display">\[y_t=\arg\max_{y}P(y\mid\boldsymbol{x},y_{&lt;t}).\]</span> 它简单、结果确定，但每步的局部最优不保证整体最优，还容易陷入重复。<strong>束搜索</strong>（beam search）每步保留累计概率最高的 <span class="math inline">\(k\)</span> 个候选序列（<span class="math inline">\(k\)</span> 称为束宽），最后选累计概率最高的序列，常用于机器翻译等有较明确标准答案的任务。在开放式生成中，这两种确定性方法生成的文本往往平淡、重复。</p>
 <p><strong>温度采样</strong>　 对话等开放式生成通常按概率<strong>随机采样</strong>。设模型最后一层输出的未归一化分数（logits）为 <span class="math inline">\(z_i\)</span>，引入<strong>温度</strong>（temperature）<span class="math inline">\(\tau\)</span> 后，各 token 的采样概率为 <span class="math display">\[p_i=\frac{\exp(z_i/\tau)}{\sum_j\exp(z_j/\tau)}.
 \tag{3-38}\]</span> 如图 <a href="../ch3/s3-9.html#c3-fig-temp">3-22</a>，<span class="math inline">\(\tau&lt;1\)</span> 时分布变“尖”，高概率 token 更占优势，输出更保守、确定；<span class="math inline">\(\tau&gt;1\)</span> 时分布变“平”，低概率 token 机会增加，输出更多样，也更容易出错；<span class="math inline">\(\tau\to0\)</span> 时等价于贪心解码。</p>
 <div id="c3-fig-temp" class="bookfig">
@@ -880,6 +881,7 @@ window.Quarto = {
 <p>图 3-22　温度对下一个 token 分布的影响，以及 Top-P 截断（“今天天气很”的候选，示意数据）。τ = 1 时为模型原始分布；τ 越低分布越尖、保留的候选越少，τ 越高分布越平、保留的候选越多</p>
 </div>
 </div>
+<div class="widget" data-widget="c3decode"></div>
 <p><strong>Top-K 与 Top-P 采样</strong>　 纯随机采样可能抽到概率极低、明显不合理的 token，因此通常先截断候选范围，再在剩余候选中重新归一化后采样。<strong>Top-K 采样</strong>只保留概率最高的 <span class="math inline">\(k\)</span> 个 token。<strong>Top-P 采样</strong>（也称<strong>核采样</strong>，nucleus sampling）<sup><a href="../ch3/references.html#ref-44">[44]</a></sup>把 token 按概率从高到低排序，保留累积概率刚好达到阈值 <span class="math inline">\(p\)</span> 的最小集合： <span class="math display">\[\mathcal{V}^{(p)}=\arg\min_{\mathcal{V}'}\lvert\mathcal{V}'\rvert\quad\text{满足}\ \sum_{y\in\mathcal{V}'}P(y\mid\boldsymbol{x},y_{&lt;t})\ge p.
 \tag{3-39}\]</span> 在图 <a href="../ch3/s3-9.html#c3-fig-temp">3-22</a> 中，<span class="math inline">\(p=0.9\)</span> 时，<span class="math inline">\(\tau=0.5\)</span> 只保留 2 个候选（<span class="math inline">\(0.78+0.15=0.93\ge0.9\)</span>），<span class="math inline">\(\tau=1.0\)</span> 保留 4 个，<span class="math inline">\(\tau=2.0\)</span> 保留 6 个。</p>
 <div class="bookbox pitfall">
@@ -904,7 +906,7 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">数学、代码、信息抽取</td>
 <td style="text-align: left;">贪心或低温采样</td>
-<td style="text-align: left;"><span class="math inline">\(\tau=0\)</span>～<span class="math inline">\(0.3\)</span>（<span class="math inline">\(\tau=0\)</span> 即贪心）</td>
+<td style="text-align: left;"><span class="math inline">\(\tau=0\)</span>～<span class="math inline">\(0.3\)</span>（实现中常以 <span class="math inline">\(\tau=0\)</span> 表示贪心）</td>
 <td style="text-align: left;">需要确定、准确的结果</td>
 </tr>
 <tr class="even">

@@ -871,7 +871,7 @@ window.Quarto = {
 </section>
 <section id="c2-subsec-four-stages" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-four-stages">2.6.2　四个阶段总览</h2>
-<p>对话模型的构建分为四个阶段（图 <a href="../ch2/s2-6.html#c2-fig-build">2-12</a>）：<strong>预训练</strong>、<strong>有监督微调</strong>、<strong>奖励建模</strong>和<strong>强化学习</strong>。每个阶段都在上一阶段产出的模型上继续训练，只有奖励模型例外——它是另训的一个“裁判”，只在强化学习阶段使用。第一阶段让模型“学到知识”，后三个阶段让模型“学会说话”，即把模型的行为对齐到人类的期望，统称<strong>对齐</strong>（alignment）。这一流程由 OpenAI 在 2022 年的 InstructGPT 工作中系统化<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>。表 <a href="../ch2/s2-6.html#c2-tab-stages">2-12</a> 列出了各阶段的数据、目标与资源。</p>
+<p>对话模型的构建分为四个阶段（图 <a href="../ch2/s2-6.html#c2-fig-build">2-12</a>）：<strong>预训练</strong>、<strong>有监督微调</strong>、<strong>奖励建模</strong>和<strong>强化学习</strong>。每个阶段都在上一阶段产出的模型上继续训练，只有奖励模型例外——它是另训的一个“裁判”，只在强化学习阶段使用。第一阶段让模型“学到知识”，后三个阶段让模型“学会说话”，即把模型的行为对齐到人类的期望，统称<strong>对齐</strong>（alignment）。这一流程由 OpenAI 在 2022 年的 InstructGPT 工作中系统化<sup><a href="../ch2/references.html#ref-49">[49]</a></sup>。表 <a href="../ch2/s2-6.html#c2-tab-stages">2-12</a> 列出了各阶段的数据、目标与资源。</p>
 <div id="c2-fig-build" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -879,7 +879,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 2-12　对话模型构建的四个阶段（数据规模取自文献 <sup><a href="../ch2/references.html#ref-18">[18]</a>,<a href="../ch2/references.html#ref-47">[47]</a></sup>）。阶段之间的横向箭头表示“在上一阶段产出的模型上继续训练”；奖励模型从第三列底部接入强化学习，它不直接给用户使用，只在强化学习阶段充当裁判</p>
+<p>图 2-12　对话模型构建的四个阶段（数据规模取自文献 <sup><a href="../ch2/references.html#ref-19">[19]</a>,<a href="../ch2/references.html#ref-49">[49]</a></sup>）。阶段之间的横向箭头表示“在上一阶段产出的模型上继续训练”；奖励模型从第三列底部接入强化学习，它不直接给用户使用，只在强化学习阶段充当裁判</p>
 </div>
 </div>
 <div id="c2-tab-stages" class="booktab">
@@ -932,7 +932,7 @@ window.Quarto = {
 <section id="c2-subsec-pretrain" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-pretrain">2.6.3　预训练：从海量文本中学到知识</h2>
 <p>预训练利用海量数据，包括互联网网页、维基百科、书籍、GitHub 代码、论文、问答网站等，构建数千亿乃至数万亿词元的多样化语料，在由数千块 GPU 和高速网络组成的集群上花费数十天训练，得到<strong>基础模型</strong>（base model）。训练目标就是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a>。</p>
-<p>不同来源的数据要按一定比例混合。图 <a href="../ch2/s2-6.html#c2-fig-llama">2-13</a> 是 Meta 公开的 LLaMA 预训练数据配比<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>。从中可以看出两个常见做法：网页数据提供规模和多样性，是语料的主体；维基百科、书籍这类高质量数据总量有限，就通过多轮重复来提高权重。近年的趋势是<strong>质量比数量更重要</strong>：微软的 Phi 系列用精选和合成的“教科书级”数据，让小模型达到了超出其规模的效果<sup><a href="../ch2/references.html#ref-48">[48]</a></sup>。另一方面，人类公开的高质量文本可能在未来几年内被用尽，这被称为“数据墙”问题，合成数据因此成为重要的研究方向。原始网页怎样经过正文抽取、语言识别、质量过滤、去重、隐私清理、测试集去污染和分词打包变成训练样本，见第 3 章。</p>
+<p>不同来源的数据要按一定比例混合。图 <a href="../ch2/s2-6.html#c2-fig-llama">2-13</a> 是 Meta 公开的 LLaMA 预训练数据配比<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>。从中可以看出两个常见做法：网页数据提供规模和多样性，是语料的主体；维基百科、书籍这类高质量数据总量有限，就通过多轮重复来提高权重。近年的趋势是<strong>质量比数量更重要</strong>：微软的 Phi 系列用精选和合成的“教科书级”数据，让小模型达到了超出其规模的效果<sup><a href="../ch2/references.html#ref-50">[50]</a></sup>。另一方面，人类公开的高质量文本可能在未来几年内被用尽，这被称为“数据墙”问题，合成数据因此成为重要的研究方向。原始网页怎样经过正文抽取、语言识别、去重、隐私脱敏、质量打分、数据配比、分词、测试集去污染和序列打包变成训练样本，见第 <a href="../ch3/s3-3.html">3.3</a> 节。</p>
 <div id="c2-fig-llama" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -940,7 +940,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 2-13　LLaMA 预训练数据的采样占比与训练轮次（据文献 <sup><a href="../ch2/references.html#ref-19">[19]</a></sup>，共约 1.4 万亿词元）。两类网页数据合计 82%；维基百科和书籍占比小，但被重复训练两遍以上</p>
+<p>图 2-13　LLaMA 预训练数据的采样占比与训练轮次（据文献 <sup><a href="../ch2/references.html#ref-20">[20]</a></sup>，共约 1.4 万亿词元）。两类网页数据合计 82%；维基百科和书籍占比小，但被重复训练两遍以上</p>
 </div>
 </div>
 <p>预训练消耗了整个流程的绝大部分算力。用第 <a href="../ch2/s2-4.html#c2-subsec-kaplan">2.4.2</a> 小节的公式可以核对一个公开数字。</p>
@@ -948,7 +948,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 2-8　GPT-3 预训练需要多少算力和时间</p>
 </div>
-<p>GPT-3 论文报告一次完整训练的计算量约为 3640 PF-days<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>（1 PF-day 指以 <span class="math inline">\(10^{15}\)</span> 次/秒的速度运行一天）。(1) 把它换算成浮点运算次数，并用 <span class="math inline">\(C\approx6ND\)</span> 核对；(2) 若用 1000 块 A100、平均利用率 50%，需要多少天？</p>
+<p>GPT-3 论文报告一次完整训练的计算量约为 3640 PF-days<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>（1 PF-day 指以 <span class="math inline">\(10^{15}\)</span> 次/秒的速度运行一天）。(1) 把它换算成浮点运算次数，并用 <span class="math inline">\(C\approx6ND\)</span> 核对；(2) 若用 1000 块 A100、平均利用率 50%，需要多少天？</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1009,21 +1009,21 @@ window.Quarto = {
 &lt;|user|&gt;用一句话解释什么是光合作用。
 &lt;|assistant|&gt;光合作用是植物利用光能，把二氧化碳和水转化为有机物并释放氧气的过程。&lt;|end|&gt;</code></pre>
 <p>训练时整段文本都作为输入，但只有 <code>&lt;|assistant|&gt;</code> 之后的词元（包括结束标记）计入损失，前面部分的损失权重置为 0。让模型学会生成结束标记也很重要，否则它会在回答完之后继续自说自话，甚至替用户提出下一个问题。</p>
-<p>InstructGPT 的 SFT 数据只有约 1.3 万条提示<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>，相对预训练的数千亿词元微不足道，却显著改变了模型的行为。Meta 的 LIMA 工作（2023）更进一步：只用 1000 条精心挑选的样本微调 650 亿参数的 LLaMA，效果就已相当不错<sup><a href="../ch2/references.html#ref-49">[49]</a></sup>。作者据此提出“表面对齐假说”：模型的知识和能力几乎全部来自预训练，对齐主要是教它用什么格式和风格与用户交互。由此得到一条工程原则：SFT 数据的质量和多样性远比数量重要。经过 SFT 的模型具备了初步的指令理解和上下文理解能力，能完成开放领域问答、阅读理解、翻译、代码生成等任务，对没见过的任务也有一定泛化能力，可以开放给用户使用，许多开源对话模型就停在这一阶段。SFT 数据的来源（人工撰写、改写已有数据集、由更强的模型生成）和 LoRA 等参数高效微调方法见第 3 章。</p>
+<p>InstructGPT 的 SFT 数据只有约 1.3 万条提示<sup><a href="../ch2/references.html#ref-49">[49]</a></sup>，相对预训练的数千亿词元微不足道，却显著改变了模型的行为。Meta 的 LIMA 工作（2023）更进一步：只用 1000 条精心挑选的样本微调 650 亿参数的 LLaMA，效果就已相当不错<sup><a href="../ch2/references.html#ref-51">[51]</a></sup>。作者据此提出“表面对齐假说”：模型的知识和能力几乎全部来自预训练，对齐主要是教它用什么格式和风格与用户交互。由此得到一条工程原则：SFT 数据的质量和多样性远比数量重要。经过 SFT 的模型具备了初步的指令理解和上下文理解能力，能完成开放领域问答、阅读理解、翻译、代码生成等任务，对没见过的任务也有一定泛化能力，可以开放给用户使用，许多开源对话模型就停在这一阶段。SFT 数据的来源（人工撰写、改写已有数据集、由更强的模型生成）见第 <a href="../ch3/s3-6.html">3.6</a> 节，LoRA 等参数高效微调方法见第 <a href="../ch3/s3-7.html">3.7</a> 节。</p>
 </section>
 <section id="c2-subsec-rm" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-rm">2.6.5　奖励建模：训练一个裁判</h2>
 <p>SFT 只能模仿示范回答，而写出完美的回答很难。对人类来说，<strong>判断哪个回答更好，远比亲自写出最好的回答容易</strong>。奖励建模就利用了这一点：对同一个提示，让 SFT 模型生成多个回答（InstructGPT 中为 4～9 个），由标注人员按质量排序；再把排序拆成若干“好回答 <span class="math inline">\(y_w\)</span> 优于差回答 <span class="math inline">\(y_l\)</span>”的对子，训练一个打分模型 <span class="math inline">\(r(x,y)\)</span>，让好回答的得分高于差回答。例如对 4 个回答 A、B、C、D 排出 B <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> C，任取两个都能比出高下，一次排序就得到 <span class="math inline">\(\binom{4}{2}=6\)</span> 个偏好对。</p>
 <p>训练损失只取决于两个回答的<strong>得分差</strong>： <span class="math display">\[\mathcal{L}_{\mathrm{RM}} = -\log\sigma\bigl(r(x,y_w)-r(x,y_l)\bigr),
-\tag{2-24}\]</span> 得分差越大（越确信好回答更好），损失越小。因此奖励模型的分数只有相对意义，绝对数值没有含义；它学到的也是标注人员的偏好，而不是客观的“好坏”——如果标注人员偏爱更长、更自信的回答，奖励模型也会继承这种偏好。奖励模型通常从 SFT 模型初始化，把输出层换成一个输出标量分数的线性层，InstructGPT 的奖励模型有 60 亿参数。与基础模型和 SFT 模型不同，<strong>奖励模型本身不能单独提供给用户使用</strong>，它只是下一阶段的裁判；训练资源与 SFT 相当，通常是数十块 GPU、数天。这个损失从哪来（Bradley–Terry 模型）及其梯度分析见第 3 章。</p>
+\tag{2-24}\]</span> 得分差越大（越确信好回答更好），损失越小。因此奖励模型的分数只有相对意义，绝对数值没有含义；它学到的也是标注人员的偏好，而不是客观的“好坏”——如果标注人员偏爱更长、更自信的回答，奖励模型也会继承这种偏好。奖励模型通常从 SFT 模型初始化，把输出层换成一个输出标量分数的线性层，InstructGPT 的奖励模型有 60 亿参数。与基础模型和 SFT 模型不同，<strong>奖励模型本身不能单独提供给用户使用</strong>，它只是下一阶段的裁判；训练资源与 SFT 相当，通常是数十块 GPU、数天。这个损失的形式及其来源（Bradley–Terry 模型）、梯度分析和数值算例（例 <a href="../ch3/s3-8.html#c3-ex-rmloss">3-8</a>）见第 <a href="../ch3/s3-8.html">3.8</a> 节式 <a href="../ch3/s3-8.html#c3-eq-rm">（3-28）</a>。</p>
 </section>
 <section id="c2-subsec-rl" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-rl">2.6.6　强化学习：在裁判的打分下改进</h2>
-<p>强化学习阶段把前三个阶段的成果组合起来：对大量提示，当前模型生成回答，奖励模型给出评分，再用强化学习算法更新模型参数，让高分回答的概率变大、低分回答的概率变小。这就是<strong>基于人类反馈的强化学习</strong>（RLHF），常用算法是<strong>近端策略优化</strong>（PPO）<sup><a href="../ch2/references.html#ref-50">[50]</a></sup>。</p>
+<p>强化学习阶段把前三个阶段的成果组合起来：对大量提示，当前模型生成回答，奖励模型给出评分，再用强化学习算法更新模型参数，让高分回答的概率变大、低分回答的概率变小。这就是<strong>基于人类反馈的强化学习</strong>（RLHF），常用算法是<strong>近端策略优化</strong>（PPO）<sup><a href="../ch2/references.html#ref-52">[52]</a></sup>。</p>
 <p>只追求高分是危险的：模型会找到奖励模型的漏洞并加以利用，例如生成越来越长、堆砌套话却得分很高的回答，这称为<strong>奖励破解</strong>（reward hacking）。因此优化目标还要加一项约束，惩罚当前模型的输出分布偏离 SFT 模型太远（用 KL 散度衡量，它是度量两个概率分布差异的指标，分布相同时为 0），也就是把“追求奖励”与“保持语言模型原有的建模能力”综合起来： <span class="math display">\[\max_{\pi_\theta}\ \mathbb{E}\bigl[r(x,y)\bigr] - \beta\,\mathrm{KL}\bigl(\pi_\theta\,\Vert\,\pi_{\mathrm{SFT}}\bigr),
 \tag{2-25}\]</span> 其中 <span class="math inline">\(\pi_\theta\)</span> 是正在训练的模型（在强化学习中称为<strong>策略</strong>），<span class="math inline">\(\beta\)</span> 控制约束的强弱。</p>
-<p>这一阶段的提示数量与 SFT 阶段同一量级，但不需要人工预先写出理想回答；计算量远小于预训练，通常也只需数十块 GPU、数天。效果却很显著：InstructGPT 论文报告，经过 RLHF 的 13 亿参数模型，其回答比 1750 亿参数的 GPT-3 更受标注人员偏爱<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>。</p>
-<p>PPO 的一次迭代要同时协调策略模型、参考模型（冻结的 SFT 模型）、奖励模型和价值模型四个模型，工程上复杂、超参数敏感。这推动了后来的简化：直接偏好优化（DPO，2023）跳过奖励模型和强化学习，直接用偏好对训练模型<sup><a href="../ch2/references.html#ref-51">[51]</a></sup>；DeepSeek-R1（2025）等推理模型在数学、代码等答案可以自动验证的任务上，用规则给出的奖励代替人类打分，并采用去掉价值模型的 GRPO 算法做大规模强化学习<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>。这些方法的推导与比较见第 3 章。</p>
+<p>这一阶段的提示数量与 SFT 阶段同一量级，但不需要人工预先写出理想回答；计算量远小于预训练，通常也只需数十块 GPU、数天。效果却很显著：InstructGPT 论文报告，经过 RLHF 的 13 亿参数模型，其回答比 1750 亿参数的 GPT-3 更受标注人员偏爱<sup><a href="../ch2/references.html#ref-49">[49]</a></sup>。</p>
+<p>PPO 的一次迭代要同时协调策略模型、参考模型（冻结的 SFT 模型）、奖励模型和价值模型四个模型，工程上复杂、超参数敏感。这推动了后来的简化：直接偏好优化（DPO，2023）跳过奖励模型和强化学习，直接用偏好对训练模型<sup><a href="../ch2/references.html#ref-53">[53]</a></sup>；DeepSeek-R1（2025）等推理模型在数学、代码等答案可以自动验证的任务上，用规则给出的奖励代替人类打分，并采用去掉价值模型的 GRPO 算法做大规模强化学习<sup><a href="../ch2/references.html#ref-21">[21]</a></sup>。PPO 的裁剪目标与四个模型的分工、DPO 的损失，以及 GRPO 和基于可验证奖励的强化学习，见第 <a href="../ch3/s3-8.html">3.8</a> 节。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>SFT 与 RLHF 都在“对齐”，学习信号却不同。SFT 是<strong>模仿</strong>：给出标准答案，让模型逐词元地照着写，上限是示范数据的质量。RLHF 是<strong>比较</strong>：不给标准答案，只告诉模型它自己生成的回答哪个更好，因此能超出示范数据，但依赖奖励模型的质量，并有奖励破解的风险。实践中两者先后使用：先用 SFT 把模型带到“会按格式回答”，再用 RLHF 在此基础上继续改进。</p>

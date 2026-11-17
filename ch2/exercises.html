@@ -828,7 +828,7 @@ window.Quarto = {
 </dd>
 <dt>2.8</dt>
 <dd>
-<p>每层注意力 <span class="math inline">\(4\times4096^2=6.71\times10^{7}\)</span>，FFN <span class="math inline">\(3\times4096\times11\,008=1.353\times10^{8}\)</span>，每层 <span class="math inline">\(2.024\times10^{8}\)</span>，32 层共 <span class="math inline">\(6.476\times10^{9}\)</span>；嵌入与输出 <span class="math inline">\(2\times32\,000\times4096=2.62\times10^{8}\)</span>；合计 <span class="math inline">\(6.74\times10^{9}\)</span>，即约 67 亿。<span class="math inline">\(12Ld^2=6.44\times10^{9}\)</span>，两者接近：SwiGLU 用三个矩阵，但把 <span class="math inline">\(d_{\mathrm{ff}}\)</span> 从 <span class="math inline">\(4d\)</span> 缩到约 <span class="math inline">\(\tfrac{8}{3}d\)</span>，参数量与 <span class="math inline">\(8d^2\)</span> 相当。</p>
+<p>每层注意力 <span class="math inline">\(4\times4096^2=6.71\times10^{7}\)</span>，FFN <span class="math inline">\(3\times4096\times11\,008=1.353\times10^{8}\)</span>，每层 <span class="math inline">\(2.024\times10^{8}\)</span>，32 层共 <span class="math inline">\(6.476\times10^{9}\)</span>；嵌入与输出 <span class="math inline">\(2\times32\,000\times4096=2.62\times10^{8}\)</span>；合计 <span class="math inline">\(6.74\times10^{9}\)</span>，即约 67 亿。<span class="math inline">\(12Ld^2=12\times32\times4096^2=6.44\times10^{9}\)</span>（不含嵌入），与不含嵌入的 <span class="math inline">\(6.476\times10^{9}\)</span> 只差约 0.6</p>
 </dd>
 <dt>2.9</dt>
 <dd>

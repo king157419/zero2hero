@@ -793,10 +793,10 @@ window.Quarto = {
 <section id="c6-subsec-autonomy" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-autonomy">6.4.1　自主性：从逐步指令到目标委托</h2>
 <p><strong>自主性</strong>（autonomy）指在没有持续人工干预的情况下，根据自身目标和对环境的感知，独立做出决策并执行行动的能力。它是其他能力发挥作用的前提：一个需要用户逐步指挥的系统，单步能力再强，也无法接受“把这件事办了”式的委托。</p>
-<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-7</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
+<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-8</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
 <div id="c6-tab-autonomy" class="booktab">
 <div class="tabcap">
-<p>表 6-7　智能体自主性的五个等级（据 Feng 等人的划分）</p>
+<p>表 6-8　智能体自主性的五个等级（据 Feng 等人的划分）</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -841,7 +841,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="c6-subsec-plan">6.4.2　规划：把目标变成可执行的步骤</h2>
 <p><strong>规划</strong>（planning）指把复杂任务分解为一系列可管理的子任务，确定执行顺序，评估不同行动路径的优劣，并根据可用信息和期望结果选出最佳方案。</p>
 <p>形式上，规划是一个搜索问题：给定初始状态 <span class="math inline">\(s_0\)</span>、目标条件 <span class="math inline">\(g\)</span>、动作集合 <span class="math inline">\(\mathcal{A}\)</span> 和状态转移函数 <span class="math inline">\(f(s,a)\)</span>，寻找动作序列 <span class="math inline">\((a_1,\dots,a_n)\)</span>，使得从 <span class="math inline">\(s_0\)</span> 出发依次执行后满足 <span class="math inline">\(g\)</span>。<strong>经典规划</strong>用符号精确描述状态，并为每个动作写出前置条件与效果——例如 <strong>STRIPS</strong>（Stanford Research Institute Problem Solver，最早用于斯坦福研究所的规划系统）表示法中，“预订酒店”的前置条件是“已确定入住日期”，效果是“已有住处”——再用搜索算法求解。<strong>LLM 规划</strong>则用自然语言描述状态与步骤，搜索隐含在模型的生成过程里。</p>
-<p>两种规划各有长短。经典规划精确、可验证，在模型描述正确、所用算法完备且最优（如配合可采纳启发函数的 A*）时还能给出最优性保证，但要求先把世界形式化，开放领域难以做到；LLM 规划灵活，能处理常识和模糊约束，却可能写出动作集合之外的动作（例如调用一个并不存在的工具）、漏掉前置条件，或在长任务中忘记目标。于是出现了三种结合方式：</p>
+<p>两种规划各有长短。经典规划精确、可验证，在模型描述正确、搜索算法完备，且 A* 这类启发式搜索使用可采纳的启发函数（图搜索时还需满足一致性）时，还能给出最优性保证，但要求先把世界形式化，开放领域难以做到；LLM 规划灵活，能处理常识和模糊约束，却可能写出动作集合之外的动作（例如调用一个并不存在的工具）、漏掉前置条件，或在长任务中忘记目标。于是出现了三种结合方式：</p>
 <ul>
 <li><p><strong>LLM 作规划器</strong>：直接让模型输出步骤列表，框架逐步执行。实现简单，适合步骤少、容错高的任务。</p></li>
 <li><p><strong>LLM 作翻译器</strong>：模型把自然语言任务翻译成形式化描述，例如 <strong>PDDL</strong>（规划领域定义语言），交给经典规划器求解，再把结果翻译回自然语言。这样兼得模型的理解能力和规划器的正确性保证，LLM+P<sup><a href="../ch6/references.html#ref-13">[13]</a></sup>是这一思路的代表。</p></li>
@@ -863,12 +863,12 @@ window.Quarto = {
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p><strong>规划与推理。</strong>二者都由 LLM 完成，常被混为一谈，但产物不同。推理回答“什么是真的”，产物是<strong>结论</strong>（这家酒店不能报销）；规划回答“该做什么”，产物是作用于环境的<strong>动作序列</strong>（先查制度、再查车次、再订酒店）。规划离不开推理——判断哪一步可行就要推理——但推理不一定产生行动。评价方式也不同：推理看结论是否正确，规划看计划能否执行、是否达成目标。</p>
-<p><strong>“推理”的两种意思。</strong>本节的“推理”是 reasoning，指得出结论的思维过程；第 4 章的“推理”是 inference，指训练好的模型根据输入计算输出的运行过程（与“训练”相对）。“推理模型”“推理成本”这类说法要看上下文：说模型“推理能力强”指前者，说“推理服务的显存”指后者。</p>
+<p><strong>“推理”的两种意思。</strong>本节的“推理”是 reasoning，指得出结论的思维过程；第 4 章第 <a href="../ch4/s4-4.html">4.4</a> 节的“推理”是 inference，指训练好的模型根据输入计算输出的运行过程（与“训练”相对）。“推理模型”“推理成本”这类说法要看上下文：说模型“推理能力强”指前者，说“推理服务的显存”指后者。</p>
 </div>
 </section>
 <section id="c6-subsec-memory" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-memory">6.4.4　记忆：让智能体保持连续</h2>
-<p><strong>记忆</strong>（memory）指存储和检索过去的经验、知识与上下文信息的能力，它是自主性、适应性和持续学习的基础。本小节只讲智能体需要什么样的记忆、记忆怎么读写；各种记忆系统的设计与代表系统见第 8 章。</p>
+<p><strong>记忆</strong>（memory）指存储和检索过去的经验、知识与上下文信息的能力，它是自主性、适应性和持续学习的基础。本小节只讲智能体需要什么样的记忆、记忆怎么读写；各种记忆系统的设计与代表系统见第 <a href="../ch8/s8-2.html">8.2</a> 节。</p>
 <p>为什么需要记忆？除非专门做微调，模型参数在训练后是固定的，不会因为一次对话而改变；上下文窗口提供了“临时记忆”，但容量有限、成本随长度上升，会话结束就消失。没有外部记忆，智能体每次见到用户都像初次见面。记忆承担三项功能：<strong>维持对话连贯</strong>，记住用户偏好和历史对话，使交互自然、个性化；<strong>支持复杂任务执行</strong>，在多步骤、长时间的任务中记住中间状态、规划结果和执行细节，避免重复劳动和错误；<strong>实现持续学习与适应</strong>，积累经验和知识，不断改进行为与决策。</p>
 <p><strong>三层记忆</strong>　 工程上常按保留时长把记忆分为三层（图 <a href="../ch6/s6-4.html#c6-fig-memory">6-7</a>）：<strong>即时记忆</strong>（session memory）保存当前对话内容、近期操作记录和临时工作状态，随会话结束而清空；<strong>工作记忆</strong>（working memory）保存与当前任务相关的上下文、任务执行状态和决策过程，随任务结束而归档；<strong>长期记忆</strong>（persistent memory）保存历史对话摘要、学到的模式和积累的知识，跨任务、跨会话保留。三层之间有两个方向的流动：会话中的关键事实、任务结束时工作记忆里值得保留的结论，被提炼后写入长期记忆（固化）；长期记忆中的相关内容在需要时被召回到工作记忆（召回），供当前任务使用。</p>
 <div id="c6-fig-memory" class="bookfig">
@@ -881,10 +881,10 @@ window.Quarto = {
 <p>图 6-7　智能体记忆的三层结构与读写操作。三层按保留时长划分；会话中的关键事实提炼后固化到长期记忆，长期记忆中的相关内容在需要时召回到工作记忆；检索排序的常用公式见式 (<a href="../ch6/s6-4.html#c6-eq-memscore">6-5</a>)</p>
 </div>
 </div>
-<p><strong>四种操作</strong>　 一个完整的记忆系统包含四种操作：<strong>写入</strong>把原始交互转成可存储的形式，通常是抽取事实再加摘要，而不是原文照存；<strong>检索</strong>在需要时召回相关片段，常用向量相似度初筛，再按时效与重要性排序（向量检索的原理见第 5 章）；<strong>压缩</strong>在记忆膨胀时摘要、去重、裁剪；<strong>遗忘</strong>按价值与时间淘汰低价值记忆，既控制成本，也避免过时信息干扰判断。</p>
-<p>检索时怎样给记忆排序？Park 等人在“生成式智能体”中把相关性、新近度、重要性三项等权相加<sup><a href="../ch6/references.html#ref-6">[6]</a></sup>（新近度按每过一小时乘以 0.995 衰减）。把它写成带权重、按指数衰减的一般形式为 <span class="math display">\[\mathrm{score}(q,m) = \alpha\,\mathrm{sim}(q,m) + \beta\,\mathrm{rec}(m) + \gamma\,\mathrm{imp}(m),
+<p><strong>四种操作</strong>　 一个完整的记忆系统包含四种操作：<strong>写入</strong>把原始交互转成可存储的形式，通常是抽取事实再加摘要，而不是原文照存；<strong>检索</strong>在需要时召回相关片段，常用向量相似度初筛，再按时效与重要性排序（向量检索的原理见第 <a href="../ch5/s5-2.html#c5-subsec-embed">5.2.2</a> 小节）；<strong>压缩</strong>在记忆膨胀时摘要、去重、裁剪；<strong>遗忘</strong>按价值与时间淘汰低价值记忆，既控制成本，也避免过时信息干扰判断。</p>
+<p>检索时怎样给记忆排序？Park 等人在“生成式智能体”中把相关性、新近性、重要性三项等权相加<sup><a href="../ch6/references.html#ref-6">[6]</a></sup>（新近性按每过一小时乘以 0.995 衰减）。把它写成带权重、按指数衰减的一般形式为 <span class="math display">\[\mathrm{score}(q,m) = \alpha\,\mathrm{sim}(q,m) + \beta\,\mathrm{rec}(m) + \gamma\,\mathrm{imp}(m),
   \qquad \mathrm{rec}(m) = e^{-\lambda\,\Delta t},
-\tag{6-5}\]</span> 其中 <span class="math inline">\(q\)</span> 是当前查询，<span class="math inline">\(m\)</span> 是一条记忆；<span class="math inline">\(\mathrm{sim}\)</span> 是二者的语义相似度（“像不像”）；<span class="math inline">\(\mathrm{rec}\)</span> 是新近度，随距今时间 <span class="math inline">\(\Delta t\)</span> 指数衰减，<span class="math inline">\(\lambda\)</span> 为衰减速率（“新不新”）；<span class="math inline">\(\mathrm{imp}\)</span> 是写入时由模型或规则打出的重要性（“重不重要”）；<span class="math inline">\(\alpha,\beta,\gamma\)</span> 为权重。三项各有用处：只看相似度，会反复召回早已过时的信息；只看新近度，会丢掉关键的长期偏好；只看重要性，会忽略眼前的具体情境。</p>
+\tag{6-5}\]</span> 其中 <span class="math inline">\(q\)</span> 是当前查询，<span class="math inline">\(m\)</span> 是一条记忆；<span class="math inline">\(\mathrm{sim}\)</span> 是二者的语义相似度（“像不像”）；<span class="math inline">\(\mathrm{rec}\)</span> 是新近性，随距今时间 <span class="math inline">\(\Delta t\)</span> 指数衰减，<span class="math inline">\(\lambda\)</span> 为衰减速率（“新不新”）；<span class="math inline">\(\mathrm{imp}\)</span> 是写入时由模型或规则打出的重要性（“重不重要”）；<span class="math inline">\(\alpha,\beta,\gamma\)</span> 为权重。三项各有用处：只看相似度，会反复召回早已过时的信息；只看新近性，会丢掉关键的长期偏好；只看重要性，会忽略眼前的具体情境。</p>
 <div id="c6-ex-memscore" class="bookbox example">
 <div class="boxtitle">
 <p>例 6-3　记忆检索评分</p>
@@ -931,7 +931,8 @@ window.Quarto = {
 <p>得分按式 <a href="../ch6/s6-4.html#c6-eq-memscore">（6-5）</a> 逐项相加，例如 <span class="math inline">\(m_1\)</span>：<span class="math inline">\(0.82+0.223+0.9=1.943\)</span>。sim 由嵌入向量的相似度算出，<span class="math inline">\(\Delta t\)</span> 来自写入时间，imp 是写入时打的分。若只取得分最高的两条，结果是 <span class="math inline">\(m_3\)</span> 和 <span class="math inline">\(m_1\)</span>：既拿到了出行日期，又拿到了长期偏好。若只按相似度取前两条，会得到 <span class="math inline">\(m_1\)</span> 和 <span class="math inline">\(m_2\)</span>，丢掉了最关键的出行日期，而 <span class="math inline">\(m_2\)</span> 对这次任务没有用。</p>
 <p><strong>数据流向</strong>：查询 → 与每条记忆算三项分数 → 加权求和 → 取前 <span class="math inline">\(k\)</span> 条写进上下文。</p>
 </div>
-<p><strong>挑战与趋势</strong>　 实现高效、可扩展的长期记忆有五个难点：<strong>记忆表示</strong>——怎样组织海量历史，既能被 LLM 理解又能高效检索（纯文本易读但检索粒度粗，结构化条目精确却丢失语境）；<strong>记忆检索</strong>——怎样从庞大的记忆库中快速准确地找到相关片段（语义相似不等于对任务有用）；<strong>更新与管理</strong>——怎样增删改记忆、保持一致、处理冲突（用户上周说“喜欢靠窗”，这周说“无所谓”，以哪条为准）；<strong>计算效率</strong>——记忆带来的计算和存储开销；<strong>幻觉与一致性</strong>——怎样保证检索到的记忆准确，避免模型基于错误记忆编造，记忆一旦被污染会长期影响行为且难以察觉，因为检索只按相似度、新近度等排序，错误记忆与正确记忆会被一同召回。针对这些难点的发展方向包括：把文本、图像、音频纳入统一表示的<strong>多模态记忆</strong>；从对话中抽取实体、关系、事件，以知识图谱形式存储的<strong>结构化记忆</strong>；更智能的更新与遗忘机制，按任务和时间调整记忆优先级与粒度的<strong>动态管理</strong>；支持大规模、长时间、实时交互的<strong>效率与可扩展性</strong>；以及让开发者能理解、控制智能体如何使用记忆的<strong>可解释性与可控性</strong>。这些方向在第 8 章展开。</p>
+<div class="widget" data-widget="c6mem"></div>
+<p><strong>挑战与趋势</strong>　 实现高效、可扩展的长期记忆有五个难点：<strong>记忆表示</strong>——怎样组织海量历史，既能被 LLM 理解又能高效检索（纯文本易读但检索粒度粗，结构化条目精确却丢失语境）；<strong>记忆检索</strong>——怎样从庞大的记忆库中快速准确地找到相关片段（语义相似不等于对任务有用）；<strong>更新与管理</strong>——怎样增删改记忆、保持一致、处理冲突（用户上周说“喜欢靠窗”，这周说“无所谓”，以哪条为准）；<strong>计算效率</strong>——记忆带来的计算和存储开销；<strong>幻觉与一致性</strong>——怎样保证检索到的记忆准确，避免模型基于错误记忆编造，记忆一旦被污染会长期影响行为且难以察觉，因为检索只按相似度、新近性等排序，错误记忆与正确记忆会被一同召回。针对这些难点的发展方向包括：把文本、图像、音频纳入统一表示的<strong>多模态记忆</strong>；从对话中抽取实体、关系、事件，以知识图谱形式存储的<strong>结构化记忆</strong>；更智能的更新与遗忘机制，按任务和时间调整记忆优先级与粒度的<strong>动态管理</strong>；支持大规模、长时间、实时交互的<strong>效率与可扩展性</strong>；以及让开发者能理解、控制智能体如何使用记忆的<strong>可解释性与可控性</strong>。这些方向在第 <a href="../ch8/s8-2.html">8.2</a> 节和第 <a href="../ch8/s8-2.html#c8-subsec-frontier">8.2.10</a> 小节展开。</p>
 </section>
 <section id="c6-subsec-tools" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-tools">6.4.5　工具使用：把语言能力接到外部世界</h2>
@@ -939,10 +940,10 @@ window.Quarto = {
 <p>为什么必须用工具？其一，模型的知识有截止日期，也接触不到实时、私有的数据，不知道今天的票价、库存和天气；其二，模型不擅长精确计算和大规模数据处理；其三，预订、发信、改签都需要能改变外部状态的接口。</p>
 <p><strong>函数调用的机制</strong>　 当前的主流做法是<strong>函数调用</strong>（Function Calling），OpenAI 于 2023 年 6 月在其 API 中推出<sup><a href="../ch6/references.html#ref-14">[14]</a></sup>，此后各家模型陆续提供了类似能力（名称有 tool use、function calling 等，接口格式不完全统一）。流程分四步：开发者用 JSON Schema（描述 JSON 数据结构的规范）写出每个工具的名称、用途和参数，随请求一起交给模型；模型判断需要用工具时，不输出普通文字，而是输出一个结构化的调用请求，例如 <code>{"name": "search_hotels", "arguments": {"max_price": 600}}</code>；应用程序解析请求、执行函数；执行结果作为新的消息送回模型，模型据此继续。关键在于<strong>模型只生成调用意图，执行权始终在应用程序手中</strong>，这为参数校验、权限控制和审计留下了空间。模型学会何时调用、怎样填参数，依靠的是带工具调用示例的训练数据，Toolformer<sup><a href="../ch6/references.html#ref-15">[15]</a></sup>等工作较早探索了让模型自己学会调用外部 API，思路与后来的函数调用相通，但并非同一机制。</p>
 <p>工具调用的质量取决于三件事：<strong>工具说明</strong>（模型能否判断何时该用它）、<strong>参数设计</strong>（模型能否一次填对）、<strong>错误处理</strong>（失败后模型能否自己改正）。第一项最容易被低估：一个叫 <code>query</code> 的工具，模型猜不出它查的是订单还是库存；叫 <code>search_orders_by_customer_id</code>，误用的可能就小得多（当然仍需配合准确的说明和参数定义）。</p>
-<p><strong>Function Calling、MCP 与 A2A</strong>　 函数调用解决了“模型怎样表达调用意图”，但每个应用都要自己为每个工具写一遍接入代码。2024 年 11 月 Anthropic 发布的 <strong>MCP</strong>（Model Context Protocol，模型上下文协议）<sup><a href="../ch6/references.html#ref-16">[16]</a></sup>把工具和数据源的接入标准化：工具提供方实现一个 MCP 服务器，任何支持 MCP 的应用都能发现并调用它的工具。2025 年 4 月 Google 发布的 <strong>A2A</strong>（Agent2Agent，智能体间协议）<sup><a href="../ch6/references.html#ref-17">[17]</a></sup>则面向另一种关系：一个智能体如何发现另一个智能体的能力、把任务委托给它、接收结果。A2A 于 2025 年 6 月交由 Linux 基金会托管<sup><a href="../ch6/references.html#ref-18">[18]</a></sup>；MCP 于 2025 年 12 月捐赠给 Linux 基金会新成立的智能体人工智能基金会（Agentic AI Foundation，AAIF）<sup><a href="../ch6/references.html#ref-19">[19]</a></sup>。三者的关系见表 <a href="../ch6/s6-4.html#c6-tab-protocols">6-8</a>。</p>
+<p><strong>Function Calling、MCP 与 A2A</strong>　 函数调用解决了“模型怎样表达调用意图”，但每个应用都要自己为每个工具写一遍接入代码。2024 年 11 月 Anthropic 发布的 <strong>MCP</strong>（Model Context Protocol，模型上下文协议）<sup><a href="../ch6/references.html#ref-16">[16]</a></sup>把工具和数据源的接入标准化：工具提供方实现一个 MCP 服务器，任何支持 MCP 的应用都能发现并调用它的工具。2025 年 4 月 Google 发布的 <strong>A2A</strong>（Agent2Agent，智能体间协议）<sup><a href="../ch6/references.html#ref-17">[17]</a></sup>则面向另一种关系：一个智能体如何发现另一个智能体的能力、把任务委托给它、接收结果。A2A 于 2025 年 6 月交由 Linux 基金会托管<sup><a href="../ch6/references.html#ref-18">[18]</a></sup>；MCP 于 2025 年 12 月捐赠给 Linux 基金会新成立的智能体人工智能基金会（Agentic AI Foundation，AAIF）<sup><a href="../ch6/references.html#ref-19">[19]</a></sup>。三者的关系见表 <a href="../ch6/s6-4.html#c6-tab-protocols">6-9</a>。</p>
 <div id="c6-tab-protocols" class="booktab">
 <div class="tabcap">
-<p>表 6-8　Function Calling、MCP 与 A2A 的定位</p>
+<p>表 6-9　Function Calling、MCP 与 A2A 的定位</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -983,7 +984,7 @@ window.Quarto = {
 </div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p>三者不是三选一，而是在不同层次上<strong>叠加</strong>使用：模型通过 Function Calling 说出“我要调用 <code>search_hotels</code>”；这个工具可能来自一个 MCP 服务器，应用程序按 MCP 把请求转发过去；如果任务的某一部分要交给另一个独立的智能体去完成，则通过 A2A 委托。MCP 主要标准化应用对工具与数据源的发现和调用，调用方掌握主动权；A2A 主要标准化智能体之间的能力发现与任务委托，对方通常自行决定如何完成任务。两种协议的消息格式、传输方式与安全机制见第 7 章。</p>
+<p>三者不是三选一，而是在不同层次上<strong>叠加</strong>使用：模型通过 Function Calling 说出“我要调用 <code>search_hotels</code>”；这个工具可能来自一个 MCP 服务器，应用程序按 MCP 把请求转发过去；如果任务的某一部分要交给另一个独立的智能体去完成，则通过 A2A 委托。MCP 主要标准化应用对工具与数据源的发现和调用，调用方掌握主动权；A2A 主要标准化智能体之间的能力发现与任务委托，对方通常自行决定如何完成任务。两种协议的消息格式、传输方式与安全机制见第 <a href="../ch7/s7-6.html">7.6</a> 节。</p>
 </div>
 <p><strong>工具带来的风险</strong>　 工具扩展了能力，也扩大了攻击面。主要有三类风险：</p>
 <ul>
@@ -991,7 +992,7 @@ window.Quarto = {
 <li><p><strong>权限越界</strong>：智能体拥有的权限往往大于当前任务所需。应遵循最小权限原则，按任务临时授予权限，而不是给它一个“万能账号”。</p></li>
 <li><p><strong>副作用失控</strong>：批量操作、循环调用可能造成大规模误操作。防御手段包括配额、速率限制、批量操作二次确认和事务回滚。</p></li>
 </ul>
-<p>这三类风险都不是模型能力问题，而是系统设计问题。</p>
+<p>这三类风险主要靠系统设计来缓解；模型自身区分数据与指令的能力也是一环，但不能单靠它。</p>
 </section>
 <section id="c6-subsec-learning" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-learning">6.4.6　学习与适应：从经验中改进</h2>
@@ -999,7 +1000,7 @@ window.Quarto = {
 <ol type="1">
 <li><p><strong>上下文内学习</strong>：把成功示例、失败教训、用户反馈直接放进提示或记忆，本次会话即可生效；不改参数，但换一个会话就消失（除非写入长期记忆）。</p></li>
 <li><p><strong>提示与流程优化</strong>：根据评估结果修改系统提示、工具说明和任务拆分方式。这是当前投入产出比最高的“学习”，由人或另一个模型充当优化者。</p></li>
-<li><p><strong>参数微调</strong>：用积累的轨迹数据对模型做监督微调或偏好优化，把“怎样做这类任务”固化进参数（方法见第 3 章）。成本高、周期长，能显著提高特定领域的稳定性。</p></li>
+<li><p><strong>参数微调</strong>：用积累的轨迹数据对模型做监督微调或偏好优化，把“怎样做这类任务”固化进参数（方法见第 <a href="../ch3/s3-6.html">3.6</a> 节和第 <a href="../ch3/s3-8.html">3.8</a> 节）。成本高、周期长，能显著提高特定领域的稳定性。</p></li>
 <li><p><strong>强化学习</strong>：让智能体在环境中试错，以任务成功为奖励优化策略（第 <a href="../ch6/s6-5.html#c6-subsec-ml">6.5.2</a> 小节）。受试错成本和安全约束限制，在线试错多在仿真或可自动判分的环境中进行；也可以用积累的轨迹做离线训练。</p></li>
 </ol>
 <p>成熟系统往往同时使用多个层次。要警惕“学习的副作用”：从少量样本学到的规律可能是偶然的，用户一次临时的选择可能被误当成长期偏好，一次侥幸成功的激进策略可能被强化。因此学习要与置信度和遗忘机制配套：低置信度的经验标为“待验证”，多次验证后才固化；与已有偏好冲突的新信息要请用户确认，而不是静默覆盖。</p>
@@ -1011,10 +1012,10 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-extend" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-extend">6.4.8　七项能力如何补足 LLM</h2>
-<p>把七项能力放在一起看，它们共同指向一个结论：<strong>智能体不是 LLM 的替代品，而是 LLM 的扩展装置</strong>。表 <a href="../ch6/s6-4.html#c6-tab-extend">6-9</a> 把 LLM 的局限与对应的能力一一列出，归纳起来有五个方面：克服静态知识、实现与外界的动态交互；从“辅助”走向“执行”，赋予模型行动能力；扩展记忆与上下文管理；实现自主规划与目标导向的行为；以及增强鲁棒性与可靠性。最后一项不是某一种能力单独做到的，而是推理、工具使用在第 <a href="../ch6/s6-3.html">6.3</a> 节的闭环中配合校验与反思实现的。</p>
+<p>把七项能力放在一起看，它们共同指向一个结论：<strong>智能体不是 LLM 的替代品，而是 LLM 的扩展装置</strong>。表 <a href="../ch6/s6-4.html#c6-tab-extend">6-10</a> 把 LLM 的局限与对应的能力逐项列出（个别局限由多项能力共同补足），归纳起来有五个方面：克服静态知识、实现与外界的动态交互；从“辅助”走向“执行”，赋予模型行动能力；扩展记忆与上下文管理；实现自主规划与目标导向的行为；以及增强鲁棒性与可靠性。最后一项不是某一种能力单独做到的，而是推理、工具使用在第 <a href="../ch6/s6-3.html">6.3</a> 节的闭环中配合校验与反思实现的。</p>
 <div id="c6-tab-extend" class="booktab">
 <div class="tabcap">
-<p>表 6-9　智能体能力对 LLM 局限的补充</p>
+<p>表 6-10　智能体能力对 LLM 局限的补充</p>
 </div>
 <table class="caption-top table">
 <thead>

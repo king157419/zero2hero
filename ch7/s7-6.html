@@ -791,7 +791,7 @@ window.Quarto = {
 <section id="c7-subsec-fc" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-fc">7.6.1　工具调用：模型怎样使用外部能力</h2>
 <p><strong>工具调用</strong>（tool use）指模型借助 API 等接口使用搜索引擎、数据库、计算器、代码执行环境等外部能力，以弥补自身知识和能力的局限：获取实时数据、执行精确计算、操作外部系统。一次调用分三步：模型<strong>理解需求</strong>、<strong>选择工具并给出参数</strong>，应用执行后模型再<strong>处理返回结果</strong>。例如回答“上海明天会下雨吗”，模型不靠记忆猜，而是调用天气 API，再把返回的数据组织成回答。</p>
-<p>这种能力的标准形式是 <strong>Function Calling</strong>（函数调用）。OpenAI 于 2023 年 6 月 13 日随 gpt-3.5-turbo-0613 和 gpt-4-0613 模型在其 API 中推出这一功能：开发者用 JSON Schema（一种描述 JSON 数据结构的格式）声明一组函数的名称、用途和参数，模型在需要时输出一段符合该结构的 JSON，指明要调用哪个函数、参数是什么；<strong>真正执行函数的是应用程序</strong>，执行结果再作为一条消息送回模型<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。此后主流模型 API 都提供了类似机制，第 6 章介绍的 ReAct 闭环中的“行动”一步，通常就是靠它实现的。</p>
+<p>这种能力的标准形式是 <strong>Function Calling</strong>（函数调用）。OpenAI 于 2023 年 6 月 13 日随 gpt-3.5-turbo-0613 和 gpt-4-0613 模型在其 API 中推出这一功能：开发者用 JSON Schema（一种描述 JSON 数据结构的格式）声明一组函数的名称、用途和参数，模型在需要时输出一段符合该结构的 JSON，指明要调用哪个函数、参数是什么；<strong>真正执行函数的是应用程序</strong>，执行结果再作为一条消息送回模型<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。此后主流模型 API 都提供了类似机制，第 <a href="../ch6/s6-3.html#c6-subsec-react">6.3.2</a> 小节介绍的 ReAct 闭环中的“行动”一步，通常就是靠它实现的。</p>
 <p>模型调用工具，与传统软件之间的接口集成看起来相似，其实差别很大（表 <a href="../ch7/s7-6.html#c7-tab-fc-vs-sw">7-10</a>）。</p>
 <div id="c7-tab-fc-vs-sw" class="booktab">
 <div class="tabcap">
@@ -941,7 +941,7 @@ window.Quarto = {
 <p>Tool 和 Resource 都可能返回文本，但语义不同：读一份版本化的接口文档更像 Resource，触发一次查询或改变外部状态则是 Tool。把所有数据都包成一个能执行任意请求的 Tool，权限就难以细分；把写操作伪装成 Resource，用户就看不到它的副作用。</p>
 <p><strong>2026-07-28 版的主要变化</strong>　 协议还在快速演进，实现时应固定协议和 SDK 版本。2026-07-28 版有几项影响工程实现的改动<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>：</p>
 <ul>
-<li><p><strong>无状态化</strong>：取消了 <code>initialize</code> 握手和会话编号，每个请求都在元数据里自带协议版本和客户端能力；服务器必须实现 <code>server/discover</code>，用于事先查询它支持的版本、能力和身份。</p></li>
+<li><p><strong>无状态化</strong>：取消了 <code>initialize</code> 握手和会话编号，每个请求都在元数据里自带协议版本和客户端能力；服务器必须实现 <code>server/discover</code>，客户端可以先调用它，查询服务器支持的版本、能力和身份，再发业务请求；这样即使请求本身不再建立会话，也能在发送前选定双方都支持的协议版本。</p></li>
 <li><p><strong>多轮往返请求</strong>（Multi Round-Trip Requests，MRTR）：服务器处理请求时如果还需要用户补充信息，不再反过来向客户端发请求，而是返回一个 <code>input_required</code> 的中间结果，客户端补齐信息后<strong>重发原请求</strong>。原先由服务器主动发起的 Roots（让服务器知道可访问的目录）、Sampling（服务器借用宿主的模型生成文本）和 Logging 三项功能被标为弃用。</p></li>
 <li><p>服务器应按<strong>确定的顺序</strong>返回工具列表，便于客户端缓存，也提高模型提示缓存的命中率。</p></li>
 </ul>
@@ -1094,12 +1094,12 @@ window.Quarto = {
 </section>
 <section id="c7-subsec-multi" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-multi">7.6.6　多 Agent 协作：拆分、授权与合并</h2>
-<p>A2A 只建立了通信方式，多 Agent 协作（第 6 章）还需要一个明确的父任务。父任务要规定每个子任务的输入版本、负责范围、输出格式、截止时间和验收方式。可并行的代码修改各用独立的工作树，避免在同一目录互相覆盖；父 Agent 收到结果后还要检查冲突、合并代码、运行整体验证。只读的调研任务可以让多个 Agent 分头检索再比较来源与结论；互相依赖的任务过早并行，只会增加等待和返工。</p>
+<p>A2A 只建立了通信方式，多 Agent 协作（第 <a href="../ch6/s6-6.html">6.6</a> 节）还需要一个明确的父任务。父任务要规定每个子任务的输入版本、负责范围、输出格式、截止时间和验收方式。可并行的代码修改各用独立的工作树，避免在同一目录互相覆盖；父 Agent 收到结果后还要检查冲突、合并代码、运行整体验证。只读的调研任务可以让多个 Agent 分头检索再比较来源与结论；互相依赖的任务过早并行，只会增加等待和返工。</p>
 <p>两种连接都要遵守<strong>最小权限</strong>和<strong>可追溯</strong>。MCP Server 不应因为连接成功就拿到整个仓库或全部账户凭据；A2A 远端 Agent 也只应收到完成委托所需的材料。跨系统传递的内容可能含有隐私数据或恶意指令：发送前做范围筛选，接收后保留来源、按低信任数据处理。在本章案例里，Agent 调用 Calendar、Mail、Tasks 三个 Mock 服务属于工具层，Mock 查询失败时当前 Agent 可以换个查询或报告工具错误；把“检查提醒规则是否满足隐私规范”委托给独立的审查 Agent 属于任务层，审查失败时父任务要决定重试、换 Agent 或请人接手，并且不能把缺失的审查报告写成“已通过”。</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>
-<li><p>Function Calling 让模型表达调用意图；MCP 把 <span class="math inline">\(M\times N\)</span> 的对接变成 <span class="math inline">\(M+N\)</span>；A2A 让 Agent 委托有状态的任务；Skill 把操作知识按需加载进上下文。</p></li>
+<li><p>Function Calling 让模型表达调用意图；MCP 把接口适配的编写量从 <span class="math inline">\(M\times N\)</span> 降到 <span class="math inline">\(M+N\)</span>（审核、凭据和测试仍要逐个服务器做）；A2A 让 Agent 委托有状态的任务；Skill 把操作知识按需加载进上下文。</p></li>
 <li><p>MCP 的三个角色是 Host、Client、Server，三类能力是 Tool、Resource、Prompt；2026-07-28 版改为无状态并引入多轮往返请求。</p></li>
 <li><p>A2A 的五个对象是 Agent Card、Task、Message、Part、Artifact；父任务保留最终验收责任。</p></li>
 </ul>

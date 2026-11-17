@@ -794,7 +794,7 @@ window.Quarto = {
 <section id="c2-subsec-three" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-three">2.4.1　三要素与四个规划问题</h2>
 <p>算法、算力、数据是人工智能的三要素。大模型时代，三者都在快速增长。</p>
-<p><strong>算法（模型规模）</strong>　 2018 年的 BERT-Large 约有 3.4 亿参数，2019 年的 GPT-2 有 15 亿，2020 年的 GPT-3 有 1750 亿。截至 2026 年 11 月，公开技术报告的模型中已有总参数达到万亿级的混合专家模型，例如 2025 年开源的 Kimi K2（总参数约 1 万亿，每个词元激活约 320 亿；这类模型由许多“专家”子网络组成，每个词元只经过其中少数几个，见第 <a href="../ch2/s2-5.html#c2-subsec-transformer">2.5.1</a> 小节）<sup><a href="../ch2/references.html#ref-27">[27]</a></sup>。</p>
+<p><strong>算法（模型规模）</strong>　 2018 年的 BERT-Large 约有 3.4 亿参数，2019 年的 GPT-2 有 15 亿，2020 年的 GPT-3 有 1750 亿。截至 2026 年 11 月，公开技术报告的模型中已有总参数达到万亿级的混合专家模型，例如 2025 年开源的 Kimi K2（总参数约 1 万亿，每个词元激活约 320 亿；这类模型由许多“专家”子网络组成，每个词元只经过其中少数几个，见第 <a href="../ch2/s2-5.html#c2-subsec-transformer">2.5.1</a> 小节）<sup><a href="../ch2/references.html#ref-28">[28]</a></sup>。</p>
 <p><strong>算力</strong>　 GPU 是深度学习最常用的算力资源。从 2012 年的 NVIDIA K10（单精度峰值约 4.6 TFLOP/s，即每秒 <span class="math inline">\(4.6\times10^{12}\)</span> 次浮点运算）到 2020 年的 A100（SXM 版 BF16 稠密张量算力约 312 TFLOP/s），单卡峰值算力提高了约 70 倍；若按 A100 的 INT8 稀疏运算峰值（约 1248 万亿次/秒）计算，则约为 270 倍，常见的“提升了数百倍”说的是这种口径。比较算力时必须说明精度和是否稀疏。其后的 H100、B200 又成倍提升，但单卡仍远不能满足大模型训练的需要（第 <a href="../ch4/s4-1.html#subsec-three-quantities">4.1.2</a> 小节）。</p>
 <p><strong>数据</strong>　 GPT-1、GPT-2、GPT-3 的训练数据分别约为 5 GB、40 GB 和 45 TB（原始文本，清洗后约 570 GB）。表 <a href="../ch2/s2-4.html#c2-tab-models">2-4</a> 列出了若干代表模型的参数量和训练数据量。</p>
 <div id="c2-tab-models" class="booktab">
@@ -879,7 +879,7 @@ window.Quarto = {
 </section>
 <section id="c2-subsec-kaplan" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-kaplan">2.4.2　缩放定律</h2>
-<p>2020 年，OpenAI 的卡普兰（Jared Kaplan）等人在大量实验中发现<sup><a href="../ch2/references.html#ref-28">[28]</a></sup>：模型在测试集上的损失 <span class="math inline">\(\mathcal{L}\)</span>，与参数量 <span class="math inline">\(N\)</span>（不含嵌入参数）、训练数据量 <span class="math inline">\(D\)</span>（词元数）和训练计算量 <span class="math inline">\(C\)</span> 各自呈<strong>幂律关系</strong>。只要另外两个因素不成为瓶颈，这一趋势跨越了 6 个数量级： <span class="math display">\[\mathcal{L}(N)=\Bigl(\frac{N_c}{N}\Bigr)^{\alpha_N},\qquad
+<p>2020 年，OpenAI 的卡普兰（Jared Kaplan）等人在大量实验中发现<sup><a href="../ch2/references.html#ref-29">[29]</a></sup>：模型在测试集上的损失 <span class="math inline">\(\mathcal{L}\)</span>，与参数量 <span class="math inline">\(N\)</span>（不含嵌入参数）、训练数据量 <span class="math inline">\(D\)</span>（词元数）和训练计算量 <span class="math inline">\(C\)</span> 各自呈<strong>幂律关系</strong>。只要另外两个因素不成为瓶颈，这一趋势跨越了 6 个数量级： <span class="math display">\[\mathcal{L}(N)=\Bigl(\frac{N_c}{N}\Bigr)^{\alpha_N},\qquad
   \mathcal{L}(D)=\Bigl(\frac{D_c}{D}\Bigr)^{\alpha_D},\qquad
   \mathcal{L}(C)=\Bigl(\frac{C_c}{C}\Bigr)^{\alpha_C},
 \tag{2-18}\]</span> 其中 <span class="math inline">\(N_c\)</span>、<span class="math inline">\(D_c\)</span>、<span class="math inline">\(C_c\)</span> 是拟合常数，<span class="math inline">\(\alpha_N\approx0.076\)</span>，<span class="math inline">\(\alpha_D\approx0.095\)</span>，<span class="math inline">\(\alpha_C\approx0.050\)</span>。幂律在双对数坐标下是一条直线：<strong>规模每增大一个数量级，损失按一个固定的比例下降</strong>。通俗的说法“规模指数增加，效果线性提高”指的就是这一点：横轴取对数后，损失（的对数）随之线性下降。这项研究还有三个观察：</p>
@@ -889,12 +889,12 @@ window.Quarto = {
 <li><p><strong>模型与数据要同步增长</strong>：只加大模型、不增加数据，数据很快成为瓶颈，测试损失不再下降（极端情况下出现过拟合）；只增加数据、不加大模型，同样会遇到边际递减。</p></li>
 </ul>
 <p><strong>计算量公式</strong>　 三个量之间有一个很有用的近似关系： <span class="math display">\[C \approx 6\,N\,D .
-\tag{2-19}\]</span> 其中的 6 来自第 <a href="../ch2/s2-1.html#c2-subsec-bp">2.1.4</a> 小节：前向传播时，每个参数对每个词元做一次乘法和一次加法，共 2 次浮点运算；反向传播既要对激活求梯度、又要对权重求梯度，约为前向的 2 倍，即 4 次。推理只有前向，生成一个词元约需 <span class="math inline">\(2N\)</span> 次运算。第 4 章用同一公式估算训练时间（式 <a href="../ch4/s4-1.html#eq-train-flops">（4-2）</a>）。</p>
+\tag{2-19}\]</span> 其中的 6 来自第 <a href="../ch2/s2-1.html#c2-subsec-bp">2.1.4</a> 小节：前向传播时，每个参数对每个词元做一次乘法和一次加法，共 2 次浮点运算；反向传播既要对激活求梯度、又要对权重求梯度，约为前向的 2 倍，即 4 次。推理只有前向，生成一个词元约需 <span class="math inline">\(2N\)</span> 次运算。第 <a href="../ch3/s3-5.html">3.5</a> 节和第 4 章用同一公式估算训练时间（式 <a href="../ch4/s4-1.html#eq-train-flops">（4-2）</a>）。</p>
 <p>卡普兰等人还给出了算力增长时的最优分配：最优参数量 <span class="math inline">\(N\propto C^{0.73}\)</span>，最优批大小 <span class="math inline">\(B\propto C^{0.24}\)</span>，最优训练步数 <span class="math inline">\(S\propto C^{0.03}\)</span>。也就是说，算力增加时，大部分应花在加大模型上，训练步数几乎不变。GPT-3 用 1750 亿参数只训练了约 3000 亿词元，正是这一结论的产物。</p>
 </section>
 <section id="c2-subsec-chinchilla" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-chinchilla">2.4.3　Chinchilla 的修正与资源规划</h2>
-<p>2022 年，DeepMind 的霍夫曼（Jordan Hoffmann）等人训练了 400 多个模型，发现卡普兰的分配方案低估了数据的作用<sup><a href="../ch2/references.html#ref-29">[29]</a></sup>。他们的结论是：<strong>模型和数据应当等比例扩大</strong>，即 <span class="math inline">\(N\propto C^{0.5}\)</span>、<span class="math inline">\(D\propto C^{0.5}\)</span>，最优配比约为每个参数 20 个词元： <span class="math display">\[D \approx 20\,N .
+<p>2022 年，DeepMind 的霍夫曼（Jordan Hoffmann）等人训练了 400 多个模型，发现卡普兰的分配方案低估了数据的作用<sup><a href="../ch2/references.html#ref-30">[30]</a></sup>。他们的结论是：<strong>模型和数据应当等比例扩大</strong>，即 <span class="math inline">\(N\propto C^{0.5}\)</span>、<span class="math inline">\(D\propto C^{0.5}\)</span>，最优配比约为每个参数 20 个词元： <span class="math display">\[D \approx 20\,N .
 \tag{2-20}\]</span> 为了验证，他们用与 2800 亿参数的 Gopher 相同的算力，训练了只有 700 亿参数、但用了 1.4 万亿词元的 Chinchilla，结果 Chinchilla 在几乎所有评测任务上都超过了 Gopher。论文还拟合了一个同时含 <span class="math inline">\(N\)</span> 和 <span class="math inline">\(D\)</span> 的损失公式： <span class="math display">\[\mathcal{L}(N,D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}},\qquad
   E=1.69,\ A=406.4,\ B=410.7,\ \alpha=0.34,\ \beta=0.28 .
 \tag{2-21}\]</span> 式中的 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span> 是拟合常数（这里的 <span class="math inline">\(B\)</span> 与批大小无关）。三项各有含义：<span class="math inline">\(E\)</span> 是<strong>不可约损失</strong>，代表自然语言本身的不确定性，再大的模型也消除不了；第二项是模型容量不足带来的损失；第三项是数据不足带来的损失。图 <a href="../ch2/s2-4.html#c2-fig-scaling">2-7</a> 画出了两种扩大方式下损失的变化。</p>
@@ -910,7 +910,7 @@ window.Quarto = {
 </div>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p>卡普兰（2020）与 Chinchilla（2022）给出的最优分配不同，并非谁算错了，而是实验设置不同。Chinchilla 论文认为，卡普兰的实验对不同训练长度沿用同一套学习率衰减计划，没有为每个算力预算重新调整，使较小模型的潜力被低估，因而高估了加大模型的收益。后续分析还指出<sup><a href="../ch2/references.html#ref-30">[30]</a></sup>，卡普兰的 <span class="math inline">\(N\)</span> 不含嵌入参数、实验规模也较小，而 Chinchilla 的 <span class="math inline">\(N\)</span> 含嵌入参数，这一口径差异本身就能解释两者结论的大部分差距；哪个因素是主因，目前仍有争论。今天做训练规划，一般以 Chinchilla 的 <span class="math inline">\(D\approx20N\)</span> 为“训练最优”的基准，代入公式时要注意 <span class="math inline">\(N\)</span> 的口径。</p>
+<p>卡普兰（2020）与 Chinchilla（2022）给出的最优分配不同，并非谁算错了，而是实验设置不同。Chinchilla 论文认为，卡普兰的实验对不同训练长度沿用同一套学习率衰减计划，没有为每个算力预算重新调整，使较小模型的潜力被低估，因而高估了加大模型的收益。后续分析还指出<sup><a href="../ch2/references.html#ref-31">[31]</a></sup>，卡普兰的 <span class="math inline">\(N\)</span> 不含嵌入参数、实验规模也较小，而 Chinchilla 的 <span class="math inline">\(N\)</span> 含嵌入参数，这一口径差异本身就能解释两者结论的大部分差距；哪个因素是主因，目前仍有争论。另外要注意，式 <a href="../ch2/s2-4.html#c2-eq-chinchilla">（2-21）</a> 这组常数来自 Chinchilla 论文三种估计方法中的第三种（拟合损失曲面）；Besiroglu 等人（2024）重新拟合后发现原报告的常数有问题<sup><a href="../ch2/references.html#ref-32">[32]</a></sup>，按原常数计算，同一算力下损失最低点的 <span class="math inline">\(D/N\)</span> 并不在 20，而且随算力增大而变大（在例 <a href="../ch2/s2-4.html#c2-ex-plan">2-7</a> 的算力 <span class="math inline">\(3.2\times10^{22}\)</span> 下约为 70，到 <span class="math inline">\(10^{24}\)</span> 时约为 100），只是最低点附近的曲线很平，按 20N 分配的损失只高出约 0.3%。<span class="math inline">\(D\approx20N\)</span> 来自论文的另外两种方法，是业界通用的规划基准。今天做训练规划，一般以 Chinchilla 的 <span class="math inline">\(D\approx20N\)</span> 为“训练最优”的基准，代入公式时要注意 <span class="math inline">\(N\)</span> 的口径。</p>
 </div>
 <p>用式 <a href="../ch2/s2-4.html#c2-eq-6nd">（2-19）</a>、<a href="../ch2/s2-4.html#c2-eq-20n">（2-20）</a> 和 <a href="../ch2/s2-4.html#c2-eq-chinchilla">（2-21）</a>，就可以回答第 <a href="../ch2/s2-4.html#c2-subsec-three">2.4.1</a> 小节的四个问题。其中第三问最常用，也最容易算错，图 <a href="../ch2/s2-4.html#c2-fig-plan">2-8</a> 给出了它的计算流程。</p>
 <div id="c2-ex-plan" class="bookbox example">
@@ -967,14 +967,14 @@ window.Quarto = {
 <tr class="even">
 <td style="text-align: center;">6</td>
 <td style="text-align: left;">问 3：联立</td>
-<td style="text-align: left;"><span class="math inline">\(C=6N\times20N=120N^{2}\)</span>；<span class="math inline">\(N=\sqrt{(3.2\times10^{22})\div120}\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(1.63\times10^{10}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(C=6N\times20N=120N^{2}\)</span>；<span class="math inline">\(N=\sqrt{C\div120}\)</span>（<span class="math inline">\(C\)</span> 取第 5 步未取整的 <span class="math inline">\(3.235\times10^{22}\)</span>）</td>
+<td style="text-align: left;"><span class="math inline">\(1.6\times10^{10}\)</span>（精确值 <span class="math inline">\(1.64\times10^{10}\)</span>）</td>
 <td style="text-align: left;">式 <a href="../ch2/s2-4.html#c2-eq-6nd">（2-19）</a> 代入式 <a href="../ch2/s2-4.html#c2-eq-20n">（2-20）</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">7</td>
 <td style="text-align: left;">问 3：数据量</td>
-<td style="text-align: left;"><span class="math inline">\(D=20\times(1.63\times10^{10})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(D=20\times(1.64\times10^{10})\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(3.3\times10^{11}\)</span></td>
 <td style="text-align: left;">第 6 步</td>
 </tr>
@@ -1013,26 +1013,27 @@ window.Quarto = {
 <p>图 2-8　例 <a href="../ch2/s2-4.html#c2-ex-plan">2-7</a> 第三问的计算流程：先由硬件和时间算出总算力，再用 <span class="math inline">\(C\approx6ND\)</span> 与 Chinchilla 配比 <span class="math inline">\(D\approx20N\)</span> 联立求出参数量和数据量</p>
 </div>
 </div>
+<div class="widget" data-widget="c2plan"></div>
 </section>
 <section id="c2-subsec-overtrain" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-overtrain">2.4.4　训练最优不等于部署最优</h2>
-<p>Chinchilla 配比回答的是“给定训练算力，怎样训出损失最低的模型”。但模型训练一次，要被调用亿万次，而每生成一个词元约需 <span class="math inline">\(2N\)</span> 次运算，推理成本与参数量成正比。因此业界普遍对小模型“超量训练”：LLaMA-7B 用了 1 万亿词元<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>，Llama 3 8B 用了约 15 万亿词元<sup><a href="../ch2/references.html#ref-24">[24]</a></sup>，每个参数上千个词元，远超 20 的配比。用更多的训练算力换一个更小、部署更便宜的模型，在调用量大时是划算的。</p>
+<p>Chinchilla 配比回答的是“给定训练算力，怎样训出损失最低的模型”。但模型训练一次，要被调用亿万次，而每生成一个词元约需 <span class="math inline">\(2N\)</span> 次运算，推理成本与参数量成正比。因此业界普遍对小模型“超量训练”：LLaMA-7B 用了 1 万亿词元<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>，Llama 3 8B 用了约 15 万亿词元<sup><a href="../ch2/references.html#ref-25">[25]</a></sup>，每个参数上千个词元，远超 20 的配比。用更多的训练算力换一个更小、部署更便宜的模型，在调用量大时是划算的。</p>
 <p>此外，2024 年以来的推理模型（如 OpenAI o1、DeepSeek-R1）表明，让模型在回答前生成更长的思考过程，也能稳定地提升数学、代码等任务的表现。这被称为<strong>测试时计算</strong>的缩放：除了训练时的 <span class="math inline">\(N\)</span> 和 <span class="math inline">\(D\)</span>，推理时花多少计算也成了一个可以调节的维度。</p>
 </section>
 <section id="c2-subsec-compression" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-compression">2.4.5　语言模型即压缩</h2>
 <p>为什么“预测下一个词”这么简单的目标，能训练出看起来会思考的模型？一个有力的解释来自信息论。香农证明：如果模型给某个词元的概率是 <span class="math inline">\(p\)</span>，那么配合算术编码，这个词元可以用约 <span class="math inline">\(-\log_2 p\)</span> 比特存储。于是整段文本的压缩长度（单位为比特）约为 <span class="math display">\[\ell \approx -\sum_{t=1}^{T}\log_2 P_\theta(x_t\mid x_{&lt;t}),
-\tag{2-22}\]</span> 这恰好是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a> 的训练损失乘以 <span class="math inline">\(T\)</span>，再除以 <span class="math inline">\(\ln2\)</span>（把自然对数换成以 2 为底）。所以，<strong>降低损失与提高压缩率是同一件事</strong>。而要把一份内容压缩得足够好，就必须发现其中的规律——压缩物理教科书的最好办法，是掌握牛顿定律。德莱唐（Grégoire Delétang）等人（2023）用实验支持了这一观点<sup><a href="../ch2/references.html#ref-31">[31]</a></sup>：只在文本上训练的 Chinchilla 70B，能把 ImageNet 图像块压缩到原始大小的 43.4%、把 LibriSpeech 语音压缩到 16.4%，优于专用的 PNG（58.5%）和 FLAC（30.3%）。</p>
+\tag{2-22}\]</span> 这恰好是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a> 的训练损失乘以 <span class="math inline">\(T\)</span>，再除以 <span class="math inline">\(\ln2\)</span>（把自然对数换成以 2 为底）。所以，<strong>降低损失与提高压缩率是同一件事</strong>。而要把一份内容压缩得足够好，就必须发现其中的规律——压缩物理教科书的最好办法，是掌握牛顿定律。德莱唐（Grégoire Delétang）等人（2023）用实验支持了这一观点<sup><a href="../ch2/references.html#ref-33">[33]</a></sup>：只在文本上训练的 Chinchilla 70B，能把 ImageNet 图像块压缩到原始大小的 43.4%、把 LibriSpeech 语音压缩到 16.4%，优于专用的 PNG（58.5%）和 FLAC（30.3%）。</p>
 </section>
 <section id="c2-subsec-emergence" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-emergence">2.4.6　涌现能力</h2>
-<p>魏（Jason Wei）等人（2022）把<strong>涌现能力</strong>定义为：在小模型中不存在、在大模型中出现的能力<sup><a href="../ch2/references.html#ref-32">[32]</a></sup>。典型例子有：</p>
+<p>魏（Jason Wei）等人（2022）把<strong>涌现能力</strong>定义为：在小模型中不存在、在大模型中出现的能力<sup><a href="../ch2/references.html#ref-34">[34]</a></sup>。典型例子有：</p>
 <ul>
 <li><p><strong>上下文学习</strong>（In-Context Learning，ICL，也译作情景学习）：只在提示中看几个示例就能完成新任务，不更新参数，GPT-3 使其广为人知；</p></li>
 <li><p><strong>思维链</strong>（Chain-of-Thought，CoT）推理：提示模型“一步一步地思考”，大模型的数学应用题准确率大幅提升，小模型却没有改善甚至变差；</p></li>
 <li><p><strong>指令遵循</strong>：经过指令微调后，大模型能完成训练中从未见过的指令。</p></li>
 </ul>
-<p>涌现是否真实存在仍有争议。谢弗（Rylan Schaeffer）等人（2023）指出<sup><a href="../ch2/references.html#ref-33">[33]</a></sup>，许多“突然出现”的能力来自评测指标的选择：若用“完全匹配”这种非对即错的指标，一道五位数加法题要每一位都对才算对，逐位准确率的平滑提升就会被放大成陡峭的跳变；换成连续指标后，曲线往往变得平滑。这提醒我们：缩放定律描述的<strong>损失</strong>是平滑可预测的，而某项具体<strong>任务能力</strong>何时变得可用则较难预测。</p>
+<p>涌现是否真实存在仍有争议。谢弗（Rylan Schaeffer）等人（2023）指出<sup><a href="../ch2/references.html#ref-35">[35]</a></sup>，许多“突然出现”的能力来自评测指标的选择：若用“完全匹配”这种非对即错的指标，一道五位数加法题要每一位都对才算对，逐位准确率的平滑提升就会被放大成陡峭的跳变；换成连续指标后，曲线往往变得平滑。这提醒我们：缩放定律描述的<strong>损失</strong>是平滑可预测的，而某项具体<strong>任务能力</strong>何时变得可用则较难预测。</p>
 </section>
 <section id="c2-subsec-hallucination" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-hallucination">2.4.7　幻觉及其对策</h2>
@@ -1082,9 +1083,9 @@ window.Quarto = {
 <li><p><strong>逐词元生成的误差累积</strong>：一旦生成了一个错误的词元，后续内容以它为条件继续生成，为了前后自洽反而越编越多。</p></li>
 <li><p><strong>提示词不准确</strong>：问题含糊或包含错误前提（“请介绍鲁迅和周树人的辩论”），模型倾向于顺着前提回答，而不是纠正它。</p></li>
 </ol>
-<p>卡莱（Adam Tauman Kalai）等人（2025）还指出一个常被忽视的原因<sup><a href="../ch2/references.html#ref-34">[34]</a></sup>：大多数评测只统计答对率，回答“我不知道”得 0 分，猜一个答案却有机会得分。就像不倒扣分的选择题考试，模型被训练成了“宁可瞎猜也不弃权”。</p>
-<p><strong>案例</strong>　 2023 年，美国纽约的一名律师在 Mata 诉 Avianca 航空公司一案中，用 ChatGPT 检索判例，并把它给出的六个判例写进了提交给法院的文件。这些判例有案名、有案号、有引文，格式无可挑剔，却没有一个真实存在；律师追问它们是否真实时，ChatGPT 给出了肯定的回答。法官最终对涉事律师及其律所处以 5000 美元罚款<sup><a href="../ch2/references.html#ref-35">[35]</a></sup>。这个案例几乎集齐了上面的成因：模型学到了“判例引用长什么样”的表面模式，没有可以核对的事实库，被追问时又顺着用户继续肯定。教训是：在高风险场景中，大模型的输出必须有可追溯的来源，并由人来核实。</p>
-<p><strong>对策</strong>　 幻觉无法被彻底消除，只能在各个环节降低。最有效的思路是给模型接入<strong>可信的外部知识源</strong>——权威网站、企业内部文档、数据库、知识图谱等，把“先检索、再生成”做成标准流程，这就是<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG），详见第 5 章。表 <a href="../ch2/s2-4.html#c2-tab-halluc-fix">2-6</a> 按环节归纳了常用方法。</p>
+<p>卡莱（Adam Tauman Kalai）等人（2025）还指出一个常被忽视的原因<sup><a href="../ch2/references.html#ref-36">[36]</a></sup>：大多数评测只统计答对率，回答“我不知道”得 0 分，猜一个答案却有机会得分。就像不倒扣分的选择题考试，模型被训练成了“宁可瞎猜也不弃权”。</p>
+<p><strong>案例</strong>　 2023 年，美国纽约的一名律师在 Mata 诉 Avianca 航空公司一案中，用 ChatGPT 检索判例，并把它给出的六个判例写进了提交给法院的文件。这些判例有案名、有案号、有引文，格式无可挑剔，却没有一个真实存在；律师追问它们是否真实时，ChatGPT 给出了肯定的回答。法官最终对涉事律师及其律所处以 5000 美元罚款<sup><a href="../ch2/references.html#ref-37">[37]</a></sup>。这个案例几乎集齐了上面的成因：模型学到了“判例引用长什么样”的表面模式，没有可以核对的事实库，被追问时又顺着用户继续肯定。教训是：在高风险场景中，大模型的输出必须有可追溯的来源，并由人来核实。</p>
+<p><strong>对策</strong>　 幻觉无法被彻底消除，只能在各个环节降低。最有效的思路是给模型接入<strong>可信的外部知识源</strong>——权威网站、企业内部文档、数据库、知识图谱等，把“先检索、再生成”做成标准流程，这就是<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG），详见第 <a href="../ch5/s5-2.html">5.2</a> 节。表 <a href="../ch2/s2-4.html#c2-tab-halluc-fix">2-6</a> 按环节归纳了常用方法。</p>
 <div id="c2-tab-halluc-fix" class="booktab">
 <div class="tabcap">
 <p>表 2-6　降低幻觉的方法（按作用环节）</p>
@@ -1186,7 +1187,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>这张表给出的工程原则是：让大模型做它擅长的事，用检索增强（第 5 章）、工具调用和智能体框架（第 6 章）弥补它的短板。</p>
+<p>这张表给出的工程原则是：让大模型做它擅长的事，用检索增强（第 <a href="../ch5/s5-1.html">5.1</a> 节）、工具调用和智能体框架（第 <a href="../ch6/s6-1.html">6.1</a> 节）弥补它的短板。</p>
 </section>
 <section id="c2-subsec-ai2" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-ai2">2.4.9　AI 1.0 与 AI 2.0</h2>

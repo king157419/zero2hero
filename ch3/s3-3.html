@@ -923,6 +923,26 @@ window.Quarto = {
 \tag{3-8}\]</span> 它正是式 <a href="../ch3/s3-2.html#c3-eq-ar-loss">（3-2）</a> 损失的指数，衡量模型对这段文本“感到意外”的程度。困惑度越低，文本越接近高质量语料的风格；困惑度过高的往往是乱码、机器拼接文本或列表式垃圾内容。不过，专业性强或较罕见的高质量文本困惑度也可能偏高，所以阈值要谨慎设置，常与分类器结合使用。</p>
 <p><strong>⑤ 分层采样与数据配比</strong>　 不同来源的价值不同，不能按原始数量简单混合。<strong>数据配比</strong>（data mixture）规定训练时从每个来源采样的比例。例如 LLaMA 中维基百科、书籍的原始体量远小于网页，却被重复采样两遍以上（<strong>上采样</strong>），在训练中获得更高权重；低质量网页则被<strong>下采样</strong>。配比通常要靠小规模实验反复调整，以均衡通用知识、代码、学术和长文本。不少模型还会在预训练的最后阶段提高高质量数据的比例，称为<strong>退火</strong>阶段。</p>
 <p><strong>⑥ 分词</strong>　 最后，分词器把清洗好的文本切成 token 并转换为整数编号，作为模型的输入。下一小节单独讨论。</p>
+<p>上面六步之外，构造训练数据时还有两件事要专门处理：防止评测题混进训练集，以及把长短不一的文档装进固定长度的训练序列。</p>
+<p><strong>测试集去污染</strong>　 去重只处理训练集内部的重复。还有一类重合危害更大：训练文档里恰好含有评测题目或答案。这称为<strong>数据污染</strong>（data contamination）。模型若见过评测题，成绩只反映它记住了多少，不反映真实能力，评测结果会偏高。常用的检测方法是 <span class="math inline">\(n\)</span>-gram 重叠：把每道评测题切成连续的 <span class="math inline">\(n\)</span> 个词（中文可按字）组成的片段，在训练语料里查找是否出现相同片段；命中的文档被视为受污染，需要删除或截去。例如取 <span class="math inline">\(n=8\)</span> 个字，评测题“光合作用发生在叶绿体的哪一个部位”与某个训练网页共享片段“光合作用发生在”，该网页就被标记。<span class="math inline">\(n\)</span> 太小，常见短语也会误报；<span class="math inline">\(n\)</span> 太大，稍作改写的题目就漏检。</p>
+<p>GPT-3 的做法常被引用<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>（论文附录 C）：对所有评测集的题目检索 13-gram 重合，这里的“词”指小写、无标点、按空白切分的单词；命中的 13-gram 连同前后各 200 个字符一并删去，原文档被切成若干片段，短于 200 个字符的片段丢弃，被切成超过 10 段的文档整篇删除；同一个 13-gram 若出现在超过 10 篇训练文档里，多半是常用语或法律套话，不算污染。论文同时坦承，因为程序错误，这一步只清除了部分重合，而重新训练代价太高，所以事后又对各评测集按“题目长度的第 5 百分位”取 <span class="math inline">\(n\)</span>（下限 8、上限 13）做重合分析，分别报告在干净子集上的成绩。可见去污染要在数据准备阶段做，而且事后仍要核对。本章案例中把往年试题排除在训练语料之外，做的也是同一件事。</p>
+<p><strong>序列打包</strong>　 文档分词以后，长度从几十个 token 到几万个 token 不等，而训练按固定的上下文长度 <span class="math inline">\(T\)</span>（如 4096）成批处理。把每篇文档单独补零（padding）到长度 <span class="math inline">\(T\)</span>，补的位置白白占用算力；Krell 等人统计，常见文本数据集中最多约一半的 token 是补零<sup><a href="../ch3/references.html#ref-55">[55]</a></sup>。<strong>序列打包</strong>（packing）把多篇文档的 token 依次拼接，每篇之后加一个<strong>序列结束符</strong>（End of Sequence，EOS）作分隔，再按 <span class="math inline">\(T\)</span> 切成等长的块，不留补零。</p>
+<div id="c3-ex-packing" class="bookbox example">
+<div class="boxtitle">
+<p>例 3-1　序列打包的利用率</p>
+</div>
+<p>设 <span class="math inline">\(T=8\)</span>，三篇文档分词后（含 EOS）长度分别为 5、3、6 个 token，比较补零与打包。</p>
+<div class="cthreecalc">
+<p>1 &amp; 补零 &amp; <span class="math inline">\(3\times8\)</span> &amp; 24 个位置 &amp; 每篇文档各占一行<br>
+2 &amp; 有效 token &amp; <span class="math inline">\(5+3+6\)</span> &amp; 14 个 &amp; 三篇文档的长度之和<br>
+3 &amp; 补零利用率 &amp; <span class="math inline">\(14\div24\)</span> &amp; 58% &amp; 步骤 2 除以步骤 1<br>
+4 &amp; 打包 &amp; <span class="math inline">\(\lceil14\div8\rceil=2\)</span> 块 &amp; 16 个位置 &amp; 第 1 块 <span class="math inline">\(=5+3\)</span>，第 2 块 <span class="math inline">\(=6\)</span> 加下一篇文档的前 2 个 token<br>
+5 &amp; 打包利用率 &amp; <span class="math inline">\((14+2)\div16\)</span> &amp; 100% &amp; 第 2 块的 2 个空位由后续文档的 token 填入，只有整个语料的最后一块可能有补零<br>
+</p>
+</div>
+<p>数据流向文档按顺序拼接 → 每篇后加 EOS → 按 <span class="math inline">\(T\)</span> 切块 → 块的边界允许落在文档中间。</p>
+</div>
+<p>拼进同一块的文档本来互不相关，注意力要不要跨过文档边界，有两种做法。一种是<strong>不加限制</strong>：整块只用普通的因果掩码，后面的文档能看到前面的文档，靠 EOS 让模型学会“结束符之后是新内容”；实现最简单，缺点是引入了不相关的上下文。另一种是<strong>文档掩码</strong>：注意力只在同一篇文档内进行，并且让每篇文档的位置编号从头开始，这样打包不改变单篇文档的计算结果<sup><a href="../ch3/references.html#ref-55">[55]</a></sup>。Llama 3 的预训练采用后一种，报告称在常规预训练中影响有限，但在超长序列上继续预训练时很重要<sup><a href="../ch3/references.html#ref-56">[56]</a></sup>。文档掩码要求注意力实现支持按文档分段的掩码。</p>
 </section>
 <section id="token-与分词器" class="level2">
 <h2 class="anchored" data-anchor-id="token-与分词器">3.3.4　token 与分词器</h2>
@@ -990,7 +1010,7 @@ window.Quarto = {
 </section>
 <section id="数据质量为什么比数量更关键" class="level2">
 <h2 class="anchored" data-anchor-id="数据质量为什么比数量更关键">3.3.5　数据质量为什么比数量更关键</h2>
-<p>大模型并不是数据越多越好，而要在规模、质量和多样性之间取得平衡。低质量数据的危害有五类：<strong>噪声与垃圾</strong>浪费模型容量、降低生成质量；<strong>重复数据</strong>导致记忆而非泛化，甚至逐字复现训练文本；<strong>错误知识与偏见</strong>会被模型学习并放大；<strong>隐私与版权内容</strong>可能被模型记住并输出；<strong>数据污染</strong>（data contamination）——评测基准的测试题意外混入预训练数据，使模型在该基准上的得分虚高。检测污染常用 <span class="math inline">\(n\)</span>-gram 重叠，例如 GPT-3 检查训练集与各评测集之间的 13-gram 重合，尝试剔除重合内容，并报告了剔除不彻底对得分的影响<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>。RefinedWeb、FineWeb 等工作表明，精心过滤和去重的网页数据，训练效果可以超过未充分处理、规模更大的混合数据<sup><a href="../ch3/references.html#ref-13">[13]</a>,<a href="../ch3/references.html#ref-14">[14]</a></sup>。</p>
+<p>大模型并不是数据越多越好，而要在规模、质量和多样性之间取得平衡。低质量数据的危害有五类：<strong>噪声与垃圾</strong>浪费模型容量、降低生成质量；<strong>重复数据</strong>导致记忆而非泛化，甚至逐字复现训练文本；<strong>错误知识与偏见</strong>会被模型学习并放大；<strong>隐私与版权内容</strong>可能被模型记住并输出；数据污染——评测基准的测试题意外混入预训练数据，使模型在该基准上的得分虚高，检测与处理办法见前文“测试集去污染”。RefinedWeb、FineWeb 等工作表明，精心过滤和去重的网页数据，训练效果可以超过未充分处理、规模更大的混合数据<sup><a href="../ch3/references.html#ref-13">[13]</a>,<a href="../ch3/references.html#ref-14">[14]</a></sup>。</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>
