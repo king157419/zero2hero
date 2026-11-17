@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5.4 基础 RAG 的天花板 – 大语言模型原理与技术</title>
+<title>5.4 高级 RAG：优化检索的各个环节 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-4.html">5.4　基础 RAG 的天花板</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-4.html">5.4　高级 RAG：优化检索的各个环节</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -684,15 +749,25 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#c5-subsec-forms" id="toc-c5-subsec-forms" class="nav-link active" data-scroll-target="#c5-subsec-forms">5.4.1　RAG 的五种形态</a></li>
+  <li><a href="#c5-subsec-rewrite" id="toc-c5-subsec-rewrite" class="nav-link" data-scroll-target="#c5-subsec-rewrite">5.4.2　检索前：改写查询与改进索引</a></li>
+  <li><a href="#c5-subsec-hybrid" id="toc-c5-subsec-hybrid" class="nav-link" data-scroll-target="#c5-subsec-hybrid">5.4.3　检索中：混合检索与多路召回</a></li>
+  <li><a href="#c5-subsec-rerank" id="toc-c5-subsec-rerank" class="nav-link" data-scroll-target="#c5-subsec-rerank">5.4.4　检索后：融合、重排与压缩</a></li>
+  <li><a href="#c5-subsec-adaptive" id="toc-c5-subsec-adaptive" class="nav-link" data-scroll-target="#c5-subsec-adaptive">5.4.5　自适应检索与持续优化</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-4.html">5.4　基础 RAG 的天花板</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-4.html">5.4　高级 RAG：优化检索的各个环节</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">5.4　基础 RAG 的天花板</h1>
+<h1 class="title">5.4　高级 RAG：优化检索的各个环节</h1>
 </div>
 
 
@@ -709,44 +784,265 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>如果 RAG 就这么简单，为什么很多团队做完之后，效果还是不尽如人意？因为”基础 RAG”（Naive RAG）只是把流程跑通了，离”好用”还有距离。它的局限，主要集中在五处。</p>
-<p><strong>第一，一个块只有一个向量。</strong>把一段几百字的文字压缩成一个向量，必然会丢细节。否定词、限定条件、数字、时间状语，这些最要命的信息，在压缩中最容易模糊。</p>
-<p><strong>第二，块与块之间是独立匹配的。</strong>系统分别判断每个块像不像问题，却不会把几个块放在一起联合推理。可很多问题恰恰需要跨块聚合：“三个供应商的账期分别是多少，哪家最长？”答案分散在三份合同里，单看任何一块都不完整。</p>
-<p><strong>第三，排名是不透明的。</strong>向量相似度只给你一个分数，不告诉你为什么。用户问”为什么给我这个答案”，系统只能回答”因为它和你的问题很像”。在需要解释的场景，这远远不够。</p>
-<p><strong>第四，它只编码语义相似，不编码结构、规则和关系。</strong>”分公司必须由总公司担保”是一条规则，“A 是 B 的分公司”是一个关系，这两件事在向量空间里都只是两段相似的文字，系统不知道它们能推出什么。</p>
-<p><strong>第五，查询和文档之间常常有”词汇鸿沟”。</strong>用户问”钱怎么退回来”，文档写的是”退款申请流程”；用户问”住院能报多少”，文档写的是”基本医疗保险统筹基金支付比例”。字面不重合，向量也未必靠得近，召回自然就漏。</p>
-<table class="table">
-<colgroup>
-<col style="width: 100%">
-</colgroup>
+<div class="bookbox guide">
+<p>如果说基础 RAG 解决的是“有没有资料”，那么怎样让资料找得更全、更准、更精简？本节先给出 RAG 五种形态的全景，再沿流水线把高级 RAG 的优化分为检索前（改写查询、改进索引）、检索中（混合检索与多路召回）、检索后（融合、重排、压缩）三类，最后介绍自适应检索与持续优化。结论是：高级 RAG 没有推翻基础流水线，而是在各环节做加法；每项技术只提升几个百分点，叠加起来效果显著。</p>
+</div>
+<section id="c5-subsec-forms" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-forms">5.4.1　RAG 的五种形态</h2>
+<p>过去几年，RAG 大致发展出五种形态，后一种针对前一种的短板<sup><a href="../ch5/references.html#ref-6">[6]</a></sup>（表 <a href="../ch5/s5-4.html#c5-tab-forms">5-5</a>）。它们不是“后者淘汰前者”的关系：大量生产系统仍以基础 RAG 为主，因为它成本最低、最可控；成熟系统往往是几种形态的组合。</p>
+<div id="c5-tab-forms" class="booktab">
+<div class="tabcap">
+<p>表 5-5　RAG 的五种形态</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">形态</th>
+<th style="text-align: left;">核心特点</th>
+<th style="text-align: left;">代表技术</th>
+<th style="text-align: left;">典型场景</th>
+<th style="text-align: left;">主要局限</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td>
-<p>
-<strong>故事　0.92 的相似度，找错了政策</strong>
-</p>
-<p>
-我曾见过一个电商客服的 RAG 系统，上线第一周就被投诉。用户问“拆封后还能退吗”，系统给出的答案来自《换货政策》，而不是《退货政策》。两段文字相似度高达 0.92，因为都包含“商品完好”“七日内”“申请”这些词。
-</p>
-<p>
-更糟的是，这两份政策对“拆封”的规定完全相反：一个说拆封不影响，一个说拆封后不支持。系统没有“冲突检测”的能力，它只是忠实地返回了得分最高的那一段。
-</p>
-<p>
-修复的办法并不复杂：给每份文档加上“政策类型”的元数据，检索时先按类型过滤；再加一个轻量的重排模型，专门看“退货”和“换货”的区别；最后在提示词里要求模型如果发现材料互相矛盾，必须并列说明。三处小改动，投诉率降了下来。
-</p>
-<p>
-这个案例说明：RAG 的失败，往往不是“没找到”，而是“找错了还觉得自己找对了”。
-</p>
-</td>
+<td style="text-align: left;">基础 RAG</td>
+<td style="text-align: left;">固定的“检索—生成”，静态向量检索</td>
+<td style="text-align: left;">稠密向量检索、固定切分、top-<span class="math inline">\(k\)</span></td>
+<td style="text-align: left;">知识库问答、客服问答</td>
+<td style="text-align: left;">依赖初始相似度，不能多步推理</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">高级 RAG</td>
+<td style="text-align: left;">优化检索质量</td>
+<td style="text-align: left;">混合检索、查询改写、重排、压缩</td>
+<td style="text-align: left;">复杂文档、垂直领域知识库</td>
+<td style="text-align: left;">流程仍需人工设计</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GraphRAG</td>
+<td style="text-align: left;">结构化关系推理</td>
+<td style="text-align: left;">实体抽取、知识图谱、社区摘要</td>
+<td style="text-align: left;">多跳问答、全局综述、合规审计</td>
+<td style="text-align: left;">构建成本高、更新难</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">推理 RAG</td>
+<td style="text-align: left;">边推理边检索，自我反思</td>
+<td style="text-align: left;">Self-RAG、CRAG、迭代检索、ReAct</td>
+<td style="text-align: left;">医疗辅助诊断、金融分析、代码调试</td>
+<td style="text-align: left;">延迟高，可能陷入循环</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Agentic RAG</td>
+<td style="text-align: left;">智能体自主规划、调用工具</td>
+<td style="text-align: left;">多智能体协作、MCP、深度研究</td>
+<td style="text-align: left;">个人助手、科研探索、复杂决策</td>
+<td style="text-align: left;">成本与可控性难平衡</td>
 </tr>
 </tbody>
 </table>
-<p>除了这五条，还有两个工程上绕不开的麻烦。</p>
-<p>一个是”中间迷失”（lost in the middle）。2023 年，斯坦福等机构的研究者发现，当相关材料放在长上下文的开头或结尾时，模型答得最好；放在中间，性能明显下降。也就是说，你把 20 个块按相关度排序后一股脑塞进去，最关键的证据如果排在中间，模型可能真的”没看见”。</p>
-<p>另一个是”越多越吵”。直觉上，多给几段材料总能提高命中率；实际上，无关材料会稀释注意力，还可能诱导模型把不相干的信息拼进来。top-k 从 5 加到 50，召回率上去了，答案的准确率却可能下来。这个权衡，必须靠评测来定，不能拍脑袋。</p>
-<p>所以，基础 RAG 更像一个刚入职的实习生：流程都懂，态度也好，但只会按索书号找书，遇到模糊需求、跨书推理、相互矛盾的材料，就露怯了。要让它变成老手，需要一整套进阶技术。这就是下一节的内容。</p>
+</div>
+<p>表中出现的各项技术在本节和第 <a href="../ch5/s5-5.html">5.5</a>、<a href="../ch5/s5-6.html">5.6</a> 节中逐一解释。本节讨论高级 RAG，它的各项优化在流水线上的位置如图 <a href="../ch5/s5-4.html#c5-fig-advanced">5-3</a> 所示。</p>
+<div id="c5-fig-advanced" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch5-advanced.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 5-3　高级 RAG 的优化点在流水线上的位置。青绿色为本节重点讨论的检索前、检索中、检索后三类优化；上方是决定是否检索的旁路，下方虚线是持续改进的反馈回路</p>
+</div>
+</div>
+</section>
+<section id="c5-subsec-rewrite" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-rewrite">5.4.2　检索前：改写查询与改进索引</h2>
+<p>很多检索失败源于问题本身：用户说“这个怎么弄”，系统不知道“这个”指什么；用户说“报销”，没说是差旅还是招待；用户把三个问题揉成一句，检索只能顾此失彼。<strong>查询改写</strong>（query rewriting，也称查询转换）在检索之前让大模型先把问题改造成更适合检索的形式，输入是原始问题（和对话历史），输出是一个或多个新查询。常用手法有五种：</p>
+<ul>
+<li><p><strong>指代消解与补全</strong>：结合对话历史，把“这个怎么弄”补成“上个月购买的打印机如何申请保修”，即上下文感知的查询增强；</p></li>
+<li><p><strong>同义扩展</strong>：把“钱怎么退回来”扩展出“退款、退货、原路退回、到账时间”等词，跨过词汇鸿沟；</p></li>
+<li><p><strong>多查询并行</strong>：把一个问题改写成 3～5 个不同角度的版本分别检索，再合并去重，代价是检索次数和延迟成倍增加；</p></li>
+<li><p><strong>假设文档嵌入</strong>（Hypothetical Document Embeddings，HyDE）<sup><a href="../ch5/references.html#ref-11">[11]</a></sup>：先让模型写一段“理想的答案文档”，再用这段假答案的向量去检索真实文档；</p></li>
+<li><p><strong>退一步提问</strong>（step-back prompting）<sup><a href="../ch5/references.html#ref-12">[12]</a></sup>：先提一个更抽象的问题（如“RAG 检索有哪些优化方向”），拿到总体框架后再回到具体问题，适合问得太细反而找不到的情形。</p></li>
+</ul>
+<p>HyDE 为什么有效？用户的问题通常很短，用词和句式都与文档不同；而模型写出的假答案虽然内容可能有错，用词、结构却与真实文档相似。在向量空间中，“答案找答案”比“问题找答案”更容易命中。HyDE 并不让模型替代答案，而是让模型描述“你想要的文档长什么样”；最终回答仍以检索到的真实文档为依据。</p>
+<p>改写的是查询，改进的则是索引。前面介绍的结构化切分、父子块属于这一类，另一项代表性技术是 Anthropic 在 2024 年 9 月提出的<strong>上下文检索</strong>（Contextual Retrieval）<sup><a href="../ch5/references.html#ref-13">[13]</a></sup>。它针对的问题是：块被孤立编码时缺少背景。例如某块写着“公司营收较上一季度增长 3%”，没说是哪家公司、哪个季度，嵌入模型只能把它编码成“一句关于增长的话”。做法是在入库前让一个较小的模型读整篇文档，为每个块生成一句说明其位置与背景的前缀（如“本段出自 ACME 公司 2023 年第二季度财报……”），把前缀与原块拼在一起再做嵌入和关键词索引。在其实验中，前 20 个结果的检索失败率（即 <span class="math inline">\(1-\text{Recall@}20\)</span>）从 5.7% 降到 3.7%（相对降低 35%，绝对下降 2 个百分点）；再叠加同样加了前缀的 BM25 检索，降到 2.9%（相对基线降低 49%）；最后加重排，降到 1.9%（相对基线降低 67%）。</p>
+</section>
+<section id="c5-subsec-hybrid" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-hybrid">5.4.3　检索中：混合检索与多路召回</h2>
+<p>向量检索擅长“意思像”，关键词检索擅长“字面像”，两者正好互补。</p>
+<p><strong>关键词检索与 BM25</strong>　 关键词检索为每个词建立<strong>倒排索引</strong>（inverted index）：记录每个词出现在哪些文档中。打分最常用的是 <strong>BM25</strong><sup><a href="../ch5/references.html#ref-14">[14]</a></sup>，它综合三个因素：查询词在文档中出现得多不多（<strong>词频</strong>，TF），这个词在整个语料中稀不稀有（<strong>逆文档频率</strong>，IDF），以及文档本身长不长。对查询 <span class="math inline">\(q\)</span> 和文档 <span class="math inline">\(D\)</span>， <span class="math display">\[\mathrm{BM25}(q,D) = \sum_{t\in q} \mathrm{IDF}(t)\cdot
+  \frac{f(t,D)\,(k_1+1)}{f(t,D)+k_1\left(1-b+b\cdot\dfrac{\lvert D\rvert}{\mathrm{avgdl}}\right)},
+\tag{5-3}\]</span> 其中 <span class="math inline">\(f(t,D)\)</span> 是词 <span class="math inline">\(t\)</span> 在 <span class="math inline">\(D\)</span> 中的出现次数，<span class="math inline">\(\lvert D\rvert\)</span> 是文档长度，<span class="math inline">\(\mathrm{avgdl}\)</span> 是语料平均文档长度；<span class="math inline">\(k_1\)</span>（常取 1.2～2.0）控制词频饱和的快慢，<span class="math inline">\(b\)</span>（常取 0.75）控制长度归一化的强度，这里的 <span class="math inline">\(b\)</span> 是 BM25 自带的参数，与全书表示位数的 <span class="math inline">\(b\)</span> 无关。由于向量检索得到的是<strong>稠密向量</strong>（每一维都有值），BM25 对应的词频向量绝大多数维度为零，二者也常被称为<strong>稠密检索</strong>与<strong>稀疏检索</strong>。BM25 有两个向量检索比不了的优点：对专有名词、型号、编号极其敏感；可解释，能看到是哪个词命中了。例如用户搜索“错误码 TS-999”，嵌入模型可能找到一批泛泛讨论错误码的文档，BM25 则能精确捞出含该字符串的那一篇<sup><a href="../ch5/references.html#ref-13">[13]</a></sup>；反过来，用户问“东西坏了怎么换”而文档写“退换货流程”时，BM25 无能为力，向量检索却能靠语义找到。</p>
+<p><strong>用 RRF 合并两路结果</strong>　 <strong>混合检索</strong>（hybrid search）让向量检索和 BM25 各召回一批候选，再合并成一个列表。两路的原始分数量纲不同（余弦相似度在 <span class="math inline">\(-1\)</span>～1 之间，BM25 分数没有固定上界，常见量级为几到几十），不能直接相加。最常用的合并方法是<strong>倒数排名融合</strong>（Reciprocal Rank Fusion，RRF）<sup><a href="../ch5/references.html#ref-15">[15]</a></sup>：只看文档在各路列表中排第几， <span class="math display">\[\mathrm{RRF}(d) = \sum_{r\in\mathcal{P}} \frac{1}{c+\mathrm{rank}_r(d)},
+\tag{5-4}\]</span> 其中 <span class="math inline">\(\mathcal{P}\)</span> 是参与融合的各路检索列表的集合，<span class="math inline">\(\mathrm{rank}_r(d)\)</span> 是文档 <span class="math inline">\(d\)</span> 在列表 <span class="math inline">\(r\)</span> 中的名次（从 1 开始，未出现则该项记 0），<span class="math inline">\(c\)</span> 是平滑常数，原论文取 60（原文记作 <span class="math inline">\(k\)</span>，此处改记 <span class="math inline">\(c\)</span> 以免与返回条数 <span class="math inline">\(k\)</span> 混淆）。<span class="math inline">\(c\)</span> 越大，分母主要由 <span class="math inline">\(c\)</span> 决定，不同名次的得分越接近，单独一路的头部名次就越难主导融合结果。RRF 简单、稳定、几乎无须调参，是工程上的默认选择。</p>
+<div id="c5-ex-rrf" class="bookbox example">
+<div class="boxtitle">
+<p>例 5-4　用 RRF 合并两路检索结果</p>
+</div>
+<p>对问题“TS-999 报错如何处理”，向量检索返回的前 4 名依次为 D1、D2、D3、D4；BM25 返回的前 4 名依次为 D3、D1、D5、D2。取 <span class="math inline">\(c=60\)</span>，求融合后的前 4 名。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">文档</th>
+<th style="text-align: left;">向量名次</th>
+<th style="text-align: left;">BM25 名次</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">RRF 分数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">D1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><span class="math inline">\(1\div61+1\div62\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.016\,39+0.016\,13=0.032\,52\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D3</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><span class="math inline">\(1\div63+1\div61\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.015\,87+0.016\,39=0.032\,26\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">D2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><span class="math inline">\(1\div62+1\div64\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.016\,13+0.015\,63=0.031\,76\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D5</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><span class="math inline">\(1\div63\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.015\,87\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">D4</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><span class="math inline">\(1\div64\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(0.015\,63\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>融合后前 4 名为 D1、D3、D2、D5。D5 只被 BM25 召回（例如它是唯一含“TS-999”字样的故障手册），向量检索没有找到它，但融合后它挤进了前 4 名，替换了只在向量列表中排第 4 的 D4。<strong>数据流向</strong>：两路列表 → 各自名次 → 按式 <a href="../ch5/s5-4.html#c5-eq-rrf">（5-4）</a> 求和 → 重新排序。整个计算没有用到任何一路的原始分数。</p>
+</div>
+<p><strong>多路召回与元数据过滤</strong>　 再进一步，可以同时运行多路检索：一路向量、一路关键词、一路查图数据库中的关系（第 <a href="../ch5/s5-5.html">5.5</a> 节），对图片、表格还可以加一路多模态检索，各路结果用 RRF 等方法合并。每一路都有自己的盲区，合在一起才更完整。此外，可以按元数据（日期、部门、文档类型、作者、地域）在检索前或检索时过滤候选，这称为<strong>上下文相关性过滤</strong>：例如只检索“2026 年生效”“政策类型=退货”的文档。第 <a href="../ch5/s5-3.html#c5-subsec-five-limits">5.3.1</a> 小节的退货/换货案例，正是靠元数据过滤修好的。</p>
+</section>
+<section id="c5-subsec-rerank" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-rerank">5.4.4　检索后：融合、重排与压缩</h2>
+<p>粗召回追求“不漏”，会捞回几十到上百个候选；检索后的工作是“不错”和“不吵”：挑出最相关的少数几个，并压缩到上下文放得下的长度。</p>
+<p><strong>重排</strong>　 向量检索采用<strong>双编码器</strong>（bi-encoder，也称双塔）结构：问题和文档分别送进编码器得到两个向量，再算相似度。文档向量可以提前算好存起来，所以很快；但问题和文档在编码时互不可见，细粒度的对应关系会丢失。<strong>重排</strong>（reranking）通常采用<strong>交叉编码器</strong>（cross-encoder）<sup><a href="../ch5/references.html#ref-16">[16]</a></sup>：把问题和一个候选文档拼接成一个输入，让模型在每一层注意力中逐词比对，直接输出一个相关性分数。它准确得多，但每个候选都要和问题一起完整运行一次模型，无法预先计算，只能用于少量候选。因此标准做法是<strong>两阶段</strong>：第一阶段用向量或混合检索快速召回 100～150 个候选，第二阶段用重排模型精选 10～20 个交给生成器。在 Anthropic 的实验中，重排把检索失败率从 2.9% 进一步降到 1.9%<sup><a href="../ch5/references.html#ref-13">[13]</a></sup>，代价是每次查询增加几十到几百毫秒。重排模型有开源的 bge-reranker 系列，也有 Cohere Rerank 等商业服务；重排时还可以加入其他标准，例如用户偏好、文档新旧和来源权威性。对垂直领域，用自己标注的数据微调一个重排模型，往往比微调生成模型更划算。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>双编码器与交叉编码器的区别不在于模型大小，而在于<strong>问题和文档是否在同一次前向计算中相互可见</strong>。双编码器“分别编码、再比距离”，文档向量可离线预算，适合从海量文档中召回；交叉编码器“拼在一起、联合打分”，不能预算，适合对少量候选精排。二者是先后配合的关系，不是互相替代。</p>
+</div>
+<p><strong>两种融合</strong>　 把多个检索结果“合起来”可以发生在两个位置。<strong>增强阶段的融合</strong>在把文档交给生成器之前完成：重排、过滤、合并、去重、聚合，RRF 与重排都属于此类，也是最简单有效的一类。<strong>生成阶段的融合</strong>则让生成器先分别处理每个检索文档，在生成最终回答时再综合它们的信息，例如 FiD（Fusion-in-Decoder）<sup><a href="../ch5/references.html#ref-17">[17]</a></sup>把每个段落分别编码，在解码器中统一注意。前者对模型无要求，后者通常需要专门训练的模型。</p>
+<p><strong>上下文压缩</strong>　 精选后的 10～20 个块加起来可能仍然太长，而且互相重复。<strong>上下文压缩</strong>（context compression）有两种做法：<strong>抽取式</strong>用一个小模型给每句话打相关性分数，只保留高分句，原文不改，引用可追溯；<strong>生成式</strong>让模型把多段材料改写成一段摘要，更短，但经过了“二次加工”，引用可能对不上原文。对可追溯性要求高的场景更常用抽取式。</p>
+<p>压缩是<strong>上下文管理</strong>的一部分。所谓上下文，是模型处理当前输入时参考的全部信息；管理上下文的目标，是在不丢失必要知识的前提下，让检索到的信息不超过模型的输入限制。表 <a href="../ch5/s5-4.html#c5-tab-ctxmgmt">5-6</a> 归纳了四种常用策略。</p>
+<div id="c5-tab-ctxmgmt" class="booktab">
+<div class="tabcap">
+<p>表 5-6　上下文管理的四种策略</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">策略</th>
+<th style="text-align: left;">做法</th>
+<th style="text-align: left;">作用位置</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">文档分块</td>
+<td style="text-align: left;">把长文档切成合适粒度的块，只把相关块而非全文送入模型</td>
+<td style="text-align: left;">索引构建</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">选择性检索</td>
+<td style="text-align: left;">从大量相关文档中只保留最相关的部分，减少无关信息</td>
+<td style="text-align: left;">检索后（重排、过滤）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">目标检索</td>
+<td style="text-align: left;">针对特定查询意图使用专门的检索器，加入领域标准优化结果</td>
+<td style="text-align: left;">检索中</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">上下文摘要</td>
+<td style="text-align: left;">用抽取式或生成式摘要浓缩检索内容，保留必要信息</td>
+<td style="text-align: left;">检索后（压缩）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="c5-subsec-adaptive" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-adaptive">5.4.5　自适应检索与持续优化</h2>
+<p>并不是所有问题都值得检索。用户说“你好”“谢谢”，或问“1 加 1 等于几”，检索纯属浪费，还可能引入干扰。<strong>自适应检索</strong>（adaptive retrieval）在检索之前加一个轻量的分类器或路由器，判断问题属于寒暄、常识还是需要外部知识；需要检索的，再决定查哪个库、查多少。这一分流能节省大量成本和延迟，第 <a href="../ch5/s5-6.html">5.6</a> 节的 Self-RAG 把这一判断交给模型自己完成。</p>
+<p>此外还有三类优化。<strong>针对具体领域的优化</strong>：在医疗、金融等领域，为特定字段设置检索权重，或用领域数据微调嵌入模型与重排模型。<strong>带反馈回路的主动学习</strong>：收集用户的点击、采纳、纠正和追问，定期回流到评估集和检索策略中，让系统随时间改进。<strong>语义哈希</strong>（semantic hashing）<sup><a href="../ch5/references.html#ref-18">[18]</a></sup>：把文档编码为紧凑的二进制向量，用汉明距离（两个二进制串不同位的个数）快速比较，以少量精度换取速度和存储，适合高并发场景（参见例 <a href="../ch5/s5-2.html#c5-ex-storage">5-2</a>）。表 <a href="../ch5/s5-4.html#c5-tab-optim">5-7</a> 汇总了常用的检索优化方法。</p>
+<div id="c5-tab-optim" class="booktab">
+<div class="tabcap">
+<p>表 5-7　常用的检索优化方法</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">做法</th>
+<th style="text-align: left;">本章位置</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">混合搜索与重排</td>
+<td style="text-align: left;">结合稀疏（关键词）与稠密（嵌入）检索获取候选，再重排，优先保留最符合查询意图的结果</td>
+<td style="text-align: left;"><a href="../ch5/s5-4.html#c5-subsec-hybrid">5.4.3</a>、<a href="../ch5/s5-4.html#c5-subsec-rerank">5.4.4</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">查询转换</td>
+<td style="text-align: left;">用同义词、改述、子问题等扩展或改写查询，提高检索到高质量上下文的机会</td>
+<td style="text-align: left;"><a href="../ch5/s5-4.html#c5-subsec-rewrite">5.4.2</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">上下文相关性过滤</td>
+<td style="text-align: left;">按日期、地点、作者等元数据过滤，使所选内容贴近用户需求</td>
+<td style="text-align: left;"><a href="../ch5/s5-4.html#c5-subsec-hybrid">5.4.3</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">针对具体领域的优化</td>
+<td style="text-align: left;">领域加权，或用专门数据集微调检索模型</td>
+<td style="text-align: left;">本小节</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">带反馈回路的主动学习</td>
+<td style="text-align: left;">用用户反馈迭代改进检索结果，适应偏好变化</td>
+<td style="text-align: left;">本小节</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">语义哈希</td>
+<td style="text-align: left;">把文档编码为紧凑二进制向量，快速做相似性检索</td>
+<td style="text-align: left;">本小节</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>把本节的技术串起来，就得到一条高级流水线：自适应路由 → 查询改写 → 多路召回（向量＋BM25＋元数据过滤）→ RRF 融合去重 → 重排 → 压缩 → 生成与检查。用图书馆打比方，这是把只会按索书号找书的实习生，训练成会追问需求、会同时翻目录和书架、会挑出最该看的几页的老馆员。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>检索前改查询（改写、HyDE、退一步）和改索引（上下文前缀、父子块）；检索中用混合检索与多路召回补盲区；检索后用 RRF 融合、交叉编码器重排、压缩控制噪声与长度。</p></li>
+<li><p>RRF 只用名次不用分数，式 <a href="../ch5/s5-4.html#c5-eq-rrf">（5-4）</a>；双编码器负责召回，交叉编码器负责精排。</p></li>
+<li><p>自适应检索决定要不要查，反馈回路让系统持续改进。</p></li>
+</ul>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1227,18 +1523,18 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch5/s5-3.html" class="pagination-link" aria-label="5.3　一条流水线的诞生">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.3　一条流水线的诞生</span>
+      <a href="../ch5/s5-3.html" class="pagination-link" aria-label="5.3　基础 RAG 的局限">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.3　基础 RAG 的局限</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch5/s5-5.html" class="pagination-link" aria-label="5.5　高级 RAG：把实习生练成老馆员">
-        <span class="nav-page-text">5.5　高级 RAG：把实习生练成老馆员</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch5/s5-5.html" class="pagination-link" aria-label="5.5　GraphRAG：当答案藏在关系里">
+        <span class="nav-page-text">5.5　GraphRAG：当答案藏在关系里</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

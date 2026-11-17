@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,12 +754,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#先分清信息从哪里来" id="toc-先分清信息从哪里来" class="nav-link active" data-scroll-target="#先分清信息从哪里来">7.4.1　先分清信息从哪里来</a></li>
-  <li><a href="#选择信息相关可信及时可追溯" id="toc-选择信息相关可信及时可追溯" class="nav-link" data-scroll-target="#选择信息相关可信及时可追溯">7.4.2　选择信息：相关、可信、及时、可追溯</a></li>
-  <li><a href="#一条可实现的上下文处理流水线" id="toc-一条可实现的上下文处理流水线" class="nav-link" data-scroll-target="#一条可实现的上下文处理流水线">7.4.3　一条可实现的上下文处理流水线</a></li>
-  <li><a href="#记忆要分层不能把旧结论直接当新事实" id="toc-记忆要分层不能把旧结论直接当新事实" class="nav-link" data-scroll-target="#记忆要分层不能把旧结论直接当新事实">7.4.4　记忆要分层，不能把旧结论直接当新事实</a></li>
-  <li><a href="#本章案例的最小上下文包" id="toc-本章案例的最小上下文包" class="nav-link" data-scroll-target="#本章案例的最小上下文包">7.4.5　本章案例的最小上下文包</a></li>
-  <li><a href="#小结上下文是随任务变化的工作集" id="toc-小结上下文是随任务变化的工作集" class="nav-link" data-scroll-target="#小结上下文是随任务变化的工作集">7.4.6　小结：上下文是随任务变化的工作集</a></li>
+  <li><a href="#c7-subsec-ctx-src" id="toc-c7-subsec-ctx-src" class="nav-link active" data-scroll-target="#c7-subsec-ctx-src">7.4.1　信息从哪里来</a></li>
+  <li><a href="#c7-subsec-filter" id="toc-c7-subsec-filter" class="nav-link" data-scroll-target="#c7-subsec-filter">7.4.2　窗口是注意力预算：四道筛选器</a></li>
+  <li><a href="#c7-subsec-pipeline" id="toc-c7-subsec-pipeline" class="nav-link" data-scroll-target="#c7-subsec-pipeline">7.4.3　一条上下文处理流水线</a></li>
+  <li><a href="#c7-subsec-memory" id="toc-c7-subsec-memory" class="nav-link" data-scroll-target="#c7-subsec-memory">7.4.4　记忆要分层，旧结论不是新事实</a></li>
+  <li><a href="#c7-subsec-ctx-pack" id="toc-c7-subsec-ctx-pack" class="nav-link" data-scroll-target="#c7-subsec-ctx-pack">7.4.5　本章案例的最小上下文包</a></li>
   </ul>
 </nav>
     </div>
@@ -720,102 +784,209 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>7.3 节已经写明任务目标，Agent 接下来仍有一个实际困难：模型看不到整个工作区，只能依据本轮送入的内容判断。项目可能有数千个文件，工具日志会持续增长，邮件和日历还会随时间变化。<strong>Context Engineering 的任务，是在每一次模型调用前，选出当前决策真正需要的信息，并在情况变化后及时更新。</strong>它管理的是信息的进入、使用、退出与保存，而非单纯扩大上下文窗口。<a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents"><u>Anthropic：Effective context engineering for AI agents</u></a></p>
-<section id="先分清信息从哪里来" class="level2">
-<h2 class="anchored" data-anchor-id="先分清信息从哪里来">7.4.1　先分清信息从哪里来</h2>
-<p>在 Coding Agent 中，模型输入通常混合了几类性质不同的材料。若把它们都叫”上下文”，容易忽略其来源和可信度。</p>
+<div class="bookbox guide">
+<p>任务合同写清以后，Agent 还有一个实际困难：模型看不到整个工作区，只能依据本轮送进来的内容判断。项目可能有几千个文件，工具日志不断增长，邮件和日历随时在变。本节回答：每次调用模型之前，该让它看到什么？先按来源和可信度给信息分类，再用四道筛选器和 token 预算决定取舍，然后给出一条“检索—核对—组装—更新—持久化”的处理流水线，最后区分上下文窗口、外部记忆和 KV 缓存。结论是：上下文不是“模型看过的一切”，而是一个有来源、有版本、随任务更新的<strong>工作集</strong>。</p>
+</div>
+<section id="c7-subsec-ctx-src" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-ctx-src">7.4.1　信息从哪里来</h2>
+<p><strong>上下文</strong>（context）指一次模型调用实际送进模型的全部输入：系统提示、工具描述、检索到的材料、历史摘要、最新的工具结果等。它只是“模型看过的一切”中被选进本轮的那一部分。<strong>上下文工程</strong>（Context Engineering）管理的是信息怎样<strong>进入</strong>、<strong>使用</strong>、<strong>退出</strong>和<strong>保存</strong>，而不是单纯扩大窗口<sup><a href="../ch7/references.html#ref-13">[13]</a></sup>。在 Coding Agent 里，模型输入混合了几类性质很不相同的材料（表 <a href="../ch7/s7-4.html#c7-tab-ctx-src">7-8</a>）；如果统统叫“上下文”，就容易忽略它们的来源和可信度。</p>
+<div id="c7-tab-ctx-src" class="booktab">
+<div class="tabcap">
+<p>表 7-8　Coding Agent 上下文中的六类信息</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>信息类型</strong></th>
-<th><strong>典型内容</strong></th>
-<th><strong>主要用途</strong></th>
-<th><strong>更新方式</strong></th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">典型内容</th>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">更新方式</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>当前任务</td>
-<td>用户目标、边界、验收标准</td>
-<td>决定工作方向</td>
-<td>用户修改需求时更新</td>
+<td style="text-align: left;">持久规则</td>
+<td style="text-align: left;"><code>AGENTS.md</code>、<code>CLAUDE.md</code>、项目规范</td>
+<td style="text-align: left;">长期适用的约定</td>
+<td style="text-align: left;">由维护者版本化管理</td>
 </tr>
 <tr class="even">
-<td>持久规则</td>
-<td>AGENTS.md、CLAUDE.md、项目规范</td>
-<td>说明长期适用的约定</td>
-<td>由项目维护者版本化管理</td>
+<td style="text-align: left;">仓库事实</td>
+<td style="text-align: left;">源码、类型定义、依赖、测试配置、启动命令</td>
+<td style="text-align: left;">判断项目目前怎样实现</td>
+<td style="text-align: left;">文件变化后重新读取</td>
 </tr>
 <tr class="odd">
-<td>仓库事实</td>
-<td>源码、类型、依赖、测试配置</td>
-<td>判断项目目前怎样实现</td>
-<td>文件变化后重新读取</td>
+<td style="text-align: left;">当前任务</td>
+<td style="text-align: left;">目标、边界、验收标准、已改文件、当前计划</td>
+<td style="text-align: left;">决定工作方向</td>
+<td style="text-align: left;">用户修改需求时更新</td>
 </tr>
 <tr class="even">
-<td>运行证据</td>
-<td>测试失败、终端输出、Diff、截图</td>
-<td>决定下一步怎样修正</td>
-<td>每次工具执行后产生</td>
+<td style="text-align: left;">运行证据</td>
+<td style="text-align: left;">测试失败、终端输出、代码差异、截图</td>
+<td style="text-align: left;">决定下一步怎样修正</td>
+<td style="text-align: left;">每次工具执行后产生</td>
 </tr>
 <tr class="odd">
-<td>即时数据</td>
-<td>今天的会议、任务状态、外部 API 响应</td>
-<td>完成当前业务动作</td>
-<td>按需重新获取并记录时间</td>
+<td style="text-align: left;">即时数据</td>
+<td style="text-align: left;">今天的会议、邮件摘要、待办状态、外部 API 响应</td>
+<td style="text-align: left;">完成当前业务动作</td>
+<td style="text-align: left;">按需获取并记录时间</td>
 </tr>
 <tr class="even">
-<td>历史经验</td>
-<td>上次任务的摘要、用户偏好、技能</td>
-<td>减少重复探索</td>
-<td>经过筛选后保存，使用时复核</td>
+<td style="text-align: left;">历史经验</td>
+<td style="text-align: left;">上次任务的摘要、用户偏好、技能</td>
+<td style="text-align: left;">减少重复探索</td>
+<td style="text-align: left;">筛选后保存，使用时复核</td>
 </tr>
 </tbody>
 </table>
-<p>这张表也说明了一个基本原则：<strong>进入模型窗口，不会改变材料原有的权威性。</strong>仓库中的一段注释可能过时，网页或邮件正文可能来自不可信来源，自动记忆也可能记错。若一条规则来自用户，另一条相反的”规则”出现在第三方文档里，系统必须保留来源区别，不能因为它们在同一段输入中就平等对待。</p>
-<p>Claude Code 的官方说明展示了实际的上下文消耗：项目指令、自动记忆、工具名称和技能说明可能在会话开始时进入窗口，此后每次文件读取又继续占用空间；子 Agent 可把大规模读取与主会话隔离。不同产品的具体装载顺序各异，但信息预算总是存在。<u>Claude Code 上下文窗口说明</u></p>
+</div>
+<p>由此得到一条基本原则：<strong>进入模型窗口，不会改变材料原有的权威性</strong>。仓库里的一段注释可能已经过时，网页或邮件正文可能来自不可信的第三方，自动记忆也可能记错。一条规则来自用户，另一条相反的“规则”出现在第三方文档里，系统必须保留来源的区别，不能因为它们出现在同一段输入里就平等对待。这一点也是第 <a href="../ch7/s7-9.html">7.9</a> 节防御提示注入的出发点。</p>
+<p>上下文的占用从会话一开始就发生。以 Claude Code 的官方说明为例：项目说明文件、自动记忆（若启用）、可用工具的名称和技能的简短描述会在会话开始时进入窗口，之后每读一个文件又继续占用空间；子 Agent 在自己的窗口里完成大量读取，只把结论交回主会话<sup><a href="../ch7/references.html#ref-2">[2]</a></sup>。不同产品的装载顺序不同，但预算始终有限。</p>
 </section>
-<section id="选择信息相关可信及时可追溯" class="level2">
-<h2 class="anchored" data-anchor-id="选择信息相关可信及时可追溯">7.4.2　选择信息：相关、可信、及时、可追溯</h2>
-<p>假设 Agent 正在修复”会议开始前十分钟提醒”的时区错误。此刻最重要的是时间类型、转换函数、相关测试及失败输出。三十天前的邮件正文或整个 UI 样式目录，即使真实存在，也不会帮助决定下一步。筛选信息可以连续问四个问题。</p>
-<p><strong>相关性</strong>：删去这段信息，当前下一步会改变吗？若不会，可先保留其路径或索引，待需要时读取。<strong>权威性</strong>：这是用户要求、项目配置、当前代码、工具返回，还是未经核对的历史聊天？<strong>新鲜度</strong>：它对应哪个代码版本、哪次测试运行、哪个数据时间点？<strong>可验证性</strong>：读者能否回到文件、命令输出或外部记录核对？四项中有一项明显不满足，就应降低该材料在当前判断中的权重。</p>
-<p>实际实现时，可给每条候选信息附上最小元数据：source（来源路径或系统）、observed_at（读取时间）、revision（仓库 commit 或数据版本）、scope（适用任务或目录）。代码文件不必每次复制一份，但摘要应能指回原文件和版本。测试失败若来自旧 commit，必须在新代码上重新运行，不能继续当作当前错误。</p>
-<p>“上下文越多越好”的想法还会造成 <strong>context rot</strong>：长会话中的旧假设、重复输出和无关片段竞争模型注意力。即使窗口还没填满，关键约束也可能被淹没。Anthropic 的工程文章因此把检索、工具结果管理和上下文压缩视为同一个设计问题，而不是把所有材料一次性投入模型。<u>Anthropic 上下文工程文章</u></p>
-</section>
-<section id="一条可实现的上下文处理流水线" class="level2">
-<h2 class="anchored" data-anchor-id="一条可实现的上下文处理流水线">7.4.3　一条可实现的上下文处理流水线</h2>
-<p>可以把每轮上下文准备写成六步。步骤不要求使用某个专门的向量数据库；小项目用文件搜索和结构化记录也能实现。</p>
+<section id="c7-subsec-filter" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-filter">7.4.2　窗口是注意力预算：四道筛选器</h2>
+<p>“上下文越多越好”是常见误解。Anthropic 的工程文章把这种现象称为<strong>上下文腐化</strong>（context rot）：包括“大海捞针”在内的长上下文测试显示，随着窗口中 token 增多，模型准确找回和利用其中某条信息的能力往往下降；长会话里的旧假设、重复输出和无关片段会与关键约束争夺模型的注意力<sup><a href="../ch7/references.html#ref-13">[13]</a></sup>。即使窗口还没填满，关键约束也可能被淹没。因此上下文窗口更像一份<strong>注意力预算</strong>，目标是用最少的高信号 token 支撑这一步的判断。</p>
+<p>假设 Agent 正在修复“会议开始前十分钟提醒”的时区错误。此刻需要的是时间类型、转换函数、相关测试和失败输出；三十天前的邮件正文、整个界面样式目录，即使真实存在，也不会帮助决定下一步。筛选可以连问四个问题：</p>
 <ol type="1">
-<li><p><strong>确定当前问题。</strong> 从任务状态中取出下一步要判断的事，例如”时区转换错在哪里”，而不是重复整个项目目标。</p></li>
-<li><p><strong>发现候选来源。</strong> 先用文件名、符号、调用关系或测试名称搜索；需要外部资料时，再调用对应工具。此时只获取路径和少量摘要。</p></li>
-<li><p><strong>读取并核对。</strong> 打开相关文件的必要片段，确认版本；对测试输出保存命令与退出码。若来源互相冲突，显式记录冲突。</p></li>
-<li><p><strong>按预算组装。</strong> 先放任务目标与不可忽略的约束，再放当前问题、相关代码和最新失败证据；长日志仅保留定位信息和原始记录链接。</p></li>
-<li><p><strong>执行后更新。</strong> 新工具结果到达时，更新”已知事实、仍不确定的点、下一步动作”；失败的旧假设应退出工作集。</p></li>
-<li><p><strong>必要时持久化。</strong> 跨会话仍有效的决定写入项目文件或任务状态；易变数据只保存索引、来源与时间，不当作永久事实。</p></li>
+<li><p><strong>相关性</strong>：删掉这段信息，下一步会改变吗？不会，就只保留它的路径或索引，需要时再读。</p></li>
+<li><p><strong>权威性</strong>：它是用户要求、项目配置、当前代码、工具返回，还是没核对过的旧聊天？</p></li>
+<li><p><strong>新鲜度</strong>：它对应哪个代码版本、哪次测试运行、哪个数据时刻？会议可能刚被取消。</p></li>
+<li><p><strong>可验证性</strong>：能否回到文件、命令输出或外部记录核对？</p></li>
 </ol>
-<p>这套流程中的”检索”与”压缩”解决不同问题。检索是在庞大信息库中找出有用片段；压缩是在多轮执行后保留决策所需的状态。一个好的阶段摘要应包括：目标是否改变、已确认的事实、已经修改的文件、最近一次检查结果、尚未解决的问题以及下一步的理由。它不应只写”目前进展顺利”。原始日志和 Diff 仍需保留在外部，方便重新检查。Claude Code 对上下文窗口与压缩过程的说明，也展示了规则和工具结果如何占用、离开或重新进入窗口。<u>Claude Code 上下文窗口说明</u></p>
+<p>四项中有一项明显不满足，就应降低它在当前判断中的分量。实现时可以给每条候选信息附上最小的元数据：来源（文件路径或系统）、读取时间、版本（提交号或数据版本）、适用范围（任务或目录）。测试失败若来自旧的提交，必须在新代码上重跑，不能继续当作当前错误。</p>
+<div id="c7-ex-budget" class="bookbox example">
+<div class="boxtitle">
+<p>例 7-1　上下文预算：全部加载还是最小工作集</p>
+</div>
+<p>设模型的上下文窗口为 <span class="math inline">\(W=200\,000\)</span> token。今日工作助手的数据有：120 封邮件、30 天日历、200 条待办、10 轮旧对话。各项的平均 token 数为便于计算而假设（见最后一列）。比较“全部加载”与“最小工作集”两种做法的窗口占用和 30 轮循环的累计输入量。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">全部邮件</td>
+<td style="text-align: left;"><span class="math inline">\(120\times800\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(96\,000\)</span></td>
+<td style="text-align: left;">每封含正文约 800 token（假设）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">30 天日历</td>
+<td style="text-align: left;"><span class="math inline">\(30\times10\times60\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(18\,000\)</span></td>
+<td style="text-align: left;">每天约 10 个事件，每个约 60 token</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">全部待办</td>
+<td style="text-align: left;"><span class="math inline">\(200\times50\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(10\,000\)</span></td>
+<td style="text-align: left;">每条约 50 token</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">旧对话</td>
+<td style="text-align: left;"><span class="math inline">\(10\times2\,000\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(20\,000\)</span></td>
+<td style="text-align: left;">每轮约 2000 token</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">规则与工具描述</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><span class="math inline">\(15\,000\)</span></td>
+<td style="text-align: left;">系统提示、项目规则、全部工具描述（假设）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">全部加载合计</td>
+<td style="text-align: left;">步骤 1～5 相加</td>
+<td style="text-align: left;"><span class="math inline">\(159\,000\)</span></td>
+<td style="text-align: left;">占窗口 <span class="math inline">\(159\,000\div200\,000\approx79.5\%\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">最小工作集</td>
+<td style="text-align: left;"><span class="math inline">\(800+2\,000+1\,500\)</span> <span class="math inline">\(+\,360+450+250\)</span> <span class="math inline">\(+\,4\,000+600\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(9\,960\)</span></td>
+<td style="text-align: left;">依次为合同、规则、3 个 Adapter 的工具描述、今日 6 场会议、3 封邮件摘要（各 150）、5 条逾期待办、4 个相关代码片段（各 1000）、最新失败输出</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">最小工作集占比</td>
+<td style="text-align: left;"><span class="math inline">\(9\,960\div200\,000\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\approx5\%\)</span></td>
+<td style="text-align: left;">步骤 7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">30 轮累计输入</td>
+<td style="text-align: left;"><span class="math inline">\(159\,000\times30\)</span> 与 <span class="math inline">\(9\,960\times30\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(4.77\times10^{6}\)</span> 与 <span class="math inline">\(\approx3.0\times10^{5}\)</span></td>
+<td style="text-align: left;">每轮都要重新发送全部上下文（未计缓存）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据流向</strong>：邮件、日历、待办、旧对话 → 四道筛选器 → 只留今日、高优先级、未完成、与当前问题相关的部分 → 组装成约 <span class="math inline">\(10^{4}\)</span> token 的工作集。</p>
+<p><strong>结论</strong>：全部加载用掉约八成窗口，留给代码和测试输出的空间只剩约 <span class="math inline">\(4.1\times10^{4}\)</span> token，而且无关邮件与关键规则争夺注意力；最小工作集只占 5%，30 轮的累计输入量相差约 16 倍（<span class="math inline">\(4.77\times10^{6}\div3.0\times10^{5}\)</span>）。按 token 计费时，成本也大致按这个比例变化。前缀缓存（复用相同开头的 KV 缓存）可以降低重复部分的计算（见第 <a href="../ch7/s7-11.html">7.11</a> 节），但不能解决注意力被稀释的问题。</p>
+</div>
 </section>
-<section id="记忆要分层不能把旧结论直接当新事实" class="level2">
-<h2 class="anchored" data-anchor-id="记忆要分层不能把旧结论直接当新事实">7.4.4　记忆要分层，不能把旧结论直接当新事实</h2>
-<p>长任务、跨会话任务都需要记忆，但”记忆”至少有三个层次。<strong>工作记忆</strong>是当前会话里正在用的任务状态与证据；<strong>持久项目知识</strong>是团队维护的仓库规则、接口约定和架构说明；<strong>跨任务经验</strong>是对多次工作有帮助的偏好或排查方法。它们在什么时候写入、怎样读取、由谁修正，应分别设计。</p>
-<p>项目规则适合写在受版本控制的文件中，使未来 Agent 和人都能看到。例如 AGENTS.md 可以记录测试入口，CLAUDE.md 可以记录 Claude Code 的项目约定。自动记忆更适合保存经验性线索，但使用前要核对当前仓库。若历史记录说”日历接口返回 UTC”，而代码已改成携带时区的时间对象，当前类型定义与测试结果应优先。Claude Code 官方文档也区分显式项目指令与自动记忆。<u>Claude Code 项目记忆</u></p>
-<p>保存记忆时还要避免把未经信任的内容”洗成”长期规则。邮件、网页、仓库中的第三方文件可能包含诱导 Agent 更改目标或泄露信息的文字。它们可以作为任务数据被读取，却不应因出现在工具结果中就覆盖用户指令；从这些来源提炼经验，最好保留原始出处并经过验证。这样做同时服务于安全与准确性：未来会话能知道一条结论从何而来、何时可能过期。</p>
-<p>这里还要区分<strong>上下文窗口、外部记忆和 KV Cache</strong>。上下文窗口是模型本次调用可接收的输入范围；外部记忆是磁盘或数据库中可跨调用保存、再按需取回的内容；KV Cache 是推理过程中为已处理的 Token 保存的计算结果，用于减少重复计算。KV Cache 可以降低某些长上下文推理的计算开销，却不会自动判断旧事实是否可靠，也不能代替任务状态或长期记忆。后文讨论边缘部署和缓存时，将再分析它对延迟与资源占用的影响。<u>PagedAttention 论文</u></p>
+<section id="c7-subsec-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-pipeline">7.4.3　一条上下文处理流水线</h2>
+<p>每一轮准备上下文可以写成六步（图 <a href="../ch7/s7-4.html#c7-fig-ctx-pipe">7-5</a>）。它不要求专门的向量数据库，小项目用文件搜索和结构化记录也能实现。</p>
+<ol type="1">
+<li><p><strong>确定当前问题</strong>：从任务状态里取出这一步要判断的事，例如“时区转换错在哪里”，而不是重复整个项目目标。</p></li>
+<li><p><strong>发现候选来源</strong>：先按文件名、符号、调用关系或测试名搜索；需要外部资料时再调用相应工具。此时只取路径和简短摘要。</p></li>
+<li><p><strong>读取并核对</strong>：打开相关文件的必要片段，确认版本；测试输出连同命令和退出码一起保存；来源相互冲突时，显式记下冲突。</p></li>
+<li><p><strong>按预算组装</strong>：先放任务目标和不可忽略的约束，再放当前问题、相关代码和最新失败证据；长日志只留定位信息和原始记录的位置。</p></li>
+<li><p><strong>执行后更新</strong>：新结果到达后，更新“已知事实、仍不确定的点、下一步动作”；已被否定的假设退出工作集。</p></li>
+<li><p><strong>必要时持久化</strong>：跨会话仍然有效的决定写进项目文件或任务状态；易变数据只存索引、来源和时间。</p></li>
+</ol>
+<div id="c7-fig-ctx-pipe" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-ctx-pipe.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.1%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-5　每轮上下文处理流水线。②③从来源中检索并核对，④按预算组装工作集交给模型（高亮）；工具执行后的新观察在⑤更新工作集，相当于压缩；⑥把长期有效的内容写入外部存储，供以后检索</p>
+</div>
+</div>
+<p>流水线里有两种动作常被混为一谈。<strong>检索</strong>是从庞大的信息库里找出有用片段，解决“缺什么”；<strong>压缩</strong>是在多轮执行后只保留决策需要的状态，解决“太多了”。好的阶段摘要应包括：目标是否改变、已确认的事实、已修改的文件、最近一次检查的结果、尚未解决的问题、下一步的理由，而不是一句“目前进展顺利”。原始日志和代码差异保留在外部，摘要是<strong>索引</strong>，不是新的事实来源；仓库状态变了，就重新读文件或差异，而不是沿用旧摘要。</p>
+<p>工具描述同样占预算。接入的工具越多，每轮都要带上的工具说明就越长。一些系统因此采用<strong>按需加载</strong>：会话开始时只放工具名称和一句话说明，任务确实需要时再加载完整的参数描述；Skill（按需加载的操作说明包，第 <a href="../ch7/s7-6.html#c7-subsec-compare">7.6.5</a> 小节）也按同样思路，平时只露出名称和简介。长会话被压缩以后，持久规则要能从磁盘<strong>重新注入</strong>，不能随压缩一起丢失。新会话则先加载简短的入口说明，再按索引获取实时数据；需要大量读取的子任务交给子 Agent，在隔离的窗口里完成。</p>
 </section>
-<section id="本章案例的最小上下文包" class="level2">
-<h2 class="anchored" data-anchor-id="本章案例的最小上下文包">7.4.5　本章案例的最小上下文包</h2>
-<p>对”今日工作助手”的首页任务，不需要一次加载所有邮件和全部仓库。一个可以交给模型开始工作的<strong>最小上下文包</strong>应包括：7.3 节的任务合同；项目入口与运行命令；三个 Mock Adapter 的接口；与首页及其测试直接相关的文件路径。Agent 阅读后再按发现的问题补充资料。进入测试阶段时，当前 Diff 与最新检查结果比最初的设计讨论更重要；进入页面验收阶段时，页面状态和截图又比旧的单元测试日志更重要。</p>
-<p>可用一个简单的检查问题评价上下文设计：<strong>如果下一步判断出错，能否指出是缺少信息、信息过时、来源不可信，还是摘要丢失了关键细节？</strong>若能定位原因，就能改进检索与组装规则；若所有内容只堆在一条越来越长的对话里，这些问题就很难区分。</p>
+<section id="c7-subsec-memory" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-memory">7.4.4　记忆要分层，旧结论不是新事实</h2>
+<p>长任务、跨会话任务都需要记忆。第 <a href="../ch7/s7-2.html#c7-subsec-state">7.2.2</a> 小节已经区分了会话状态、项目知识和跨任务经验三层；对上下文工程来说，关键是它们<strong>进入窗口前</strong>都要复核。项目规则适合写在受版本控制的文件里，未来的 Agent 和人都能看到；自动记忆更适合保存经验性线索，使用前要核对当前仓库。历史记录说“日历接口返回 UTC 时间”，而代码已改成携带时区的时间对象，那么当前的类型定义和测试结果优先。</p>
+<p>保存记忆时还要防止把不可信的内容“洗成”长期规则。邮件、网页、仓库里的第三方文件可能写着诱导 Agent 改变目标或泄露信息的文字。它们可以作为数据被读取，但不能因为出现在工具结果里就覆盖用户指令；从这些来源提炼的经验要保留原始出处并经过验证。记忆系统的完整设计见第 8 章。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>上下文窗口、外部记忆、KV 缓存</strong>是三回事。<strong>上下文窗口</strong>是模型单次调用能接收的输入长度上限，每次调用都要重新填入内容，上一次填了什么不会自动保留。<strong>外部记忆</strong>是存在磁盘或数据库里、跨调用保存、按需取回的内容，进入窗口前仍要检索、筛选和授权。<strong>KV 缓存</strong>（Key-Value Cache，键值缓存）是推理引擎在每一层注意力中为已处理的 token 保存的键（Key）和值（Value）向量，生成后续 token 时不必重算它们（第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节）；它能降低长上下文推理的开销，却不会判断旧事实是否可靠，也代替不了任务状态和长期记忆。第 <a href="../ch7/s7-11.html">7.11</a> 节还会从部署角度比较这几种缓存。</p>
+</div>
 </section>
-<section id="小结上下文是随任务变化的工作集" class="level2">
-<h2 class="anchored" data-anchor-id="小结上下文是随任务变化的工作集">7.4.6　小结：上下文是随任务变化的工作集</h2>
-<p>Prompt 给出了任务合同，Context 为每轮决策提供依据。有效的上下文不是”模型看过的一切”，而是一个有来源、有版本、会更新的工作集。下一节讨论 Harness Engineering：当 Agent 已经知道要做什么、也拿到了必要事实，系统怎样让工具调用安全地发生，并用机械检查提供可靠反馈。</p>
+<section id="c7-subsec-ctx-pack" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-ctx-pack">7.4.5　本章案例的最小上下文包</h2>
+<p>对今日工作助手的首页任务，不需要一次加载全部邮件和整个仓库。可以交给模型开工的<strong>最小上下文包</strong>包括：第 <a href="../ch7/s7-3.html#c7-subsec-template">7.3.5</a> 小节的任务合同；项目入口和运行命令；三个 Mock Adapter 的接口；与首页及其测试直接相关的文件路径。Agent 读完后再按发现的问题补充资料。进入测试阶段时，当前代码差异和最新检查结果比最初的设计讨论更重要；进入页面验收阶段时，页面状态和截图又比旧的单元测试日志更重要。工作集随阶段变化。</p>
+<p>评价上下文设计可以用一个检查问题：<strong>下一步判断出错时，能否指出是缺少信息、信息过时、来源不可信，还是摘要丢了关键细节？</strong>能定位原因，就能改进检索和组装规则；所有内容都堆在一条越来越长的对话里，这些原因就无从区分。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>上下文按来源分六类；进入窗口不改变权威性。</p></li>
+<li><p>窗口是注意力预算：用相关性、权威性、新鲜度、可验证性筛选，用元数据记录来源和版本。</p></li>
+<li><p>检索补“缺”，压缩去“多”；摘要是索引不是事实；规则压缩后要能重新注入。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1299,8 +1470,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch7/s7-3.html" class="pagination-link" aria-label="7.3　Prompt Engineering：把需求写成可以执行和验收的任务">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span>
+      <a href="../ch7/s7-3.html" class="pagination-link" aria-label="7.3　Prompt Engineering：把需求写成任务合同">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">7.3　Prompt Engineering：把需求写成任务合同</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1310,7 +1481,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

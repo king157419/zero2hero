@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7.6 工具与智能体互操作：MCP、A2A – 大语言模型原理与技术</title>
+<title>7.6 工具与智能体互操作：MCP 与 A2A – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-6.html">7.6　工具与智能体互操作：MCP、A2A</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-6.html">7.6　工具与智能体互操作：MCP 与 A2A</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,21 +754,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#mcp-的三方关系与三类能力" id="toc-mcp-的三方关系与三类能力" class="nav-link active" data-scroll-target="#mcp-的三方关系与三类能力">7.6.1　MCP 的三方关系与三类能力</a></li>
-  <li><a href="#一次-mcp-工具调用怎样走完" id="toc-一次-mcp-工具调用怎样走完" class="nav-link" data-scroll-target="#一次-mcp-工具调用怎样走完">7.6.2　一次 MCP 工具调用怎样走完</a></li>
-  <li><a href="#a2a把任务交给独立-agent" id="toc-a2a把任务交给独立-agent" class="nav-link" data-scroll-target="#a2a把任务交给独立-agent">7.6.3　A2A：把任务交给独立 Agent</a></li>
-  <li><a href="#两条调用链的工程边界" id="toc-两条调用链的工程边界" class="nav-link" data-scroll-target="#两条调用链的工程边界">7.6.4　两条调用链的工程边界</a></li>
-  <li><a href="#多-agent-协作还需要任务拆分与合并" id="toc-多-agent-协作还需要任务拆分与合并" class="nav-link" data-scroll-target="#多-agent-协作还需要任务拆分与合并">7.6.5　多 Agent 协作还需要任务拆分与合并</a></li>
-  <li><a href="#小结协议让边界可表达系统仍要负责结果" id="toc-小结协议让边界可表达系统仍要负责结果" class="nav-link" data-scroll-target="#小结协议让边界可表达系统仍要负责结果">7.6.6　小结：协议让边界可表达，系统仍要负责结果</a></li>
+  <li><a href="#c7-subsec-fc" id="toc-c7-subsec-fc" class="nav-link active" data-scroll-target="#c7-subsec-fc">7.6.1　工具调用：模型怎样使用外部能力</a></li>
+  <li><a href="#c7-subsec-mcp" id="toc-c7-subsec-mcp" class="nav-link" data-scroll-target="#c7-subsec-mcp">7.6.2　MCP：统一的工具接入协议</a></li>
+  <li><a href="#c7-subsec-mcp-call" id="toc-c7-subsec-mcp-call" class="nav-link" data-scroll-target="#c7-subsec-mcp-call">7.6.3　一次 MCP 工具调用怎样走完</a></li>
+  <li><a href="#c7-subsec-a2a" id="toc-c7-subsec-a2a" class="nav-link" data-scroll-target="#c7-subsec-a2a">7.6.4　A2A：把任务交给独立的 Agent</a></li>
+  <li><a href="#c7-subsec-compare" id="toc-c7-subsec-compare" class="nav-link" data-scroll-target="#c7-subsec-compare">7.6.5　Function Calling、MCP、A2A 与 Skill</a></li>
+  <li><a href="#c7-subsec-multi" id="toc-c7-subsec-multi" class="nav-link" data-scroll-target="#c7-subsec-multi">7.6.6　多 Agent 协作：拆分、授权与合并</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-6.html">7.6　工具与智能体互操作：MCP、A2A</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch7/index.html">第 7 章　Coding Agent 工程技术</a></li><li class="breadcrumb-item"><a href="../ch7/s7-6.html">7.6　工具与智能体互操作：MCP 与 A2A</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">7.6　工具与智能体互操作：MCP、A2A</h1>
+<h1 class="title">7.6　工具与智能体互操作：MCP 与 A2A</h1>
 </div>
 
 
@@ -720,129 +785,325 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>一个 Coding Agent 很少只操作本地文件。它可能需要从代码托管平台读取 Issue，从测试服务取得报告，或请另一个团队维护的 Agent 分析依赖风险。这时要分清两类连接：<strong>调用一个有明确输入输出的能力</strong>，以及<strong>把一项需要自主处理的任务委托给另一个 Agent</strong>。MCP 主要规范前者，A2A 主要规范后者。两项协议可以在同一系统中共存，但连接对象、状态归属和失败处理不同。<u>A2A 官方比较</u></p>
-<section id="mcp-的三方关系与三类能力" class="level2">
-<h2 class="anchored" data-anchor-id="mcp-的三方关系与三类能力">7.6.1　MCP 的三方关系与三类能力</h2>
-<p>MCP（Model Context Protocol）的基本角色是 <strong>Host、Client、Server</strong>。Host 是用户正在使用的 Agent 应用；Host 内的 Client 负责与某个 MCP Server 通信；Server 暴露外部能力。Server 不直接”进入模型”，它返回描述和数据，由 Host 决定哪些能力可见、哪些结果进入本轮上下文。一个 Host 可以连接多个 Server，例如代码搜索、测试报告和项目文档服务。MCP 的基础消息采用 JSON-RPC；具体连接方式和生命周期要以采用的协议版本为准。<u>MCP 基础规范</u>、<a href="https://py.sdk.modelcontextprotocol.io/get-started/first-steps/"><u>MCP SDK 入门</u></a></p>
-<p>Server 可以提供三类主要内容，区别在于”谁决定使用它”。</p>
+<div class="bookbox guide">
+<p>Coding Agent 很少只操作本地文件：它要从代码托管平台读 Issue，从 CI 服务取测试报告，有时还要请另一个团队维护的 Agent 审查依赖风险。本节回答：模型怎样调用外部工具？成百上千的工具怎样以统一方式接入？一项需要自主处理的任务怎样交给另一个 Agent？先从函数调用说起，说明它与传统软件集成的区别和“M×N”问题；再讲统一工具接入的 MCP 和统一智能体协作的 A2A；最后把 Function Calling、MCP、A2A、Skill 四者放在一起比较。结论是：MCP 让 Agent 能<strong>使用工具</strong>，A2A 让 Agent 能<strong>与其他 Agent 合作</strong>；协议只规定怎样传递，授权与验收仍由各方的 Harness 负责。</p>
+</div>
+<section id="c7-subsec-fc" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-fc">7.6.1　工具调用：模型怎样使用外部能力</h2>
+<p><strong>工具调用</strong>（tool use）指模型借助 API 等接口使用搜索引擎、数据库、计算器、代码执行环境等外部能力，以弥补自身知识和能力的局限：获取实时数据、执行精确计算、操作外部系统。一次调用分三步：模型<strong>理解需求</strong>、<strong>选择工具并给出参数</strong>，应用执行后模型再<strong>处理返回结果</strong>。例如回答“上海明天会下雨吗”，模型不靠记忆猜，而是调用天气 API，再把返回的数据组织成回答。</p>
+<p>这种能力的标准形式是 <strong>Function Calling</strong>（函数调用）。OpenAI 于 2023 年 6 月 13 日随 gpt-3.5-turbo-0613 和 gpt-4-0613 模型在其 API 中推出这一功能：开发者用 JSON Schema（一种描述 JSON 数据结构的格式）声明一组函数的名称、用途和参数，模型在需要时输出一段符合该结构的 JSON，指明要调用哪个函数、参数是什么；<strong>真正执行函数的是应用程序</strong>，执行结果再作为一条消息送回模型<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。此后主流模型 API 都提供了类似机制，第 6 章介绍的 ReAct 闭环中的“行动”一步，通常就是靠它实现的。</p>
+<p>模型调用工具，与传统软件之间的接口集成看起来相似，其实差别很大（表 <a href="../ch7/s7-6.html#c7-tab-fc-vs-sw">7-10</a>）。</p>
+<div id="c7-tab-fc-vs-sw" class="booktab">
+<div class="tabcap">
+<p>表 7-10　大模型工具调用与传统软件集成的区别</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>MCP 能力</strong></th>
-<th><strong>含义</strong></th>
-<th><strong>在 Coding Agent 中的例子</strong></th>
-<th><strong>典型控制者</strong></th>
+<th style="text-align: left;">对比项</th>
+<th style="text-align: left;">大模型工具调用</th>
+<th style="text-align: left;">传统软件集成</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Tool</td>
-<td>可调用的动作，有名称和输入 Schema</td>
-<td>查询 CI 状态、搜索 Issue、运行受限数据库查询</td>
-<td>模型提出调用，Host 执行审批</td>
+<td style="text-align: left;">集成逻辑</td>
+<td style="text-align: left;">模型根据语义动态决定是否调用、调用哪个，具有一定自主性</td>
+<td style="text-align: left;">依赖预设接口和固定流程，逻辑由开发者写死</td>
 </tr>
 <tr class="even">
-<td>Resource</td>
-<td>可读取的资料，以 URI 标识</td>
-<td>仓库架构说明、API Schema、构建日志</td>
-<td>Host 或用户选择何时放入上下文</td>
+<td style="text-align: left;">灵活性</td>
+<td style="text-align: left;">可按需调整工具组合，新增工具只需加一份描述</td>
+<td style="text-align: left;">新增工具要修改代码并重新部署</td>
 </tr>
 <tr class="odd">
-<td>Prompt</td>
-<td>可复用的交互模板</td>
-<td>“根据失败测试生成诊断报告”的模板</td>
-<td>用户或 Host 选择使用</td>
+<td style="text-align: left;">交互方式</td>
+<td style="text-align: left;">用户用自然语言提出需求，结果被转化为语言回答</td>
+<td style="text-align: left;">用户通过图形界面或指令触发，需要知道功能入口</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">智能程度</td>
+<td style="text-align: left;">能判断是否需要调用，并对结果做加工和解释</td>
+<td style="text-align: left;">机械地组合功能，直接呈现工具返回的结果</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">代价</td>
+<td style="text-align: left;">选错工具、编造参数的可能；需要权限与验证</td>
+<td style="text-align: left;">行为确定，可完整测试</td>
 </tr>
 </tbody>
 </table>
-<p>“工具”和”资源”都可能返回文本，但语义不同。读取一份版本化的接口文档更像 Resource；触发一次查询或改变外部状态更像 Tool。若把所有数据都包装成一个能执行任意请求的 Tool，权限难以细分；若把写操作伪装成 Resource，用户可能看不到它的副作用。MCP 规范把 Tool 设计为可由模型选择调用，把 Resource 设计为由应用决定怎样纳入上下文。<u>MCP Tools</u>、<a href="https://modelcontextprotocol.io/specification/2026-07-28/server/resources"><u>MCP Resources</u></a></p>
-</section>
-<section id="一次-mcp-工具调用怎样走完" class="level2">
-<h2 class="anchored" data-anchor-id="一次-mcp-工具调用怎样走完">7.6.2　一次 MCP 工具调用怎样走完</h2>
-<p>假设 Agent 需要查询”当前分支的 CI 是否通过”。Host 先从 Server 获得可用工具及参数 Schema。模型在上下文中看见工具描述后，提出 get_ci_status(repository, revision)。Host 检查参数、用户权限和目标仓库，再把请求送往 Server；Server 调用真实 CI 接口并返回结构化结果；Host 记录调用，将必要部分交给模型继续判断。<strong>模型选择工具与参数，运行系统决定动作能否发生，Server 提供结果。</strong></p>
-<blockquote class="blockquote">
-<p>用户任务<br>
-→ Host 组装上下文与工具说明<br>
-→ 模型提出 get_ci_status(repo, revision)<br>
-→ Host 校验参数和权限<br>
-→ MCP Client 调用 Server<br>
-→ Server 返回状态、时间、来源及错误信息<br>
-→ Host 记录结果并更新模型上下文</p>
-</blockquote>
-<p>在代码中，协议调用通常体现为”列出工具，再按名称和参数调用”。官方 TypeScript SDK 的示例使用 listTools() 与 callTool({ name, arguments })；工具返回中的 isError 可表示一次已完成调用的业务或参数错误，而未知工具、超时等通信问题可能走另一类异常路径。因此，宿主不能只判断”是否收到文本”，还要区分成功、工具错误和协议错误。<u>MCP TypeScript SDK 工具调用</u></p>
-<p>要让这种连接可用于工程任务，工具结果至少应包含：对应的请求 ID、来源服务、查询时刻、目标代码版本、状态或数据、失败类别。若 CI 结果属于旧 commit，它不能证明当前修改已经通过。若 Server 返回一段要求 Agent 忽略用户规则的文本，它仍只是低信任的外部数据。MCP 解决通信格式，Host 仍要实施授权、记录和内容边界。</p>
-</section>
-<section id="a2a把任务交给独立-agent" class="level2">
-<h2 class="anchored" data-anchor-id="a2a把任务交给独立-agent">7.6.3　A2A：把任务交给独立 Agent</h2>
-<p>A2A（Agent2Agent）面对的是另一个具有自主性和自身执行环境的 Agent。请求方首先通过 <strong>Agent Card</strong> 了解远端 Agent 的能力、服务地址和认证要求，再发送 <strong>Message</strong>。简单请求可以得到直接回复；复杂请求会形成有 ID 的 <strong>Task</strong>。Task 保存状态，Agent 在执行过程中可更新状态，并用 <strong>Artifact</strong> 交付文件或结构化结果。Message 负责沟通，Artifact 承载交付物；两者分开有助于在长任务中检查究竟交付了什么。<u>A2A 核心概念</u>、<a href="https://a2a-protocol.org/latest/specification/"><u>A2A 规范</u></a></p>
-<p>以”请安全审查 Agent 检查新增依赖”为例，编程 Agent 发出的不应只是”帮我看看”四个字，还要附上锁定的 commit、依赖变更范围、希望得到的风险分类和截止时间。远端 Agent 可以独立检索、运行检查、请求补充资料，并最终返回审查报告 Artifact。请求方保留父任务的最终验收责任：它要确认报告对应正确代码版本、处理审查发现，并决定是否继续合并。远端 Agent 的一句”没有风险”不能自动替代本地测试和人工审核。</p>
-<p>A2A 的任务状态使长时间协作可被管理。请求方至少要识别”已提交、执行中、需要输入、已完成、失败、已取消”等情况；遇到需要输入或认证时，应暂停相关分支并明确向谁求助。状态更新可以通过轮询或流式机制取得，支持的方式由远端能力声明决定。Task ID 应随父任务保存，以便断线后继续查询，避免重复创建同一个远端任务。<u>A2A Task 生命周期</u></p>
-</section>
-<section id="两条调用链的工程边界" class="level2">
-<h2 class="anchored" data-anchor-id="两条调用链的工程边界">7.6.4　两条调用链的工程边界</h2>
-<p>可以用一张表判断应选择哪种接口。这是架构判断，不要求所有内部子 Agent 都必须使用 A2A；同一进程内的协作也可能由专有接口完成。</p>
+</div>
+<p>Function Calling 解决了“模型怎样表达调用意图”，但没有规定<strong>工具一方</strong>应以什么格式提供能力。早期每个应用都要为每个工具单独写一份对接代码：工具描述怎么写、参数怎么传、错误怎么报，各家不同。<span class="math inline">\(M\)</span> 个应用接 <span class="math inline">\(N\)</span> 个工具，最多要写 <span class="math inline">\(M\times N\)</span> 份对接，这就是下面 MCP 要解决的问题。</p>
+<div id="c7-ex-mn" class="bookbox example">
+<div class="boxtitle">
+<p>例 7-2　从 <span class="math inline">\(M\times N\)</span> 到 <span class="math inline">\(M+N\)</span></p>
+</div>
+<p>某团队有 5 个 Agent 应用（两款 Coding Agent、一个 IDE 插件、一个内部问答机器人、一个运维助手），要接入 8 个工具（代码托管、CI、缺陷跟踪、数据库、文档库、日历、邮件、搜索）。比较两种接入方式需要编写的对接数量。</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>问题</strong></th>
-<th><strong>MCP 工具调用</strong></th>
-<th><strong>A2A 任务委托</strong></th>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>对方是什么</td>
-<td>某项工具、资料或模板的提供者</td>
-<td>有自身目标、状态和执行过程的 Agent</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">无统一协议的对接数</td>
+<td style="text-align: left;"><span class="math inline">\(M\times N=5\times8\)</span></td>
+<td style="text-align: left;">40</td>
+<td style="text-align: left;">每个应用为每个工具各写一份</td>
 </tr>
 <tr class="even">
-<td>谁组织步骤</td>
-<td>当前 Agent</td>
-<td>远端 Agent 在委托范围内组织步骤</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">有统一协议的实现数</td>
+<td style="text-align: left;"><span class="math inline">\(M+N=5+8\)</span></td>
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">每个应用实现一次客户端，每个工具实现一次服务器</td>
 </tr>
 <tr class="odd">
-<td>主要标识</td>
-<td>工具名称、参数和请求 ID</td>
-<td>Agent Card、Task ID、状态与 Artifact</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">新增 1 个工具时的增量</td>
+<td style="text-align: left;">前：<span class="math inline">\(M=5\)</span>；后：1</td>
+<td style="text-align: left;">5 与 1</td>
+<td style="text-align: left;">前者每个应用都要改，后者只写一个服务器</td>
 </tr>
 <tr class="even">
-<td>常见时长</td>
-<td>一次相对明确的调用</td>
-<td>可能跨多轮、异步进行</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">新增 1 个应用时的增量</td>
+<td style="text-align: left;">前：<span class="math inline">\(N=8\)</span>；后：1</td>
+<td style="text-align: left;">8 与 1</td>
+<td style="text-align: left;">前者要对接全部工具，后者只实现一次客户端</td>
 </tr>
 <tr class="odd">
-<td>结果怎样验收</td>
-<td>校验工具结果及来源</td>
-<td>校验远端交付物与父任务目标的关系</td>
-</tr>
-<tr class="even">
-<td>典型失败</td>
-<td>参数错误、权限拒绝、服务超时</td>
-<td>需要补充输入、任务失败、取消、结果版本不符</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">节省比例</td>
+<td style="text-align: left;"><span class="math inline">\((40-13)\div40\)</span></td>
+<td style="text-align: left;">67.5%</td>
+<td style="text-align: left;">步骤 1、2</td>
 </tr>
 </tbody>
 </table>
-<p>两种调用都需要<strong>最小权限和可追溯性</strong>。MCP Server 不应因为连接成功就获得完整仓库或全部账户凭据；A2A 远端 Agent 也只应收到完成委托所需的材料。跨系统传递的内容可能含有隐私数据或恶意指令，发送前应做范围筛选，接收后应保留来源并按低信任数据处理。真正的授权由各自的 Host 与服务执行，协议本身不会替用户决定”该不该批准”。</p>
+<p><strong>数据流向</strong>：应用 → 统一的客户端接口 → 统一的服务器接口 → 工具。</p>
+<p><strong>注意</strong>：统一协议减少的是<strong>接口适配</strong>的工作量。每接入一个服务器，宿主仍要审核它的身份和工具清单、配置凭据、测试行为；这部分工作不会因为协议统一而消失。</p>
+</div>
 </section>
-<section id="多-agent-协作还需要任务拆分与合并" class="level2">
-<h2 class="anchored" data-anchor-id="多-agent-协作还需要任务拆分与合并">7.6.5　多 Agent 协作还需要任务拆分与合并</h2>
-<p>A2A 建立了通信方式，多 Agent 协作仍需一个明确的父任务。父任务要规定：每个子任务的输入版本、负责范围、输出格式、截止时间与验收方式。对可并行的代码修改，独立 worktree 能避免在同一目录相互覆盖；父 Agent 收到结果后，还要检查冲突、合并代码并运行整体验证。对只读研究任务，则可让多个 Agent 分别检索，再比较来源与结论。若任务互相依赖，过早并行会增加等待和返工。</p>
-<p>在本章项目中，单个 Agent 调用 Calendar、Mail、Tasks Mock 服务属于工具层；把”检查提醒规则是否满足隐私规范”委托给独立审查 Agent 属于任务层。这个区分有助于设定失败处理：Mock 查询失败，当前 Agent 可以更换查询或报告工具错误；审查任务失败，父任务需决定重试、换 Agent 或请人接手，且不能把缺失的审查报告写成已通过。</p>
+<section id="c7-subsec-mcp" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-mcp">7.6.2　MCP：统一的工具接入协议</h2>
+<p><strong>MCP</strong>（Model Context Protocol，模型上下文协议）是 Anthropic 于 2024 年 11 月发布的开放协议，用来规范 AI 应用与外部数据源、工具之间怎样交换上下文和调用能力；2025 年 12 月，Anthropic 把它捐给 Linux 基金会新成立的 Agentic AI Foundation（AAIF）管理<sup><a href="../ch7/references.html#ref-15">[15]</a>,<a href="../ch7/references.html#ref-16">[16]</a></sup>。截至 2026 年 11 月，最新的稳定规范版本是 2026-07-28。</p>
+<p><strong>三个角色</strong>　 MCP 采用客户端—服务器架构，有三个角色：</p>
+<ul>
+<li><p><strong>Host</strong>（宿主）：用户正在使用的 AI 应用，内置大模型，例如一个 Coding Agent 或桌面聊天应用；</p></li>
+<li><p><strong>Client</strong>（客户端）：Host 内部负责与<strong>某一个</strong> Server 通信的组件，通常 Host 为每个 Server 建立一个 Client，二者一一对应；</p></li>
+<li><p><strong>Server</strong>（服务器）：把某个软件或数据源的能力按 MCP 格式暴露出来。它可以是<strong>本地</strong>进程，通过标准输入输出（stdio）通信；也可以是<strong>远程</strong>服务，通过 Streamable HTTP 通信（每条消息是一次 HTTP POST，回复为一段 JSON 或一段服务器推送事件流）。</p></li>
+</ul>
+<p>消息格式是 <strong>JSON-RPC</strong> 2.0：一种用 JSON 表示“调用哪个方法、带什么参数、返回什么结果或错误”的远程调用约定。Server 不直接“进入模型”：它返回的是能力描述和数据，由 Host 决定哪些能力对模型可见、哪些结果进入本轮上下文。</p>
+<p><strong>Server 提供的三类能力</strong>　 三类能力的区别在于“由谁决定使用”（表 <a href="../ch7/s7-6.html#c7-tab-mcp-cap">7-11</a>）。</p>
+<div id="c7-tab-mcp-cap" class="booktab">
+<div class="tabcap">
+<p>表 7-11　MCP Server 提供的三类能力</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">能力</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">Coding Agent 中的例子</th>
+<th style="text-align: left;">由谁决定使用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tool（工具）</td>
+<td style="text-align: left;">可调用的动作，有名称和参数描述</td>
+<td style="text-align: left;">查询 CI 状态、搜索 Issue、执行受限的数据库查询</td>
+<td style="text-align: left;">模型提出调用，Host 审批并执行</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Resource（资源）</td>
+<td style="text-align: left;">可读取的资料，以 URI 标识</td>
+<td style="text-align: left;">仓库架构说明、API 描述、构建日志</td>
+<td style="text-align: left;">Host 或用户决定何时放入上下文</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Prompt（提示模板）</td>
+<td style="text-align: left;">可复用的交互模板</td>
+<td style="text-align: left;">“根据失败测试生成诊断报告”的模板</td>
+<td style="text-align: left;">用户或 Host 选择使用</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Tool 和 Resource 都可能返回文本，但语义不同：读一份版本化的接口文档更像 Resource，触发一次查询或改变外部状态则是 Tool。把所有数据都包成一个能执行任意请求的 Tool，权限就难以细分；把写操作伪装成 Resource，用户就看不到它的副作用。</p>
+<p><strong>2026-07-28 版的主要变化</strong>　 协议还在快速演进，实现时应固定协议和 SDK 版本。2026-07-28 版有几项影响工程实现的改动<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>：</p>
+<ul>
+<li><p><strong>无状态化</strong>：取消了 <code>initialize</code> 握手和会话编号，每个请求都在元数据里自带协议版本和客户端能力；服务器必须实现 <code>server/discover</code>，用于事先查询它支持的版本、能力和身份。</p></li>
+<li><p><strong>多轮往返请求</strong>（Multi Round-Trip Requests，MRTR）：服务器处理请求时如果还需要用户补充信息，不再反过来向客户端发请求，而是返回一个 <code>input_required</code> 的中间结果，客户端补齐信息后<strong>重发原请求</strong>。原先由服务器主动发起的 Roots（让服务器知道可访问的目录）、Sampling（服务器借用宿主的模型生成文本）和 Logging 三项功能被标为弃用。</p></li>
+<li><p>服务器应按<strong>确定的顺序</strong>返回工具列表，便于客户端缓存，也提高模型提示缓存的命中率。</p></li>
+</ul>
+<p>有了这些机制再看常见的比喻：MCP 像 AI 应用的“USB-C 接口”——任何设备按同一规格做插头，就能插进任何电脑。USB-C 统一的是插头形状和电气协议，MCP 统一的是能力发现（如 <code>tools/list</code>）、调用（如 <code>tools/call</code>）和消息格式（JSON-RPC）。也有人拿它与 HTTP 类比：HTTP 统一了浏览器与网站的通信，催生了整个互联网服务生态，MCP 有可能对智能体生态起到类似作用。后一点是展望，不是已经发生的事实。</p>
 </section>
-<section id="小结协议让边界可表达系统仍要负责结果" class="level2">
-<h2 class="anchored" data-anchor-id="小结协议让边界可表达系统仍要负责结果">7.6.6　小结：协议让边界可表达，系统仍要负责结果</h2>
-<p>MCP 使工具、资源和提示模板按统一接口暴露；A2A 使独立 Agent 能交换任务、状态与产物。前者延伸当前 Agent 的能力，后者组织跨 Agent 的协作。设计时应固定协议与 SDK 版本，记录调用身份、输入版本、状态和最终证据。下一节讨论 Loop Engineering：这些工具结果和远端任务状态返回后，系统怎样据此选择下一步，并判断何时真正结束。</p>
+<section id="c7-subsec-mcp-call" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-mcp-call">7.6.3　一次 MCP 工具调用怎样走完</h2>
+<p>假设 Agent 要回答“当前分支的 CI 通过了吗”。图 <a href="../ch7/s7-6.html#c7-fig-mcp-seq">7-7</a> 给出了完整过程：Host 经 Client 向 Server 查询工具列表（<code>tools/list</code>），得到工具名称和参数描述；Host 把这些描述连同任务放进上下文；模型提出调用 <code>get_ci_status(repo, revision)</code>；Host 校验参数、检查用户权限和目标仓库，再经 Client 发出 <code>tools/call</code>；Server 调用真实的 CI 接口，返回结构化结果；Host 记录这次调用，把必要部分写回上下文，模型据此继续。一句话概括：<strong>模型选择工具和参数，Host 决定动作能否发生，Server 提供结果</strong>。</p>
+<div id="c7-fig-mcp-seq" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-mcp-seq.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-7　一次 MCP 工具调用的时序。①Host 经 Client 发现工具；②③模型在上下文中看到工具描述后提出调用；④Host（高亮）校验参数与权限，模型的提议在这一步才可能变成动作；⑤⑥Client 发出 tools/call，Server 调用外部 CI 服务并返回结构化结果；⑦Host 记录结果并交回模型</p>
+</div>
+</div>
+<p>宿主还要区分三种结果。<strong>成功</strong>；<strong>工具执行错误</strong>——调用本身完成了，但业务或参数出错，以普通结果加 <code>isError: true</code> 返回，模型能看到并据此调整；<strong>协议错误</strong>——未知工具、请求格式不对等，以 JSON-RPC 错误返回，由宿主处理，不一定交给模型<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>。宿主只判断“有没有收到文本”是不够的。</p>
+<p>工程上，工具结果至少还应带上：请求编号、来源服务、查询时刻、目标代码版本、状态或数据、失败类别。CI 结果属于旧的提交，就证明不了当前修改已经通过；Server 返回一段“要求 Agent 忽略用户规则”的文本，它仍然只是低信任的外部数据。MCP 统一的是通信格式，授权、记录和内容边界仍由 Host 实施。</p>
+</section>
+<section id="c7-subsec-a2a" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-a2a">7.6.4　A2A：把任务交给独立的 Agent</h2>
+<p>MCP 的对面是一个工具：给定输入，返回输出，步骤由调用方组织。有时需要的却是另一个<strong>有自主性、有自己执行环境</strong>的 Agent——例如请专门的安全审查 Agent 检查新增依赖，它要自己检索、运行检查、必要时追问。<strong>A2A</strong>（Agent2Agent，智能体间协议）就是为这种<strong>任务委托</strong>设计的。它由 Google 于 2025 年 4 月发布，同年 6 月捐给 Linux 基金会，2026 年 3 月发布 1.0 版<sup><a href="../ch7/references.html#ref-17">[17]</a></sup>。</p>
+<p><strong>参与者</strong>　 A2A 有三方：<strong>用户</strong>（使用 Agent 系统完成任务的人或服务）；<strong>A2A 客户端</strong>（代表用户向远端 Agent 请求操作的一方，通常本身也是一个 Agent）；<strong>A2A 服务器</strong>（远端 Agent）。远端 Agent 对客户端是<strong>不透明</strong>的：客户端看不到它内部用什么模型、什么工具、怎样推理，只看到它声明的能力和交付的结果。</p>
+<p><strong>核心对象</strong>　 协议围绕五个对象展开（表 <a href="../ch7/s7-6.html#c7-tab-a2a-obj">7-12</a>）。</p>
+<div id="c7-tab-a2a-obj" class="booktab">
+<div class="tabcap">
+<p>表 7-12　A2A 的核心对象</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">对象</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Agent Card（智能体名片）</td>
+<td style="text-align: left;">远端 Agent 发布的 JSON 文档，描述身份、能力（技能）、服务地址和认证要求；1.0 版的约定位置是 <code>/.well-known/agent-card.json</code>，便于发现</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Task（任务）</td>
+<td style="text-align: left;">有状态的工作单元，有唯一编号；记录状态、产物和消息历史，支持长时间、异步的协作</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Message（消息）</td>
+<td style="text-align: left;">客户端与远端之间的一轮交流，带发送方角色；指令、补充上下文、追问、状态说明都以消息传递</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Part（部分）</td>
+<td style="text-align: left;">最小的内容单元，可以是一段文本、一个文件引用或一段结构化数据；消息和产物都由若干 Part 组成</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Artifact（产物）</td>
+<td style="text-align: left;">远端为任务产生的输出，例如一份审查报告；由 Part 组成，一个任务可以有多个产物</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Message 负责沟通，Artifact 承载交付物，二者分开，长任务结束时才能清楚地检查“到底交付了什么”。Task 的状态包括：已提交（submitted）、执行中（working）、需要输入（input-required）、需要认证（auth-required）、已完成（completed）、失败（failed）、已取消（canceled）、被拒绝（rejected）。状态更新可以通过轮询、流式响应（服务器推送事件）或推送通知（远端向客户端登记的网址发 HTTP 请求）取得，支持哪种由 Agent Card 声明。1.0 版规定了三种传输绑定：基于 HTTP 的 JSON-RPC、gRPC 和 HTTP+JSON（REST 风格）。</p>
+<div id="c7-fig-a2a" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-a2a.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-8　一次 A2A 任务委托。编程 Agent 先读取远端的 Agent Card，再以消息提交任务；远端独立执行，中途可转入“需要输入”状态索要材料，最后以 Artifact 交付。右列为 Task 状态的变化；最终验收（高亮）仍由委托方完成</p>
+</div>
+</div>
+<p>以“请安全审查 Agent 检查新增依赖”为例（图 <a href="../ch7/s7-6.html#c7-fig-a2a">7-8</a>）：编程 Agent 先读取对方的 Agent Card，确认它有依赖审查的技能和认证方式；发出的消息不能只是“帮我看看”，而要附上锁定的提交号、依赖变更范围、希望得到的风险分类和截止时间。远端创建 Task 后独立工作，中途可能转入“需要输入”状态索要锁文件；最后以 Artifact 交付审查报告。请求方保留父任务的<strong>最终验收责任</strong>：确认报告对应正确的代码版本，处理审查发现，再决定是否合并。远端一句“没有风险”不能代替本地测试和人工审核。Task 编号应随父任务保存，断线后可以继续查询，避免重复创建同一个远端任务。</p>
+</section>
+<section id="c7-subsec-compare" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-compare">7.6.5　Function Calling、MCP、A2A 与 Skill</h2>
+<p>还有一个常与上述三者混淆的概念：<strong>Skill</strong>（技能）。Anthropic 于 2025 年推出 Agent Skills，同年 12 月把它作为开放标准发布<sup><a href="../ch7/references.html#ref-18">[18]</a></sup>。一个 Skill 是一个文件夹，核心是一份 <code>SKILL.md</code>，写明“遇到某类任务怎样做”，可附带脚本和参考资料。Agent 平时只加载每个 Skill 的名称和一句话简介，任务需要时才读入完整内容，这叫<strong>渐进式加载</strong>。截至 2026 年 11 月，Codex、Gemini CLI、GitHub Copilot、Cursor 等工具都已支持这一格式。</p>
+<p>四者不在同一层次，彼此有调用关系（表 <a href="../ch7/s7-6.html#c7-tab-protocols">7-13</a>）：Function Calling 是<strong>模型层</strong>的机制，模型借它表达“我要调用什么”；MCP 规定 <strong>Host 与工具服务器</strong>之间怎样发现和调用工具，Host 拿到工具描述后，仍然通过 Function Calling 交给模型；A2A 规定 <strong>Agent 与 Agent</strong> 之间怎样委托任务；Skill 则是<strong>打包给模型看的操作知识</strong>：名称和简介常驻上下文，正文和脚本在需要时才读入，其中的步骤可能再调用 MCP 工具或本地脚本。简单地说：MCP 解决“怎样接入和调用工具”，A2A 解决“怎样把任务交给另一个 Agent”，Skill 解决“操作知识怎样打包、按需加载”。</p>
+<div id="c7-tab-protocols" class="booktab">
+<div class="tabcap">
+<p>表 7-13　Function Calling、MCP、A2A 与 Skill 的对比</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">对比项</th>
+<th style="text-align: left;">Function Calling</th>
+<th style="text-align: left;">MCP</th>
+<th style="text-align: left;">A2A</th>
+<th style="text-align: left;">Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">所在层次</td>
+<td style="text-align: left;">模型 API</td>
+<td style="text-align: left;">宿主与工具服务器之间</td>
+<td style="text-align: left;">智能体与智能体之间</td>
+<td style="text-align: left;">模型的上下文</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">标准化什么</td>
+<td style="text-align: left;">模型怎样输出调用意图</td>
+<td style="text-align: left;">工具怎样被发现、描述和调用</td>
+<td style="text-align: left;">任务怎样委托、跟踪和交付</td>
+<td style="text-align: left;">操作知识怎样打包和按需加载</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">对方是什么</td>
+<td style="text-align: left;">应用内的函数</td>
+<td style="text-align: left;">工具、资源、提示模板的提供者</td>
+<td style="text-align: left;">有自身目标和执行过程的 Agent</td>
+<td style="text-align: left;">一份说明文档及附带脚本</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">谁组织步骤</td>
+<td style="text-align: left;">应用</td>
+<td style="text-align: left;">当前 Agent</td>
+<td style="text-align: left;">远端 Agent（在委托范围内）</td>
+<td style="text-align: left;">当前 Agent 按说明执行</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">状态</td>
+<td style="text-align: left;">单次调用</td>
+<td style="text-align: left;">单次调用为主</td>
+<td style="text-align: left;">有状态的 Task，可跨多轮、异步</td>
+<td style="text-align: left;">无状态</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">典型失败</td>
+<td style="text-align: left;">参数不符合结构、编造参数</td>
+<td style="text-align: left;">参数错误、权限拒绝、服务超时</td>
+<td style="text-align: left;">需要补充输入、任务失败、产物版本不符</td>
+<td style="text-align: left;">说明过时、与仓库事实冲突、被植入恶意脚本</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">验收方式</td>
+<td style="text-align: left;">应用检查返回值</td>
+<td style="text-align: left;">校验结果及其来源、版本</td>
+<td style="text-align: left;">校验产物与父任务目标的关系</td>
+<td style="text-align: left;">用对照评估检验是否真有帮助</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>MCP 与 A2A 不能互相替代，也不是二选一。把“查询 CI 状态”包装成一个远端 Agent，会白白增加状态管理和不确定性；把“独立完成一次安全审查”塞进一个工具调用，又会丢掉中途追问、长时运行和产物交付的能力。判断标准是：对方只需按输入给输出，用 MCP；对方需要自己组织步骤，用 A2A。同一进程内的子 Agent 也可以用私有接口协作，不一定非用 A2A。</p>
+</div>
+</section>
+<section id="c7-subsec-multi" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-multi">7.6.6　多 Agent 协作：拆分、授权与合并</h2>
+<p>A2A 只建立了通信方式，多 Agent 协作（第 6 章）还需要一个明确的父任务。父任务要规定每个子任务的输入版本、负责范围、输出格式、截止时间和验收方式。可并行的代码修改各用独立的工作树，避免在同一目录互相覆盖；父 Agent 收到结果后还要检查冲突、合并代码、运行整体验证。只读的调研任务可以让多个 Agent 分头检索再比较来源与结论；互相依赖的任务过早并行，只会增加等待和返工。</p>
+<p>两种连接都要遵守<strong>最小权限</strong>和<strong>可追溯</strong>。MCP Server 不应因为连接成功就拿到整个仓库或全部账户凭据；A2A 远端 Agent 也只应收到完成委托所需的材料。跨系统传递的内容可能含有隐私数据或恶意指令：发送前做范围筛选，接收后保留来源、按低信任数据处理。在本章案例里，Agent 调用 Calendar、Mail、Tasks 三个 Mock 服务属于工具层，Mock 查询失败时当前 Agent 可以换个查询或报告工具错误；把“检查提醒规则是否满足隐私规范”委托给独立的审查 Agent 属于任务层，审查失败时父任务要决定重试、换 Agent 或请人接手，并且不能把缺失的审查报告写成“已通过”。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>Function Calling 让模型表达调用意图；MCP 把 <span class="math inline">\(M\times N\)</span> 的对接变成 <span class="math inline">\(M+N\)</span>；A2A 让 Agent 委托有状态的任务；Skill 把操作知识按需加载进上下文。</p></li>
+<li><p>MCP 的三个角色是 Host、Client、Server，三类能力是 Tool、Resource、Prompt；2026-07-28 版改为无状态并引入多轮往返请求。</p></li>
+<li><p>A2A 的五个对象是 Agent Card、Task、Message、Part、Artifact；父任务保留最终验收责任。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1331,13 +1592,13 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch7/s7-7.html" class="pagination-link" aria-label="7.7　Loop Engineering：让执行结果改变下一步">
-        <span class="nav-page-text">7.7　Loop Engineering：让执行结果改变下一步</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch7/s7-7.html" class="pagination-link" aria-label="7.7　Loop Engineering：让执行结果决定下一步">
+        <span class="nav-page-text">7.7　Loop Engineering：让执行结果决定下一步</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

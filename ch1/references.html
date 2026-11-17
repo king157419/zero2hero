@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>术语与参考文献 – 大语言模型原理与技术</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../ch2/index.html" rel="next">
+<link href="../ch1/exercises.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3f919ab3a9e34f68bb3391aa14ad2951.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">跳至主要内容</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="工具栏">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/references.html">术语与参考文献</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="网站">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">大语言模型原理与技术</a> 
+        <div class="sidebar-tools-main">
+    <a href="../大语言模型原理与技术_全书.pdf" title="下载全书 PDF" class="quarto-navigation-tool px-1" aria-label="下载全书 PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">全书导读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">第 1 章　大语言模型的由来与现状</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true" aria-label="展开或折叠此栏: 第 1 章　大语言模型的由来与现状">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.4　当前技术版图</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5　应用现状</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.6　局限、风险与治理</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">第 2 章　大语言模型的底层原理与技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="展开或折叠此栏: 第 2 章　大语言模型的底层原理与技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">第 3 章　大语言模型的预训练、微调与推理</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false" aria-label="展开或折叠此栏: 第 3 章　大语言模型的预训练、微调与推理">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3　预训练数据工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.7　参数高效微调</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">第 4 章　大模型计算系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false" aria-label="展开或折叠此栏: 第 4 章　大模型计算系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1　大模型对计算系统提出的要求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2　算力资源：让计算算得快、存得下、传得动</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3　深度学习框架：把算法组织成可执行的计算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4　推理服务：让模型又快又省地回答请求</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.5　应用系统工具：从模型到产品</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.6　综合案例：课程知识问答助手的系统设计</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/s4-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch4/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch5/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">第 5 章　检索增强生成</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="展开或折叠此栏: 第 5 章　检索增强生成">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.10　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch6/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">第 6 章　智能体</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="展开或折叠此栏: 第 6 章　智能体">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.1　智能体是什么</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.2　智能体的组成</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.3　智能体如何运行</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.6　Agentic AI：从单个智能体到智能体系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch7/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">第 7 章　Coding Agent 工程技术</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false" aria-label="展开或折叠此栏: 第 7 章　Coding Agent 工程技术">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1　从代码生成到 Coding Agent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.4　Context Engineering：为下一步决策准备信息</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.5　Harness Engineering：把模型的动作接入可控环境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.9　安全与可信交付：把信任边界放在工具之前</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../ch8/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">第 8 章　记忆系统</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false" aria-label="展开或折叠此栏: 第 8 章　记忆系统">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1　理解记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3　基于认知学的记忆</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4　应用：智能个人助手</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#本章术语" id="toc-本章术语" class="nav-link active" data-scroll-target="#本章术语">本章术语</a></li>
+  <li><a href="#参考文献" id="toc-参考文献" class="nav-link" data-scroll-target="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/references.html">术语与参考文献</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">术语与参考文献</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="本章术语" class="level2">
+<h2 class="anchored" data-anchor-id="本章术语">本章术语</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">缩写/术语</th>
+<th style="text-align: left;">英文全称</th>
+<th style="text-align: left;">中文</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AI</td>
+<td style="text-align: left;">Artificial Intelligence</td>
+<td style="text-align: left;">人工智能</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ML / DL</td>
+<td style="text-align: left;">Machine Learning / Deep Learning</td>
+<td style="text-align: left;">机器学习/深度学习</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GenAI / AIGC</td>
+<td style="text-align: left;">Generative AI / AI-Generated Content</td>
+<td style="text-align: left;">生成式人工智能/人工智能生成内容</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LLM</td>
+<td style="text-align: left;">Large Language Model</td>
+<td style="text-align: left;">大语言模型</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FM</td>
+<td style="text-align: left;">Foundation Model</td>
+<td style="text-align: left;">基础模型</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MLLM / VLM</td>
+<td style="text-align: left;">Multimodal LLM / Vision-Language Model</td>
+<td style="text-align: left;">多模态大模型/视觉语言模型</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">World Model</td>
+<td style="text-align: left;">World Model</td>
+<td style="text-align: left;">世界模型</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">JEPA</td>
+<td style="text-align: left;">Joint Embedding Predictive Architecture</td>
+<td style="text-align: left;">联合嵌入预测架构</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">token</td>
+<td style="text-align: left;">token</td>
+<td style="text-align: left;">词元</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tokenizer</td>
+<td style="text-align: left;">tokenizer</td>
+<td style="text-align: left;">词元化器（分词器）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">n-gram</td>
+<td style="text-align: left;">n-gram Language Model</td>
+<td style="text-align: left;">n 元语法模型</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HMM</td>
+<td style="text-align: left;">Hidden Markov Model</td>
+<td style="text-align: left;">隐马尔可夫模型</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NPLM</td>
+<td style="text-align: left;">Neural Probabilistic Language Model</td>
+<td style="text-align: left;">神经概率语言模型</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RNN / LSTM</td>
+<td style="text-align: left;">Recurrent Neural Network / Long Short-Term Memory</td>
+<td style="text-align: left;">循环神经网络/长短期记忆网络</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Seq2Seq</td>
+<td style="text-align: left;">Sequence to Sequence</td>
+<td style="text-align: left;">序列到序列</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Transformer</td>
+<td style="text-align: left;">Transformer</td>
+<td style="text-align: left;">（无通用译名）基于自注意力的网络结构</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GPT</td>
+<td style="text-align: left;">Generative Pre-trained Transformer</td>
+<td style="text-align: left;">生成式预训练 Transformer</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BERT</td>
+<td style="text-align: left;">Bidirectional Encoder Representations from Transformers</td>
+<td style="text-align: left;">基于 Transformer 的双向编码器表示</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MLM</td>
+<td style="text-align: left;">Masked Language Modeling</td>
+<td style="text-align: left;">遮蔽语言建模</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ICL</td>
+<td style="text-align: left;">In-Context Learning</td>
+<td style="text-align: left;">上下文学习</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SFT</td>
+<td style="text-align: left;">Supervised Fine-Tuning</td>
+<td style="text-align: left;">监督微调（指令微调）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RLHF</td>
+<td style="text-align: left;">Reinforcement Learning from Human Feedback</td>
+<td style="text-align: left;">基于人类反馈的强化学习</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DPO</td>
+<td style="text-align: left;">Direct Preference Optimization</td>
+<td style="text-align: left;">直接偏好优化</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MoE</td>
+<td style="text-align: left;">Mixture of Experts</td>
+<td style="text-align: left;">专家混合</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CoT</td>
+<td style="text-align: left;">Chain of Thought</td>
+<td style="text-align: left;">思维链</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ReAct</td>
+<td style="text-align: left;">Reasoning and Acting</td>
+<td style="text-align: left;">推理—行动交替</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RAG</td>
+<td style="text-align: left;">Retrieval-Augmented Generation</td>
+<td style="text-align: left;">检索增强生成</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">(AI) Agent</td>
+<td style="text-align: left;">智能体</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">API</td>
+<td style="text-align: left;">Application Programming Interface</td>
+<td style="text-align: left;">应用程序编程接口</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Top-K / Top-P</td>
+<td style="text-align: left;">Top-K / Top-P (nucleus) Sampling</td>
+<td style="text-align: left;">前 K 采样/核采样</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MCP</td>
+<td style="text-align: left;">Model Context Protocol</td>
+<td style="text-align: left;">模型上下文协议</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Embodied AI</td>
+<td style="text-align: left;">Embodied Artificial Intelligence</td>
+<td style="text-align: left;">具身智能</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GAN</td>
+<td style="text-align: left;">Generative Adversarial Network</td>
+<td style="text-align: left;">生成对抗网络</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VAE</td>
+<td style="text-align: left;">Variational Autoencoder</td>
+<td style="text-align: left;">变分自编码器</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FLOP(s)</td>
+<td style="text-align: left;">Floating-Point Operation(s)</td>
+<td style="text-align: left;">浮点运算（次数）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GPU</td>
+<td style="text-align: left;">Graphics Processing Unit</td>
+<td style="text-align: left;">图形处理器</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MMLU</td>
+<td style="text-align: left;">Massive Multitask Language Understanding</td>
+<td style="text-align: left;">大规模多任务语言理解（基准）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NIST</td>
+<td style="text-align: left;">National Institute of Standards and Technology</td>
+<td style="text-align: left;">（美国）国家标准与技术研究院</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="参考文献" class="level2">
+<h2 class="anchored" data-anchor-id="参考文献">参考文献</h2>
+<p><span id="ref-1" class="refnum">[1]</span> Russell S, Norvig P. Artificial Intelligence: A Modern Approach[M]. 4th ed.&nbsp;Hoboken: Pearson, 2020.</p>
+<p><span id="ref-2" class="refnum">[2]</span> Goodfellow I, Bengio Y, Courville A. Deep Learning[M]. Cambridge, MA: MIT Press, 2016.</p>
+<p><span id="ref-3" class="refnum">[3]</span> Brown T B, Mann B, Ryder N, et al.&nbsp;Language Models are Few-Shot Learners[C]//Advances in Neural Information Processing Systems 33. 2020: 1877–1901.</p>
+<p><span id="ref-4" class="refnum">[4]</span> Bommasani R, Hudson D A, Adeli E, et al.&nbsp;On the Opportunities and Risks of Foundation Models[EB/OL]. arXiv:2108.07258, 2021.</p>
+<p><span id="ref-5" class="refnum">[5]</span> LeCun Y. A Path Towards Autonomous Machine Intelligence[EB/OL]. OpenReview, 2022. <a href="https://openreview.net/forum?id=BZ5a1r-kVsf" class="uri">https://openreview.net/forum?id=BZ5a1r-kVsf</a></p>
+<p><span id="ref-6" class="refnum">[6]</span> Gurnee W, Tegmark M. Language Models Represent Space and Time[C]//International Conference on Learning Representations. 2024.</p>
+<p><span id="ref-7" class="refnum">[7]</span> Ouyang L, Wu J, Jiang X, et al.&nbsp;Training Language Models to Follow Instructions with Human Feedback[C]//Advances in Neural Information Processing Systems 35. 2022: 27730–27744.</p>
+<p><span id="ref-8" class="refnum">[8]</span> Karpathy A. Intro to Large Language Models[EB/OL]. (2023-11-23). <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g" class="uri">https://www.youtube.com/watch?v=zjkBMFhNj_g</a></p>
+<p><span id="ref-9" class="refnum">[9]</span> Shannon C E. A Mathematical Theory of Communication[J]. Bell System Technical Journal, 1948, 27(3): 379–423.</p>
+<p><span id="ref-10" class="refnum">[10]</span> Bengio Y, Ducharme R, Vincent P, Jauvin C. A Neural Probabilistic Language Model[J]. Journal of Machine Learning Research, 2003, 3: 1137–1155.</p>
+<p><span id="ref-11" class="refnum">[11]</span> Hochreiter S, Schmidhuber J. Long Short-Term Memory[J]. Neural Computation, 1997, 9(8): 1735–1780.</p>
+<p><span id="ref-12" class="refnum">[12]</span> Sutskever I, Vinyals O, Le Q V. Sequence to Sequence Learning with Neural Networks[C]//Advances in Neural Information Processing Systems 27. 2014: 3104–3112.</p>
+<p><span id="ref-13" class="refnum">[13]</span> Bahdanau D, Cho K, Bengio Y. Neural Machine Translation by Jointly Learning to Align and Translate[C]//International Conference on Learning Representations. 2015.</p>
+<p><span id="ref-14" class="refnum">[14]</span> Vaswani A, Shazeer N, Parmar N, et al.&nbsp;Attention Is All You Need[C]//Advances in Neural Information Processing Systems 30. 2017: 5998–6008.</p>
+<p><span id="ref-15" class="refnum">[15]</span> Radford A, Narasimhan K, Salimans T, Sutskever I. Improving Language Understanding by Generative Pre-Training[R]. San Francisco: OpenAI, 2018.</p>
+<p><span id="ref-16" class="refnum">[16]</span> Devlin J, Chang M W, Lee K, Toutanova K. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding[C]//Proceedings of NAACL-HLT. 2019: 4171–4186.</p>
+<p><span id="ref-17" class="refnum">[17]</span> Kaplan J, McCandlish S, Henighan T, et al.&nbsp;Scaling Laws for Neural Language Models[EB/OL]. arXiv:2001.08361, 2020.</p>
+<p><span id="ref-18" class="refnum">[18]</span> Hoffmann J, Borgeaud S, Mensch A, et al.&nbsp;Training Compute-Optimal Large Language Models[C]//Advances in Neural Information Processing Systems 35. 2022.</p>
+<p><span id="ref-19" class="refnum">[19]</span> Wei J, Tay Y, Bommasani R, et al.&nbsp;Emergent Abilities of Large Language Models[J]. Transactions on Machine Learning Research, 2022.</p>
+<p><span id="ref-20" class="refnum">[20]</span> Schaeffer R, Miranda B, Koyejo S. Are Emergent Abilities of Large Language Models a Mirage?[C]//Advances in Neural Information Processing Systems 36. 2023.</p>
+<p><span id="ref-21" class="refnum">[21]</span> Guo D, Yang D, Zhang H, et al.&nbsp;DeepSeek-R1 Incentivizes Reasoning in LLMs through Reinforcement Learning[J]. Nature, 2025, 645: 633–638.</p>
+<p><span id="ref-22" class="refnum">[22]</span> Goodfellow I, Pouget-Abadie J, Mirza M, et al.&nbsp;Generative Adversarial Nets[C]//Advances in Neural Information Processing Systems 27. 2014: 2672–2680.</p>
+<p><span id="ref-23" class="refnum">[23]</span> Wei J, Wang X, Schuurmans D, et al.&nbsp;Chain-of-Thought Prompting Elicits Reasoning in Large Language Models[C]//Advances in Neural Information Processing Systems 35. 2022.</p>
+<p><span id="ref-24" class="refnum">[24]</span> Yao S, Zhao J, Yu D, et al.&nbsp;ReAct: Synergizing Reasoning and Acting in Language Models[C]//International Conference on Learning Representations. 2023.</p>
+<p><span id="ref-25" class="refnum">[25]</span> Lewis P, Perez E, Piktus A, et al.&nbsp;Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks[C]//Advances in Neural Information Processing Systems 33. 2020: 9459–9474.</p>
+<p><span id="ref-26" class="refnum">[26]</span> Wooldridge M, Jennings N R. Intelligent Agents: Theory and Practice[J]. The Knowledge Engineering Review, 1995, 10(2): 115–152.</p>
+<p><span id="ref-27" class="refnum">[27]</span> Stanford Institute for Human-Centered Artificial Intelligence. Artificial Intelligence Index Report 2026[R]. Stanford: Stanford University, 2026. <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" class="uri">https://hai.stanford.edu/ai-index/2026-ai-index-report</a></p>
+<p><span id="ref-28" class="refnum">[28]</span> DeepSeek. DeepSeek V4 Preview Release[EB/OL]. (2026-04-24)[2026-11-16]. <a href="https://api-docs.deepseek.com/news/news260424" class="uri">https://api-docs.deepseek.com/news/news260424</a></p>
+<p><span id="ref-29" class="refnum">[29]</span> Stanford Institute for Human-Centered Artificial Intelligence. Artificial Intelligence Index Report 2025[R]. Stanford: Stanford University, 2025. <a href="https://hai.stanford.edu/ai-index/2025-ai-index-report" class="uri">https://hai.stanford.edu/ai-index/2025-ai-index-report</a></p>
+<p><span id="ref-30" class="refnum">[30]</span> Axios. OpenAI Releases GPT-5.6 and ChatGPT Work Tool[EB/OL]. (2026-07-09)[2026-11-16]. <a href="https://www.axios.com/2026/07/09/ai-openai-gpt-release" class="uri">https://www.axios.com/2026/07/09/ai-openai-gpt-release</a></p>
+<p><span id="ref-31" class="refnum">[31]</span> 9to5Google. OpenAI Launches GPT-6 Astra[EB/OL]. (2026-09-03)[2026-11-16]. <a href="https://9to5google.com/2026/09/03/openai-gpt-6-astra-launch/" class="uri">https://9to5google.com/2026/09/03/openai-gpt-6-astra-launch/</a></p>
+<p><span id="ref-32" class="refnum">[32]</span> Anthropic. 1M Context Is Now Generally Available for Opus 4.6 and Sonnet 4.6[EB/OL]. (2026-03-13)[2026-11-16]. <a href="https://claude.com/blog/1m-context-ga" class="uri">https://claude.com/blog/1m-context-ga</a></p>
+<p><span id="ref-33" class="refnum">[33]</span> Anthropic. Claude Fable 5 and Claude Mythos 5[EB/OL]. (2026-06-09)[2026-11-16]. <a href="https://www.anthropic.com/news/claude-fable-5-mythos-5" class="uri">https://www.anthropic.com/news/claude-fable-5-mythos-5</a></p>
+<p><span id="ref-34" class="refnum">[34]</span> Axios. Anthropic Releases New Model, Opus 5[EB/OL]. (2026-07-24)[2026-11-16]. <a href="https://www.axios.com/2026/07/24/anthropic-releases-new-model-opus-5" class="uri">https://www.axios.com/2026/07/24/anthropic-releases-new-model-opus-5</a></p>
+<p><span id="ref-35" class="refnum">[35]</span> Google. Gemini 4 Argon: Our Next Era of Frontier Intelligence[EB/OL]. (2026-10-01)[2026-11-16]. <a href="https://blog.google/intl/en-mena/company-news/technology/gemini-4-argon-our-next-era-of-frontier-intelligence/" class="uri">https://blog.google/intl/en-mena/company-news/technology/gemini-4-argon-our-next-era-of-frontier-intelligence/</a></p>
+<p><span id="ref-36" class="refnum">[36]</span> Gates B. The Age of AI Has Begun[EB/OL]. (2023-03-21). <a href="https://www.gatesnotes.com/The-Age-of-AI-Has-Begun" class="uri">https://www.gatesnotes.com/The-Age-of-AI-Has-Begun</a></p>
+<p><span id="ref-37" class="refnum">[37]</span> Bender E M, Gebru T, McMillan-Major A, Shmitchell S. On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?[C]//Proceedings of ACM FAccT. 2021: 610–623.</p>
+<p><span id="ref-38" class="refnum">[38]</span> 国家互联网信息办公室, 国家发展和改革委员会, 教育部, 等. 生成式人工智能服务管理暂行办法[Z]. 2023-07-10. <a href="https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm" class="uri">https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm</a></p>
+<p><span id="ref-39" class="refnum">[39]</span> 国家互联网信息办公室, 工业和信息化部, 公安部, 国家广播电视总局. 人工智能生成合成内容标识办法[Z]. 2025-03-07.</p>
+<p><span id="ref-40" class="refnum">[40]</span> 全国人民代表大会常务委员会. 关于修改《中华人民共和国网络安全法》的决定[Z]. 2025-10-28.</p>
+<p><span id="ref-41" class="refnum">[41]</span> European Parliament, Council of the European Union. Regulation (EU) 2024/1689 Laying Down Harmonised Rules on Artificial Intelligence (Artificial Intelligence Act)[Z]. Official Journal of the European Union, 2024-07-12.</p>
+<p><span id="ref-42" class="refnum">[42]</span> National Institute of Standards and Technology. Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile: NIST AI 600-1[R]. Gaithersburg: NIST, 2024. <a href="https://doi.org/10.6028/NIST.AI.600-1" class="uri">https://doi.org/10.6028/NIST.AI.600-1</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/king157419\.github\.io\/zero2hero\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"可滚动的代码","output":"可滚动的输出"};
+  </script>
+<nav class="page-navigation" aria-label="页面">
+  <div class="nav-page nav-page-previous">
+      <a href="../ch1/exercises.html" class="pagination-link" aria-label="习题">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">习题</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../ch2/index.html" class="pagination-link" aria-label="第 2 章　大语言模型的底层原理与技术">
+        <span class="nav-page-text">第 2 章　大语言模型的底层原理与技术</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+<script src="../toc.js"></script><script src="../widgets.js"></script>
+
+
+
+
+</body></html>

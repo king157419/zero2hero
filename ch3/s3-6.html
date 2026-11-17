@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3.6 参数高效微调技术 – 大语言模型原理与技术</title>
+<title>3.6 微调：让基础模型学会按指令做事 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　参数高效微调技术</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　微调：让基础模型学会按指令做事</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -718,25 +754,20 @@ window.Quarto = {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#为什么需要参数高效微调" id="toc-为什么需要参数高效微调" class="nav-link active" data-scroll-target="#为什么需要参数高效微调">3.6.1　为什么需要参数高效微调</a></li>
-  <li><a href="#参数高效微调的分类" id="toc-参数高效微调的分类" class="nav-link" data-scroll-target="#参数高效微调的分类">3.6.2　参数高效微调的分类</a></li>
-  <li><a href="#选取部分参数bitfit" id="toc-选取部分参数bitfit" class="nav-link" data-scroll-target="#选取部分参数bitfit">3.6.3　选取部分参数：BitFit</a></li>
-  <li><a href="#adapter-tuning" id="toc-adapter-tuning" class="nav-link" data-scroll-target="#adapter-tuning">3.6.4　Adapter Tuning</a></li>
-  <li><a href="#软提示方法" id="toc-软提示方法" class="nav-link" data-scroll-target="#软提示方法">3.6.5　软提示方法</a></li>
-  <li><a href="#lora" id="toc-lora" class="nav-link" data-scroll-target="#lora">3.6.6　LoRA</a></li>
-  <li><a href="#adalora" id="toc-adalora" class="nav-link" data-scroll-target="#adalora">3.6.7　AdaLoRA</a></li>
-  <li><a href="#qlora" id="toc-qlora" class="nav-link" data-scroll-target="#qlora">3.6.8　QLoRA</a></li>
-  <li><a href="#显存需求对比" id="toc-显存需求对比" class="nav-link" data-scroll-target="#显存需求对比">3.6.9　显存需求对比</a></li>
-  <li><a href="#方法比较" id="toc-方法比较" class="nav-link" data-scroll-target="#方法比较">3.6.10　方法比较</a></li>
+  <li><a href="#使用大模型的两个层面" id="toc-使用大模型的两个层面" class="nav-link active" data-scroll-target="#使用大模型的两个层面">3.6.1　使用大模型的两个层面</a></li>
+  <li><a href="#微调的分类" id="toc-微调的分类" class="nav-link" data-scroll-target="#微调的分类">3.6.2　微调的分类</a></li>
+  <li><a href="#指令微调" id="toc-指令微调" class="nav-link" data-scroll-target="#指令微调">3.6.3　指令微调</a></li>
+  <li><a href="#指令数据从哪里来" id="toc-指令数据从哪里来" class="nav-link" data-scroll-target="#指令数据从哪里来">3.6.4　指令数据从哪里来</a></li>
+  <li><a href="#微调的风险与领域适配" id="toc-微调的风险与领域适配" class="nav-link" data-scroll-target="#微调的风险与领域适配">3.6.5　微调的风险与领域适配</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　参数高效微调技术</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-6.html">3.6　微调：让基础模型学会按指令做事</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3.6　参数高效微调技术</h1>
+<h1 class="title">3.6　微调：让基础模型学会按指令做事</h1>
 </div>
 
 
@@ -753,210 +784,132 @@ window.Quarto = {
 </header>
 
 
-<section id="为什么需要参数高效微调" class="level2">
-<h2 class="anchored" data-anchor-id="为什么需要参数高效微调">3.6.1　为什么需要参数高效微调</h2>
-<p>把预训练模型在下游任务上微调，已经成为处理自然语言任务的标准范式。但随着模型越来越大，全量微调变得越来越难以承受：</p>
+<div class="bookbox guide">
+<p>基础模型读遍了海量文本，却不一定会回答问题、遵守格式、完成任务。要让它做好一件具体的事，有哪些办法？本节先比较“改提示词”“接检索”“改参数”三条路，再讲改参数的主要方式——指令微调：数据长什么样、损失怎么算、数据从哪来，以及微调可能带来的副作用。结论是：缺的是知识，优先用检索增强生成；要改变的是行为、风格和格式，才需要微调；指令微调只在回答部分计算损失，数据质量比数量更重要。</p>
+</div>
+<section id="使用大模型的两个层面" class="level2">
+<h2 class="anchored" data-anchor-id="使用大模型的两个层面">3.6.1　使用大模型的两个层面</h2>
+<p>让大模型完成特定任务，有两个层面的手段。</p>
+<p><strong>第一层：提示词工程</strong>　 <strong>提示词</strong>（prompt）是人发给模型、用以完成特定任务的指令；<strong>提示词工程</strong>（prompt engineering）是为了让模型更好地完成任务，对提示词进行设计、优化和调整的过程。例如写明角色（“你是一名资深律师”），给出几个示例（<strong>少样本提示</strong>，few-shot prompting），要求“一步一步地思考”（<strong>思维链提示</strong>，chain-of-thought），都能明显改善输出。提示词工程不改变参数，成本低、见效快，是首选手段。但它有四个局限：</p>
 <ul>
-<li><strong>显存开销大</strong>：按 3.4.6 节的估算，全量微调一个 7B 模型（混合精度 + AdamW）仅模型状态就需要约 112 GB，必须动用多张高端 GPU；</li>
-<li><strong>存储开销大</strong>：每个下游任务都要保存一份完整的模型副本。为 100 个客户各微调一个 7B 模型，就要保存 100 份、每份十几 GB 的权重；</li>
-<li><strong>容易遗忘</strong>：所有参数都被修改，模型更容易遗忘预训练获得的通用能力。</li>
+<li><p><strong>成本与长度</strong>：复杂任务需要很长的提示词和大量示例，每次调用都要重复处理，推理成本高；过长还会超出上下文窗口被截断，输出质量下降。</p></li>
+<li><p><strong>无法利用自有数据</strong>：提示词只能临时提供少量信息，不能让模型系统地学习企业或领域的大量私有数据。</p></li>
+<li><p><strong>难以个性化</strong>：特定的语气、风格和输出格式很难仅靠提示词稳定保持。</p></li>
+<li><p><strong>数据安全</strong>：每次调用都要把敏感信息写进提示词发给模型服务方，存在泄露风险。</p></li>
 </ul>
-<p>为此，研究者提出了<strong>参数高效微调</strong>（PEFT）方法：<strong>固定预训练模型的大部分参数，仅调整其中很小一部分参数（或新增少量参数），达到接近全量微调的效果。</strong> 由于 PEFT 本质上是在原模型的基础上学习一个”增量”，它也被称为<strong>增量微调</strong>（Delta Tuning）。</p>
-</section>
-<section id="参数高效微调的分类" class="level2">
-<h2 class="anchored" data-anchor-id="参数高效微调的分类">3.6.2　参数高效微调的分类</h2>
-<p>参数高效微调方法可以大致分为三类（图 3-12）：</p>
-<ul>
-<li><strong>增加额外参数</strong>（Addition，A）：在模型中加入少量新的可训练参数，原有参数全部冻结。它又分为两小类：<strong>类适配器方法</strong>在网络内部插入小型模块，如 Adapter Tuning；<strong>软提示方法</strong>在输入或各层前加入可训练的连续向量，如 Prompt Tuning、Prefix Tuning、P-Tuning；</li>
-<li><strong>选取部分参数更新</strong>（Selection，S）：不增加参数，只选择原模型中的一小部分参数进行训练，如只训练偏置项的 BitFit；</li>
-<li><strong>引入重参数化</strong>（Reparameterization，R）：不直接修改权重，而是把权重的变化量 <span class="math inline">\(\Delta W\)</span> 用一种参数更少的形式表示，即 <span class="math inline">\(W = W_{0} + \Delta W\)</span>，如 LoRA 及其变体。</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId91.png" style="width:4.78333in;height:1.60718in" class="figure-img"></p>
-<figcaption>图3-12 参数高效微调方法的分类</figcaption>
-</figure>
+<p><strong>第二层：微调</strong>　 大模型并不能开箱即用地适应每一项任务。<strong>微调</strong>（fine-tuning）把预训练模型在特定任务或领域的数据上继续训练，使它广泛的语言能力适应更具体的任务，或更好地反映领域的细微差别。</p>
+<p>两者之间还有一种常用方案：<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）——先从外部知识库检索与问题相关的文档，再把它们和问题一起交给模型生成回答，其完整流程见第 5 章。表 <a href="../ch3/s3-6.html#c3-tab-prag">3-10</a> 比较了三条路。</p>
+<div id="c3-tab-prag" class="booktab">
+<div class="tabcap">
+<p>表 3-10　提示词工程、检索增强生成与微调的比较</p>
 </div>
-<p>图3-12 参数高效微调方法的分类</p>
-<p>从实现上看，这些方法又可以归纳为两个方向：一是<strong>添加小型网络模块</strong>，保持基础模型不变，只为每个任务训练这些小模块（Adapter、Prefix Tuning、Prompt Tuning 等）；二是<strong>对权重的增量进行建模</strong>，不修改模型结构，只学习 <span class="math inline">\(\Delta W\)</span>（Diff Pruning、LoRA 等）。</p>
-</section>
-<section id="选取部分参数bitfit" class="level2">
-<h2 class="anchored" data-anchor-id="选取部分参数bitfit">3.6.3　选取部分参数：BitFit</h2>
-<p>BitFit 是最简单的 PEFT 方法：冻结所有权重矩阵，<strong>只训练网络中的偏置</strong>（bias）参数。对 BERT 这样的模型，偏置参数只占总参数的约 0.08%，但在许多中小规模任务上，BitFit 的效果已经接近全量微调。它的局限在于：许多现代大模型（如 LLaMA）的线性层根本不含偏置项，BitFit 也就无从下手。</p>
-</section>
-<section id="adapter-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="adapter-tuning">3.6.4　Adapter Tuning</h2>
-<p><strong>基本思想</strong>：在预训练模型的每一层中插入专门用于下游任务的小型模块（Adapter），微调时冻结模型主体，只训练这些模块，从而大幅减少训练开销。</p>
-<p><strong>结构</strong>：如图 3-13 所示，Houlsby 等人（2019）提出的方法在每个 Transformer 层中加入两个 Adapter，分别位于多头注意力之后和前馈网络之后。训练时固定原模型的参数，只训练新增的 Adapter 和层归一化参数。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId96.png" style="width:3.85in;height:3.63382in" class="figure-img"></p>
-<figcaption>图3-13 Adapter Tuning 的结构</figcaption>
-</figure>
-</div>
-<p>图3-13 Adapter Tuning 的结构</p>
-<p>每个 Adapter 是一个”瓶颈”结构：第一个前馈子层（降维投影）把维度为 <span class="math inline">\(d\)</span> 的输入投影到较低的维度 <span class="math inline">\(m\)</span>，经过非线性激活后，第二个前馈子层（升维投影）再把它映射回维度 <span class="math inline">\(d\)</span>，并通过残差连接与输入相加：</p>
-<p><span class="math inline">\(Adapter\left( \mathbf{h} \right) = \mathbf{h} + W_{up}\, f\left( W_{down}\mathbf{h} \right),\quad\quad W_{down} \in \mathbb{R}^{m \times d},\ W_{up} \in \mathbb{R}^{d \times m}\quad\)</span> (3-26)</p>
-<p>通常 <span class="math inline">\(m \ll d\)</span>，通过控制 <span class="math inline">\(m\)</span> 的大小就能控制 Adapter 的参数量，每个 Adapter 约有 <span class="math inline">\(2md\)</span> 个参数。残差连接保证了：只要把 <span class="math inline">\(W_{up}\)</span> 初始化为接近零，Adapter 在训练开始时就近似于恒等变换，不会破坏原模型。在 BERT 上，Adapter 只训练约 3.6% 的参数，就在 GLUE 基准上达到了与全量微调相差不到 0.4 个百分点的效果。</p>
-<p>Adapter 的主要缺点是<strong>增加了推理时延</strong>：新增的模块串行地插在网络中，推理时无法省去，在逐 Token 生成的场景下，这种额外开销会被放大。</p>
-</section>
-<section id="软提示方法" class="level2">
-<h2 class="anchored" data-anchor-id="软提示方法">3.6.5　软提示方法</h2>
-<p>3.5.1 节介绍的提示词工程，是用人能读懂的离散文本来引导模型，称为<strong>硬提示</strong>（Hard Prompt）。软提示方法则把提示变成了可以训练的<strong>连续向量</strong>，称为<strong>软提示</strong>（Soft Prompt）。</p>
-<p><strong>Prompt Tuning</strong> 保持基础模型的参数不变，为每个特定任务训练一小段（如 20 个）“虚拟 Token”的嵌入向量，拼接在输入序列的最前面，执行该任务时按需加载对应的软提示。若软提示长度为 <span class="math inline">\(l\)</span>、隐藏层维度为 <span class="math inline">\(d\)</span>，则可训练参数只有 <span class="math inline">\(l \times d\)</span> 个。Lester 等人（2021）发现，随着模型规模增大到百亿参数以上，Prompt Tuning 的效果逐渐接近全量微调；但在较小的模型上，它与全量微调的差距明显。</p>
-<p><strong>Prefix Tuning</strong> 不只在输入层，而是在<strong>每一层</strong>注意力的 Key 和 Value 前面都加上一段可训练的前缀向量，相当于在不改变大模型的前提下，为每一层的上下文添加适当的”条件”，引导模型表现得更好。由于直接优化前缀向量容易不稳定，Prefix Tuning 通常先用一个小型多层感知机生成前缀，训练完成后再丢弃这个网络，只保留前缀。</p>
-<p><strong>P-Tuning</strong> 用一个小型的提示编码器（如 LSTM 或 MLP）来生成连续提示，使各个虚拟 Token 之间相互关联；其后的 P-Tuning v2 借鉴了 Prefix Tuning 的思路，在每一层都加入提示，从而在不同规模的模型和更多类型的任务上都取得了接近全量微调的效果。</p>
-<p>软提示方法的优点是参数量极小、不改变模型结构；缺点是占用了一部分上下文长度，训练也不如其他方法稳定。</p>
-</section>
-<section id="lora" class="level2">
-<h2 class="anchored" data-anchor-id="lora">3.6.6　LoRA</h2>
-<p><strong>1．基本思想</strong></p>
-<p><strong>LoRA</strong>（Low-Rank Adaptation，低秩适配）由 Hu 等人于 2021 年提出，是目前应用最广泛的参数高效微调方法。它的出发点是一个观察：神经网络中有大量借助矩阵乘法实现的全连接层，预训练模型适配到特定下游任务时，权重的<strong>变化量</strong>并不需要是”满秩”的，而是具有很低的<strong>本征秩</strong>（Intrinsic Rank）。换言之，虽然大模型参数很多，但针对一个具体任务，真正需要调整的”方向”只有少数几个。</p>
-<p>因此，LoRA 不直接更新原始权重 <span class="math inline">\(W_{0}\)</span>，而是用两个小矩阵的乘积来表示权重的变化量：</p>
-<p><span class="math inline">\(W = W_{0} + \Delta W = W_{0} + BA,\quad\quad B \in \mathbb{R}^{d \times r},\ A \in \mathbb{R}^{r \times k},\ r \ll \min(d,k)\quad\)</span> (3-27)</p>
-<p>如图 3-14 所示，LoRA 在原始权重旁边增加一条”旁路”：矩阵 <span class="math inline">\(A\)</span> 负责<strong>降维</strong>，把输入从 <span class="math inline">\(k\)</span> 维压缩到 <span class="math inline">\(r\)</span> 维；矩阵 <span class="math inline">\(B\)</span> 负责<strong>升维</strong>，再映射回 <span class="math inline">\(d\)</span> 维；中间维度 <span class="math inline">\(r\)</span> 就是所谓的”秩”，用来模拟本征秩。前向计算变为</p>
-<p><span class="math inline">\(\mathbf{h} = W_{0}\mathbf{x} + \Delta W\mathbf{x} = W_{0}\mathbf{x} + \frac{\alpha}{r}BA\mathbf{x}\quad\)</span> (3-28)</p>
-<p>其中 <span class="math inline">\(\alpha\)</span> 是一个缩放系数，用来在改变 <span class="math inline">\(r\)</span> 时保持更新幅度大致稳定。训练时 <span class="math inline">\(W_{0}\)</span> 冻结，只有 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 接收梯度。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId101.png" style="width:4.08333in;height:2.57713in" class="figure-img"></p>
-<figcaption>图3-14 LoRA 的结构</figcaption>
-</figure>
-</div>
-<p>图3-14 LoRA 的结构</p>
-<p><strong>2．初始化</strong></p>
-<p><span class="math inline">\(A\)</span> 用随机高斯分布初始化，<span class="math inline">\(B\)</span> 初始化为零矩阵。这样在训练开始时 <span class="math inline">\(BA = 0\)</span>，模型的输出与原预训练模型完全一致，微调从一个”不破坏原模型”的起点平稳开始。</p>
-<p><strong>3．参数量</strong></p>
-<p>原始权重矩阵有 <span class="math inline">\(d \times k\)</span> 个参数，而 LoRA 只需训练 <span class="math inline">\(r \times (d + k)\)</span> 个参数。以 <span class="math inline">\(d = k = 4096\)</span>、<span class="math inline">\(r = 8\)</span> 为例：</p>
-<p><span class="math display">\[\frac{r(d + k)}{dk} = \frac{8 \times (4096 + 4096)}{4096 \times 4096} = \frac{65536}{16777216} \approx 0.39\%\]</span></p>
-<p><strong>【例 3-3】</strong> 对 LLaMA-7B（32 层，<span class="math inline">\(h = 4096\)</span>，前馈网络中间维度 11008）应用 <span class="math inline">\(r = 8\)</span> 的 LoRA，分别计算以下两种设置下的可训练参数量：（1）只作用于注意力的 <span class="math inline">\(W_{q}\)</span> 和 <span class="math inline">\(W_{v}\)</span>（LoRA 原论文的设置）；（2）作用于全部 7 个线性层（<span class="math inline">\(W_{q}\)</span>、<span class="math inline">\(W_{k}\)</span>、<span class="math inline">\(W_{v}\)</span>、<span class="math inline">\(W_{o}\)</span> 及前馈网络的三个矩阵）。</p>
-<p><strong>解：</strong>（1）每层两个 <span class="math inline">\(4096 \times 4096\)</span> 的矩阵，每个需 <span class="math inline">\(8 \times (4096 + 4096) = 65536\)</span> 个参数，32 层共 <span class="math inline">\(2 \times 65536 \times 32 \approx 4.2 \times 10^{6}\)</span> 个，约占 67 亿参数的 0.06%。</p>
-<p>（2）注意力的 4 个矩阵每层共 <span class="math inline">\(4 \times 65536 = 262144\)</span> 个参数；前馈网络的 3 个矩阵（<span class="math inline">\(4096 \times 11008\)</span> 或 <span class="math inline">\(11008 \times 4096\)</span>）每个需 <span class="math inline">\(8 \times (4096 + 11008) = 120832\)</span> 个，共 362496 个。每层合计 624640 个，32 层共约 <span class="math inline">\(2.0 \times 10^{7}\)</span> 个，约占 0.3%。</p>
-<p><strong>4．LoRA 的优势</strong></p>
-<ul>
-<li><strong>训练开销小</strong>：可训练参数通常不到原模型的 1%，梯度和优化器状态的显存几乎可以忽略。LoRA 论文报告，在 GPT-3 175B 上，可训练参数减少了约 10000 倍，训练显存减少约 2/3；</li>
-<li><strong>效果好</strong>：在众多数据集上，LoRA 只训练极少量参数，性能就能与全量微调相当，在某些任务上甚至更好；</li>
-<li><strong>无额外推理时延</strong>：训练完成后，可以把 <span class="math inline">\(\frac{\alpha}{r}BA\)</span> 直接加到 <span class="math inline">\(W_{0}\)</span> 上，合并成一个与原来形状相同的矩阵 <span class="math inline">\(W\)</span>，推理时与原模型的计算量完全一样。这是它相对于 Adapter 的重要优势；</li>
-<li><strong>便于多任务切换</strong>：每个任务只需保存一组几十 MB 大小的 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span> 矩阵，同一个基础模型可以按需加载不同的 LoRA 模块，服务多个任务或用户。</li>
-</ul>
-</section>
-<section id="adalora" class="level2">
-<h2 class="anchored" data-anchor-id="adalora">3.6.7　AdaLoRA</h2>
-<p>LoRA 为所有被适配的权重矩阵设定了相同的秩 <span class="math inline">\(r\)</span>，但不同层、不同矩阵对下游任务的重要性显然不同。<strong>AdaLoRA</strong>（Adaptive LoRA）据此<strong>动态调整各增量矩阵的秩</strong>：为关键的增量矩阵分配较高的秩，以捕捉更精细、更具任务特性的信息；同时降低较不重要矩阵的秩，以防止过拟合并节省计算预算。</p>
-<p>具体做法是，以<strong>奇异值分解</strong>（SVD）的形式对增量进行参数化：</p>
-<p><span class="math inline">\(\Delta W = P\Lambda Q,\quad\quad P \in \mathbb{R}^{d \times r},\ \Lambda = diag\left( \lambda_{1},\ldots,\lambda_{r} \right),\ Q \in \mathbb{R}^{r \times k}\quad\)</span> (3-29)</p>
-<p>训练中根据重要性指标裁剪掉不重要的奇异值 <span class="math inline">\(\lambda_{i}\)</span>（置为零），但保留对应的奇异向量，以便将来有需要时恢复。由于对大矩阵做精确的 SVD 计算代价很高，AdaLoRA 并不真正进行分解，而是在训练损失中加入一个正则项，约束 <span class="math inline">\(P\)</span> 和 <span class="math inline">\(Q\)</span> 近似正交：</p>
-<p><span class="math inline">\(R(P,Q) = \left. \parallel P^{\top}P - I \right.\parallel_{F}^{2} + \left. \parallel QQ^{\top} - I \right.\parallel_{F}^{2}\quad\)</span> (3-30)</p>
-<p>这样既避免了大量的 SVD 计算，又稳定了训练。</p>
-</section>
-<section id="qlora" class="level2">
-<h2 class="anchored" data-anchor-id="qlora">3.6.8　QLoRA</h2>
-<p>LoRA 虽然大幅减少了梯度和优化器状态的显存，但冻结的基础模型本身仍要以 16 位精度加载：7B 模型约 14 GB，65B 模型约 130 GB。<strong>QLoRA</strong>（Quantized LoRA）由 Dettmers 等人于 2023 年提出，其核心思想是：<strong>把冻结的基础模型量化到 4 位存储，再在其上训练 16 位精度的 LoRA 模块。</strong> 前向和反向计算时，4 位权重被临时反量化为 BF16 参与运算，梯度则只流向 LoRA 参数。QLoRA 引入了三项关键技术：</p>
-<p><strong>（1）4 位 NormalFloat（NF4）。</strong> 预训练模型的权重近似服从均值为零的正态分布。普通的 4 位整数（INT4）把 16 个量化等级均匀地分布在取值区间上，而 NF4 按照<strong>标准正态分布的分位数</strong>来设置这 16 个等级，使每个等级覆盖的权重数量大致相同。对于正态分布的权重，这是信息论意义上最优的 4 位数据类型，其实证效果优于 4 位整数和 4 位浮点数（FP4）。量化时，权重按 64 个一组（块）进行处理：先用块内绝对值的最大值 <span class="math inline">\(c\)</span> 把权重缩放到 <span class="math inline">\(\lbrack - 1,1\rbrack\)</span>，再把每个值映射到最接近的 NF4 等级 <span class="math inline">\(q_{j}\)</span>，只存储等级的 4 位编号；反量化时有</p>
-<p><span class="math inline">\(\widehat{w} = c \cdot q_{j}\quad\)</span> (3-31)</p>
-<p><strong>（2）双重量化（Double Quantization）。</strong> 每 64 个权重需要额外保存一个 32 位的缩放常数 <span class="math inline">\(c\)</span>，平均每个参数多占 <span class="math inline">\(32/64 = 0.5\)</span> 位。双重量化把这些常数<strong>再量化一次</strong>（以 256 个为一组量化为 8 位），使额外开销降至约 <span class="math inline">\(8/64 + 32/(64 \times 256) \approx 0.127\)</span> 位/参数。对 65B 模型而言，这一项就能节省约 3 GB 显存。</p>
-<p><strong>（3）分页优化器（Paged Optimizer）。</strong> 训练中偶尔会因为长序列等原因出现显存使用峰值而导致内存溢出。分页优化器利用 NVIDIA 的统一内存特性，在 GPU 显存紧张时自动把优化器状态分页换出到 CPU 内存，需要时再换回，从而避免训练因显存不足而中断。</p>
-<p>借助这些技术，QLoRA 首次实现了在<strong>单张 48 GB 显卡</strong>上微调 650 亿参数的模型，而且效果与 16 位全量微调基本相当。用 QLoRA 训练的 Guanaco 模型在当时的对话基准上达到了 ChatGPT 约 99% 的水平。QLoRA 让个人开发者和学生在消费级显卡上微调大模型成为可能。</p>
-</section>
-<section id="显存需求对比" class="level2">
-<h2 class="anchored" data-anchor-id="显存需求对比">3.6.9　显存需求对比</h2>
-<p><strong>【例 3-4】</strong> 对一个 7B 模型进行微调，比较全量微调与 PEFT 所需显存（不计激活值）。设基础模型以 FP32 加载，PEFT 新增的可训练参数为原模型的 2.5%，同样以 FP32 训练、使用 AdamW 优化器。</p>
-<p><strong>解：</strong> 全量微调时，权重 28 GB，梯度 28 GB，AdamW 的 <span class="math inline">\(\mathbf{m}\)</span>、<span class="math inline">\(\mathbf{v}\)</span> 两个状态 56 GB，合计 112 GB。</p>
-<p>使用 PEFT 时，基础模型冻结，只占权重 28 GB，没有梯度和优化器状态；新增参数为 <span class="math inline">\(7 \times 10^{9} \times 2.5\% = 1.75 \times 10^{8}\)</span> 个，其权重、梯度各占 0.7 GB，两个优化器状态共占 1.4 GB，合计 2.8 GB。总计约 <span class="math inline">\(28 + 2.8 = 30.8\)</span> GB，约为全量微调的 27%。</p>
-<p>可以看到，PEFT 节省的主要是<strong>梯度和优化器状态</strong>。若进一步把基础模型改用 BF16 加载，显存还能再减半。图 3-15 对比了更贴近实际的三种配置：混合精度全量微调、BF16 底座的 LoRA、NF4 底座的 QLoRA（LoRA 均作用于全部线性层，<span class="math inline">\(r = 16\)</span>，可训练参数约 4000 万个）。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId107.png" style="width:4.43333in;height:2.275in" class="figure-img"></p>
-<figcaption>图3-15 微调 7B 模型的显存对比（不含激活值与框架开销）</figcaption>
-</figure>
-</div>
-<p>图3-15 微调 7B 模型的显存对比（不含激活值与框架开销）</p>
-<p>需要注意，上述估算没有计入激活值：即使基础模型冻结，反向传播时梯度仍要穿过整个网络才能到达各层的 LoRA 模块，因此激活值并不会因为使用 PEFT 而减少。实际微调时，通常还要配合激活重计算等技术来控制显存。</p>
-</section>
-<section id="方法比较" class="level2">
-<h2 class="anchored" data-anchor-id="方法比较">3.6.10　方法比较</h2>
-<p>表 3-11 总结了本节介绍的几种参数高效微调方法。</p>
-<p>表3-11 参数高效微调方法的比较</p>
 <table class="caption-top table">
-<caption>表3-11 参数高效微调方法的比较</caption>
-<colgroup>
-<col style="width: 13%">
-<col style="width: 9%">
-<col style="width: 23%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 26%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>方法</th>
-<th>类别</th>
-<th>可训练参数的位置</th>
-<th>典型参数占比</th>
-<th>推理是否增加开销</th>
-<th>主要特点</th>
+<th style="text-align: left;">比较项</th>
+<th style="text-align: left;">提示词工程</th>
+<th style="text-align: left;">检索增强生成</th>
+<th style="text-align: left;">微调</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>BitFit</td>
-<td>S</td>
-<td>原有的偏置项</td>
-<td>约 0.1%</td>
-<td>否</td>
-<td>最简单；依赖模型含有偏置</td>
+<td style="text-align: left;">修改模型参数</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
 </tr>
 <tr class="even">
-<td>Adapter</td>
-<td>A</td>
-<td>每层插入的瓶颈模块</td>
-<td>0.5%～5%</td>
-<td>是（串行模块）</td>
-<td>效果稳定；有额外时延</td>
+<td style="text-align: left;">适合解决的问题</td>
+<td style="text-align: left;">引导模型完成通用任务</td>
+<td style="text-align: left;">补充最新的、私有的事实性知识</td>
+<td style="text-align: left;">改变行为、风格、格式，注入领域能力</td>
 </tr>
 <tr class="odd">
-<td>Prompt Tuning</td>
-<td>A</td>
-<td>输入层前的软提示</td>
-<td>&lt;0.01%</td>
-<td>略增（占用上下文）</td>
-<td>参数最少；小模型上效果较差</td>
+<td style="text-align: left;">知识更新</td>
+<td style="text-align: left;">每次在提示词中提供</td>
+<td style="text-align: left;">更新知识库即可，实时性好</td>
+<td style="text-align: left;">需要重新训练</td>
 </tr>
 <tr class="even">
-<td>Prefix Tuning / P-Tuning v2</td>
-<td>A</td>
-<td>每层 K、V 前的前缀</td>
-<td>0.1%～1%</td>
-<td>略增（占用上下文）</td>
-<td>适用面更广；训练不够稳定</td>
+<td style="text-align: left;">实施成本</td>
+<td style="text-align: left;">最低</td>
+<td style="text-align: left;">中等（要搭建检索系统）</td>
+<td style="text-align: left;">较高（要数据、算力和训练经验）</td>
 </tr>
 <tr class="odd">
-<td>LoRA</td>
-<td>R</td>
-<td>权重旁路的低秩矩阵</td>
-<td>0.1%～1%</td>
-<td>否（可合并）</td>
-<td>效果好、使用最广</td>
-</tr>
-<tr class="even">
-<td>AdaLoRA</td>
-<td>R</td>
-<td>秩自适应的增量矩阵</td>
-<td>与 LoRA 相当</td>
-<td>否（可合并）</td>
-<td>按重要性分配参数预算</td>
-</tr>
-<tr class="odd">
-<td>QLoRA</td>
-<td>R</td>
-<td>4 位底座上的 LoRA</td>
-<td>与 LoRA 相当</td>
-<td>视部署方式而定</td>
-<td>显存最省，单卡可调大模型</td>
+<td style="text-align: left;">典型例子</td>
+<td style="text-align: left;">写邮件、做摘要</td>
+<td style="text-align: left;">企业知识库问答</td>
+<td style="text-align: left;">医疗问诊模型、固定格式的信息抽取</td>
 </tr>
 </tbody>
 </table>
-<p><strong>【小结】</strong> 参数高效微调的共同思路是”冻结大部分，只学一点点”。在当前实践中，LoRA 及其量化版本 QLoRA 是最常用的选择：它们不改变模型结构、不增加推理开销，又能把微调大模型的门槛从多卡集群降低到单张显卡。</p>
+</div>
+<p>一般原则是：<strong>能用提示词解决的，先用提示词；缺的是知识，优先考虑 RAG；要改变的是行为和能力，再考虑微调</strong>。三者也常组合使用。本章的课程问答模型选择微调，是因为学校希望模型学会“引导思路而非直接报答案”的讲解方式；课程的专业知识又较多，所以案例在微调前还先做了继续预训练来补知识（第 <a href="../ch3/s3-12.html">3.12</a> 节）；第 4 章第 <a href="../ch4/s4-6.html">4.6</a> 节的课程助手则用 RAG 解决“回答注明讲义出处”的需求——两种做法针对的问题不同，可以叠加。</p>
+</section>
+<section id="微调的分类" class="level2">
+<h2 class="anchored" data-anchor-id="微调的分类">3.6.2　微调的分类</h2>
+<p>微调可以从两个相互独立的角度分类。从<strong>更新参数的规模</strong>看：<strong>全量微调</strong>（Full Fine-Tuning，FFT）更新全部参数，效果通常最好，但显存和算力开销与预训练同一量级，每个任务还要保存一份完整模型；<strong>参数高效微调</strong>（Parameter-Efficient Fine-Tuning，PEFT）冻结绝大部分参数，只训练少量新增或选定的参数（第 <a href="../ch3/s3-7.html">3.7</a> 节）。从<strong>训练数据与方法</strong>看：<strong>指令微调</strong>（instruction tuning）用“指令—回答”数据做监督学习（本节重点），它是<strong>监督微调</strong>（SFT）最主要的形式，大模型流程中所说的 SFT 阶段通常就指指令微调；<strong>基于人类反馈的强化学习</strong>（RLHF）用人类对回答的偏好训练奖励模型，再用强化学习优化模型；<strong>基于 AI 反馈的强化学习</strong>（RLAIF）用 AI 代替人提供偏好（第 <a href="../ch3/s3-8.html">3.8</a> 节）。两个角度可以任意组合：可以用 LoRA（一种 PEFT）做指令微调，也可以用全量微调做 RLHF。</p>
+</section>
+<section id="指令微调" class="level2">
+<h2 class="anchored" data-anchor-id="指令微调">3.6.3　指令微调</h2>
+<p><strong>为什么需要</strong>　 预训练的目标只是预测下一个词，模型还不能理解并遵循自然语言指令。对基础模型输入“请严格按照 JSON 格式返回上海的人口和面积”，它可能续写出“请严格按照 JSON 格式返回北京的人口和面积。”，因为网页上这类句子常常成串出现。<strong>指令微调</strong>在有限的数据条件下，构造或挑选出最有价值的“指令—回答”样本，用监督学习让模型获得遵循指令、完成下游任务的能力；在零样本、少样本设置下，效果可以达到与大规模任务专用训练相当甚至更好。这一阶段关注三个核心问题：指令数据如何构造，如何高效、低成本地训练，以及如何在语言模型基础上进一步扩展上下文长度。</p>
+<p><strong>数据格式</strong>　 指令数据集的每个实例由三个元素组成：<strong>指令</strong>（说明任务的自然语言），<strong>输入</strong>（可选，为任务提供补充信息），<strong>输出</strong>（期望的回答）。例如：</p>
+<pre><code>指令：判断下面这条电影评论的情感倾向，回答“正面”或“负面”。
+输入：这部电影剧情紧凑，演员的表演也很出色。
+输出：正面</code></pre>
+<p>训练对话模型时，这些字段按<strong>对话模板</strong>（chat template）拼成一条完整序列，用特殊标记区分系统提示、用户和助手。OpenAI 提出、Qwen 系列也采用的 ChatML 格式形如：</p>
+<pre><code>&lt;|im_start|&gt;system
+你是一个乐于助人的助手。&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+判断这条评论的情感倾向：这部电影剧情紧凑，演员的表演也很出色。&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+正面&lt;|im_end|&gt;</code></pre>
+<p>不同模型的模板各不相同，<strong>推理时使用的模板必须与微调时一致</strong>，否则表现会明显下降。</p>
+<p><strong>训练目标</strong>　 指令微调用的仍是式 <a href="../ch3/s3-2.html#c3-eq-ar-loss">（3-2）</a> 那样的交叉熵，但<strong>只在回答部分计算损失</strong>。设拼接后序列的提示部分为 <span class="math inline">\(\boldsymbol{x}\)</span>，回答部分为 <span class="math inline">\(\boldsymbol{y}=(y_1,\dots,y_m)\)</span>，则 <span class="math display">\[\mathcal{L}_{\mathrm{SFT}}(\theta)=-\frac{1}{m}\sum_{t=1}^{m}\log P_\theta(y_t\mid\boldsymbol{x},y_{&lt;t}).
+\tag{3-22}\]</span> 如图 <a href="../ch3/s3-6.html#c3-fig-lossmask">3-11</a> 所示，提示部分的 token 作为上下文参与前向计算，但它们的标签被<strong>掩码</strong>，不产生损失。原因是我们希望模型学会“怎样回答”，而不是“怎样提问”。</p>
+<div id="c3-fig-lossmask" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch3-lossmask.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:96.8%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 3-11　指令微调中的损失掩码。整条序列都送入模型做前向计算，但只有回答部分（含结束标记）的 token 参与式 <a href="../ch3/s3-6.html#c3-eq-sft">（3-22）</a> 的损失</p>
+</div>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>指令微调的“掩码”与预训练的“掩码”不是一回事。掩码语言模型把<strong>输入</strong>中的 token 替换成 <code>[MASK]</code>，让模型去猜；因果掩码限制每个位置<strong>能看到</strong>哪些位置；指令微调的损失掩码既不改输入也不改注意力，只是让提示部分的位置<strong>不计入损失</strong>。</p>
+</div>
+</section>
+<section id="指令数据从哪里来" class="level2">
+<h2 class="anchored" data-anchor-id="指令数据从哪里来">3.6.4　指令数据从哪里来</h2>
+<p>指令微调的效果很大程度上取决于数据。构建方法主要有两种。</p>
+<ul>
+<li><p><strong>由已有标注数据集转换</strong>：自然语言处理领域积累了大量带标注的数据集（情感分类、问答、翻译等）。为每类任务写若干指令模板，就能把“文本—标签”对转换成“指令—输出”对。Google 的 Flan 系列和 BigScience 的 P3 就是这样构建的。数据量大、标签可靠，但任务形式单一，与真实用户的提问方式有差距。</p></li>
+<li><p><strong>用大模型生成</strong>：先人工写少量种子指令，再让 GPT-4 等强模型模仿它们扩展出大量新指令并给出回答，最后过滤和去重。Self-Instruct 从 175 条人工种子任务出发生成了约 5.2 万条指令<sup><a href="../ch3/references.html#ref-25">[25]</a></sup>；斯坦福的 Alpaca 用同样思路低成本构建了 5.2 万条数据并微调 LLaMA；InstructionWild 等数据集也采用这一方法。这种方法成本低、多样性好，但质量受限于“教师”模型，可能继承它的错误，还要注意教师模型的服务条款。</p></li>
+</ul>
+<p>此外，也可以在用户授权的前提下收集真实对话，或请领域专家撰写高质量问答，质量最高、成本也最高。</p>
+<p>关于指令数据有一条重要经验：<strong>质量比数量更重要</strong>。LIMA 仅用 1000 条精心挑选的样本微调 650 亿参数的 LLaMA，就得到了与用大规模数据微调的模型相当的对话能力<sup><a href="../ch3/references.html#ref-26">[26]</a></sup>。研究者据此提出“表面对齐假说”：模型的知识和能力几乎都在预训练中获得，指令微调主要教会模型以什么格式和风格与用户交互。</p>
+<p>除纯文本数据集外，<strong>多模态指令数据</strong>也越来越常见。LLaVA 用图像及其相关问答构成的视觉指令数据，把语言模型与视觉编码器连接起来，得到能“看图回答问题”的多模态指令微调模型<sup><a href="../ch3/references.html#ref-27">[27]</a></sup>。</p>
+</section>
+<section id="微调的风险与领域适配" class="level2">
+<h2 class="anchored" data-anchor-id="微调的风险与领域适配">3.6.5　微调的风险与领域适配</h2>
+<p>微调并非总是有益。<strong>灾难性遗忘</strong>（catastrophic forgetting）：在窄领域数据上训练过度，模型会遗忘预训练获得的通用能力，缓解方法有降低学习率、减少轮次、混入一定比例的通用数据和使用参数高效微调。<strong>过拟合</strong>：微调数据量小，训练过久会让模型死记样本。<strong>安全性退化</strong>：研究表明，即使用看似无害的数据微调，也可能削弱原有的安全对齐，因此微调后要重新做安全评估。</p>
+<p>当目标领域与预训练数据差异很大（特定语种、医学、法律）时，只做指令微调往往不够，因为模型缺的不是“回答的格式”，而是“领域的知识”。这时可以先做<strong>继续预训练</strong>（continued pre-training，也称增量预训练）：用大量无标注领域文本，以预训练的方式继续训练基础模型，补充领域知识；再做指令微调和对齐。完整的领域适配流程是：</p>
+<div class="center">
+<p>通用基础模型 <span class="math inline">\(\to\)</span> 领域继续预训练（补知识）<span class="math inline">\(\to\)</span> 领域指令微调（学格式）<span class="math inline">\(\to\)</span> 偏好对齐（调行为）</p>
+</div>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>先提示词，缺知识用 RAG，改行为才微调；微调按参数规模分 FFT/PEFT，按方法分 SFT/RLHF/RLAIF。</p></li>
+<li><p>指令数据 = 指令 + 输入 + 输出，按对话模板拼接；损失只在回答部分计算。</p></li>
+<li><p>案例进度：课程问答模型先在课程语料上继续预训练，再用约 5 万条“问题—解答”做指令微调。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1440,18 +1393,18 @@ window.Quarto = {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch3/s3-5.html" class="pagination-link" aria-label="3.5　大语言模型微调与领域适配">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.5　大语言模型微调与领域适配</span>
+      <a href="../ch3/s3-5.html" class="pagination-link" aria-label="3.5　算力、显存与分布式训练">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.5　算力、显存与分布式训练</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch3/s3-7.html" class="pagination-link" aria-label="3.7　大语言模型对齐技术">
-        <span class="nav-page-text">3.7　大语言模型对齐技术</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch3/s3-7.html" class="pagination-link" aria-label="3.7　参数高效微调">
+        <span class="nav-page-text">3.7　参数高效微调</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>思考题 – 大语言模型原理与技术</title>
+<title>2.6 模型构建全景：从基础模型到对话模型 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-6.html">思考题</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-6.html">2.6　模型构建全景：从基础模型到对话模型</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -684,15 +749,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">本页目录</h2>
+   
+  <ul class="collapse">
+  <li><a href="#c2-subsec-steps" id="toc-c2-subsec-steps" class="nav-link active" data-scroll-target="#c2-subsec-steps">2.6.1　训练的三个要点与工程步骤</a></li>
+  <li><a href="#c2-subsec-four-stages" id="toc-c2-subsec-four-stages" class="nav-link" data-scroll-target="#c2-subsec-four-stages">2.6.2　四个阶段总览</a></li>
+  <li><a href="#c2-subsec-pretrain" id="toc-c2-subsec-pretrain" class="nav-link" data-scroll-target="#c2-subsec-pretrain">2.6.3　预训练：从海量文本中学到知识</a></li>
+  <li><a href="#c2-subsec-sft" id="toc-c2-subsec-sft" class="nav-link" data-scroll-target="#c2-subsec-sft">2.6.4　有监督微调：学会按指令回答</a></li>
+  <li><a href="#c2-subsec-rm" id="toc-c2-subsec-rm" class="nav-link" data-scroll-target="#c2-subsec-rm">2.6.5　奖励建模：训练一个裁判</a></li>
+  <li><a href="#c2-subsec-rl" id="toc-c2-subsec-rl" class="nav-link" data-scroll-target="#c2-subsec-rl">2.6.6　强化学习：在裁判的打分下改进</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-6.html">思考题</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-6.html">2.6　模型构建全景：从基础模型到对话模型</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">思考题</h1>
+<h1 class="title">2.6　模型构建全景：从基础模型到对话模型</h1>
 </div>
 
 
@@ -709,20 +785,260 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<ol type="1">
-<li><p>休谟认为”因果”只是习惯性联想。如果 LLM 只学到了统计共现，它能否真正完成因果推理？请结合”语言模型即压缩”的观点谈谈你的看法。</p></li>
-<li><p>在 2.1.1 节的反向传播算例中，若把学习率改为 η = 10，更新后的 w 是多少？损失一定会下降吗？由此说明学习率过大的风险。</p></li>
-<li><p>一个 bigram 模型在测试集上的平均交叉熵为 3.0（自然对数），它的困惑度是多少？为什么神经语言模型能在同样的数据上取得更低的困惑度？</p></li>
-<li><p>对 2.1.5 节的五个候选词，取 T = 1、p = 0.75，top-p 采样会保留哪些词？重新归一化后各自的概率是多少？当 T → 0 和 T → ∞ 时，输出各会变成什么样？</p></li>
-<li><p>你有 1000 张 A100，训练时间 60 天，硬件利用率 40%。按 Chinchilla 法则，最优的模型参数量和训练 token 数各是多少？如果这个模型要在手机上部署，你会如何调整方案？</p></li>
-<li><p>一个 40 层、d = 5120 的模型，用 FP16 处理 8192 个 token 的上下文，单条序列的 KV Cache 约占多少显存？如果上下文增加到 128K 呢？</p></li>
-<li><p>在 2.3.1 节的注意力算例中，若不除以 √d_k，第 3 行的注意力权重会变成多少？结合维度更高的情形，解释缩放因子的作用。</p></li>
-<li><p>BERT 为什么要把被选中的 token 按 80% / 10% / 10% 的比例处理，而不是全部替换为 [MASK]？</p></li>
-<li><p>为什么 RLHF 的优化目标中要加入 KL 散度惩罚？它与 PPO 的裁剪机制分别约束什么？请举一个奖励破解的例子。</p></li>
-<li><p>如果评测标准对”我不知道”给 0 分、对错误答案也给 0 分，模型会学到什么策略？请设计一种能减少幻觉的评分规则。</p></li>
-</ol>
+<div class="bookbox guide">
+<p>前几节讲的都是“已经训练好的模型怎样计算”。一个对话模型是怎样从零训练出来的？本节先说明大模型训练的三个要点和工程上的主要步骤，再给出以 ChatGPT 为代表的对话模型构建的四个阶段：预训练让模型从海量文本中学到知识，消耗绝大部分算力，产出只会“续写”的基础模型；有监督微调教它按指令回答；奖励建模训练一个“裁判”；强化学习让模型在裁判的打分下继续改进。本节只讲各阶段的数据、目标、产出与直觉，具体方法见第 3 章，训练所依赖的计算系统见第 4 章。</p>
+</div>
+<section id="c2-subsec-steps" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-steps">2.6.1　训练的三个要点与工程步骤</h2>
+<p>从方法上看，大模型的训练有三个要点：</p>
+<ul>
+<li><p><strong>大规模数据</strong>：获得大量经过整理的文本，来源包括书籍、文章、代码和网站等。</p></li>
+<li><p><strong>自监督学习</strong>：训练的“标签”就是文本自己的下一个词元（第 <a href="../ch2/s2-2.html#c2-subsec-lm-def">2.2.1</a> 小节），不需要人工标注。这是数据规模能扩大到万亿词元的根本原因。</p></li>
+<li><p><strong>不更新参数也能完成新任务</strong>：预训练完成后，模型可以只凭任务描述完成任务（<strong>零样本学习</strong>），或在提示中看几个示例后完成任务（<strong>少样本学习</strong>）。这种在上下文中学习的能力就是情景学习（第 <a href="../ch2/s2-4.html#c2-subsec-emergence">2.4.6</a> 小节），围绕它发展出了提示工程（Prompt engineering）。</p></li>
+</ul>
+<p>从工程上看，训练一个大模型要经过表 <a href="../ch2/s2-6.html#c2-tab-steps">2-11</a> 中的步骤：前 6 步解决“怎样把训练跑起来”，后 5 步解决“怎样跑稳、跑好、用起来”。其中分布式框架、数据并行与模型并行属于计算系统的内容，详见第 <a href="../ch4/s4-3.html">4.3</a> 节。</p>
+<div id="c2-tab-steps" class="booktab">
+<div class="tabcap">
+<p>表 2-11　训练大模型的工程步骤</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">要做什么</th>
+<th style="text-align: left;">关键考量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1.&nbsp;数据准备</td>
+<td style="text-align: left;">从互联网等来源收集、清洗、去重、分词</td>
+<td style="text-align: left;">质量与多样性决定模型上限</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2.&nbsp;模型架构选择</td>
+<td style="text-align: left;">选 GPT 类解码器或其变体，确定层数、宽度、参数量</td>
+<td style="text-align: left;">按任务与预算定规模（第 <a href="../ch2/s2-4.html#c2-subsec-chinchilla">2.4.3</a> 小节）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3.&nbsp;分布式计算框架</td>
+<td style="text-align: left;">选用 PyTorch、TensorFlow、Horovod、DeepSpeed 等</td>
+<td style="text-align: left;">让多个 GPU 或 TPU 协同工作</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.&nbsp;数据并行</td>
+<td style="text-align: left;">把数据切成小批次分给不同节点，各自计算后同步梯度</td>
+<td style="text-align: left;">提高吞吐</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5.&nbsp;模型并行</td>
+<td style="text-align: left;">把模型的不同层或张量切片放到不同节点</td>
+<td style="text-align: left;">单卡放不下时必须使用</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.&nbsp;数据分布策略</td>
+<td style="text-align: left;">把数据放在分布式文件系统或云存储中，让各节点高效读取</td>
+<td style="text-align: left;">读数据不能成为瓶颈</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.&nbsp;超参数调整</td>
+<td style="text-align: left;">调整学习率、批大小、训练轮次等</td>
+<td style="text-align: left;">大模型试错成本高，常先在小模型上外推</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.&nbsp;监控与调试</td>
+<td style="text-align: left;">用日志和可视化工具跟踪损失、梯度范数等</td>
+<td style="text-align: left;">及时发现损失突刺和发散</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9.&nbsp;扩展性与容错</td>
+<td style="text-align: left;">支持动态增加节点，定期保存检查点</td>
+<td style="text-align: left;">数千卡训练中硬件故障是常态</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">10.&nbsp;模型评估</td>
+<td style="text-align: left;">在各类基准任务上验证性能</td>
+<td style="text-align: left;">防止测试集泄露到训练数据</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.&nbsp;部署与应用</td>
+<td style="text-align: left;">部署到生产环境，用于生成、翻译、问答等</td>
+<td style="text-align: left;">推理延迟与成本（第 <a href="../ch4/s4-4.html">4.4</a> 节）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="c2-subsec-four-stages" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-four-stages">2.6.2　四个阶段总览</h2>
+<p>对话模型的构建分为四个阶段（图 <a href="../ch2/s2-6.html#c2-fig-build">2-12</a>）：<strong>预训练</strong>、<strong>有监督微调</strong>、<strong>奖励建模</strong>和<strong>强化学习</strong>。每个阶段都在上一阶段产出的模型上继续训练，只有奖励模型例外——它是另训的一个“裁判”，只在强化学习阶段使用。第一阶段让模型“学到知识”，后三个阶段让模型“学会说话”，即把模型的行为对齐到人类的期望，统称<strong>对齐</strong>（alignment）。这一流程由 OpenAI 在 2022 年的 InstructGPT 工作中系统化<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>。表 <a href="../ch2/s2-6.html#c2-tab-stages">2-12</a> 列出了各阶段的数据、目标与资源。</p>
+<div id="c2-fig-build" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch2-build.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 2-12　对话模型构建的四个阶段（数据规模取自文献 <sup><a href="../ch2/references.html#ref-18">[18]</a>,<a href="../ch2/references.html#ref-47">[47]</a></sup>）。阶段之间的横向箭头表示“在上一阶段产出的模型上继续训练”；奖励模型从第三列底部接入强化学习，它不直接给用户使用，只在强化学习阶段充当裁判</p>
+</div>
+</div>
+<div id="c2-tab-stages" class="booktab">
+<div class="tabcap">
+<p>表 2-12　对话模型构建的四个阶段</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">数据</th>
+<th style="text-align: left;">训练目标</th>
+<th style="text-align: left;">产出</th>
+<th style="text-align: left;">典型资源</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">预训练</td>
+<td style="text-align: left;">数千亿至数万亿词元的网页、书籍、代码、论文</td>
+<td style="text-align: left;">预测下一个词元</td>
+<td style="text-align: left;">基础模型</td>
+<td style="text-align: left;">数千块 GPU，数十天</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">有监督微调</td>
+<td style="text-align: left;">数万条高质量“提示—理想回答”对</td>
+<td style="text-align: left;">在回答部分预测下一个词元</td>
+<td style="text-align: left;">SFT 模型</td>
+<td style="text-align: left;">数十块 GPU，数天</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">奖励建模</td>
+<td style="text-align: left;">同一提示下多个回答的人工排序</td>
+<td style="text-align: left;">好回答得分高于差回答</td>
+<td style="text-align: left;">奖励模型</td>
+<td style="text-align: left;">数十块 GPU，数天</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">强化学习</td>
+<td style="text-align: left;">数万至十万量级的提示，无需理想回答</td>
+<td style="text-align: left;">最大化奖励，且不偏离 SFT 模型太远</td>
+<td style="text-align: left;">对话模型</td>
+<td style="text-align: left;">数十块 GPU，数天</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="c2-subsec-pretrain" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-pretrain">2.6.3　预训练：从海量文本中学到知识</h2>
+<p>预训练利用海量数据，包括互联网网页、维基百科、书籍、GitHub 代码、论文、问答网站等，构建数千亿乃至数万亿词元的多样化语料，在由数千块 GPU 和高速网络组成的集群上花费数十天训练，得到<strong>基础模型</strong>（base model）。训练目标就是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a>。</p>
+<p>不同来源的数据要按一定比例混合。图 <a href="../ch2/s2-6.html#c2-fig-llama">2-13</a> 是 Meta 公开的 LLaMA 预训练数据配比<sup><a href="../ch2/references.html#ref-19">[19]</a></sup>。从中可以看出两个常见做法：网页数据提供规模和多样性，是语料的主体；维基百科、书籍这类高质量数据总量有限，就通过多轮重复来提高权重。近年的趋势是<strong>质量比数量更重要</strong>：微软的 Phi 系列用精选和合成的“教科书级”数据，让小模型达到了超出其规模的效果<sup><a href="../ch2/references.html#ref-48">[48]</a></sup>。另一方面，人类公开的高质量文本可能在未来几年内被用尽，这被称为“数据墙”问题，合成数据因此成为重要的研究方向。原始网页怎样经过正文抽取、语言识别、质量过滤、去重、隐私清理、测试集去污染和分词打包变成训练样本，见第 3 章。</p>
+<div id="c2-fig-llama" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch2-llama.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:96.1%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 2-13　LLaMA 预训练数据的采样占比与训练轮次（据文献 <sup><a href="../ch2/references.html#ref-19">[19]</a></sup>，共约 1.4 万亿词元）。两类网页数据合计 82%；维基百科和书籍占比小，但被重复训练两遍以上</p>
+</div>
+</div>
+<p>预训练消耗了整个流程的绝大部分算力。用第 <a href="../ch2/s2-4.html#c2-subsec-kaplan">2.4.2</a> 小节的公式可以核对一个公开数字。</p>
+<div id="c2-ex-gpt3" class="bookbox example">
+<div class="boxtitle">
+<p>例 2-8　GPT-3 预训练需要多少算力和时间</p>
+</div>
+<p>GPT-3 论文报告一次完整训练的计算量约为 3640 PF-days<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>（1 PF-day 指以 <span class="math inline">\(10^{15}\)</span> 次/秒的速度运行一天）。(1) 把它换算成浮点运算次数，并用 <span class="math inline">\(C\approx6ND\)</span> 核对；(2) 若用 1000 块 A100、平均利用率 50%，需要多少天？</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">换算总量</td>
+<td style="text-align: left;"><span class="math inline">\(3640\times10^{15}\times86\,400\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(3.14\times10^{23}\)</span></td>
+<td style="text-align: left;">1 天 <span class="math inline">\(=86\,400\)</span> s</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">公式核对</td>
+<td style="text-align: left;"><span class="math inline">\(6\times(1.75\times10^{11})\times(3\times10^{11})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(3.15\times10^{23}\)</span></td>
+<td style="text-align: left;">式 <a href="../ch2/s2-4.html#c2-eq-6nd">（2-19）</a>，<span class="math inline">\(N\)</span>、<span class="math inline">\(D\)</span> 见表 <a href="../ch2/s2-4.html#c2-tab-models">2-4</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">集群算力</td>
+<td style="text-align: left;"><span class="math inline">\(1000\times(312\times10^{12})\times0.5\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.56\times10^{17}\)</span> FLOP/s</td>
+<td style="text-align: left;">A100 BF16 峰值，利用率 50%</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">训练秒数</td>
+<td style="text-align: left;"><span class="math inline">\((3.14\times10^{23})\div(1.56\times10^{17})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(2.0\times10^{6}\)</span> s</td>
+<td style="text-align: left;">第 1、3 步</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">换算成天</td>
+<td style="text-align: left;"><span class="math inline">\((2.0\times10^{6})\div86\,400\)</span></td>
+<td style="text-align: left;">约 23 天</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据流向</strong>：PF-days <span class="math inline">\(\to\)</span> FLOP（与 <span class="math inline">\(6ND\)</span> 互相印证）；卡数 <span class="math inline">\(\times\)</span> 峰值 <span class="math inline">\(\times\)</span> 利用率 <span class="math inline">\(\to\)</span> 有效算力；总量 <span class="math inline">\(\div\)</span> 有效算力 <span class="math inline">\(\to\)</span> 时间。两种算法的结果几乎完全一致，1000 块 A100 约需 23 天，接近一个月。注意 3640 PF-days 是<strong>计算量</strong>，不是“3640 PFLOPS”这样的<strong>算力</strong>：前者是总共做了多少次运算，后者是每秒能做多少次。</p>
+</div>
+<p>预训练得到的基础模型知识丰富，但它只会“续写”，不会“回答”。例如输入“中国的首都是哪里？”，基础模型很可能接着写出“美国的首都是哪里？日本的首都是哪里？”，因为在网页上，这样的问题常常是一串考题。让它学会听指令，是后续三个阶段的任务。</p>
+</section>
+<section id="c2-subsec-sft" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-sft">2.6.4　有监督微调：学会按指令回答</h2>
+<p><strong>有监督微调</strong>（Supervised Fine-Tuning，SFT）使用少量高质量数据，每条数据包含一个用户<strong>提示词</strong>（prompt）和对应的理想回答。训练算法与预训练相同，仍是预测下一个词元，只是<strong>只对回答部分计算损失</strong>：模型学的是“怎样回答”，而不是“怎样提问”。这一阶段也称为<strong>指令微调</strong>（instruction tuning）。</p>
+<p>一条 SFT 数据送入模型前，会被套进一个<strong>对话模板</strong>，用特殊标记区分系统提示、用户和助手的发言。不同模型的标记写法不同，下面是一个示意：</p>
+<pre><code>&lt;|system|&gt;你是一个乐于助人的助手。
+&lt;|user|&gt;用一句话解释什么是光合作用。
+&lt;|assistant|&gt;光合作用是植物利用光能，把二氧化碳和水转化为有机物并释放氧气的过程。&lt;|end|&gt;</code></pre>
+<p>训练时整段文本都作为输入，但只有 <code>&lt;|assistant|&gt;</code> 之后的词元（包括结束标记）计入损失，前面部分的损失权重置为 0。让模型学会生成结束标记也很重要，否则它会在回答完之后继续自说自话，甚至替用户提出下一个问题。</p>
+<p>InstructGPT 的 SFT 数据只有约 1.3 万条提示<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>，相对预训练的数千亿词元微不足道，却显著改变了模型的行为。Meta 的 LIMA 工作（2023）更进一步：只用 1000 条精心挑选的样本微调 650 亿参数的 LLaMA，效果就已相当不错<sup><a href="../ch2/references.html#ref-49">[49]</a></sup>。作者据此提出“表面对齐假说”：模型的知识和能力几乎全部来自预训练，对齐主要是教它用什么格式和风格与用户交互。由此得到一条工程原则：SFT 数据的质量和多样性远比数量重要。经过 SFT 的模型具备了初步的指令理解和上下文理解能力，能完成开放领域问答、阅读理解、翻译、代码生成等任务，对没见过的任务也有一定泛化能力，可以开放给用户使用，许多开源对话模型就停在这一阶段。SFT 数据的来源（人工撰写、改写已有数据集、由更强的模型生成）和 LoRA 等参数高效微调方法见第 3 章。</p>
+</section>
+<section id="c2-subsec-rm" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-rm">2.6.5　奖励建模：训练一个裁判</h2>
+<p>SFT 只能模仿示范回答，而写出完美的回答很难。对人类来说，<strong>判断哪个回答更好，远比亲自写出最好的回答容易</strong>。奖励建模就利用了这一点：对同一个提示，让 SFT 模型生成多个回答（InstructGPT 中为 4～9 个），由标注人员按质量排序；再把排序拆成若干“好回答 <span class="math inline">\(y_w\)</span> 优于差回答 <span class="math inline">\(y_l\)</span>”的对子，训练一个打分模型 <span class="math inline">\(r(x,y)\)</span>，让好回答的得分高于差回答。例如对 4 个回答 A、B、C、D 排出 B <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> C，任取两个都能比出高下，一次排序就得到 <span class="math inline">\(\binom{4}{2}=6\)</span> 个偏好对。</p>
+<p>训练损失只取决于两个回答的<strong>得分差</strong>： <span class="math display">\[\mathcal{L}_{\mathrm{RM}} = -\log\sigma\bigl(r(x,y_w)-r(x,y_l)\bigr),
+\tag{2-24}\]</span> 得分差越大（越确信好回答更好），损失越小。因此奖励模型的分数只有相对意义，绝对数值没有含义；它学到的也是标注人员的偏好，而不是客观的“好坏”——如果标注人员偏爱更长、更自信的回答，奖励模型也会继承这种偏好。奖励模型通常从 SFT 模型初始化，把输出层换成一个输出标量分数的线性层，InstructGPT 的奖励模型有 60 亿参数。与基础模型和 SFT 模型不同，<strong>奖励模型本身不能单独提供给用户使用</strong>，它只是下一阶段的裁判；训练资源与 SFT 相当，通常是数十块 GPU、数天。这个损失从哪来（Bradley–Terry 模型）及其梯度分析见第 3 章。</p>
+</section>
+<section id="c2-subsec-rl" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-rl">2.6.6　强化学习：在裁判的打分下改进</h2>
+<p>强化学习阶段把前三个阶段的成果组合起来：对大量提示，当前模型生成回答，奖励模型给出评分，再用强化学习算法更新模型参数，让高分回答的概率变大、低分回答的概率变小。这就是<strong>基于人类反馈的强化学习</strong>（RLHF），常用算法是<strong>近端策略优化</strong>（PPO）<sup><a href="../ch2/references.html#ref-50">[50]</a></sup>。</p>
+<p>只追求高分是危险的：模型会找到奖励模型的漏洞并加以利用，例如生成越来越长、堆砌套话却得分很高的回答，这称为<strong>奖励破解</strong>（reward hacking）。因此优化目标还要加一项约束，惩罚当前模型的输出分布偏离 SFT 模型太远（用 KL 散度衡量，它是度量两个概率分布差异的指标，分布相同时为 0），也就是把“追求奖励”与“保持语言模型原有的建模能力”综合起来： <span class="math display">\[\max_{\pi_\theta}\ \mathbb{E}\bigl[r(x,y)\bigr] - \beta\,\mathrm{KL}\bigl(\pi_\theta\,\Vert\,\pi_{\mathrm{SFT}}\bigr),
+\tag{2-25}\]</span> 其中 <span class="math inline">\(\pi_\theta\)</span> 是正在训练的模型（在强化学习中称为<strong>策略</strong>），<span class="math inline">\(\beta\)</span> 控制约束的强弱。</p>
+<p>这一阶段的提示数量与 SFT 阶段同一量级，但不需要人工预先写出理想回答；计算量远小于预训练，通常也只需数十块 GPU、数天。效果却很显著：InstructGPT 论文报告，经过 RLHF 的 13 亿参数模型，其回答比 1750 亿参数的 GPT-3 更受标注人员偏爱<sup><a href="../ch2/references.html#ref-47">[47]</a></sup>。</p>
+<p>PPO 的一次迭代要同时协调策略模型、参考模型（冻结的 SFT 模型）、奖励模型和价值模型四个模型，工程上复杂、超参数敏感。这推动了后来的简化：直接偏好优化（DPO，2023）跳过奖励模型和强化学习，直接用偏好对训练模型<sup><a href="../ch2/references.html#ref-51">[51]</a></sup>；DeepSeek-R1（2025）等推理模型在数学、代码等答案可以自动验证的任务上，用规则给出的奖励代替人类打分，并采用去掉价值模型的 GRPO 算法做大规模强化学习<sup><a href="../ch2/references.html#ref-20">[20]</a></sup>。这些方法的推导与比较见第 3 章。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>SFT 与 RLHF 都在“对齐”，学习信号却不同。SFT 是<strong>模仿</strong>：给出标准答案，让模型逐词元地照着写，上限是示范数据的质量。RLHF 是<strong>比较</strong>：不给标准答案，只告诉模型它自己生成的回答哪个更好，因此能超出示范数据，但依赖奖励模型的质量，并有奖励破解的风险。实践中两者先后使用：先用 SFT 把模型带到“会按格式回答”，再用 RLHF 在此基础上继续改进。</p>
+</div>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>四个阶段：预训练（知识，绝大部分算力）<span class="math inline">\(\to\)</span> SFT（按指令回答）<span class="math inline">\(\to\)</span> 奖励建模（训练裁判）<span class="math inline">\(\to\)</span> 强化学习（在裁判打分与 KL 约束下改进）。</p></li>
+<li><p>基础模型只会续写；SFT 只在回答部分算损失；奖励模型只学得分差，不直接给用户使用。</p></li>
+<li><p>GPT-3 预训练约 <span class="math inline">\(3.14\times10^{23}\)</span> 次浮点运算，与 <span class="math inline">\(6ND\)</span> 吻合；1000 块 A100、50% 利用率约需 23 天。</p></li>
+</ul>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1203,18 +1519,18 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch2/s2-5.html" class="pagination-link" aria-label="本章小结">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">本章小结</span>
+      <a href="../ch2/s2-5.html" class="pagination-link" aria-label="2.5　三类架构：同一套 Transformer 的三种用法">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">2.5　三类架构：同一套 Transformer 的三种用法</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch2/s2-7.html" class="pagination-link" aria-label="参考文献">
-        <span class="nav-page-text">参考文献</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch2/s2-7.html" class="pagination-link" aria-label="2.7　本章小结与展望">
+        <span class="nav-page-text">2.7　本章小结与展望</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

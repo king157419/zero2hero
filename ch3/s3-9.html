@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3.9 推理性能与优化技术 – 大语言模型原理与技术</title>
+<title>3.9 推理原理：模型怎样逐个生成 token – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-9.html">3.9　推理性能与优化技术</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-9.html">3.9　推理原理：模型怎样逐个生成 token</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -718,25 +754,20 @@ window.Quarto = {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#推理性能指标" id="toc-推理性能指标" class="nav-link active" data-scroll-target="#推理性能指标">3.9.1　推理性能指标</a></li>
-  <li><a href="#硬件三要素与屋顶线模型" id="toc-硬件三要素与屋顶线模型" class="nav-link" data-scroll-target="#硬件三要素与屋顶线模型">3.9.2　硬件三要素与屋顶线模型</a></li>
-  <li><a href="#批处理与连续批处理" id="toc-批处理与连续批处理" class="nav-link" data-scroll-target="#批处理与连续批处理">3.9.3　批处理与连续批处理</a></li>
-  <li><a href="#pagedattention像管理内存页一样管理-kv-cache" id="toc-pagedattention像管理内存页一样管理-kv-cache" class="nav-link" data-scroll-target="#pagedattention像管理内存页一样管理-kv-cache">3.9.4　PagedAttention：像管理内存页一样管理 KV Cache</a></li>
-  <li><a href="#flashattention减少注意力计算的访存" id="toc-flashattention减少注意力计算的访存" class="nav-link" data-scroll-target="#flashattention减少注意力计算的访存">3.9.5　FlashAttention：减少注意力计算的访存</a></li>
-  <li><a href="#模型量化" id="toc-模型量化" class="nav-link" data-scroll-target="#模型量化">3.9.6　模型量化</a></li>
-  <li><a href="#投机解码" id="toc-投机解码" class="nav-link" data-scroll-target="#投机解码">3.9.7　投机解码</a></li>
-  <li><a href="#显存不足时的其他手段" id="toc-显存不足时的其他手段" class="nav-link" data-scroll-target="#显存不足时的其他手段">3.9.8　显存不足时的其他手段</a></li>
-  <li><a href="#预填充与解码分离" id="toc-预填充与解码分离" class="nav-link" data-scroll-target="#预填充与解码分离">3.9.9　预填充与解码分离</a></li>
-  <li><a href="#小结优化技术与瓶颈的对应关系" id="toc-小结优化技术与瓶颈的对应关系" class="nav-link" data-scroll-target="#小结优化技术与瓶颈的对应关系">3.9.10　小结：优化技术与瓶颈的对应关系</a></li>
+  <li><a href="#自回归生成" id="toc-自回归生成" class="nav-link active" data-scroll-target="#自回归生成">3.9.1　自回归生成</a></li>
+  <li><a href="#一次请求的三个阶段" id="toc-一次请求的三个阶段" class="nav-link" data-scroll-target="#一次请求的三个阶段">3.9.2　一次请求的三个阶段</a></li>
+  <li><a href="#c3-subsec-kv" id="toc-c3-subsec-kv" class="nav-link" data-scroll-target="#c3-subsec-kv">3.9.3　KV 缓存与分组查询注意力</a></li>
+  <li><a href="#推理要多少显存" id="toc-推理要多少显存" class="nav-link" data-scroll-target="#推理要多少显存">3.9.4　推理要多少显存</a></li>
+  <li><a href="#c3-subsec-decoding" id="toc-c3-subsec-decoding" class="nav-link" data-scroll-target="#c3-subsec-decoding">3.9.5　解码策略：怎样选出下一个 token</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-9.html">3.9　推理性能与优化技术</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-9.html">3.9　推理原理：模型怎样逐个生成 token</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3.9　推理性能与优化技术</h1>
+<h1 class="title">3.9　推理原理：模型怎样逐个生成 token</h1>
 </div>
 
 
@@ -753,350 +784,160 @@ window.Quarto = {
 </header>
 
 
-<p>3.8 节从原理上说明了一次推理请求是如何完成的。但在实际服务中，一个模型往往要同时面对成百上千个用户，还要满足严格的响应时延要求。本节讨论如何衡量推理性能、硬件的哪些因素决定性能，以及业界为提升推理效率发展出的主要优化技术。</p>
-<section id="推理性能指标" class="level2">
-<h2 class="anchored" data-anchor-id="推理性能指标">3.9.1　推理性能指标</h2>
-<p>衡量推理性能，需要从”单个用户的体验”和”整个系统的效率”两个角度来看：</p>
-<ul>
-<li><strong>首 Token 时延</strong>（TTFT）：用户发出请求后多久看到第一个字，主要取决于预填充阶段和排队等待的时间；</li>
-<li><strong>每个输出 Token 的时延</strong>（TPOT）：输出过程中相邻两个 Token 的间隔，决定了用户感受到的”打字速度”。人的阅读速度大约相当于每秒十几个 Token，因此 TPOT 只要稳定在几十毫秒以内，用户就会觉得流畅；</li>
-<li><strong>吞吐量</strong>（Throughput）：整个系统每秒生成的 Token 总数（或每秒完成的请求数），决定了一台服务器能服务多少用户，直接关系到服务成本；</li>
-<li><strong>并发数</strong>：系统能同时处理的请求数，主要受显存中能容纳的 KV Cache 数量限制。</li>
-</ul>
-<p>这些指标之间往往存在<strong>此消彼长</strong>的关系：为了提高吞吐量，可以把更多请求合并成一批处理，但每个用户分到的计算资源随之减少，TPOT 就会变长。实际部署时，通常先根据业务需求设定服务水平目标（Service Level Objective，SLO），例如”TTFT 不超过 1 秒、TPOT 不超过 50 毫秒”，再在满足 SLO 的前提下尽量提高吞吐量。</p>
+<div class="bookbox guide">
+<p>训练好的模型参数固定了，用户发来一个问题，模型内部发生了什么？为什么回答总是一个字一个字地往外蹦，为什么“支持 128K 上下文”的模型在自己的显卡上开不了那么长？本节从自回归生成讲起，把一次请求拆成加载、预填充、解码三个阶段，估算推理需要的显存，最后讲每一步怎样从概率分布中选出下一个 token。结论是：回答有多少个 token，就要串行做多少次前向计算；推理显存 = 权重 + KV 缓存 + 开销，长上下文和多用户时 KV 缓存可能超过权重；温度、Top-K、Top-P 等解码策略决定了回答是保守还是多样。</p>
+</div>
+<section id="自回归生成" class="level2">
+<h2 class="anchored" data-anchor-id="自回归生成">3.9.1　自回归生成</h2>
+<p>与预训练目标式 <a href="../ch3/s3-2.html#c3-eq-ar">（3-1）</a> 相对应，大语言模型<strong>自回归</strong>地生成文本：每次根据输入和已经生成的内容，算出下一个 token 的概率分布，从中选出一个 token 接到序列末尾，再预测下一个： <span class="math display">\[y_t\sim P_\theta(\cdot\mid\boldsymbol{x},y_1,\dots,y_{t-1}),\qquad t=1,2,\dots
+\tag{3-34}\]</span> 直到生成表示结束的特殊 token，或达到设定的最大输出长度。“<span class="math inline">\(\sim\)</span>”表示从分布中选出一个 token，具体怎么选由第 <a href="../ch3/s3-9.html#c3-subsec-decoding">3.9.5</a> 小节的解码策略决定。可见，除去处理输入的那一次前向，<strong>回答有多少个 token，解码阶段就要做多少次前向计算</strong>，而且只能一个接一个地串行进行：第 <span class="math inline">\(t\)</span> 个 token 必须等前 <span class="math inline">\(t-1\)</span> 个生成之后才能算。这是大模型回答“一个字一个字往外蹦”的原因，也是推理优化面临的核心约束。</p>
 </section>
-<section id="硬件三要素与屋顶线模型" class="level2">
-<h2 class="anchored" data-anchor-id="硬件三要素与屋顶线模型">3.9.2　硬件三要素与屋顶线模型</h2>
-<p><strong>1．影响推理性能的硬件因素</strong></p>
-<p>可以把运行大模型的设备想象成一座”推理工厂”：计算单元是工人，显存是仓库，内存带宽是仓库到车间的传送带。从这个角度看，影响推理性能的硬件因素主要有以下几个。</p>
-<p><strong>（1）计算单元决定”算得有多快”。</strong> 算力通常用每秒浮点运算次数（FLOPS）或每秒运算次数（OPS）衡量：</p>
-<ul>
-<li>1 TFLOPS <span class="math inline">\(= 10^{12}\)</span> FLOP/s，1 TOPS <span class="math inline">\(= 10^{12}\)</span> OP/s；</li>
-<li>1 PFLOPS <span class="math inline">\(= 10^{15}\)</span> FLOP/s，1 EFLOPS <span class="math inline">\(= 10^{18}\)</span> FLOP/s。</li>
-</ul>
-<p>需要注意，厂商标称的 FLOPS 或 OPS 是<strong>指定精度下的理论峰值</strong>，必须确认是 FP32、FP16、BF16、FP8、INT8 还是 INT4，以及是否为稀疏计算下的数值。同一块显卡在不同精度下的峰值可能相差数倍乃至数十倍。</p>
-<p><strong>（2）显存（或统一内存）容量决定”能不能跑”。</strong> 运行模型时，显存中通常要同时容纳：模型权重、KV Cache、推理框架自身的开销、临时计算张量和显存碎片，以及桌面显示或其他 GPU 程序的占用。显存不足时，框架可能把部分模型层放到系统内存中，由 CPU 计算或通过 PCIe 总线传输数据，这称为 <strong>CPU 卸载</strong>（CPU Offload），代价是速度大幅下降（见 3.9.8 节）。</p>
-<p><strong>（3）内存带宽决定”数据喂得有多快”。</strong> 推理过程中，GPU 需要不断读取模型权重和 KV Cache。如 3.8.5 节所述，单请求逐 Token 生成时并行度很低，计算单元容易等待数据，因此单用户的生成速度往往与<strong>有效内存带宽</strong>密切相关。硬件规格给出的是理论峰值带宽，实际有效带宽还受内存类型、频率、位宽和通道配置，推理框架与量化内核的访存方式，KV Cache 大小和上下文长度，操作系统和其他程序的内存竞争，以及功耗、温度和持续运行频率等因素的影响。</p>
-<p><strong>（4）推理框架和驱动决定”硬件能发挥多少”。</strong> 即使两张显卡的理论参数相近，实际速度也可能因以下条件不同而有明显差异：是否支持模型所用的量化格式；模型各层能否完整加载到 GPU 上；是否有针对当前硬件架构优化的计算内核；是否支持高效的 KV Cache 管理、批处理和注意力优化；驱动、框架与操作系统是否兼容。</p>
-<p><strong>2．屋顶线模型</strong></p>
-<p>一个计算任务到底受算力限制还是受带宽限制，可以用<strong>屋顶线模型</strong>（Roofline Model）来分析。定义任务的<strong>计算强度</strong>（Arithmetic Intensity）为每读取一个字节数据所做的运算次数：</p>
-<p><span class="math inline">\(I = \frac{\text{运算次数（FLOP）}}{\text{访存量（字节）}}\quad\)</span> (3-45)</p>
-<p>在峰值算力为 <span class="math inline">\(P_{peak}\)</span>、内存带宽为 <span class="math inline">\(B\)</span> 的设备上，该任务能达到的性能上限为</p>
-<p><span class="math inline">\(P = \min\left( P_{peak},\ B \times I \right)\quad\)</span> (3-46)</p>
-<p>如图 3-22 所示，性能曲线像一个”屋顶”：计算强度较低时，性能随 <span class="math inline">\(I\)</span> 线性增长，受带宽限制；计算强度超过<strong>拐点</strong> <span class="math inline">\(I^{*} = P_{peak}/B\)</span> 后，性能达到峰值算力，受算力限制。</p>
+<section id="一次请求的三个阶段" class="level2">
+<h2 class="anchored" data-anchor-id="一次请求的三个阶段">3.9.2　一次请求的三个阶段</h2>
+<p>一次完整的推理请求分为三个阶段（图 <a href="../ch3/s3-9.html#c3-fig-stages">3-19</a>）。</p>
+<p><strong>模型加载</strong>　 发生在首次启动、切换模型或模型已被系统卸载之后。推理引擎识别模型结构、读取权重文件并分配内存，根据模型大小、磁盘速度和框架设置，可能需要几秒到几十秒：BF16 的 7B 模型约 14 GB，从读速约 3 GB/s 的固态硬盘加载，仅读文件就要约 5 秒。加载后权重常驻显存（或苹果芯片等设备的统一内存），后续请求不必重复加载。但“已经在内存中”不等于读取权重没有开销：GPU 执行每一层计算时，仍要把该层的权重和缓存从显存读入计算单元，这段通路的速度受内存带宽和访问效率限制，在解码阶段尤为关键。</p>
+<p><strong>预填充</strong>　 <strong>预填充</strong>（prefill）集中处理全部输入 token，计算它们在每一层的中间状态，建立初始的 KV 缓存（见下一小节），并给出第一个输出 token。输入 token 全部已知，可以高度并行地处理；计算形态接近“矩阵乘矩阵”，一次读取的权重同时服务成百上千个 token，因此容易发挥 GPU 的矩阵计算能力，通常<strong>计算受限</strong>。计算量约为每个输入 token <span class="math inline">\(2N\)</span> 次运算，例如 7B 模型处理 2000 个 token 的提示约需 <span class="math inline">\(2\times(7\times10^{9})\times2000=2.8\times10^{13}\)</span> 次运算，有效算力 100 TFLOP/s 时约 0.28 s。衡量指标是<strong>首 token 延迟</strong>（Time To First Token，TTFT）——从发出请求到看到第一个输出 token 的时间，以及<strong>预填充速度</strong>——每秒处理的输入 token 数，一些推理工具称为 prompt eval rate。</p>
+<p><strong>解码</strong>　 <strong>解码</strong>（decode，也称生成阶段）从第一个输出 token 开始逐个预测，直到结束标记或最大长度。单个请求每一步只生成一个新 token，却要完成一轮完整的前向计算；计算形态接近“矩阵乘向量”，为了这一个 token，GPU 要把<strong>全部权重</strong>和不断增长的 KV 缓存从显存读一遍；并行度低，计算单元大部分时间在等数据，因此通常<strong>访存受限</strong>。每读取一个 16 位参数（2 字节）只做一次乘法和一次加法，算术强度约 1 FLOP/byte，远低于 GPU 约数百 FLOP/byte 的拐点——Roofline 模型中访存受限与计算受限的分界点（第 <a href="../ch4/s4-1.html#subsec-roofline">4.1.3</a> 小节）。于是得到单请求解码速度的上限： <span class="math display">\[\text{解码速度（token/s）}\lesssim\frac{\text{有效内存带宽（GB/s）}}{\text{每生成一个 token 需读取的数据量（GB）}},
+\tag{3-35}\]</span> 分母约为权重大小加 KV 缓存大小。例如 FP16 的 7B 模型约 14 GB，在显存带宽约 1 TB/s 的 RTX 4090 上，单请求解码上限约 <span class="math inline">\(1000\div14\approx70\)</span> token/s；量化到 4 位（约 4 GB）后，上限提高到三倍以上。这也说明量化不仅让模型“放得下”，还让它“跑得快”。衡量指标是<strong>每 token 输出时间</strong>（Time Per Output Token，TPOT），即相邻两个输出 token 的平均间隔，以及输出速度（output token/s，约等于 <span class="math inline">\(1/\mathrm{TPOT}\)</span>）。</p>
+<p>一次请求的端到端延迟可以写成 <span class="math display">\[t_{\text{总}}\approx\mathrm{TTFT}+(n-1)\times\mathrm{TPOT},
+\tag{3-36}\]</span> <span class="math inline">\(n\)</span> 为输出 token 数。“半天不开口、开口以后很快”，往往是提示很长、预填充耗时多（TTFT 大）；“马上开始回答、但一个字一个字很慢”，往往是解码受限于内存带宽（TPOT 大）。业界常用“预填充看算力，解码看带宽”概括两个阶段的瓶颈；两阶段的硬件分析见第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节。</p>
+<div id="c3-fig-stages" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/rId147.png" style="width:4.66667in;height:2.64035in" class="figure-img"></p>
-<figcaption>图3-22 屋顶线模型（以 H100 为例：BF16 稠密算力约 989 TFLOPS，显存带宽约 3.35 TB/s）</figcaption>
+<p><img src="../figs/ch3-stages.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.3%"></p>
 </figure>
 </div>
-<p>图3-22 屋顶线模型（以 H100 为例：BF16 稠密算力约 989 TFLOPS，显存带宽约 3.35 TB/s）</p>
-<p>对于大模型中的线性层，若以 16 位精度同时处理 <span class="math inline">\(b\)</span> 个 Token，运算量约为 <span class="math inline">\(2Nb\)</span>，而权重的访存量约为 <span class="math inline">\(2N\)</span> 字节，因此计算强度约为</p>
-<p><span class="math inline">\(I \approx \frac{2Nb}{2N} = b\quad\)</span> (3-47)</p>
-<p>由此可以清楚地看到两个阶段的区别：预填充一次处理数千个 Token，<span class="math inline">\(I\)</span> 达到数千，远超 H100 约 295 的拐点，处于算力受限区；单请求解码时 <span class="math inline">\(b = 1\)</span>，<span class="math inline">\(I \approx 1\)</span>，只能发挥峰值算力的约 0.3%，处于带宽受限区。<strong>提高解码效率的关键，就在于设法提高计算强度，或减少需要读取的数据量。</strong> 下面介绍的批处理、量化、投机解码等技术，都可以从这个角度来理解。</p>
+<div class="figcap">
+<p>图 3-19　一次推理请求的三个阶段。模型加载只在首次启动或切换模型时发生；预填充并行处理输入并给出第一个 token；解码阶段反复执行“前向—解码策略—追加”，每步只生成一个 token。两阶段在硬件上的表现见第 4 章图 <a href="../ch4/s4-4.html#figure-prefill">4-9</a></p>
+</div>
+</div>
 </section>
-<section id="批处理与连续批处理" class="level2">
-<h2 class="anchored" data-anchor-id="批处理与连续批处理">3.9.3　批处理与连续批处理</h2>
-<p><strong>1．批处理提高吞吐量</strong></p>
-<p>既然解码时读一次权重只为一个 Token 服务太”浪费”，那么最直接的办法就是<strong>批处理</strong>（Batching）：把多个请求合并起来，读一次权重同时为 <span class="math inline">\(b\)</span> 个请求各生成一个 Token。按式（3-47），计算强度随之提高到约 <span class="math inline">\(b\)</span>。在带宽受限区，一个解码步的耗时可以近似为</p>
-<p><span class="math inline">\(t_{\text{步}} \approx \frac{M_{\text{权重}} + b \times M_{\text{KV}}^{\text{每请求}}}{B}\quad\)</span> (3-48)</p>
-<p>即每一步都要读一遍全部权重，再加上所有请求各自的 KV Cache。</p>
-<p><strong>【例 3-6】</strong> 在显存带宽约 2.0 TB/s 的 A100-80GB 上，以 FP16 部署 LLaMA-7B（权重约 14 GB，采用标准多头注意力，每个 Token 的 KV Cache 为 <span class="math inline">\(2 \times 32 \times 32 \times 128 \times 2\)</span> 字节 <span class="math inline">\(= 0.5\)</span> MB）。设每个请求的上下文为 2048 个 Token，估算不同批量大小下的解码性能。</p>
-<p><strong>解：</strong> 每个请求的 KV Cache 约为 <span class="math inline">\(0.5\ \text{MB} \times 2048 \approx 1.07\)</span> GB。按式（3-48）计算，结果如表 3-15 所示。</p>
-<p>表3-15 批量大小对解码性能的影响（估算）</p>
+<section id="c3-subsec-kv" class="level2">
+<h2 class="anchored" data-anchor-id="c3-subsec-kv">3.9.3　KV 缓存与分组查询注意力</h2>
+<p>生成新 token 时，模型要用当前位置的查询向量 <span class="math inline">\(\boldsymbol{q}_t\)</span> 与所有历史位置的键向量计算相关性，再按相关性读取对应的值向量。由于因果掩码，历史 token 的 <span class="math inline">\(\boldsymbol{k}_i\)</span>、<span class="math inline">\(\boldsymbol{v}_i\)</span> 一旦算出就不再改变；若每步都从头重算，生成 <span class="math inline">\(n\)</span> 个 token 要处理约 <span class="math inline">\(n^2/2\)</span> 个 token。推理框架因此把每层历史 token 的 K、V 保存在显存里，称为 <strong>KV 缓存</strong>（Key-Value Cache）：预填充时一次性建立，解码时读取并为每个新 token 追加一项。它保存的是注意力计算中可复用的<strong>中间结果</strong>，不是现成的答案。KV 缓存的机制、显存管理（如 PagedAttention：像操作系统分页那样按固定大小的块分配 KV 缓存，减少显存碎片）与并发分析由第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节详细讨论，大小按第 4 章式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 计算： <span class="math display">\[M_{\mathrm{KV}}\approx2\times L\times H_{\mathrm{KV}}\times d_{\mathrm{head}}\times T\times B\times b_{\mathrm{KV}},\]</span> 系数 2 对应 K 和 V，<span class="math inline">\(H_{\mathrm{KV}}\)</span> 为 KV 头数，<span class="math inline">\(T\)</span> 为序列长度（输入加输出），<span class="math inline">\(B\)</span> 为同时驻留的请求数，<span class="math inline">\(b_{\mathrm{KV}}\)</span> 为每个数值的字节数。例如某 27B 级模型有 64 层、8 个 KV 头、每头 128 维，以 BF16 缓存，一个 2000 token 的请求需要 <span class="math inline">\(2\times64\times8\times128\times2000\times2\approx5.24\times10^{8}\)</span> 字节，约 0.52 GB。KV 缓存的大小不能只看 token 数，还取决于层数、KV 头数、每头维度、缓存精度和同时驻留的请求数。</p>
+<p>公式里的 <span class="math inline">\(H_{\mathrm{KV}}\)</span> 由模型的注意力结构决定（图 <a href="../ch3/s3-9.html#c3-fig-gqa">3-20</a>）。标准的<strong>多头注意力</strong>（Multi-Head Attention，MHA）中，每个查询头都有自己的一组 K、V，KV 头数等于注意力头数。为了缩小 KV 缓存，可以让多个查询头<strong>共享</strong>同一组 K、V：所有查询头共享一组，称为<strong>多查询注意力</strong>（Multi-Query Attention，MQA）；查询头分成若干组、每组共享一组，称为<strong>分组查询注意力</strong>（Grouped-Query Attention，GQA）<sup><a href="../ch3/references.html#ref-43">[43]</a></sup>。例如 8 个查询头分成 2 组、每组 4 个共享一组 K、V，KV 头数就是 2，缓存缩小到 MHA 的 1/4。GQA 在效果与缓存大小之间取得了较好的平衡，LLaMA 2-70B、LLaMA 3、Qwen2 及以后的 Qwen 系列等主流模型都采用它。</p>
+<div id="c3-fig-gqa" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch3-gqa.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:93.1%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 3-20　三种注意力的 K、V 头数（以 8 个查询头为例）。KV 缓存的大小与 KV 头数成正比：GQA 在本例中把缓存缩小到 MHA 的 1/4，MQA 缩小到 1/8</p>
+</div>
+</div>
+</section>
+<section id="推理要多少显存" class="level2">
+<h2 class="anchored" data-anchor-id="推理要多少显存">3.9.4　推理要多少显存</h2>
+<p>判断一个模型能否在某台设备上运行，可以按下式粗估显存（或统一内存）： <span class="math display">\[M_{\mathrm{infer}}\approx\underbrace{N\times b_w}_{\text{权重}}+\underbrace{M_{\mathrm{KV}}}_{\text{式\,（4-7）}}+\underbrace{(10\%\sim20\%)\times(\text{前两项之和})}_{\text{激活值与框架开销}},
+\tag{3-37}\]</span> <span class="math inline">\(b_w\)</span> 为每个权重的字节数（FP16/BF16 为 2，INT8 为 1，4 位约 0.5）。估算流程见图 <a href="../ch3/s3-9.html#c3-fig-infermem">3-21</a>。</p>
+<div id="c3-fig-infermem" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch3-infermem.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:89.8%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 3-21　推理显存的估算流程（例 <a href="../ch3/s3-9.html#c3-ex-infermem">3-7</a>）。KV 缓存按第 4 章式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 计算；②～③ 中任何一个数取错，结果都会相差数倍</p>
+</div>
+</div>
+<div id="c3-ex-infermem" class="bookbox example">
+<div class="boxtitle">
+<p>例 3-7　70B 模型的推理显存</p>
+</div>
+<p>LLaMA 2-70B 有 80 层、64 个注意力头、每头 128 维（隐藏维度 <span class="math inline">\(d=8192\)</span>），采用 GQA，共 8 个 KV 头。以 FP16 推理，同时服务 10 个用户，每人支持 32K 上下文，开销按前两项之和的 10% 计。分别按“不用 GQA”（把隐藏维度 8192 全部当作 KV 维度）和“实际的 GQA”估算推理显存。</p>
+<div class="cthreecalc">
+<p>1 &amp; 权重 &amp; <span class="math inline">\(70\times10^{9}\times2\)</span> &amp; 140 GB &amp; FP16 每参数 2 字节<br>
+2a &amp; 每 token KV（不用 GQA） &amp; <span class="math inline">\(2\times80\times8192\times2\)</span> &amp; 2 621 440 B &amp; K、V 两份 × 80 层 × 64 头 × 128 维 × 2 字节<br>
+3a &amp; KV 总量（不用 GQA） &amp; <span class="math inline">\(2\,621\,440\times32\,768\times10\)</span> &amp; 859 GB &amp; 32K 取 32 768，10 个用户<br>
+4a &amp; 开销 &amp; <span class="math inline">\((140+859)\times10\%\)</span> &amp; 99.9 GB &amp; 按前两项之和的 10%<br>
+5a &amp; 合计（不用 GQA） &amp; <span class="math inline">\(140+859+99.9\)</span> &amp; 约 1099 GB &amp; 步骤 1、3a、4a<br>
+2b &amp; 每 token KV（GQA） &amp; <span class="math inline">\(2\times80\times8\times128\times2\)</span> &amp; 327 680 B &amp; KV 头数是 8，不是 64<br>
+3b &amp; KV 总量（GQA） &amp; <span class="math inline">\(327\,680\times32\,768\times10\)</span> &amp; 107 GB &amp; 为 3a 的 1/8<br>
+5b &amp; 合计（GQA） &amp; <span class="math inline">\((140+107)\times1.1\)</span> &amp; 约 272 GB &amp; 需要 4 张 80 GB 显卡<br>
+</p>
+</div>
+<p>数据流向配置文件给出层数、KV 头数、每头维度 → 每 token 的 KV → 乘上下文长度与用户数 → 加权重 → 乘 1.1 加开销。 同一道题常见三个答案，差别全在口径。(a) 把“32K”取为 <span class="math inline">\(32\,000\)</span>：KV 为 <span class="math inline">\(2\,621\,440\times32\,000\times10\approx839\,\text{GB}\)</span>，合计 <span class="math inline">\((140+839)\times1.1\approx1077\,\text{GB}\)</span>。(b) 取 <span class="math inline">\(32\,768\)</span>：如上表约 1099 GB。(c) 教学资料中常见的“KV 约 800 GB、合计约 1034 GB”：<span class="math inline">\(2\,621\,440\times32\,768\times10\)</span> 字节恰好是 800 GiB（除以 <span class="math inline">\(1024^{3}\)</span>），却与以 <span class="math inline">\(10^{9}\)</span> 计的 140 GB 权重直接相加，单位混用，所以偏小；此外，有的题目把隐藏维度写成“每层 8196 个神经元”，应为 8192。本书 GB 一律按 <span class="math inline">\(10^{9}\)</span> 字节计，因此取 (b)；若题目明确 32K = 32 000，取 (a)。更重要的是，真实的 LLaMA 2-70B 用 GQA，按 MHA 计算会把 KV 缓存高估 8 倍：此时 KV 缓存（859 GB）远超权重本身，而 GQA 下只有 107 GB。</p>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>长上下文不是免费的。KV 缓存与上下文长度、并发用户数都成正比。一个模型“支持 128K 上下文”，只说明它在训练和结构上能处理这么长的输入，不意味着在你的显卡上能以 128K 同时服务很多人。估算推理显存时必须同时考虑权重和 KV 缓存，并且用 <strong>KV 头数</strong>而不是查询头数代入。</p>
+</div>
+</section>
+<section id="c3-subsec-decoding" class="level2">
+<h2 class="anchored" data-anchor-id="c3-subsec-decoding">3.9.5　解码策略：怎样选出下一个 token</h2>
+<p>模型每一步输出的是词表上的一个概率分布。“如何从分布中选出下一个 token”称为<strong>解码策略</strong>，它直接影响生成文本的质量和风格。这里的“解码”指选 token 的方法，与解码器（模型结构）、解码阶段（运行阶段）都不是一回事。</p>
+<p><strong>贪心解码与束搜索</strong>　 <strong>贪心解码</strong>（greedy decoding）每步选概率最大的 token： <span class="math display">\[y_t=\arg\max_{y}P(y\mid\boldsymbol{x},y_{&lt;t}).\]</span> 它简单、结果确定，但每步的局部最优不保证整体最优，还容易陷入重复。<strong>束搜索</strong>（beam search）每步保留概率最高的 <span class="math inline">\(k\)</span> 个候选序列（<span class="math inline">\(k\)</span> 称为束宽），最后选整体概率最高的序列，常用于机器翻译等有较明确标准答案的任务。在开放式生成中，这两种确定性方法生成的文本往往平淡、重复。</p>
+<p><strong>温度采样</strong>　 对话等开放式生成通常按概率<strong>随机采样</strong>。设模型最后一层输出的未归一化分数（logits）为 <span class="math inline">\(z_i\)</span>，引入<strong>温度</strong>（temperature）<span class="math inline">\(\tau\)</span> 后，各 token 的采样概率为 <span class="math display">\[p_i=\frac{\exp(z_i/\tau)}{\sum_j\exp(z_j/\tau)}.
+\tag{3-38}\]</span> 如图 <a href="../ch3/s3-9.html#c3-fig-temp">3-22</a>，<span class="math inline">\(\tau&lt;1\)</span> 时分布变“尖”，高概率 token 更占优势，输出更保守、确定；<span class="math inline">\(\tau&gt;1\)</span> 时分布变“平”，低概率 token 机会增加，输出更多样，也更容易出错；<span class="math inline">\(\tau\to0\)</span> 时等价于贪心解码。</p>
+<div id="c3-fig-temp" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch3-temp.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 3-22　温度对下一个 token 分布的影响，以及 Top-P 截断（“今天天气很”的候选，示意数据）。τ = 1 时为模型原始分布；τ 越低分布越尖、保留的候选越少，τ 越高分布越平、保留的候选越多</p>
+</div>
+</div>
+<p><strong>Top-K 与 Top-P 采样</strong>　 纯随机采样可能抽到概率极低、明显不合理的 token，因此通常先截断候选范围，再在剩余候选中重新归一化后采样。<strong>Top-K 采样</strong>只保留概率最高的 <span class="math inline">\(k\)</span> 个 token。<strong>Top-P 采样</strong>（也称<strong>核采样</strong>，nucleus sampling）<sup><a href="../ch3/references.html#ref-44">[44]</a></sup>把 token 按概率从高到低排序，保留累积概率刚好达到阈值 <span class="math inline">\(p\)</span> 的最小集合： <span class="math display">\[\mathcal{V}^{(p)}=\arg\min_{\mathcal{V}'}\lvert\mathcal{V}'\rvert\quad\text{满足}\ \sum_{y\in\mathcal{V}'}P(y\mid\boldsymbol{x},y_{&lt;t})\ge p.
+\tag{3-39}\]</span> 在图 <a href="../ch3/s3-9.html#c3-fig-temp">3-22</a> 中，<span class="math inline">\(p=0.9\)</span> 时，<span class="math inline">\(\tau=0.5\)</span> 只保留 2 个候选（<span class="math inline">\(0.78+0.15=0.93\ge0.9\)</span>），<span class="math inline">\(\tau=1.0\)</span> 保留 4 个，<span class="math inline">\(\tau=2.0\)</span> 保留 6 个。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>Top-K 与 Top-P 都是“先截断再采样”，区别在截断的依据。Top-K 按<strong>个数</strong>截断，<span class="math inline">\(k\)</span> 固定，不能适应分布形状：分布很集中时，<span class="math inline">\(k\)</span> 个候选里可能混入不合理的选项；分布很分散时，又可能截掉合理的选项。Top-P 按<strong>累积概率</strong>截断，候选数随分布自适应：模型很确定时只留一两个，不确定时留得多。两者可以同时使用，此时取二者的交集。温度则不截断，只改变分布的形状，通常先施加温度再做截断。</p>
+</div>
+<p>此外常用的控制手段还有<strong>重复惩罚</strong>（降低已出现 token 的概率，避免车轱辘话）、<strong>最大输出长度</strong>和<strong>停止词</strong>。表 <a href="../ch3/s3-9.html#c3-tab-decode">3-13</a> 给出了不同任务的一般经验。</p>
+<div id="c3-tab-decode" class="booktab">
+<div class="tabcap">
+<p>表 3-13　不同任务下解码参数的一般经验</p>
+</div>
 <table class="caption-top table">
-<caption>表3-15 批量大小对解码性能的影响（估算）</caption>
-<colgroup>
-<col style="width: 20%">
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 21%">
-<col style="width: 28%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>批量大小 <span class="math inline">\(b\)</span></th>
-<th>显存占用</th>
-<th>每步耗时</th>
-<th>系统吞吐量</th>
-<th>每个用户的生成速度</th>
+<th style="text-align: left;">任务</th>
+<th style="text-align: left;">推荐策略</th>
+<th style="text-align: left;">典型设置</th>
+<th style="text-align: left;">原因</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>1</td>
-<td>15.1 GB</td>
-<td>7.5 ms</td>
-<td>133 tokens/s</td>
-<td>133 tokens/s</td>
+<td style="text-align: left;">数学、代码、信息抽取</td>
+<td style="text-align: left;">贪心或低温采样</td>
+<td style="text-align: left;"><span class="math inline">\(\tau=0\)</span>～<span class="math inline">\(0.3\)</span>（<span class="math inline">\(\tau=0\)</span> 即贪心）</td>
+<td style="text-align: left;">需要确定、准确的结果</td>
 </tr>
 <tr class="even">
-<td>8</td>
-<td>22.6 GB</td>
-<td>11.3 ms</td>
-<td>708 tokens/s</td>
-<td>89 tokens/s</td>
+<td style="text-align: left;">日常问答、对话</td>
+<td style="text-align: left;">适中温度 + Top-P</td>
+<td style="text-align: left;"><span class="math inline">\(\tau\approx0.7\)</span>，<span class="math inline">\(p\approx0.9\)</span></td>
+<td style="text-align: left;">兼顾准确与自然</td>
 </tr>
 <tr class="odd">
-<td>16</td>
-<td>31.2 GB</td>
-<td>15.6 ms</td>
-<td>1026 tokens/s</td>
-<td>64 tokens/s</td>
+<td style="text-align: left;">创意写作、头脑风暴</td>
+<td style="text-align: left;">较高温度 + Top-P</td>
+<td style="text-align: left;"><span class="math inline">\(\tau\approx0.9\)</span>～<span class="math inline">\(1.2\)</span>，<span class="math inline">\(p\approx0.95\)</span></td>
+<td style="text-align: left;">需要多样性和新意</td>
 </tr>
 <tr class="even">
-<td>32</td>
-<td>48.4 GB</td>
-<td>24.2 ms</td>
-<td>1323 tokens/s</td>
-<td>41 tokens/s</td>
-</tr>
-<tr class="odd">
-<td>48</td>
-<td>65.5 GB</td>
-<td>32.8 ms</td>
-<td>1465 tokens/s</td>
-<td>31 tokens/s</td>
+<td style="text-align: left;">机器翻译</td>
+<td style="text-align: left;">束搜索</td>
+<td style="text-align: left;">束宽 4～5</td>
+<td style="text-align: left;">有较明确的最优译文</td>
 </tr>
 </tbody>
 </table>
-<p>可以看到：批量从 1 增大到 32，系统吞吐量提高了约 10 倍，而每个用户的生成速度只下降到原来的约 1/3；但随着批量增大，KV Cache 逐渐取代模型权重成为读取量的主体，吞吐量的增长趋于平缓，显存也很快被 KV Cache 占满。这再次说明，<strong>KV Cache 的大小决定了推理系统的并发上限。</strong></p>
-<p><strong>2．连续批处理</strong></p>
-<p>传统的<strong>静态批处理</strong>把若干请求凑成一批，同时开始、同时结束。但不同请求的输出长度差别很大：先完成的请求只能空占槽位，等待批中最长的请求结束，新到达的请求则只能排队（图 3-23(a)）。</p>
-<p><strong>连续批处理</strong>（Continuous Batching，也称迭代级调度）由 Orca 系统（2022）提出：调度以”解码步”为单位进行，每一步结束后检查是否有请求已经完成，一旦有空位，下一步就立即补入新请求（图 3-23(b)）。这样 GPU 几乎始终满负荷运行，新请求也不必长时间等待。连续批处理已成为 vLLM、SGLang、TensorRT-LLM 等现代推理引擎的标准功能。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId151.png" style="width:5.48333in;height:2.70147in" class="figure-img"></p>
-<figcaption>图3-23 静态批处理与连续批处理</figcaption>
-</figure>
 </div>
-<p>图3-23 静态批处理与连续批处理</p>
-</section>
-<section id="pagedattention像管理内存页一样管理-kv-cache" class="level2">
-<h2 class="anchored" data-anchor-id="pagedattention像管理内存页一样管理-kv-cache">3.9.4　PagedAttention：像管理内存页一样管理 KV Cache</h2>
-<p>批处理能否发挥作用，取决于显存中能放下多少个请求的 KV Cache。早期的推理系统为每个请求预先分配一块<strong>连续的</strong>显存，大小按最大可能长度（如 2048 个 Token）预留。但请求最终会生成多少 Token 事先无法知道，于是产生了大量浪费：预留了却没用上的空间、请求之间无法利用的碎片。vLLM 的作者测量发现，这类系统中有 60%～80% 的 KV Cache 显存被浪费。</p>
-<p><strong>PagedAttention</strong> 由 Kwon 等人于 2023 年提出，其灵感来自操作系统的<strong>虚拟内存分页</strong>机制（图 3-24）：</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
 <ul>
-<li>把 KV Cache 切分成固定大小的<strong>块</strong>（Block），每块存放若干个 Token（如 16 个）的 K 和 V；</li>
-<li>每个请求的 KV Cache 在逻辑上是连续的，但在物理显存中可以分散存放在任意空闲的块里，二者之间的对应关系由一张<strong>块表</strong>（Block Table）记录；</li>
-<li>请求每生成满一块，再按需分配下一块，只有最后一块可能部分空闲。</li>
+<li><p>自回归生成：输出多少 token 就串行做多少次前向；端到端延迟 <span class="math inline">\(\approx\mathrm{TTFT}+(n-1)\mathrm{TPOT}\)</span>。</p></li>
+<li><p>预填充并行、计算受限，决定 TTFT；解码逐 token、访存受限，速度上限 ≈ 带宽 ÷ 每步读取量。</p></li>
+<li><p>推理显存 ≈ 权重 + KV 缓存 + 10%～20% 开销；KV 头数用错、GB/GiB 混用是最常见的错误。</p></li>
+<li><p>温度改变分布形状，Top-K 按个数截断，Top-P 按累积概率截断。</p></li>
+<li><p>案例进度：课程问答用较低温度（如 <span class="math inline">\(\tau=0.3\)</span>）加 Top-P，降低随机性，让讲解更稳定。</p></li>
 </ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId155.png" style="width:5.36667in;height:2.17551in" class="figure-img"></p>
-<figcaption>图3-24 PagedAttention 的分块管理</figcaption>
-</figure>
 </div>
-<p>图3-24 PagedAttention 的分块管理</p>
-<p>这样，KV Cache 显存的浪费被降到 4% 以下，同样的显存能容纳更多并发请求。vLLM 报告其吞吐量达到当时主流系统的 2～4 倍。分块管理还带来了另一个好处：多个请求如果有相同的前缀（例如相同的系统提示词），就可以<strong>共享</strong>同一批物理块，而不必各存一份。在此基础上发展出的<strong>前缀缓存</strong>（Prefix Caching）技术，例如 SGLang 的 RadixAttention，会把已经计算过的前缀 KV Cache 保留下来，后续请求遇到相同前缀时直接复用，从而跳过这部分的预填充计算，显著降低 TTFT。</p>
-</section>
-<section id="flashattention减少注意力计算的访存" class="level2">
-<h2 class="anchored" data-anchor-id="flashattention减少注意力计算的访存">3.9.5　FlashAttention：减少注意力计算的访存</h2>
-<p>标准的注意力计算会先算出完整的 <span class="math inline">\(s \times s\)</span> 注意力分数矩阵 <span class="math inline">\(QK^{\top}\)</span>，把它写回显存，再读出来做 softmax，最后乘以 <span class="math inline">\(V\)</span>。当序列很长时，这个矩阵本身就非常大（<span class="math inline">\(s = 32\text{K}\)</span> 时，单个注意力头就有约 10 亿个元素），反复读写它的时间远远超过实际计算的时间。</p>
-<p><strong>FlashAttention</strong> 由 Dao 等人于 2022 年提出，是一种”IO 感知”的精确注意力算法。它把 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span> 切成小块，逐块加载到 GPU 片上速度极快但容量很小的 SRAM 中完成计算，并借助”在线 softmax”技巧逐块累积结果，<strong>始终不在显存中生成完整的注意力矩阵</strong>。这样，注意力计算的显存占用从随序列长度平方增长降为线性增长，速度也提升了数倍；而且计算结果与标准注意力完全相同，不是近似。FlashAttention 及其后续版本已经成为训练和推理中注意力计算的事实标准，也是大模型能够支持长上下文的重要基础。</p>
-</section>
-<section id="模型量化" class="level2">
-<h2 class="anchored" data-anchor-id="模型量化">3.9.6　模型量化</h2>
-<p><strong>1．基本原理</strong></p>
-<p><strong>量化</strong>（Quantization）把模型中的数值从高精度（如 FP16）转换为更低位宽或更紧凑的表示（如 INT8、INT4）。量化后，模型文件变小，显存占用和每一步需要读取的数据量也随之下降。它的作用有两方面：一是让原本放不进设备的模型有了运行的可能；二是按式（3-41），在带宽受限的解码阶段，读取的数据量减少，生成速度也随之提高。</p>
-<p>以最常见的<strong>对称线性量化</strong>为例，把一组浮点数 <span class="math inline">\(\mathbf{w}\)</span> 量化为 <span class="math inline">\(k\)</span> 位整数时，先计算缩放因子 <span class="math inline">\(s\)</span>，再把每个数除以 <span class="math inline">\(s\)</span> 并四舍五入：</p>
-<p><span class="math inline">\(s = \frac{\max_{i}\left| w_{i} \right|}{2^{k - 1} - 1},\quad\quad q_{i} = round\left( \frac{w_{i}}{s} \right),\quad\quad{\widehat{w}}_{i} = s \cdot q_{i}\quad\)</span> (3-49)</p>
-<p>其中 <span class="math inline">\(q_{i}\)</span> 是存储的整数，<span class="math inline">\({\widehat{w}}_{i}\)</span> 是计算时反量化得到的近似值。</p>
-<p><strong>【例 3-7】</strong> 将一组权重 <span class="math inline">\(\mathbf{w} = (0.42,\  - 1.27,\ 0.08,\ 0.91)\)</span> 量化为 INT4（取值范围 <span class="math inline">\(- 7 \sim 7\)</span>），求量化结果和误差。</p>
-<p><strong>解：</strong> 缩放因子 <span class="math inline">\(s = 1.27/7 \approx 0.181\)</span>。各权重除以 <span class="math inline">\(s\)</span> 后约为 <span class="math inline">\(2.32\)</span>、<span class="math inline">\(- 7\)</span>、<span class="math inline">\(0.44\)</span>、<span class="math inline">\(5.02\)</span>，四舍五入得 <span class="math inline">\(\mathbf{q} = (2,\  - 7,\ 0,\ 5)\)</span>。反量化得 <span class="math inline">\(\widehat{\mathbf{w}} \approx (0.363,\  - 1.270,\ 0,\ 0.907)\)</span>，绝对误差分别为 <span class="math inline">\(0.057\)</span>、<span class="math inline">\(0\)</span>、<span class="math inline">\(0.08\)</span>、<span class="math inline">\(0.003\)</span>。可以看到，绝对值较小的 <span class="math inline">\(0.08\)</span> 被直接量化成了 <span class="math inline">\(0\)</span>。</p>
-<p>这个例子揭示了量化的核心难题：<strong>缩放因子由最大值决定，少数绝对值很大的”离群值”会让其他数值的精度大幅下降。</strong> 假如这组数中有一个 <span class="math inline">\(12.7\)</span>，那么 <span class="math inline">\(s\)</span> 会变为约 <span class="math inline">\(1.81\)</span>，其余三个数将全部被量化为 <span class="math inline">\(0\)</span> 或 <span class="math inline">\(\pm 1\)</span>。研究发现，大模型的激活值中普遍存在这样的离群特征，且模型越大越明显。</p>
-<p><strong>2．量化的粒度、时机与对象</strong></p>
-<p>为了减小离群值的影响，量化通常按更细的粒度进行：<strong>逐张量</strong>（整个矩阵共用一个 <span class="math inline">\(s\)</span>）、<strong>逐通道</strong>（每行或每列一个 <span class="math inline">\(s\)</span>）、<strong>逐组</strong>（每 64 或 128 个数一组，各用一个 <span class="math inline">\(s\)</span>）。粒度越细，精度越高，但需要额外存储的缩放因子也越多。3.6.8 节介绍的 QLoRA 就采用了每 64 个数一组的分块量化。</p>
-<p>按量化发生的时机，分为<strong>训练后量化</strong>（Post-Training Quantization，PTQ）和<strong>量化感知训练</strong>（Quantization-Aware Training，QAT）。PTQ 直接对训练好的模型进行量化，只需少量校准数据，成本低，是大模型最常用的方式；QAT 在训练过程中模拟量化误差，让模型提前适应低精度，效果更好但需要重新训练。</p>
-<p>按量化的对象，分为<strong>仅权重量化</strong>（如 W4A16：权重 4 位、激活值 16 位，计算前把权重反量化）和<strong>权重与激活值同时量化</strong>（如 W8A8：可以直接使用整数矩阵乘法，同时提高计算速度）。前者主要缓解显存容量和带宽压力，适合解码阶段；后者还能利用低精度的算力优势，适合计算受限的场景。此外，<strong>KV Cache 也可以量化</strong>（如量化为 FP8 或 INT8），从而在长上下文、高并发场景下容纳更多请求。</p>
-<p><strong>3．代表性的量化方法</strong></p>
-<ul>
-<li><strong>LLM.int8()</strong>：发现大模型激活值中的离群特征后，把少量离群维度保留为 16 位计算，其余部分用 INT8 计算；</li>
-<li><strong>SmoothQuant</strong>：通过数学上等价的缩放，把激活值中的离群”难度”转移一部分到权重上，使二者都易于量化，实现 W8A8；</li>
-<li><strong>GPTQ</strong>：逐层量化权重，利用二阶信息（Hessian 矩阵）补偿量化误差，可在数小时内把千亿参数模型量化到 3～4 位；</li>
-<li><strong>AWQ</strong>：根据激活值的大小识别出约 1% 的”显著权重”，通过逐通道缩放对它们加以保护，从而在 4 位下保持较高精度；</li>
-<li><strong>NF4</strong>：QLoRA 提出的 4 位数据类型，按正态分布的分位数设置量化等级（图 3-25，见 3.6.8 节）。</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId160.png" style="width:4.55in;height:2.05833in" class="figure-img"></p>
-<figcaption>图3-25 INT4 与 NF4 的量化等级比较</figcaption>
-</figure>
-</div>
-<p>图3-25 INT4 与 NF4 的量化等级比较</p>
-<p><strong>4．量化后的显存估算</strong></p>
-<p>表 3-16 列出了 7B 模型在不同精度下的权重大小。</p>
-<p>表3-16 7B 模型在不同精度下的权重大小</p>
-<table class="caption-top table">
-<caption>表3-16 7B 模型在不同精度下的权重大小</caption>
-<colgroup>
-<col style="width: 19%">
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>数据类型</th>
-<th>每个参数占用</th>
-<th>7B 模型权重</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>FP32</td>
-<td>4 字节</td>
-<td>约 28 GB</td>
-<td>训练时的主权重精度，推理很少使用</td>
-</tr>
-<tr class="even">
-<td>FP16 / BF16</td>
-<td>2 字节</td>
-<td>约 14 GB</td>
-<td>推理的”原始精度”</td>
-</tr>
-<tr class="odd">
-<td>FP8 / INT8</td>
-<td>1 字节</td>
-<td>约 7 GB</td>
-<td>精度损失通常很小</td>
-</tr>
-<tr class="even">
-<td>INT4 / NF4</td>
-<td>0.5 字节</td>
-<td>约 3.5 GB</td>
-<td>需要较好的量化方法，精度略有下降</td>
-</tr>
-<tr class="odd">
-<td>GGUF Q4_K_M</td>
-<td>约 0.6 字节</td>
-<td>约 4.1 GB</td>
-<td>llama.cpp 常用格式，含缩放因子等开销</td>
-</tr>
-</tbody>
-</table>
-<p>需要强调，这些只是<strong>权重</strong>的大小。实际运行时，还要加上 KV Cache、临时张量和框架开销，因此不能只按权重估算所需显存。</p>
-<p><strong>【重点】为什么量化以后”我的电脑突然能跑模型了”？</strong> 一个 7B 模型以 FP16 存储需要约 14 GB，超过了大多数笔记本的显存；量化到 4 位后只需约 4 GB，再加上 KV Cache 等开销，8 GB 显存或 16 GB 统一内存的设备就能运行，而且由于每步读取的数据少了，生成速度反而更快。代价是一定的精度损失：通常 8 位量化几乎无损，4 位量化在多数任务上损失不大，3 位及以下则损失明显。</p>
-</section>
-<section id="投机解码" class="level2">
-<h2 class="anchored" data-anchor-id="投机解码">3.9.7　投机解码</h2>
-<p>批处理提高的是<strong>系统吞吐量</strong>，却无助于降低<strong>单个用户</strong>的生成时延。有没有办法让一个请求的解码步骤也”并行”起来？<strong>投机解码</strong>（Speculative Decoding）给出了一个巧妙的答案。它的出发点有两个：一是解码受带宽限制，大模型做一次前向计算处理 1 个 Token 和处理 5 个 Token 的耗时相差无几；二是很多 Token 是”容易猜”的，小模型也能猜对。</p>
-<p>如图 3-26 所示，投机解码的每一轮包括三步：</p>
-<ol type="1">
-<li>用一个小而快的<strong>草稿模型</strong>（Draft Model）连续生成 <span class="math inline">\(k\)</span> 个候选 Token；</li>
-<li>把这 <span class="math inline">\(k\)</span> 个 Token 一次性交给大的<strong>目标模型</strong>，在<strong>一次前向计算</strong>中并行算出每个位置上目标模型的概率分布，逐个判断是否接受；</li>
-<li>从第一个被拒绝的位置开始，丢弃其后所有候选，并由目标模型在该位置重新采样一个 Token。</li>
-</ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId164.png" style="width:5.36667in;height:1.85026in" class="figure-img"></p>
-<figcaption>图3-26 投机解码的一轮过程</figcaption>
-</figure>
-</div>
-<p>图3-26 投机解码的一轮过程</p>
-<p>设草稿模型对某个 Token <span class="math inline">\(x\)</span> 给出的概率为 <span class="math inline">\(q(x)\)</span>，目标模型给出的概率为 <span class="math inline">\(p(x)\)</span>。投机采样以概率 <span class="math inline">\(\min\left( 1,\ p(x)/q(x) \right)\)</span> 接受该 Token；若拒绝，则从按 <span class="math inline">\(\max\left( 0,\ p(x) - q(x) \right)\)</span> 归一化得到的分布中重新采样。可以证明，<strong>这样得到的输出分布与目标模型单独生成时完全相同</strong>，投机解码只加速、不改变结果。</p>
-<p>若每个候选 Token 被接受的概率约为 <span class="math inline">\(\alpha\)</span>，一轮中草稿模型提出 <span class="math inline">\(k\)</span> 个候选，则目标模型每做一次前向计算，平均能产出的 Token 数为</p>
-<p><span class="math inline">\(\mathbb{E}\left\lbrack \text{每轮产出的 Token 数} \right\rbrack = \frac{1 - \alpha^{k + 1}}{1 - \alpha}\quad\)</span> (3-50)</p>
-<p>例如 <span class="math inline">\(\alpha = 0.8\)</span>、<span class="math inline">\(k = 4\)</span> 时，每轮平均产出约 <span class="math inline">\(3.36\)</span> 个 Token。扣除草稿模型的开销后，实际加速比通常在 2～3 倍。除了使用独立的小模型，还可以在大模型上增加几个额外的预测头（如 Medusa、EAGLE），或者利用模型训练时自带的多 Token 预测模块（如 DeepSeek-V3 的 MTP）来生成候选。</p>
-</section>
-<section id="显存不足时的其他手段" class="level2">
-<h2 class="anchored" data-anchor-id="显存不足时的其他手段">3.9.8　显存不足时的其他手段</h2>
-<p><strong>1．CPU 卸载</strong></p>
-<p>当显存放不下整个模型时，推理框架可以只把一部分层放在 GPU 上，其余层留在系统内存中，由 CPU 计算，或在需要时通过 PCIe 总线传到 GPU。例如，llama.cpp 允许用户指定放到 GPU 上的层数。CPU 卸载让大模型”能跑起来”，但速度会大幅下降：PCIe 4.0 x16 的单向带宽约 32 GB/s，系统内存的带宽通常也只有每秒几十到一百多 GB，都比显存带宽低一个数量级以上。</p>
-<p><strong>2．模型压缩</strong></p>
-<p>除量化外，还可以通过以下方式从根本上减小模型：</p>
-<ul>
-<li><strong>剪枝</strong>（Pruning）：去除不重要的权重（非结构化剪枝）或整个注意力头、通道、层（结构化剪枝）。结构化剪枝更容易在硬件上获得实际加速；</li>
-<li><strong>知识蒸馏</strong>（Knowledge Distillation）：用大模型（教师）的输出概率分布或生成的数据训练小模型（学生），让小模型学到大模型的部分能力。许多开源小模型都通过蒸馏获得了远超同规模模型的效果；</li>
-<li><strong>低秩近似与权重共享</strong>：用低秩矩阵近似原权重矩阵，或让不同层共享同一组参数，以减少参数量。</li>
-</ul>
-</section>
-<section id="预填充与解码分离" class="level2">
-<h2 class="anchored" data-anchor-id="预填充与解码分离">3.9.9　预填充与解码分离</h2>
-<p>预填充是计算受限的，解码是带宽受限的，两者对硬件的需求截然不同。如果把它们混在同一批 GPU 上运行，一个长 Prompt 的预填充会”卡住”其他用户正在进行的解码，使他们的 TPOT 突然变长。针对这一问题，主要有两种思路：</p>
-<ul>
-<li><strong>分块预填充</strong>（Chunked Prefill）：把长 Prompt 切成若干小块，与其他请求的解码步交错执行，平滑时延；</li>
-<li><strong>预填充与解码分离</strong>（PD 分离）：用不同的 GPU 集群分别负责预填充和解码，预填充完成后再把 KV Cache 传给解码集群。这样可以分别针对两个阶段选择硬件和并行策略，在大规模服务中能显著提高满足 SLO 的吞吐量。</li>
-</ul>
-</section>
-<section id="小结优化技术与瓶颈的对应关系" class="level2">
-<h2 class="anchored" data-anchor-id="小结优化技术与瓶颈的对应关系">3.9.10　小结：优化技术与瓶颈的对应关系</h2>
-<p>表 3-17 把本节的优化技术与它们所针对的瓶颈对应起来。</p>
-<p>表3-17 推理优化技术及其针对的瓶颈</p>
-<table class="caption-top table">
-<caption>表3-17 推理优化技术及其针对的瓶颈</caption>
-<colgroup>
-<col style="width: 23%">
-<col style="width: 23%">
-<col style="width: 29%">
-<col style="width: 23%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>优化技术</th>
-<th>针对的瓶颈</th>
-<th>主要改善的指标</th>
-<th>是否影响输出结果</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>批处理 / 连续批处理</td>
-<td>解码阶段带宽利用率低</td>
-<td>吞吐量</td>
-<td>否</td>
-</tr>
-<tr class="even">
-<td>PagedAttention</td>
-<td>KV Cache 显存浪费</td>
-<td>并发数、吞吐量</td>
-<td>否</td>
-</tr>
-<tr class="odd">
-<td>前缀缓存</td>
-<td>重复的预填充计算</td>
-<td>TTFT</td>
-<td>否</td>
-</tr>
-<tr class="even">
-<td>GQA / MQA（模型结构）</td>
-<td>KV Cache 过大</td>
-<td>并发数、长上下文</td>
-<td>是（需在训练时采用）</td>
-</tr>
-<tr class="odd">
-<td>FlashAttention</td>
-<td>注意力计算的访存</td>
-<td>速度、长上下文</td>
-<td>否（精确计算）</td>
-</tr>
-<tr class="even">
-<td>量化</td>
-<td>显存容量、带宽</td>
-<td>能否运行、TPOT</td>
-<td>有轻微影响</td>
-</tr>
-<tr class="odd">
-<td>投机解码</td>
-<td>单请求解码串行</td>
-<td>TPOT</td>
-<td>否（分布不变）</td>
-</tr>
-<tr class="even">
-<td>CPU 卸载</td>
-<td>显存容量不足</td>
-<td>能否运行</td>
-<td>否，但速度大幅下降</td>
-</tr>
-<tr class="odd">
-<td>分块预填充 / PD 分离</td>
-<td>预填充与解码互相干扰</td>
-<td>TPOT 稳定性、吞吐量</td>
-<td>否</td>
-</tr>
-</tbody>
-</table>
 
 
 </section>
@@ -1580,18 +1421,18 @@ window.Quarto = {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch3/s3-8.html" class="pagination-link" aria-label="3.8　大语言模型推理原理">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.8　大语言模型推理原理</span>
+      <a href="../ch3/s3-8.html" class="pagination-link" aria-label="3.8　对齐：让回答符合人的期望">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.8　对齐：让回答符合人的期望</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch3/s3-10.html" class="pagination-link" aria-label="3.10　推理引擎、平台与模型部署">
-        <span class="nav-page-text">3.10　推理引擎、平台与模型部署</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch3/s3-10.html" class="pagination-link" aria-label="3.10　推理加速：围绕带宽与显存做文章">
+        <span class="nav-page-text">3.10　推理加速：围绕带宽与显存做文章</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

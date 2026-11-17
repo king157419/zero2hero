@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2.3 模型分类 – 大语言模型原理与技术</title>
+<title>2.3 一次推理的完整过程 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-3.html">2.3　模型分类</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-3.html">2.3　一次推理的完整过程</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -718,21 +754,22 @@ window.Quarto = {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#标准-transformer-模型" id="toc-标准-transformer-模型" class="nav-link active" data-scroll-target="#标准-transformer-模型">2.3.1　标准 Transformer 模型</a></li>
-  <li><a href="#基于编码器的模型" id="toc-基于编码器的模型" class="nav-link" data-scroll-target="#基于编码器的模型">2.3.2　基于编码器的模型</a></li>
-  <li><a href="#基于解码器的模型" id="toc-基于解码器的模型" class="nav-link" data-scroll-target="#基于解码器的模型">2.3.3　基于解码器的模型</a></li>
-  <li><a href="#基于编码器解码器的模型" id="toc-基于编码器解码器的模型" class="nav-link" data-scroll-target="#基于编码器解码器的模型">2.3.4　基于编码器—解码器的模型</a></li>
-  <li><a href="#基于垂直领域的模型" id="toc-基于垂直领域的模型" class="nav-link" data-scroll-target="#基于垂直领域的模型">2.3.5　基于垂直领域的模型</a></li>
-  <li><a href="#三类架构对比" id="toc-三类架构对比" class="nav-link" data-scroll-target="#三类架构对比">2.3.6　三类架构对比</a></li>
+  <li><a href="#c2-subsec-token" id="toc-c2-subsec-token" class="nav-link active" data-scroll-target="#c2-subsec-token">2.3.1　词元化：把文字切成编号</a></li>
+  <li><a href="#c2-subsec-embed" id="toc-c2-subsec-embed" class="nav-link" data-scroll-target="#c2-subsec-embed">2.3.2　词嵌入与位置信息</a></li>
+  <li><a href="#c2-subsec-attention" id="toc-c2-subsec-attention" class="nav-link" data-scroll-target="#c2-subsec-attention">2.3.3　自注意力：让每个位置读取其他位置</a></li>
+  <li><a href="#c2-subsec-ffn" id="toc-c2-subsec-ffn" class="nav-link" data-scroll-target="#c2-subsec-ffn">2.3.4　前馈网络、残差流与归一化</a></li>
+  <li><a href="#c2-subsec-output" id="toc-c2-subsec-output" class="nav-link" data-scroll-target="#c2-subsec-output">2.3.5　输出层：从向量到概率</a></li>
+  <li><a href="#c2-subsec-sampling" id="toc-c2-subsec-sampling" class="nav-link" data-scroll-target="#c2-subsec-sampling">2.3.6　从概率到词元：温度与采样</a></li>
+  <li><a href="#c2-subsec-autoregressive" id="toc-c2-subsec-autoregressive" class="nav-link" data-scroll-target="#c2-subsec-autoregressive">2.3.7　自回归循环与 KV 缓存</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-3.html">2.3　模型分类</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch2/index.html">第 2 章　大语言模型的底层原理与技术</a></li><li class="breadcrumb-item"><a href="../ch2/s2-3.html">2.3　一次推理的完整过程</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">2.3　模型分类</h1>
+<h1 class="title">2.3　一次推理的完整过程</h1>
 </div>
 
 
@@ -749,231 +786,372 @@ window.Quarto = {
 </header>
 
 
-<p>几乎所有现代 LLM 都建立在 Transformer 之上，区别在于用了它的哪一部分。只用编码器的代表是 BERT，只用解码器的代表是 GPT，两者都用的代表是 T5。在这三类架构之外，还有按应用领域划分的垂直领域模型。</p>
-<section id="标准-transformer-模型" class="level2">
-<h2 class="anchored" data-anchor-id="标准-transformer-模型">2.3.1　标准 Transformer 模型</h2>
-<p>Transformer 由 Google 的 Vaswani 等人在 2017 年的论文《Attention Is All You Need》中提出，最初用于机器翻译。它完全抛弃了循环结构（RNN），只用注意力机制建模序列中任意两个位置之间的关系。这带来了两个决定性优势：一是所有位置可以并行计算，能充分利用 GPU；二是任意两个词之间只隔一步，长距离依赖不再随距离衰减。</p>
+<div class="bookbox guide">
+<p>输入“今天天气很”，模型输出“好”。这中间，模型内部到底做了哪些计算？本节跟着这句话走完一次完整的前向计算：分词器把文字切成词元编号，嵌入层把编号换成向量，向量依次穿过 <span class="math inline">\(L\)</span> 个解码器层——每层先用自注意力在位置之间交换信息，再用前馈网络在每个位置上加工——最后由输出层给词表中每个词元打分，经 softmax 变成概率，再按解码策略抽出一个词元，追加到输入末尾，进入下一轮。每一步都配有可以手算的小例子。结论是：模型每生成一个词元，都要把这条链路走一遍；理解了这条链路，就理解了上下文长度、温度参数、KV 缓存等概念从何而来。</p>
+</div>
+<p>图 <a href="../ch2/s2-3.html#c2-fig-pipeline">2-4</a> 是解码器模型（GPT 类模型，见第 <a href="../ch2/s2-5.html#c2-subsec-decoder">2.5.3</a> 小节）生成一个词元的完整数据流，左侧标出了每一步输出的张量形状。记号沿用全书约定：<span class="math inline">\(T\)</span> 是输入的词元数，<span class="math inline">\(d\)</span> 是<strong>隐藏维度</strong>（每个词元用多少个数表示），<span class="math inline">\(\lvert\mathcal{V}\rvert\)</span> 是词表大小，<span class="math inline">\(L\)</span> 是层数。为便于手算，本节假设分词器把“今天天气很”切成“今天”“天气”“很”三个词元，即 <span class="math inline">\(T=3\)</span>。</p>
+<div id="c2-fig-pipeline" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/image6.png" style="width:6in;height:5.67857in" class="figure-img"></p>
-<figcaption>图 2-6 · 标准 Transformer 结构（据 Vaswani 等，2017 重绘）</figcaption>
+<p><img src="../figs/ch2-pipeline.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.8%"></p>
 </figure>
 </div>
-<p>图 2-6 · 标准 Transformer 结构（据 Vaswani 等，2017 重绘）</p>
-<p>去掉右侧解码器就得到 BERT 类模型，去掉左侧编码器和交叉注意力就得到 GPT 类模型。</p>
-<p>标准 Transformer 由编码器和解码器两个栈组成，原论文中各有 6 层，隐藏维度 d_model = 512。它的核心组件如下。</p>
-<p><strong>（1）缩放点积注意力</strong>。每个词的向量经过三个线性变换，得到查询 Q（我在找什么）、键 K（我能提供什么）、值 V（我的内容）。用 Q 与所有 K 的点积衡量相关性，经 softmax 归一化后对 V 加权求和：</p>
-<p><span class="math display">\[Attention(Q,K,V) = softmax\left( \frac{QK^{\top}}{\sqrt{d_{k}}} \right)V\]</span></p>
-<p>除以 √d_k 的原因是：若 Q、K 的各分量独立且方差为 1，它们的点积方差为 d_k。维度越高，点积的数值越大，softmax 会进入饱和区，梯度接近于零。除以 √d_k 把方差拉回 1，让训练保持稳定。</p>
-<blockquote class="blockquote">
-<p><strong>算例：手算一次注意力</strong></p>
-<p>设序列只有 3 个 token，d_k = 2。为了便于计算，取 Q = K，每行对应一个 token：</p>
-</blockquote>
-<p><span class="math display">\[Q = K = \begin{bmatrix}
-1 &amp; 0 \\
-0 &amp; 1 \\
-1 &amp; 1
-\end{bmatrix},\quad\quad V = \begin{bmatrix}
-1 &amp; 0 \\
-0 &amp; 2 \\
-3 &amp; 1
-\end{bmatrix}\]</span></p>
-<p><strong>第一步，算相关性分数</strong>。S = QKᵀ / √2，第 i 行第 j 列表示 token i 对 token j 的关注程度：</p>
-<p><span class="math display">\[S = \frac{1}{\sqrt{2}}\begin{bmatrix}
-1 &amp; 0 &amp; 1 \\
-0 &amp; 1 &amp; 1 \\
-1 &amp; 1 &amp; 2
-\end{bmatrix} \approx \begin{bmatrix}
-0.707 &amp; 0 &amp; 0.707 \\
-0 &amp; 0.707 &amp; 0.707 \\
-0.707 &amp; 0.707 &amp; 1.414
-\end{bmatrix}\]</span></p>
-<p><strong>第二步，按行做 softmax</strong>，得到注意力权重矩阵 A，每行之和为 1：</p>
-<p><span class="math display">\[A \approx \begin{bmatrix}
-0.401 &amp; 0.198 &amp; 0.401 \\
-0.198 &amp; 0.401 &amp; 0.401 \\
-0.248 &amp; 0.248 &amp; 0.503
-\end{bmatrix}\]</span></p>
-<p><strong>第三步，对 V 加权求和</strong>，得到输出 O = AV：</p>
-<p><span class="math display">\[O = AV \approx \begin{bmatrix}
-1.604 &amp; 0.797 \\
-1.401 &amp; 1.203 \\
-1.759 &amp; 1.000
-\end{bmatrix}\]</span></p>
-<p>以第 3 个 token 为例：它的查询 (1, 1) 与自己的键最相似，所以把约一半的注意力（0.503）给了自己，其余平分给前两个 token。输出向量是三个值向量的加权平均，它把整个序列的信息按相关程度”混合”进了当前位置。</p>
-<p>如果加上解码器使用的因果掩码（见 2.3.3 节），第 1 个 token 只能看见自己，权重变为 (1, 0, 0)，输出就是它自己的 V = (1, 0)；第 2 个 token 只能看见前两个，对分数 (0, 0.707) 做 softmax 得到权重 (0.330, 0.670)，输出为 (0.330, 1.340)；第 3 个 token 本来就能看见全部，结果不变。</p>
-<p><strong>计算代价</strong>。分数矩阵 S 的大小是 T × T，注意力的计算量和显存都随序列长度的平方增长。上下文从 4K 扩展到 128K，T 增加 32 倍，S 就要增加约 1000 倍。这是长上下文模型的核心难题。FlashAttention 等算法通过分块计算、避免把完整的 S 写入显存，大幅缓解了显存和带宽压力，但计算量的平方关系依然存在。</p>
-<p><strong>（2）多头注意力</strong>。把 Q、K、V 切成 h 份（原论文 h = 8），各自独立计算注意力后再拼接。不同的头可以关注不同类型的关系，例如一个头跟踪主谓关系，另一个头跟踪指代关系：</p>
-<p><span class="math display">\[MultiHead(Q,K,V) = Concat({head}_{1},\ldots,{head}_{h})W^{O}\]</span></p>
-<p><span class="math display">\[{head}_{i} = Attention(QW_{i}^{Q},KW_{i}^{K},VW_{i}^{V})\]</span></p>
-<p><strong>（3）前馈网络（FFN）</strong>。注意力负责在位置之间”交换信息”，FFN 则对每个位置单独做非线性变换，一般认为模型的大量”知识”存储在这里：</p>
-<p><span class="math display">\[FFN(x) = max(0,\, xW_{1} + b_{1})\, W_{2} + b_{2}\]</span></p>
-<p>中间层维度通常是 d_model 的 4 倍（原论文为 2048）。</p>
-<p><strong>（4）残差连接与层归一化</strong>。每个子层的输出都是 LayerNorm(x + Sublayer(x))。残差连接让梯度可以直接穿过深层网络，层归一化让每层的输入分布保持稳定，二者是把网络堆到上百层的前提。</p>
-<p><strong>（5）位置编码</strong>。注意力本身不区分顺序，“狗咬人”和”人咬狗”对它来说是同一组词。因此需要给每个位置加上位置信息。原论文使用正弦位置编码：</p>
-<p><span class="math display">\[PE_{(pos,2i)} = sin\left( \frac{pos}{10000^{2i/d_{model}}} \right),\quad PE_{(pos,2i + 1)} = cos\left( \frac{pos}{10000^{2i/d_{model}}} \right)\]</span></p>
-<p><strong>（6）解码器的两处不同</strong>。一是自注意力加了掩码，每个位置只能看到自己和之前的位置，防止”偷看答案”；二是多了一个交叉注意力层，其 Q 来自解码器，K 和 V 来自编码器的输出，用来把生成过程”对齐”到输入上。</p>
-<p><strong>一个实用的估算</strong>。一个 Transformer 层中，注意力的 4 个投影矩阵共 4d² 个参数，FFN 的两个矩阵共 2 × d × 4d = 8d² 个参数，合计约 12d²。因此 L 层模型的参数量约为 N ≈ 12Ld²。以 GPT-3 为例，L = 96、d = 12288，算得 12 × 96 × 12288² ≈ 1740 亿，与公布的 1750 亿基本吻合。</p>
-<p>2017 年以来，Transformer 的骨架没有大变，但细节持续改进：把 LayerNorm 移到子层之前（Pre-LN）并换成更简单的 RMSNorm；用旋转位置编码（RoPE）替代正弦编码；FFN 激活函数从 ReLU 换成 SwiGLU；用分组查询注意力（GQA）减少推理时的显存占用；用混合专家（MoE）让模型参数量很大、但每个 token 只激活一小部分。LLaMA、DeepSeek 等系列分别采用了其中一些改进，具体结构随版本而异。</p>
+<div class="figcap">
+<p>图 2-4　解码器模型生成一个词元的完整数据流。左侧为每一步输出的张量形状（T：词元数，d：隐藏维度，|<em>V</em>|：词表大小，L：层数），各步依次在 2.3.1～2.3.7 小节讲解；右侧回环表示自回归生成</p>
+</div>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>本节标题中的“推理”指模型的一次前向运行（inference），即用训练好的参数计算输出；它与“推理模型”“推理能力”中的“推理”（reasoning，多步逻辑思考）不是一回事。同样，“解码”至少有三种意思：<strong>解码器</strong>是一种网络结构（第 <a href="../ch2/s2-5.html">2.5</a> 节）；<strong>解码阶段</strong>是推理服务中逐个生成词元的运行阶段（第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节）；<strong>解码策略</strong>是从概率分布中选出一个词元的规则（第 <a href="../ch2/s2-3.html#c2-subsec-sampling">2.3.6</a> 小节）。</p>
+</div>
+<section id="c2-subsec-token" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-token">2.3.1　词元化：把文字切成编号</h2>
+<p>神经网络只能处理数字，第一步是用<strong>分词器</strong>（tokenizer）把文本切成一个个<strong>词元</strong>（token），再把每个词元映射为一个整数编号。切分的粒度是一个权衡：按字符切，词表很小，但序列很长，每个词元携带的信息很少；按整词切，序列短，但词表巨大，而且遇到没见过的新词就无从下手。现代大模型普遍采用介于两者之间的<strong>子词</strong>（subword）切分，最常用的算法是<strong>字节对编码</strong>（Byte Pair Encoding，BPE）<sup><a href="../ch2/references.html#ref-23">[23]</a></sup>。</p>
+<p>BPE 的训练过程是：从单个字符出发，统计语料中所有相邻符号对的出现次数，把最常见的一对合并成一个新符号，加入词表；重复这一过程，直到词表达到预定大小。</p>
+<div id="c2-ex-bpe" class="bookbox example">
+<div class="boxtitle">
+<p>例 2-3　BPE 的前五次合并</p>
+</div>
+<p>语料中 low 出现 5 次，lower 2 次，newest 6 次，widest 3 次。用 <code>&lt;/w&gt;</code> 标记词尾，初始切分为单个字符。出现次数相同时，取语料中先出现的一对。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">合并对</th>
+<th style="text-align: left;">次数（从哪来）</th>
+<th style="text-align: left;">合并后的切分</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><code>l o w &lt;/w&gt;</code>；<code>l o w e r &lt;/w&gt;</code>；<code>n e w e s t &lt;/w&gt;</code>；<code>w i d e s t &lt;/w&gt;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><code>e</code>+<code>s</code></td>
+<td style="text-align: left;">9 = newest 6 + widest 3</td>
+<td style="text-align: left;"><code>n e w es t &lt;/w&gt;</code>；<code>w i d es t &lt;/w&gt;</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><code>es</code>+<code>t</code></td>
+<td style="text-align: left;">9，同上</td>
+<td style="text-align: left;"><code>n e w est &lt;/w&gt;</code>；<code>w i d est &lt;/w&gt;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><code>est</code>+<code>&lt;/w&gt;</code></td>
+<td style="text-align: left;">9，同上</td>
+<td style="text-align: left;"><code>n e w est&lt;/w&gt;</code>；<code>w i d est&lt;/w&gt;</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><code>l</code>+<code>o</code></td>
+<td style="text-align: left;">7 = low 5 + lower 2</td>
+<td style="text-align: left;"><code>lo w &lt;/w&gt;</code>；<code>lo w e r &lt;/w&gt;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><code>lo</code>+<code>w</code></td>
+<td style="text-align: left;">7，同上</td>
+<td style="text-align: left;"><code>low &lt;/w&gt;</code>；<code>low e r &lt;/w&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>第 1 步时，<code>e s</code>、<code>s t</code>、<code>t &lt;/w&gt;</code> 都出现 9 次，按规则取最先出现的 <code>e s</code>；<code>w e</code>（newest 6 + lower 2 = 8）以一次之差落选。五次合并后，词表多了 <code>es</code>、<code>est</code>、<code>est&lt;/w&gt;</code>、<code>lo</code>、<code>low</code> 五个子词。此时遇到语料中没有的词 lowest，也能切成 <code>low</code> + <code>est&lt;/w&gt;</code>，两个子词都带着意义：“低”和“最高级”。</p>
+</div>
+<p>GPT-2 之后的模型多采用<strong>字节级 BPE</strong>：先把文本转为 UTF-8 字节，再在字节上合并，这样任何语言、任何符号都能被切分，不会出现“未登录词”。常见模型的词表大小从 GPT-2 的 50 257、LLaMA 的 32 000，增长到 Llama 3 的 128 256<sup><a href="../ch2/references.html#ref-24">[24]</a></sup>。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>词元不等于字，也不等于词。一个常见的中文词可能是一个词元，一个生僻字却可能被拆成几个字节词元。模型的上下文长度、API 的计费、缩放定律中的数据量 <span class="math inline">\(D\)</span>，都按词元计算。分词也解释了一些“怪现象”：问模型“strawberry 里有几个 r”，它容易答错，主要原因之一是它看到的是几个子词编号，而不是一个个字母。</p>
+</div>
 </section>
-<section id="基于编码器的模型" class="level2">
-<h2 class="anchored" data-anchor-id="基于编码器的模型">2.3.2　基于编码器的模型</h2>
-<p>编码器模型只保留 Transformer 的编码器部分，注意力是<strong>双向的</strong>：每个词都能同时看到左右两侧的上下文。它擅长”理解”，但不擅长”生成”。</p>
-<p>代表模型是 Google 2018 年提出的 BERT（Bidirectional Encoder Representations from Transformers）。它的核心训练任务是<strong>掩码语言建模</strong>（Masked Language Modeling，MLM）：随机选中 15% 的 token，让模型根据上下文预测它们原来是什么。被选中的 token 中，80% 替换为 [MASK]，10% 替换为随机词，10% 保持不变。这样做是因为微调和使用时输入里没有 [MASK]，若训练时只见过 [MASK]，模型会只在看到 [MASK] 时才认真理解语境。例如：</p>
-<blockquote class="blockquote">
-<p>输入：上海是中国的 [MASK] 大城市。 → 预测：第一</p>
-</blockquote>
-<p>BERT 还使用了下一句预测（NSP）任务，判断两个句子是否相邻。编码器模型通常用于文本分类、情感分析、命名实体识别、抽取式问答，以及生成句向量用于语义检索。今天 RAG 系统中的向量嵌入模型和重排序模型，大多仍是编码器架构。</p>
-<p>在 BERT 基础上改进的代表模型：</p>
-<ul>
-<li><p><strong>RoBERTa</strong>（Meta，2019）：去掉 NSP 任务，使用动态掩码、更多数据、更大批次和更长训练，证明 BERT 原来”训练不足”。</p></li>
-<li><p><strong>ALBERT</strong>（Google，2019）：跨层共享参数、分解词嵌入矩阵，用更少的参数达到相近效果。</p></li>
-<li><p><strong>DistilBERT</strong>（Hugging Face，2019）：用知识蒸馏把 BERT 压缩 40%，速度提升 60%，保留约 97% 的性能。</p></li>
-</ul>
+<section id="c2-subsec-embed" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-embed">2.3.2　词嵌入与位置信息</h2>
+<p>每个词元编号通过查表变成一个 <span class="math inline">\(d\)</span> 维向量。<strong>嵌入矩阵</strong> <span class="math inline">\(E\)</span> 的形状是 <span class="math inline">\(\lvert\mathcal{V}\rvert \times d\)</span>，第 <span class="math inline">\(i\)</span> 行就是编号为 <span class="math inline">\(i\)</span> 的词元的向量；这个矩阵和模型的其他参数一样是训练出来的。输入 <span class="math inline">\(T\)</span> 个词元，得到一个 <span class="math inline">\(T\times d\)</span> 的矩阵 <span class="math inline">\(X\)</span>，每一行对应一个词元。以 GPT-3 为例，<span class="math inline">\(d=12\,288\)</span>，词表约 5 万，嵌入矩阵本身就有约 6.2 亿个参数（<span class="math inline">\(50\,257\times12\,288\)</span>）。</p>
+<p>下一小节的注意力运算本身不区分顺序：“狗咬人”和“人咬狗”在它看来是同一组向量。因此还要注入<strong>位置信息</strong>。原始 Transformer 把一组按位置计算的正弦、余弦向量加到嵌入上（第 <a href="../ch2/s2-5.html#c2-subsec-transformer">2.5.1</a> 小节）；今天的大模型多用<strong>旋转位置编码</strong>（RoPE），在注意力计算时把查询和键向量按位置旋转一个角度，使注意力分数只依赖两个词元的相对距离<sup><a href="../ch2/references.html#ref-25">[25]</a></sup>。</p>
 </section>
-<section id="基于解码器的模型" class="level2">
-<h2 class="anchored" data-anchor-id="基于解码器的模型">2.3.3　基于解码器的模型</h2>
-<p>解码器模型只保留带掩码的解码器（去掉交叉注意力），训练目标是<strong>预测下一个 token</strong>，即 2.1.3 节的语言模型公式。因果掩码通过在注意力分数上加一个上三角为负无穷的矩阵实现：</p>
-<p><span class="math display">\[softmax\left( \frac{QK^{\top}}{\sqrt{d_{k}}} + M \right)V,\quad\quad M_{ij} = \left\{ \begin{matrix}
-0, &amp; j \leq i \\
-- \infty, &amp; j &gt; i
-\end{matrix} \right.\ \]</span></p>
-<p>生成时，模型一次只产生一个 token，把它接到输入末尾再生成下一个，这称为<strong>自回归</strong>（Auto-regressive）生成。解码器模型用于文本生成、对话、机器翻译、多语言文本生成和代码生成等几乎所有任务。代表模型有 OpenAI 的 GPT（Generative Pre-Training）系列、Google 的 PaLM、BigScience 的 BLOOM、DeepMind 的 Chinchilla、Meta 的 LLaMA，以及国内的 Qwen、DeepSeek 等。</p>
-<p>为什么今天的主流 LLM 几乎都是解码器架构？主要有四个原因：</p>
+<section id="c2-subsec-attention" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-attention">2.3.3　自注意力：让每个位置读取其他位置</h2>
+<p>嵌入之后，矩阵 <span class="math inline">\(X\)</span> 依次穿过 <span class="math inline">\(L\)</span> 个结构相同的解码器层。每层的第一个子层是<strong>自注意力</strong>（self-attention），它要解决的问题是：“很”这个位置要预测下一个词，应当从前文的哪些位置取信息、各取多少？</p>
+<p><strong>一句话机制</strong>　 每个位置提出一个“查询”，与所有位置的“键”比较相似度，按相似度对所有位置的“值”加权平均，作为本位置的新表示。具体地，<span class="math inline">\(X\)</span> 先经过三个可学习的线性变换，得到<strong>查询</strong>矩阵 <span class="math inline">\(Q=XW^Q\)</span>（我在找什么）、<strong>键</strong>矩阵 <span class="math inline">\(K=XW^K\)</span>（我能提供什么）和<strong>值</strong>矩阵 <span class="math inline">\(V=XW^V\)</span>（我的内容）。然后计算<strong>缩放点积注意力</strong><sup><a href="../ch2/references.html#ref-14">[14]</a></sup>： <span class="math display">\[\operatorname{Attention}(Q,K,V) = \operatorname{softmax}\Bigl(\frac{QK^{\top}}{\sqrt{d_{\mathrm{head}}}} + M\Bigr)V,
+\tag{2-11}\]</span> 分三步完成（图 <a href="../ch2/s2-3.html#c2-fig-attn">2-5</a>）：</p>
 <ol type="1">
-<li><p><strong>训练信号更密集</strong>。MLM 只对 15% 的位置计算损失，而下一词预测在每个位置都有损失，同样的数据能学到更多。</p></li>
-<li><p><strong>任务形式统一</strong>。任何任务都可以写成”给定前文，续写后文”，不需要为每个任务设计输出层，这是零样本和少样本能力的基础。</p></li>
-<li><p><strong>推理效率高</strong>。因果掩码保证已生成部分的表示不会因后文而改变，可以缓存每层的 K 和 V（KV Cache），生成新 token 时无需重算前文。</p></li>
-<li><p><strong>经验上扩展性最好</strong>。在大规模下，解码器模型的缩放曲线和零样本表现最稳定。</p></li>
+<li><p><strong>打分</strong>：<span class="math inline">\(S=QK^{\top}/\sqrt{d_{\mathrm{head}}}\)</span>，形状 <span class="math inline">\(T\times T\)</span>，第 <span class="math inline">\(i\)</span> 行第 <span class="math inline">\(j\)</span> 列表示位置 <span class="math inline">\(i\)</span> 对位置 <span class="math inline">\(j\)</span> 的关注程度；</p></li>
+<li><p><strong>掩码与归一化</strong>：加上掩码矩阵 <span class="math inline">\(M\)</span> 后按行做 softmax，得到注意力权重矩阵 <span class="math inline">\(A\)</span>，每行之和为 1；</p></li>
+<li><p><strong>加权求和</strong>：<span class="math inline">\(O=AV\)</span>，第 <span class="math inline">\(i\)</span> 行是所有值向量按第 <span class="math inline">\(i\)</span> 行权重的加权平均。</p></li>
 </ol>
+<p><strong>为什么除以 <span class="math inline">\(\sqrt{d_{\mathrm{head}}}\)</span></strong>　 设 <span class="math inline">\(\boldsymbol{q}\)</span>、<span class="math inline">\(\boldsymbol{k}\)</span> 的各分量独立、均值为 0、方差为 1，则点积 <span class="math inline">\(\boldsymbol{q}\cdot\boldsymbol{k}=\sum_{i=1}^{d_{\mathrm{head}}} q_ik_i\)</span> 的方差为 <span class="math inline">\(d_{\mathrm{head}}\)</span>。维度越高，分数的绝对值越大，softmax 越接近“只有一个 1、其余全是 0”的饱和状态，梯度几乎为零。除以 <span class="math inline">\(\sqrt{d_{\mathrm{head}}}\)</span> 把方差拉回 1，训练得以稳定。原论文把每个头的维度记为 <span class="math inline">\(d_k\)</span>，即本书的 <span class="math inline">\(d_{\mathrm{head}}\)</span>。</p>
+<p><strong>因果掩码</strong>　 解码器模型生成第 <span class="math inline">\(t\)</span> 个词元时，只能看到前 <span class="math inline">\(t-1\)</span> 个词元；训练时也必须遵守这一点，否则模型会“偷看答案”。做法是令掩码 <span class="math inline">\(M_{ij}=0\)</span>（<span class="math inline">\(j\le i\)</span>）、<span class="math inline">\(M_{ij}=-\infty\)</span>（<span class="math inline">\(j&gt;i\)</span>）：上三角位置的分数变成 <span class="math inline">\(-\infty\)</span>，softmax 之后权重为 0。这称为<strong>因果掩码</strong>（causal mask）。</p>
+<div id="c2-fig-attn" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch2-attn.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.9%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 2-5　带因果掩码的缩放点积注意力的三步计算（数值取自例 <a href="../ch2/s2-3.html#c2-ex-attn">2-4</a>，保留两位小数）。行是发出查询的位置，列是被查询的位置；掩码把后文的分数置为 −∞，softmax 后其权重为 0</p>
+</div>
+</div>
+<div id="c2-ex-attn" class="bookbox example">
+<div class="boxtitle">
+<p>例 2-4　手算一次缩放点积注意力</p>
+</div>
+<p>三个词元“今天”“天气”“很”，单头，<span class="math inline">\(d_{\mathrm{head}}=2\)</span>。为便于计算，取 <span class="math inline">\(Q=K\)</span>（实际中 <span class="math inline">\(W^Q\ne W^K\)</span>）： <span class="math display">\[Q=K=\begin{bmatrix}1&amp;0\\0&amp;1\\1&amp;1\end{bmatrix},\qquad
+  V=\begin{bmatrix}1&amp;0\\0&amp;2\\3&amp;1\end{bmatrix}.\]</span> 先不加掩码（编码器的双向注意力），再加因果掩码（解码器）。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">点积，第 3 行</td>
+<td style="text-align: left;"><span class="math inline">\((1,1)\cdot(1,0)\)</span>，<span class="math inline">\((1,1)\cdot(0,1)\)</span>，<span class="math inline">\((1,1)\cdot(1,1)\)</span></td>
+<td style="text-align: left;">1，1，2</td>
+<td style="text-align: left;"><span class="math inline">\(Q\)</span> 第 3 行与 <span class="math inline">\(K\)</span> 各行</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">缩放</td>
+<td style="text-align: left;">每个数 <span class="math inline">\(\div\sqrt2\)</span></td>
+<td style="text-align: left;">0.707，0.707，1.414</td>
+<td style="text-align: left;"><span class="math inline">\(d_{\mathrm{head}}=2\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">取指数</td>
+<td style="text-align: left;"><span class="math inline">\(e^{0.707}\)</span>，<span class="math inline">\(e^{0.707}\)</span>，<span class="math inline">\(e^{1.414}\)</span></td>
+<td style="text-align: left;">2.028，2.028，4.113</td>
+<td style="text-align: left;">第 2 步</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">归一化</td>
+<td style="text-align: left;">各数 <span class="math inline">\(\div(2.028+2.028+4.113)\)</span></td>
+<td style="text-align: left;">0.248，0.248，0.503</td>
+<td style="text-align: left;">第 3 步，和为 8.169</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">加权求和</td>
+<td style="text-align: left;"><span class="math inline">\(0.248\times(1,0)+0.248\times(0,2)+0.503\times(3,1)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((1.759,1.000)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(V\)</span> 的三行</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">掩码第 2 行</td>
+<td style="text-align: left;">只剩 <span class="math inline">\((0,0.707)\)</span>：<span class="math inline">\(1\div(1+2.028)\)</span>，<span class="math inline">\(2.028\div(1+2.028)\)</span></td>
+<td style="text-align: left;">0.330，0.670，0</td>
+<td style="text-align: left;"><span class="math inline">\(M_{23}=-\infty\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">掩码后输出</td>
+<td style="text-align: left;"><span class="math inline">\(0.330\times(1,0)+0.670\times(0,2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((0.330,1.340)\)</span></td>
+<td style="text-align: left;">第 6 步</td>
+</tr>
+</tbody>
+</table>
+<p>对第 1、2 行重复第 1～5 步，得到不加掩码时的完整结果： <span class="math display">\[S\approx\begin{bmatrix}0.707&amp;0&amp;0.707\\0&amp;0.707&amp;0.707\\0.707&amp;0.707&amp;1.414\end{bmatrix},\
+  A\approx\begin{bmatrix}0.401&amp;0.198&amp;0.401\\0.198&amp;0.401&amp;0.401\\0.248&amp;0.248&amp;0.503\end{bmatrix},\
+  O=AV\approx\begin{bmatrix}1.604&amp;0.797\\1.401&amp;1.203\\1.759&amp;1.000\end{bmatrix}.\]</span> 加因果掩码后，第 1 行只能看见自己，权重为 <span class="math inline">\((1,0,0)\)</span>，输出就是自己的值向量 <span class="math inline">\((1,0)\)</span>；第 2 行见第 6、7 步；第 3 行不变。</p>
+<p><strong>数据流向</strong>：<span class="math inline">\(Q,K\to S\to(+M)\to A\)</span>；<span class="math inline">\(A,V\to O\)</span>。“很”的查询 <span class="math inline">\((1,1)\)</span> 与自己的键最相似，约一半注意力（0.503）给了自己，其余平分给前两个词元；它的输出是三个值向量的加权平均，把整句的信息按相关程度“混合”进了当前位置。最后一个位置本来就能看到全部前文，所以加不加因果掩码，它的结果都一样。</p>
+</div>
+<p><strong>多头注意力</strong>　 一组 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span> 只能表达一种“关注方式”。<strong>多头注意力</strong>把隐藏维度 <span class="math inline">\(d\)</span> 切成 <span class="math inline">\(H\)</span> 份，每个头用自己的 <span class="math inline">\(W_i^Q\)</span>、<span class="math inline">\(W_i^K\)</span>、<span class="math inline">\(W_i^V\)</span> 在 <span class="math inline">\(d_{\mathrm{head}}=d/H\)</span> 维的子空间里独立计算注意力，再把各头的输出拼接，经输出矩阵 <span class="math inline">\(W^O\)</span> 映射回 <span class="math inline">\(d\)</span> 维： <span class="math display">\[\operatorname{MultiHead}(X) = \operatorname{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)\,W^O,\qquad
+  \mathrm{head}_i = \operatorname{Attention}(XW_i^Q,\,XW_i^K,\,XW_i^V).
+\tag{2-12}\]</span> 不同的头可以学到不同类型的关系，例如有的头跟踪主谓搭配，有的头跟踪代词指代。原始 Transformer 取 <span class="math inline">\(d=512\)</span>、<span class="math inline">\(H=8\)</span>，每头 64 维。</p>
+<p><strong>代价随长度平方增长</strong>　 分数矩阵 <span class="math inline">\(S\)</span> 的形状是 <span class="math inline">\(T\times T\)</span>，注意力的计算量和中间结果都随序列长度的平方增长。上下文从 4K 扩展到 128K，<span class="math inline">\(T\)</span> 增大 32 倍，<span class="math inline">\(S\)</span> 增大约 1000 倍。这是长上下文模型的核心难题。FlashAttention 通过分块计算避免把完整的 <span class="math inline">\(S\)</span> 写入显存，缓解了显存和带宽压力（第 <a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节），但计算量的平方关系仍然存在。</p>
 </section>
-<section id="基于编码器解码器的模型" class="level2">
-<h2 class="anchored" data-anchor-id="基于编码器解码器的模型">2.3.4　基于编码器—解码器的模型</h2>
-<p>编解码器模型保留完整的标准 Transformer：编码器用双向注意力从输入中提取有用的表示，解码器通过交叉注意力读取这些表示，来辅助并约束生成。它天然适合”输入一段、输出另一段”的任务，如翻译和摘要；在多模态领域也很常见，最著名的应用是视觉语言预训练（VLP）——用编码器处理图像，用解码器生成描述文字。</p>
-<p>代表模型：</p>
+<section id="c2-subsec-ffn" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-ffn">2.3.4　前馈网络、残差流与归一化</h2>
+<p>每层的第二个子层是<strong>前馈网络</strong>（Feed-Forward Network，FFN）。注意力负责在位置之间交换信息，FFN 则对每个位置单独做同样的非线性变换：先升维到 <span class="math inline">\(d_{\mathrm{ff}}\)</span>（通常为 <span class="math inline">\(4d\)</span>），经过激活函数（原论文用 ReLU，即 <span class="math inline">\(\max(0,x)\)</span>），再降回 <span class="math inline">\(d\)</span>： <span class="math display">\[\operatorname{FFN}(\boldsymbol{x}) = \max(0,\ \boldsymbol{x}W_1+\boldsymbol{b}_1)\,W_2+\boldsymbol{b}_2 .
+\tag{2-13}\]</span> 可解释性研究发现，模型的大量事实性“知识”与 FFN 的参数关系密切<sup><a href="../ch2/references.html#ref-26">[26]</a></sup>。</p>
+<p>两个子层都包在<strong>残差连接</strong>和<strong>归一化</strong>之中。现代大模型多采用<strong>前置归一化</strong>（Pre-LN）的写法： <span class="math display">\[\boldsymbol{x} \leftarrow \boldsymbol{x} + \operatorname{Attention}\bigl(\operatorname{Norm}(\boldsymbol{x})\bigr),\qquad
+  \boldsymbol{x} \leftarrow \boldsymbol{x} + \operatorname{FFN}\bigl(\operatorname{Norm}(\boldsymbol{x})\bigr).
+\tag{2-14}\]</span> 一个有用的理解方式是把 <span class="math inline">\(\boldsymbol{x}\)</span> 看成一条贯穿所有层的<strong>残差流</strong>（residual stream）：每个注意力子层从其他位置“读取”信息并“写回”残差流，每个 FFN 子层在当前位置上加工信息并写回。残差连接让梯度可以沿“<span class="math inline">\(+\boldsymbol{x}\)</span>”这条捷径直接穿过几十上百层，归一化让每层输入的数值范围保持稳定，二者是把网络堆深的前提。无论穿过多少层，形状始终是 <span class="math inline">\(T\times d\)</span>。可解释性研究还发现，浅层更多处理词法和局部句法，深层更多处理语义和与任务相关的信息。</p>
+<p>有了每层的结构，就可以估算模型的参数量。注意力有 <span class="math inline">\(W^Q\)</span>、<span class="math inline">\(W^K\)</span>、<span class="math inline">\(W^V\)</span>、<span class="math inline">\(W^O\)</span> 四个 <span class="math inline">\(d\times d\)</span> 矩阵，共 <span class="math inline">\(4d^2\)</span> 个参数；FFN 有 <span class="math inline">\(d\times4d\)</span> 和 <span class="math inline">\(4d\times d\)</span> 两个矩阵，共 <span class="math inline">\(8d^2\)</span> 个参数；偏置和归一化参数很少，可以忽略。于是 <span class="math display">\[N \approx 12\,L\,d^{2}\ \ (\text{不含嵌入}),\qquad N_{\mathrm{emb}} = \lvert\mathcal{V}\rvert \, d .
+\tag{2-15}\]</span></p>
+<div id="c2-ex-params" class="bookbox example">
+<div class="boxtitle">
+<p>例 2-5　估算 GPT-3 的参数量</p>
+</div>
+<p>GPT-3 有 <span class="math inline">\(L=96\)</span> 层，<span class="math inline">\(d=12\,288\)</span>，词表 <span class="math inline">\(\lvert\mathcal{V}\rvert =50\,257\)</span>，输入嵌入与输出矩阵共享<sup><a href="../ch2/references.html#ref-18">[18]</a></sup>。估算它的参数量。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">每层注意力</td>
+<td style="text-align: left;"><span class="math inline">\(4\times12\,288^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(6.04\times10^{8}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(W^Q,W^K,W^V,W^O\)</span> 各 <span class="math inline">\(d\times d\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">每层 FFN</td>
+<td style="text-align: left;"><span class="math inline">\(8\times12\,288^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.21\times10^{9}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(d_{\mathrm{ff}}=4d\)</span>，两个矩阵</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">全部层</td>
+<td style="text-align: left;"><span class="math inline">\(12\times96\times12\,288^{2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.739\times10^{11}\)</span></td>
+<td style="text-align: left;">式 <a href="../ch2/s2-3.html#c2-eq-params">（2-15）</a>，<span class="math inline">\(L=96\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">嵌入</td>
+<td style="text-align: left;"><span class="math inline">\(50\,257\times12\,288\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(6.2\times10^{8}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\lvert\mathcal{V}\rvert \times d\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">合计</td>
+<td style="text-align: left;"><span class="math inline">\(1.739\times10^{11}+0.006\times10^{11}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.745\times10^{11}\)</span></td>
+<td style="text-align: left;">第 3、4 步</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据流向</strong>：<span class="math inline">\(L,d\to\)</span> 每层 <span class="math inline">\(12d^2\to\)</span> 乘层数 <span class="math inline">\(\to\)</span> 加嵌入。结果约 1745 亿，与公布的 1750 亿基本吻合；嵌入只占约 0.4%，参数主要在各层的矩阵里。</p>
+</div>
+</section>
+<section id="c2-subsec-output" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-output">2.3.5　输出层：从向量到概率</h2>
+<p>最后一层的输出再经过一次归一化，乘以一个 <span class="math inline">\(d\times\lvert\mathcal{V}\rvert\)</span> 的<strong>输出矩阵</strong> <span class="math inline">\(W_U\)</span>（许多模型让它与嵌入矩阵共享参数），得到每个位置上对整个词表的打分，称为 <strong>logits</strong>，形状为 <span class="math inline">\(T\times\lvert\mathcal{V}\rvert\)</span>。生成下一个词元只需要<strong>最后一个位置</strong>的 logits <span class="math inline">\(\boldsymbol{z}\)</span>，经 softmax 变成概率分布： <span class="math display">\[p_i = \frac{e^{z_i}}{\sum_{j=1}^{\lvert\mathcal{V}\rvert } e^{z_j}} .
+\tag{2-16}\]</span></p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>训练与推理走的是同一条前向链路，用法却不同。<strong>训练</strong>时，整段文本一次送入，因果掩码保证每个位置只看到前文，于是<strong>每个位置</strong>的 logits 都用来预测它的下一个词元，长度为 <span class="math inline">\(T\)</span> 的文本一次就产生约 <span class="math inline">\(T\)</span> 个训练信号（准确地说是 <span class="math inline">\(T-1\)</span> 个，最后一个位置之后没有可预测的词元），按式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a> 求平均损失。<strong>推理</strong>时只取最后一个位置的分布来选下一个词元，前面位置的输出只是“顺带”算出的中间结果。</p>
+</div>
+</section>
+<section id="c2-subsec-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-sampling">2.3.6　从概率到词元：温度与采样</h2>
+<p>有了概率分布，还要决定真正输出哪个词元，这一步称为<strong>解码</strong>，所用的规则称为<strong>解码策略</strong>。下面用一组数说明最常用的几种。假设对“今天天气很”，模型给出五个候选词元的 logits：好 3.0，热 2.2，冷 1.8，差 1.0，蓝 <span class="math inline">\(-1.0\)</span>（其余词元的分数低到可以忽略）。</p>
+<p><strong>贪心解码</strong>　 每步取概率最大的词元，这里是“好”。结果确定、可复现，但容易生成重复、平淡的文字。</p>
+<p><strong>温度采样</strong>　 按概率随机抽取，并用<strong>温度</strong> <span class="math inline">\(\tau\)</span> 调节分布的尖锐程度： <span class="math display">\[p_i(\tau) = \frac{e^{z_i/\tau}}{\sum_{j} e^{z_j/\tau}} .
+\tag{2-17}\]</span> 把它与玻尔兹曼分布式 <a href="../ch2/s2-2.html#c2-eq-boltzmann">（2-10）</a> 对照：只要把“负能量”换成“分数” <span class="math inline">\(z_i\)</span>，把 <span class="math inline">\(kT_{\mathrm{K}}\)</span> 换成 <span class="math inline">\(\tau\)</span>，两者就是同一个式子。<span class="math inline">\(\tau&lt;1\)</span> 时分数差距被放大，分布更尖锐，生成更保守；<span class="math inline">\(\tau&gt;1\)</span> 时分布更平坦，生成更多样，也更容易出错；<span class="math inline">\(\tau\to0\)</span> 时退化为贪心解码（图 <a href="../ch2/s2-3.html#c2-fig-temp">2-6</a>）。</p>
+<div id="c2-fig-temp" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch2-temp.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:86.8%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 2-6　同一组 logits（好 3.0，热 2.2，冷 1.8，差 1.0，蓝 −1.0）在三种温度下的 softmax 概率。温度越低，概率越集中于“好”；温度越高，长尾的“蓝”越有机会被抽中</p>
+</div>
+</div>
+<p><strong>截断采样</strong>　 为了避免抽到长尾的异常词元，实际中常在采样前先截断候选集，再在剩下的词元上重新归一化：</p>
 <ul>
-<li><p><strong>T5</strong>（Google，2019）：提出”一切都是文本到文本”，把分类、翻译、摘要统一为输入文本、输出文本。预训练任务是片段破坏（span corruption）：把连续的几个词替换为一个哨兵符，让解码器还原。</p></li>
-<li><p><strong>BART</strong>（Meta，2019）：用多种方式破坏输入（掩码、删除、打乱句子顺序等），训练模型还原原文，在摘要任务上表现突出。</p></li>
-<li><p><strong>mT5</strong>：T5 的多语言版本，覆盖 101 种语言。</p></li>
-<li><p><strong>UL2</strong>（Google，2022）：混合多种去噪目标，试图统一理解类和生成类任务。</p></li>
-<li><p><strong>Flan-T5</strong>（Google，2022）：在 T5 基础上用上千个任务做指令微调，显著提升了零样本能力。</p></li>
+<li><p><strong>Top-K 采样</strong>：只保留概率最高的 <span class="math inline">\(k\)</span> 个词元；</p></li>
+<li><p><strong>Top-P 采样</strong>（又称<strong>核采样</strong>）：按概率从高到低累加，保留累计概率首次达到 <span class="math inline">\(p\)</span> 的最小词元集合。</p></li>
 </ul>
-</section>
-<section id="基于垂直领域的模型" class="level2">
-<h2 class="anchored" data-anchor-id="基于垂直领域的模型">2.3.5　基于垂直领域的模型</h2>
-<p>垂直领域模型是为特定行业训练或调优的 LLM。它们在架构上大多仍是解码器，区别在于数据和训练方式。构建方式主要有两种：一是在预训练阶段就混入大量领域数据，从头训练；二是在通用模型上用领域数据继续预训练或微调。</p>
+<div id="c2-ex-temp" class="bookbox example">
+<div class="boxtitle">
+<p>例 2-6　温度与截断采样</p>
+</div>
+<p>用上面的五个 logits，求 <span class="math inline">\(\tau=1\)</span> 时的概率分布，以及 <span class="math inline">\(k=2\)</span> 的 Top-K、<span class="math inline">\(p=0.9\)</span> 的 Top-P 截断后的概率；再看 <span class="math inline">\(\tau=0.5\)</span> 和 <span class="math inline">\(\tau=2\)</span> 时“好”和“蓝”的概率。</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 12%">
-<col style="width: 21%">
-<col style="width: 45%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>模型</strong></th>
-<th><strong>领域</strong></th>
-<th><strong>机构与年份</strong></th>
-<th><strong>特点</strong></th>
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Med-PaLM 2</td>
-<td>医疗</td>
-<td>Google，2023</td>
-<td>在美国医师执照考试风格的 MedQA 上达到 86.5%，接近专家水平</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">指数</td>
+<td style="text-align: left;"><span class="math inline">\(e^{3.0}\)</span>，<span class="math inline">\(e^{2.2}\)</span>，<span class="math inline">\(e^{1.8}\)</span>，<span class="math inline">\(e^{1.0}\)</span>，<span class="math inline">\(e^{-1.0}\)</span></td>
+<td style="text-align: left;">20.09，9.03，6.05，2.72，0.37</td>
+<td style="text-align: left;">logits，<span class="math inline">\(\tau=1\)</span></td>
 </tr>
 <tr class="even">
-<td>Med-PaLM</td>
-<td>医疗</td>
-<td>Google，2022</td>
-<td>在 PaLM 上做指令提示微调，MedQA 准确率 67.6%，首次超过及格线</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">归一化</td>
+<td style="text-align: left;">各数 <span class="math inline">\(\div(20.09+9.03+6.05+2.72+0.37)\)</span>，分母 <span class="math inline">\(=38.26\)</span></td>
+<td style="text-align: left;">0.525，0.236，0.158，0.071，0.010</td>
+<td style="text-align: left;">式 <a href="../ch2/s2-3.html#c2-eq-temperature">（2-17）</a></td>
 </tr>
 <tr class="odd">
-<td>ClinicalGPT</td>
-<td>临床医疗</td>
-<td>2023</td>
-<td>用病历、医患对话等临床数据微调的中文医疗模型</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Top-K（<span class="math inline">\(k=2\)</span>）</td>
+<td style="text-align: left;">保留“好、热”：<span class="math inline">\(0.525\div(0.525+0.236)\)</span></td>
+<td style="text-align: left;">好 <span class="math inline">\(0.690\)</span>，热 <span class="math inline">\(0.310\)</span></td>
+<td style="text-align: left;">第 2 步前两名</td>
 </tr>
 <tr class="even">
-<td>BloombergGPT</td>
-<td>金融</td>
-<td>彭博，2023</td>
-<td>500 亿参数，用约 3630 亿 token 金融数据加 3450 亿 token 通用数据从头训练</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">累计概率</td>
+<td style="text-align: left;"><span class="math inline">\(0.525\)</span>；<span class="math inline">\(0.525+0.236\)</span>；<span class="math inline">\(+0.158\)</span></td>
+<td style="text-align: left;">0.525，0.761，0.919</td>
+<td style="text-align: left;">第 2 步按序累加</td>
 </tr>
 <tr class="odd">
-<td>FinGPT</td>
-<td>金融</td>
-<td>开源社区，2023</td>
-<td>在开源基座上用低成本微调（如 LoRA）快速适配金融数据</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">Top-P（<span class="math inline">\(p=0.9\)</span>）</td>
+<td style="text-align: left;">第 3 个时首次 <span class="math inline">\(\ge0.9\)</span>，保留三个：<span class="math inline">\(0.525\div0.919\)</span> 等</td>
+<td style="text-align: left;">好 <span class="math inline">\(0.571\)</span>，热 <span class="math inline">\(0.257\)</span>，冷 <span class="math inline">\(0.172\)</span></td>
+<td style="text-align: left;">第 4 步</td>
 </tr>
 <tr class="even">
-<td>Galactica</td>
-<td>科学文献</td>
-<td>Meta，2022</td>
-<td>在论文、公式、分子序列上训练；公开演示因编造参考文献等幻觉问题三天后下线</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><span class="math inline">\(\tau=0.5\)</span></td>
+<td style="text-align: left;">logits 先 <span class="math inline">\(\div0.5\)</span>，再重复第 1、2 步</td>
+<td style="text-align: left;">好 <span class="math inline">\(0.763\)</span>，蓝 <span class="math inline">\(0.000\)</span></td>
+<td style="text-align: left;">分数差放大</td>
 </tr>
 <tr class="odd">
-<td>Minerva</td>
-<td>数学</td>
-<td>Google，2022</td>
-<td>在 PaLM 上用数学网页和 arXiv 论文继续训练，擅长定量推理</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;"><span class="math inline">\(\tau=2\)</span></td>
+<td style="text-align: left;">logits 先 <span class="math inline">\(\div2\)</span>，再重复第 1、2 步</td>
+<td style="text-align: left;">好 <span class="math inline">\(0.367\)</span>，蓝 <span class="math inline">\(0.050\)</span></td>
+<td style="text-align: left;">分数差缩小</td>
 </tr>
 </tbody>
 </table>
-<p>垂直模型的前景并非没有争议。后续研究发现，通用的 GPT-4 在不少金融和医疗任务上已不逊于专用模型。这印证了 2.1.4 节的”广泛性似乎战胜了专业性”。当前更常见的做法，是在强大的通用模型上叠加领域微调和 RAG，而不是为每个行业从头训一个模型。</p>
+<p><strong>数据流向</strong>：logits <span class="math inline">\(\to(\div\tau)\to\)</span> 指数 <span class="math inline">\(\to\)</span> 归一化 <span class="math inline">\(\to\)</span> 截断 <span class="math inline">\(\to\)</span> 重新归一化 <span class="math inline">\(\to\)</span> 抽样。<span class="math inline">\(\tau=2\)</span> 时“蓝”的概率升到 0.050，大约每 20 次就会抽出一次“今天天气很蓝”这样的病句。这就是高温采样更“有创意”、也更容易出错的原因，也是第 <a href="../ch2/s2-4.html#c2-subsec-hallucination">2.4.7</a> 小节所说幻觉的成因之一。</p>
+</div>
+<p>Top-K 与 Top-P 的区别在于候选集的大小是否随分布变化：Top-K 永远留 <span class="math inline">\(k\)</span> 个；Top-P 在模型很有把握时只留一两个，没把握时留得更多。常见的工程经验是：代码生成、事实问答用低温度（0～0.3），创意写作用较高温度（0.7～1.0）并配合 <span class="math inline">\(p\approx0.9\)</span>。束搜索、重复惩罚等其他解码策略，以及各策略的系统比较，见第 3 章。</p>
 </section>
-<section id="三类架构对比" class="level2">
-<h2 class="anchored" data-anchor-id="三类架构对比">2.3.6　三类架构对比</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 13%">
-<col style="width: 28%">
-<col style="width: 28%">
-<col style="width: 28%">
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th><strong>编码器（BERT 类）</strong></th>
-<th><strong>解码器（GPT 类）</strong></th>
-<th><strong>编解码器（T5 类）</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>注意力方向</td>
-<td>双向</td>
-<td>单向（因果掩码）</td>
-<td>编码端双向，解码端单向 + 交叉注意力</td>
-</tr>
-<tr class="even">
-<td>预训练目标</td>
-<td>掩码语言建模</td>
-<td>下一个 token 预测</td>
-<td>去噪 / 片段还原</td>
-</tr>
-<tr class="odd">
-<td>核心能力</td>
-<td>理解</td>
-<td>生成</td>
-<td>条件生成（输入→输出）</td>
-</tr>
-<tr class="even">
-<td>典型任务</td>
-<td>分类、实体识别、抽取式问答、向量检索</td>
-<td>对话、写作、代码、几乎所有通用任务</td>
-<td>翻译、摘要、视觉语言任务</td>
-</tr>
-<tr class="odd">
-<td>代表模型</td>
-<td>BERT、RoBERTa、ALBERT、DistilBERT</td>
-<td>GPT、PaLM、BLOOM、LLaMA、DeepSeek</td>
-<td>T5、BART、mT5、UL2、Flan-T5</td>
-</tr>
-</tbody>
-</table>
+<section id="c2-subsec-autoregressive" class="level2">
+<h2 class="anchored" data-anchor-id="c2-subsec-autoregressive">2.3.7　自回归循环与 KV 缓存</h2>
+<p>选出“好”之后，把它追加到输入末尾，再把图 <a href="../ch2/s2-3.html#c2-fig-pipeline">2-4</a> 的链路走一遍，生成下一个词元；如此循环，直到生成结束符或达到长度上限。这种“每次生成一个、生成后接回输入”的方式称为<strong>自回归</strong>（auto-regressive）生成。</p>
+<p>如果每轮都从头计算，生成第 <span class="math inline">\(t\)</span> 个词元就要把前面 <span class="math inline">\(t-1\)</span> 个位置重算一遍。由于因果掩码保证前文位置的计算结果不受后文影响，每一层中前文的键和值算出后就不再改变，可以保存下来重复使用，这就是 <strong>KV 缓存</strong>（Key-Value cache）。于是一次请求分成两个阶段：先一次性并行处理整个输入并写入缓存（<strong>预填充</strong>），再每步只为一个新词元计算并追加缓存（<strong>解码阶段</strong>）。KV 缓存用显存换计算，它的大小随序列长度和并发数线性增长；估算公式、与 GQA 的关系以及相关的推理优化，统一在第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a>～<a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节讨论。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>一次前向：词元化 <span class="math inline">\(\to\)</span> 嵌入（<span class="math inline">\(T\times d\)</span>）<span class="math inline">\(\to\)</span> <span class="math inline">\(L\)</span> 层“注意力 + FFN”（形状不变）<span class="math inline">\(\to\)</span> 输出投影（<span class="math inline">\(T\times\lvert\mathcal{V}\rvert\)</span>）<span class="math inline">\(\to\)</span> 取最后位置 softmax <span class="math inline">\(\to\)</span> 解码策略选出一个词元。</p></li>
+<li><p>注意力 <span class="math inline">\(=\operatorname{softmax}(QK^{\top}/\sqrt{d_{\mathrm{head}}}+M)V\)</span>；因果掩码让每个位置只看前文；代价随 <span class="math inline">\(T^2\)</span> 增长。</p></li>
+<li><p>每层约 <span class="math inline">\(12d^2\)</span> 个参数，模型约 <span class="math inline">\(12Ld^2\)</span>；温度 <span class="math inline">\(\tau\)</span> 调尖锐程度，Top-K/Top-P 截断长尾。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1457,18 +1635,18 @@ window.Quarto = {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch2/s2-2.html" class="pagination-link" aria-label="2.2　重要概念">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">2.2　重要概念</span>
+      <a href="../ch2/s2-2.html" class="pagination-link" aria-label="2.2　语言模型的演进：从数词频到大模型">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">2.2　语言模型的演进：从数词频到大模型</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch2/s2-4.html" class="pagination-link" aria-label="2.4　模型构建">
-        <span class="nav-page-text">2.4　模型构建</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch2/s2-4.html" class="pagination-link" aria-label="2.4　规模、能力与局限">
+        <span class="nav-page-text">2.4　规模、能力与局限</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

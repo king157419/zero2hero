@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3.4 预训练算法与大规模训练 – 大语言模型原理与技术</title>
+<title>3.4 预训练算法：一个训练步里发生了什么 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-4.html">3.4　预训练算法与大规模训练</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-4.html">3.4　预训练算法：一个训练步里发生了什么</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -719,26 +755,18 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#模型结构回顾与参数量估算" id="toc-模型结构回顾与参数量估算" class="nav-link active" data-scroll-target="#模型结构回顾与参数量估算">3.4.1　模型结构回顾与参数量估算</a></li>
-  <li><a href="#训练的基本流程" id="toc-训练的基本流程" class="nav-link" data-scroll-target="#训练的基本流程">3.4.2　训练的基本流程</a></li>
-  <li><a href="#优化器与学习率调度" id="toc-优化器与学习率调度" class="nav-link" data-scroll-target="#优化器与学习率调度">3.4.3　优化器与学习率调度</a></li>
+  <li><a href="#训练的基本循环" id="toc-训练的基本循环" class="nav-link" data-scroll-target="#训练的基本循环">3.4.2　训练的基本循环</a></li>
+  <li><a href="#优化器学习率调度与梯度裁剪" id="toc-优化器学习率调度与梯度裁剪" class="nav-link" data-scroll-target="#优化器学习率调度与梯度裁剪">3.4.3　优化器、学习率调度与梯度裁剪</a></li>
   <li><a href="#混合精度训练" id="toc-混合精度训练" class="nav-link" data-scroll-target="#混合精度训练">3.4.4　混合精度训练</a></li>
-  <li><a href="#算力需求估算" id="toc-算力需求估算" class="nav-link" data-scroll-target="#算力需求估算">3.4.5　算力需求估算</a></li>
-  <li><a href="#显存需求估算" id="toc-显存需求估算" class="nav-link" data-scroll-target="#显存需求估算">3.4.6　显存需求估算</a></li>
-  <li><a href="#分布式训练面临的挑战" id="toc-分布式训练面临的挑战" class="nav-link" data-scroll-target="#分布式训练面临的挑战">3.4.7　分布式训练面临的挑战</a></li>
-  <li><a href="#数据并行" id="toc-数据并行" class="nav-link" data-scroll-target="#数据并行">3.4.8　数据并行</a></li>
-  <li><a href="#模型并行" id="toc-模型并行" class="nav-link" data-scroll-target="#模型并行">3.4.9　模型并行</a></li>
-  <li><a href="#混合并行" id="toc-混合并行" class="nav-link" data-scroll-target="#混合并行">3.4.10　混合并行</a></li>
-  <li><a href="#分布式训练系统" id="toc-分布式训练系统" class="nav-link" data-scroll-target="#分布式训练系统">3.4.11　分布式训练系统</a></li>
-  <li><a href="#训练的稳定性与容错" id="toc-训练的稳定性与容错" class="nav-link" data-scroll-target="#训练的稳定性与容错">3.4.12　训练的稳定性与容错</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-4.html">3.4　预训练算法与大规模训练</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-4.html">3.4　预训练算法：一个训练步里发生了什么</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3.4　预训练算法与大规模训练</h1>
+<h1 class="title">3.4　预训练算法：一个训练步里发生了什么</h1>
 </div>
 
 
@@ -755,525 +783,167 @@ window.Quarto = {
 </header>
 
 
-<p>有了数据，下一步就是在数据上训练模型。本节先回顾预训练所用的模型结构，再介绍训练的基本流程、优化器和混合精度等核心算法，然后定量分析训练所需的算力和显存，最后讨论为什么必须进行分布式训练，以及分布式训练的主要技术。关于 GPU、高速互联和加速芯片等硬件的细节，将在第四章专门介绍，本节只讨论理解训练过程所必需的部分。</p>
+<div class="bookbox guide">
+<p>有了数据和目标，模型怎样一步步变好？本节先回顾预训练所用的 Transformer 结构并估算它有多少参数，再拆开一个训练步：前向、损失、反向、更新；然后讨论更新时用的优化器（SGD、Adam、AdamW）、学习率调度和梯度裁剪，最后讲为什么要用混合精度。结论是：大模型的核心算法并不复杂，AdamW 加“预热 + 余弦衰减”加 BF16 混合精度是当前的标准配置；它们决定了下一节要估算的显存：每个参数要存权重、梯度和两个优化器状态。</p>
+</div>
 <section id="模型结构回顾与参数量估算" class="level2">
 <h2 class="anchored" data-anchor-id="模型结构回顾与参数量估算">3.4.1　模型结构回顾与参数量估算</h2>
-<p>当前主流大模型都基于 Transformer 结构。按照使用 Transformer 的方式，大模型可以分为三类：<strong>仅编码器</strong>结构（如 BERT），适合理解类任务；<strong>编码器—解码器</strong>结构（如 T5），适合翻译、摘要等序列到序列任务；<strong>仅解码器</strong>结构（如 GPT、LLaMA、Qwen），适合生成任务，也是当前大语言模型的绝对主流。</p>
-<p>一个解码器层主要由以下组件构成（详见第二章）：</p>
+<p>按使用 Transformer 的方式，模型分为三类（详见第 2 章）：<strong>仅编码器</strong>（如 BERT），适合理解类任务；<strong>编码器—解码器</strong>（如 T5），适合翻译、摘要等序列到序列任务；<strong>仅解码器</strong>（如 GPT、LLaMA、Qwen），适合生成任务，是当前大语言模型的主流。一个解码器层由以下组件构成：</p>
 <ul>
-<li><strong>多头自注意力</strong>：让每个位置同时从多个”视角”关注上下文中的其他位置，捕捉多样化的依赖关系；</li>
-<li><strong>前馈网络</strong>：对每个位置独立进行非线性变换，常用 GELU、SwiGLU 等激活函数；</li>
-<li><strong>位置编码</strong>：告诉模型每个 Token 在序列中的位置，当前主流采用旋转位置编码（RoPE）；</li>
-<li><strong>层归一化</strong>：用该层激活值的均值和方差（或均方根）进行归一化，稳定训练。主流模型采用”前置归一化”（Pre-Norm），并常用更简洁的 RMSNorm；</li>
-<li><strong>残差连接</strong>：把每个子层的输入直接加到输出上，使深层网络易于训练。</li>
+<li><p><strong>多头自注意力</strong>：每个位置从多个“视角”同时关注上下文，捕捉多样的依赖关系；</p></li>
+<li><p><strong>前馈网络</strong>：对每个位置独立做非线性变换，常用的激活函数有 ReLU、GELU、SwiGLU；</p></li>
+<li><p><strong>位置编码</strong>：告诉模型每个 token 的位置，当前主流是旋转位置编码（RoPE）；</p></li>
+<li><p><strong>层归一化</strong>：用该层激活值的均值和方差（或均方根）做归一化以稳定训练，主流采用前置归一化（Pre-Norm）和更简洁的 RMSNorm；</p></li>
+<li><p><strong>残差连接</strong>：把子层的输入直接加到输出上，使深层网络易于训练。</p></li>
 </ul>
-<p>对于隐藏层维度为 <span class="math inline">\(h\)</span> 的标准 Transformer 层，注意力部分的 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span> 和输出投影四个矩阵各有 <span class="math inline">\(h^{2}\)</span> 个参数，前馈网络的两个矩阵（中间维度为 <span class="math inline">\(4h\)</span>）共有 <span class="math inline">\(8h^{2}\)</span> 个参数，因此每层约有 <span class="math inline">\(12h^{2}\)</span> 个参数。若模型有 <span class="math inline">\(L\)</span> 层、词表大小为 <span class="math inline">\(V\)</span>，则总参数量约为</p>
-<p><span class="math inline">\(N \approx 12Lh^{2} + 2Vh\quad\)</span> (3-9)</p>
-<p>其中 <span class="math inline">\(2Vh\)</span> 是输入嵌入层和输出层的参数（若二者共享权重则为 <span class="math inline">\(Vh\)</span>）。以 LLaMA-7B 为例，<span class="math inline">\(L = 32\)</span>，<span class="math inline">\(h = 4096\)</span>，<span class="math inline">\(V = 32000\)</span>，代入得 <span class="math inline">\(12 \times 32 \times 4096^{2} \approx 6.44 \times 10^{9}\)</span>，再加上嵌入层和输出层的约 <span class="math inline">\(0.26 \times 10^{9}\)</span>，共约 67 亿参数，与官方公布的 6.7B 一致。（LLaMA 的前馈网络使用 SwiGLU，有三个矩阵，但其中间维度取约 <span class="math inline">\(\frac{8}{3}h\)</span>，参数量与标准结构基本相同。）</p>
+<p>参数主要集中在矩阵里，可以直接数出来。设隐藏维度为 <span class="math inline">\(d\)</span>：注意力的 <span class="math inline">\(W_Q\)</span>、<span class="math inline">\(W_K\)</span>、<span class="math inline">\(W_V\)</span> 和输出投影 <span class="math inline">\(W_O\)</span> 各有 <span class="math inline">\(d^2\)</span> 个参数，共 <span class="math inline">\(4d^2\)</span>；前馈网络两个矩阵（中间维度 <span class="math inline">\(d_{\mathrm{ff}}=4d\)</span>）共 <span class="math inline">\(8d^2\)</span>；每层约 <span class="math inline">\(12d^2\)</span>。再设层数为 <span class="math inline">\(L\)</span>、词表大小为 <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span>，则 <span class="math display">\[N\approx 12\,L\,d^{2}+2\,\lvert\mathcal{V}\rvert\,d,
+\tag{3-9}\]</span> <span class="math inline">\(2\lvert\mathcal{V}\rvert d\)</span> 是输入嵌入层与输出层的参数（二者共享权重时为 <span class="math inline">\(\lvert\mathcal{V}\rvert d\)</span>）。归一化层和偏置的参数相对很少，忽略不计。</p>
+<div id="c3-ex-params" class="bookbox example">
+<div class="boxtitle">
+<p>例 3-1　LLaMA-7B 有多少参数</p>
+</div>
+<p>LLaMA-7B 的结构为 <span class="math inline">\(L=32\)</span>，<span class="math inline">\(d=4096\)</span>，<span class="math inline">\(\lvert\mathcal{V}\rvert=32\,000\)</span>，嵌入层与输出层不共享权重。用式 <a href="../ch3/s3-4.html#c3-eq-params">（3-9）</a> 估算参数量。</p>
+<div class="cthreecalc">
+<p>1 &amp; 每层参数 &amp; <span class="math inline">\(12\times4096^{2}\)</span> &amp; <span class="math inline">\(2.01\times10^{8}\)</span> &amp; 式 <a href="../ch3/s3-4.html#c3-eq-params">（3-9）</a> 第一项，<span class="math inline">\(d\)</span> 来自模型配置<br>
+2 &amp; 全部层 &amp; <span class="math inline">\((2.01\times10^{8})\times32\)</span> &amp; <span class="math inline">\(6.44\times10^{9}\)</span> &amp; <span class="math inline">\(L=32\)</span><br>
+3 &amp; 嵌入层 + 输出层 &amp; <span class="math inline">\(2\times32\,000\times4096\)</span> &amp; <span class="math inline">\(0.26\times10^{9}\)</span> &amp; 词表 <span class="math inline">\(32\,000\)</span>，不共享权重取系数 2<br>
+4 &amp; 合计 &amp; <span class="math inline">\(6.44\times10^{9}+0.26\times10^{9}\)</span> &amp; <span class="math inline">\(6.7\times10^{9}\)</span> &amp; 与官方公布的 6.7B 一致<br>
+</p>
+</div>
+<p>数据流向模型配置（<span class="math inline">\(L\)</span>、<span class="math inline">\(d\)</span>、<span class="math inline">\(\lvert\mathcal{V}\rvert\)</span>）→ 每层参数 → 乘层数 → 加嵌入与输出层 → 总参数量。 LLaMA 的前馈网络使用 SwiGLU，有三个矩阵，但中间维度取约 <span class="math inline">\(\tfrac{8}{3}d\)</span>（实际为 <span class="math inline">\(11\,008\)</span>），参数量与标准的 <span class="math inline">\(8d^2\)</span> 基本相同，所以公式仍然适用。</p>
+</div>
 </section>
-<section id="训练的基本流程" class="level2">
-<h2 class="anchored" data-anchor-id="训练的基本流程">3.4.2　训练的基本流程</h2>
-<p>无论模型多大，预训练的基本流程都可以概括为图 3-5 所示的循环。</p>
+<section id="训练的基本循环" class="level2">
+<h2 class="anchored" data-anchor-id="训练的基本循环">3.4.2　训练的基本循环</h2>
+<p>无论模型多大，预训练都在重复图 <a href="../ch3/s3-4.html#c3-fig-loop">3-5</a> 所示的循环。</p>
+<div id="c3-fig-loop" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/rId51.png" style="width:5.01667in;height:0.85463in" class="figure-img"></p>
-<figcaption>图3-5 神经网络训练的基本循环</figcaption>
+<p><img src="../figs/ch3-loop.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.1%"></p>
 </figure>
 </div>
-<p>图3-5 神经网络训练的基本循环</p>
+<div class="figcap">
+<p>图 3-5　神经网络训练的基本循环。下排标出了各步在显存中留下的数据：激活值、梯度和优化器状态，它们与权重一起构成训练显存（第 <a href="../ch3/s3-5.html">3.5</a> 节）</p>
+</div>
+</div>
 <ol type="1">
-<li><strong>取一个批次的数据</strong>：从训练集中取出 <span class="math inline">\(B\)</span> 条长度为 <span class="math inline">\(S\)</span> 的 Token 序列；</li>
-<li><strong>前向传播</strong>：将 Token 输入模型，逐层计算，得到每个位置上下一个 Token 的概率分布；</li>
-<li><strong>计算损失</strong>：按式（3-2）计算预测分布与真实下一个 Token 之间的交叉熵损失；</li>
-<li><strong>反向传播</strong>：利用链式法则，从输出层向输入层逐层计算损失对每个参数的梯度 <span class="math inline">\(\nabla_{\theta}\mathcal{L}\)</span>；</li>
-<li><strong>参数更新</strong>：优化器根据梯度更新参数，然后进入下一个训练步。</li>
+<li><p><strong>取一个批次</strong>：从训练集中取出 <span class="math inline">\(B\)</span> 条长度为 <span class="math inline">\(T\)</span> 的 token 序列；</p></li>
+<li><p><strong>前向传播</strong>：把 token 输入模型逐层计算，得到每个位置下一个 token 的概率分布；</p></li>
+<li><p><strong>计算损失</strong>：按式 <a href="../ch3/s3-2.html#c3-eq-ar-loss">（3-2）</a> 计算交叉熵；</p></li>
+<li><p><strong>反向传播</strong>：用链式法则从输出层向输入层逐层算出损失对每个参数的<strong>梯度</strong> <span class="math inline">\(\nabla_\theta\mathcal{L}\)</span>（梯度指向损失上升最快的方向，参数应沿反方向调整；自动微分的实现见第 <a href="../ch4/s4-3.html#subsec-pytorch">4.3.2</a> 小节）；</p></li>
+<li><p><strong>参数更新</strong>：优化器根据梯度更新参数，进入下一个训练步。</p></li>
 </ol>
-<p>这里有几个基本概念需要明确：</p>
-<ul>
-<li><strong>训练步</strong>（Step）：完成一次上述循环，即一次参数更新；</li>
-<li><strong>批量大小</strong>（Batch Size）：每一步使用的样本数。大模型常以 Token 计量批量大小，例如 LLaMA 每步约使用 400 万个 Token；</li>
-<li><strong>轮次</strong>（Epoch）：把整个训练集完整过一遍。与传统深度学习动辄训练几十个轮次不同，大模型预训练通常只把大部分数据过一遍左右，高质量数据可能重复两三遍；</li>
-<li><strong>学习率</strong>（Learning Rate）：控制每一步参数更新的幅度，是最重要的超参数之一；</li>
-<li><strong>梯度</strong>（Gradient）：损失函数对参数的偏导数，指明了让损失上升最快的方向，参数应当沿其反方向调整。</li>
-</ul>
+<p>完成一次循环、即一次参数更新，称为一个<strong>训练步</strong>（step）。每步使用的样本数称为<strong>批大小</strong>（batch size），大模型常以 token 计，例如 LLaMA 每步约 400 万个 token。把整个训练集完整过一遍称为一个<strong>轮次</strong>（epoch）；与传统深度学习动辄几十轮不同，大模型预训练通常只把大部分数据过一遍左右，高质量数据重复两三遍。<strong>学习率</strong>（learning rate）<span class="math inline">\(\eta\)</span> 控制每步更新的幅度，是最重要的超参数之一。</p>
 </section>
-<section id="优化器与学习率调度" class="level2">
-<h2 class="anchored" data-anchor-id="优化器与学习率调度">3.4.3　优化器与学习率调度</h2>
-<p><strong>优化器根据梯度决定参数如何更新。</strong> 不同的优化器在收敛速度、稳定性和显存开销上各不相同。</p>
-<p><strong>1．随机梯度下降（SGD）</strong></p>
-<p>最基本的优化器是随机梯度下降。设第 <span class="math inline">\(t\)</span> 步的梯度为 <span class="math inline">\(\mathbf{g}_{t} = \nabla_{\theta}\mathcal{L}\left( \theta_{t} \right)\)</span>，学习率为 <span class="math inline">\(\eta\)</span>，则</p>
-<p><span class="math inline">\(\theta_{t + 1} = \theta_{t} - \eta\,\mathbf{g}_{t}\quad\)</span> (3-10)</p>
-<p>SGD 不需要保存任何额外状态，但更新方向受单个批次的噪声影响大。<strong>带动量的 SGD</strong> 维护一个梯度的指数移动平均 <span class="math inline">\(\mathbf{m}_{t}\)</span>，使更新方向更平滑，代价是每个参数要多保存一个状态值。</p>
-<p><strong>2．Adam 与 AdamW</strong></p>
-<p>Adam 优化器同时维护梯度的一阶矩（均值）<span class="math inline">\(\mathbf{m}_{t}\)</span> 和二阶矩（未中心化的方差）<span class="math inline">\(\mathbf{v}_{t}\)</span>，从而为每个参数自适应地调整步长：</p>
-<p><span class="math inline">\(\mathbf{m}_{t} = \beta_{1}\mathbf{m}_{t - 1} + \left( 1 - \beta_{1} \right)\mathbf{g}_{t},\quad\quad\mathbf{v}_{t} = \beta_{2}\mathbf{v}_{t - 1} + \left( 1 - \beta_{2} \right)\mathbf{g}_{t}^{2}\quad\)</span> (3-11)</p>
-<p><span class="math inline">\({\widehat{\mathbf{m}}}_{t} = \frac{\mathbf{m}_{t}}{1 - \beta_{1}^{t}},\quad\quad{\widehat{\mathbf{v}}}_{t} = \frac{\mathbf{v}_{t}}{1 - \beta_{2}^{t}}\quad\)</span> (3-12)</p>
-<p>式（3-12）是偏差修正，用于抵消训练初期 <span class="math inline">\(\mathbf{m}_{t}\)</span>、<span class="math inline">\(\mathbf{v}_{t}\)</span> 因初始化为 0 而偏小的问题。<strong>AdamW</strong> 在此基础上把权重衰减（一种防止参数过大的正则化手段）从梯度中解耦出来，直接作用于参数：</p>
-<p><span class="math inline">\(\theta_{t + 1} = \theta_{t} - \eta\left( \frac{{\widehat{\mathbf{m}}}_{t}}{\sqrt{{\widehat{\mathbf{v}}}_{t}} + \epsilon} + \lambda\,\theta_{t} \right)\quad\)</span> (3-13)</p>
-<p>其中 <span class="math inline">\(\lambda\)</span> 为权重衰减系数，<span class="math inline">\(\epsilon\)</span> 是防止除零的小常数。AdamW 收敛快、对超参数不敏感，是目前大模型训练事实上的标准优化器。例如，LLaMA 的训练采用 <span class="math inline">\(\beta_{1} = 0.9\)</span>、<span class="math inline">\(\beta_{2} = 0.95\)</span>、<span class="math inline">\(\lambda = 0.1\)</span>。需要特别注意的是，<strong>AdamW 要为每个参数额外保存</strong> <span class="math inline">\(\mathbf{m}\)</span> <strong>和</strong> <span class="math inline">\(\mathbf{v}\)</span> <strong>两个状态</strong>，这是训练显存开销的主要来源之一（见 3.4.6 节）。</p>
-<p><strong>3．学习率调度</strong></p>
-<p>大模型训练很少使用固定的学习率，最常见的策略是”<strong>线性预热 + 余弦衰减</strong>”（图 3-6）：训练开始的 <span class="math inline">\(T_{w}\)</span> 步内，学习率从 0 线性增长到最大值 <span class="math inline">\(\eta_{\max}\)</span>，避免随机初始化的模型被过大的更新”冲垮”；此后学习率按余弦曲线逐渐降低到最小值 <span class="math inline">\(\eta_{\min}\)</span>，让模型在训练后期精细收敛：</p>
-<p><span class="math inline">\(\eta_{t} = \left\{ \begin{matrix}
-\eta_{\max} \cdot \frac{t}{T_{w}}, &amp; t &lt; T_{w} \\
-\eta_{\min} + \frac{1}{2}\left( \eta_{\max} - \eta_{\min} \right)\left\lbrack 1 + \cos\left( \pi \cdot \frac{t - T_{w}}{T - T_{w}} \right) \right\rbrack, &amp; T_{w} \leq t \leq T
-\end{matrix} \right.\ \quad\)</span> (3-14)</p>
-<p>其中 <span class="math inline">\(T\)</span> 为总训练步数。LLaMA 使用 2000 步预热，并把学习率最终衰减到最大值的 10%。</p>
+<section id="优化器学习率调度与梯度裁剪" class="level2">
+<h2 class="anchored" data-anchor-id="优化器学习率调度与梯度裁剪">3.4.3　优化器、学习率调度与梯度裁剪</h2>
+<p><strong>随机梯度下降</strong>　 设第 <span class="math inline">\(t\)</span> 步的梯度为 <span class="math inline">\(\boldsymbol{g}_t=\nabla_\theta\mathcal{L}(\theta_t)\)</span>，<strong>随机梯度下降</strong>（Stochastic Gradient Descent，SGD）直接沿负梯度方向走一步： <span class="math display">\[\theta_{t+1}=\theta_t-\eta\,\boldsymbol{g}_t.
+\tag{3-10}\]</span> 它不保存任何额外状态，但更新方向受单个批次的噪声影响大。<strong>带动量的 SGD</strong> 维护梯度的指数移动平均 <span class="math inline">\(\boldsymbol{m}_t=\mu\,\boldsymbol{m}_{t-1}+\boldsymbol{g}_t\)</span>，用 <span class="math inline">\(\boldsymbol{m}_t\)</span> 代替 <span class="math inline">\(\boldsymbol{g}_t\)</span> 更新，方向更平滑，代价是每个参数<strong>多存一个状态值</strong>。</p>
+<p><strong>Adam 与 AdamW</strong>　 <strong>Adam</strong> 同时维护梯度的一阶矩（均值）<span class="math inline">\(\boldsymbol{m}_t\)</span> 和二阶矩（未中心化的方差）<span class="math inline">\(\boldsymbol{v}_t\)</span>，为每个参数自适应地调整步长： <span class="math display">\[\begin{gathered}
+\boldsymbol{m}_t=\beta_1\boldsymbol{m}_{t-1}+(1-\beta_1)\boldsymbol{g}_t,\qquad
+  \boldsymbol{v}_t=\beta_2\boldsymbol{v}_{t-1}+(1-\beta_2)\boldsymbol{g}_t^{2},\\
+  \hat{\boldsymbol{m}}_t=\frac{\boldsymbol{m}_t}{1-\beta_1^{t}},\qquad
+  \hat{\boldsymbol{v}}_t=\frac{\boldsymbol{v}_t}{1-\beta_2^{t}}.
+\end{gathered}
+\tag{3-11～3-12}\]</span> 式 <a href="../ch3/s3-4.html#c3-eq-adam-bias">（3-12）</a> 是偏差修正：<span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 初始化为 0，训练初期会偏小，除以 <span class="math inline">\(1-\beta^{t}\)</span> 把它们拉回正常量级。<strong>AdamW</strong><sup><a href="../ch3/references.html#ref-16">[16]</a></sup> 把权重衰减（一种防止参数过大的正则化）从梯度中解耦，直接作用于参数： <span class="math display">\[\theta_{t+1}=\theta_t-\eta\Bigl(\frac{\hat{\boldsymbol{m}}_t}{\sqrt{\hat{\boldsymbol{v}}_t}+\epsilon}+\lambda\,\theta_t\Bigr),
+\tag{3-13}\]</span> <span class="math inline">\(\lambda\)</span> 为权重衰减系数，<span class="math inline">\(\epsilon\)</span> 是防止除零的小常数。AdamW 收敛快、对超参数相对不敏感（学习率仍需仔细调），是目前大模型训练事实上的标准，例如 LLaMA 取 <span class="math inline">\(\beta_1=0.9\)</span>、<span class="math inline">\(\beta_2=0.95\)</span>、<span class="math inline">\(\lambda=0.1\)</span>。要特别记住：<strong>AdamW 为每个参数额外保存 <span class="math inline">\(\boldsymbol{m}\)</span> 和 <span class="math inline">\(\boldsymbol{v}\)</span> 两个状态</strong>，这是训练显存的主要来源之一（第 <a href="../ch3/s3-5.html">3.5</a> 节）。</p>
+<p><strong>学习率调度</strong>　 大模型很少使用固定学习率，最常见的是“<strong>线性预热</strong> + <strong>余弦衰减</strong>”（图 <a href="../ch3/s3-4.html#c3-fig-lr">3-6</a>）：前 <span class="math inline">\(S_w\)</span> 步内学习率从 0 线性增长到 <span class="math inline">\(\eta_{\max}\)</span>，避免随机初始化的模型被过大的更新“冲垮”；此后按余弦曲线降到 <span class="math inline">\(\eta_{\min}\)</span>，让模型在后期精细收敛。记总步数为 <span class="math inline">\(S\)</span>，第 <span class="math inline">\(s\)</span> 步的学习率为 <span class="math display">\[\eta_s=\begin{cases}
+    \eta_{\max}\cdot\dfrac{s}{S_w}, &amp; s&lt;S_w,\\[8pt]
+    \eta_{\min}+\dfrac12(\eta_{\max}-\eta_{\min})\Bigl[1+\cos\Bigl(\pi\cdot\dfrac{s-S_w}{S-S_w}\Bigr)\Bigr], &amp; S_w\le s\le S.
+  \end{cases}
+\tag{3-14}\]</span> LLaMA 预热 2000 步，并把学习率最终衰减到最大值的 10%。</p>
+<div id="c3-fig-lr" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/rId55.png" style="width:4.2in;height:1.904in" class="figure-img"></p>
-<figcaption>图3-6 线性预热与余弦衰减的学习率调度</figcaption>
+<p><img src="../figs/ch3-lr.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:78.8%"></p>
 </figure>
 </div>
-<p>图3-6 线性预热与余弦衰减的学习率调度</p>
-<p><strong>4．梯度裁剪</strong></p>
-<p>训练过程中偶尔会出现梯度突然变得极大的情况，导致参数被剧烈更新、损失突然飙升（Loss Spike）。<strong>梯度裁剪</strong>在梯度的 L2 范数超过阈值 <span class="math inline">\(c\)</span> 时按比例缩小梯度：</p>
-<p><span class="math inline">\(\mathbf{g} \leftarrow \mathbf{g} \cdot \min\left( 1,\ \frac{c}{\parallel \mathbf{g} \parallel_{2}} \right)\quad\)</span> (3-15)</p>
-<p>大模型训练中通常取 <span class="math inline">\(c = 1.0\)</span>。</p>
+<div class="figcap">
+<p>图 3-6　“线性预热 + 余弦衰减”的学习率调度（示意：预热占总步数的 5%，最小学习率为最大值的 10%）</p>
+</div>
+</div>
+<p><strong>梯度裁剪</strong>　 训练中偶尔出现梯度突然极大的情况，导致参数被剧烈更新、损失突然飙升（<strong>损失尖峰</strong>，loss spike）。<strong>梯度裁剪</strong>在梯度的 <span class="math inline">\(L_2\)</span> 范数超过阈值 <span class="math inline">\(c\)</span> 时按比例缩小梯度： <span class="math display">\[\boldsymbol{g}\leftarrow\boldsymbol{g}\cdot\min\Bigl(1,\ \frac{c}{\lVert\boldsymbol{g}\rVert_2}\Bigr),
+\tag{3-15}\]</span> 大模型训练常取 <span class="math inline">\(c=1.0\)</span>（GPT-3、LLaMA 都是如此）。</p>
 </section>
 <section id="混合精度训练" class="level2">
 <h2 class="anchored" data-anchor-id="混合精度训练">3.4.4　混合精度训练</h2>
-<p>计算机中的浮点数由符号位、指数位和尾数位组成。指数位决定能表示的<strong>数值范围</strong>，尾数位决定<strong>精度</strong>。表 3-5 比较了大模型训练中常用的几种浮点格式。</p>
-<p>表3-5 大模型训练常用的浮点数格式</p>
+<p>计算机中的浮点数由符号位、指数位和尾数位组成：指数位决定能表示的<strong>数值范围</strong>，尾数位决定<strong>精度</strong>（图 <a href="../ch3/s3-4.html#c3-fig-fp">3-7</a>、表 <a href="../ch3/s3-4.html#c3-tab-fp">3-5</a>）。</p>
+<div id="c3-fig-fp" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch3-fp.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.2%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 3-7　四种浮点格式的位构成（方格内数字为位数）。BF16 与 FP32 的指数位相同，因此表示范围相同；FP16 指数位少，范围小，梯度容易下溢</p>
+</div>
+</div>
+<div id="c3-tab-fp" class="booktab">
+<div class="tabcap">
+<p>表 3-5　大模型训练常用的浮点格式</p>
+</div>
 <table class="caption-top table">
-<caption>表3-5 大模型训练常用的浮点数格式</caption>
-<colgroup>
-<col style="width: 13%">
-<col style="width: 9%">
-<col style="width: 14%">
-<col style="width: 12%">
-<col style="width: 18%">
-<col style="width: 31%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>格式</th>
-<th>总位数</th>
-<th>符号 / 指数 / 尾数</th>
-<th>每个数占用</th>
-<th>最大可表示值</th>
-<th>特点</th>
+<th style="text-align: left;">格式</th>
+<th style="text-align: center;">位数</th>
+<th style="text-align: center;">每个数</th>
+<th style="text-align: left;">最大可表示值</th>
+<th style="text-align: left;">特点</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>FP32</td>
-<td>32</td>
-<td>1 / 8 / 23</td>
-<td>4 字节</td>
-<td>约 <span class="math inline">\(3.4 \times 10^{38}\)</span></td>
-<td>精度高，计算慢、占用大</td>
+<td style="text-align: left;">FP32</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">4 字节</td>
+<td style="text-align: left;">约 <span class="math inline">\(3.4\times10^{38}\)</span></td>
+<td style="text-align: left;">精度高，计算慢、占用大</td>
 </tr>
 <tr class="even">
-<td>FP16</td>
-<td>16</td>
-<td>1 / 5 / 10</td>
-<td>2 字节</td>
-<td>65504</td>
-<td>范围小，梯度容易下溢或上溢</td>
+<td style="text-align: left;">FP16</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">2 字节</td>
+<td style="text-align: left;"><span class="math inline">\(65\,504\)</span></td>
+<td style="text-align: left;">范围小，梯度容易下溢或上溢，需要损失缩放</td>
 </tr>
 <tr class="odd">
-<td>BF16</td>
-<td>16</td>
-<td>1 / 8 / 7</td>
-<td>2 字节</td>
-<td>约 <span class="math inline">\(3.4 \times 10^{38}\)</span></td>
-<td>与 FP32 范围相同、精度较低，训练稳定</td>
+<td style="text-align: left;">BF16</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">2 字节</td>
+<td style="text-align: left;">约 <span class="math inline">\(3.4\times10^{38}\)</span></td>
+<td style="text-align: left;">与 FP32 范围相同、精度较低，训练稳定</td>
 </tr>
 <tr class="even">
-<td>FP8（E4M3）</td>
-<td>8</td>
-<td>1 / 4 / 3</td>
-<td>1 字节</td>
-<td>448</td>
-<td>新一代硬件支持，需精细的缩放策略</td>
+<td style="text-align: left;">FP8（E4M3）</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">1 字节</td>
+<td style="text-align: left;">448</td>
+<td style="text-align: left;">新一代硬件支持，需要精细的缩放策略</td>
 </tr>
 </tbody>
 </table>
-<p>全部使用 FP32 训练最为稳妥，但速度慢、显存占用大；而现代 GPU 的张量核心在 16 位精度下的计算吞吐量通常是 FP32 的数倍乃至十余倍。<strong>混合精度训练</strong>（Mixed Precision Training）兼顾了二者：</p>
+</div>
+<p>全用 FP32 最稳妥，但现代 GPU 的张量核心在 16 位精度下的吞吐通常是 FP32 的数倍乃至十余倍。<strong>混合精度训练</strong>（mixed precision training）<sup><a href="../ch3/references.html#ref-17">[17]</a></sup>兼顾二者：</p>
 <ol type="1">
-<li>保存一份 FP32 的”主权重”（Master Weights）；</li>
-<li>每一步把主权重转换为 FP16 或 BF16，用低精度完成前向传播和反向传播，得到低精度的梯度；</li>
-<li>把梯度转换回 FP32，由优化器更新 FP32 主权重。</li>
+<li><p>保存一份 FP32 的<strong>主权重</strong>（master weights）；</p></li>
+<li><p>每步把主权重转为 FP16 或 BF16，用低精度完成前向与反向传播，得到低精度梯度；</p></li>
+<li><p>把梯度转回 FP32，由优化器更新 FP32 主权重。</p></li>
 </ol>
-<p>这样，计算量最大的矩阵乘法都在低精度下进行，速度显著提高；而参数更新在 FP32 下进行，避免了许多微小的更新量在低精度下被舍入为零。</p>
-<p>使用 FP16 时，由于它的表示范围很小，很多梯度值会下溢为 0，因此需要<strong>损失缩放</strong>（Loss Scaling）：先把损失乘以一个较大的系数 <span class="math inline">\(s\)</span> 再反向传播，使梯度落入 FP16 可表示的范围，更新参数前再除以 <span class="math inline">\(s\)</span>。BF16 与 FP32 的指数位相同，数值范围一样大，基本不需要损失缩放，因此成为当前大模型训练的首选格式。近年来，DeepSeek-V3 等模型进一步在大规模训练中使用了 FP8 混合精度，以更低的精度换取更高的效率。</p>
-</section>
-<section id="算力需求估算" class="level2">
-<h2 class="anchored" data-anchor-id="算力需求估算">3.4.5　算力需求估算</h2>
-<p><strong>1．训练计算量：</strong><span class="math inline">\(C \approx 6ND\)</span></p>
-<p>训练一个大模型需要多少计算量？一个简洁而实用的估算公式是</p>
-<p><span class="math inline">\(C \approx 6ND\quad\)</span> (3-16)</p>
-<p>其中 <span class="math inline">\(C\)</span> 为训练总浮点运算次数（FLOPs），<span class="math inline">\(N\)</span> 为模型参数量，<span class="math inline">\(D\)</span> 为训练 Token 数。系数 6 的来源是：前向传播时，每个参数对每个 Token 大约参与一次乘法和一次加法，即 <span class="math inline">\(2N\)</span> 次运算；反向传播需要分别计算对激活值和对参数的梯度，计算量约为前向的 2 倍，即 <span class="math inline">\(4N\)</span>；合计每个 Token 约 <span class="math inline">\(6N\)</span> 次运算。该公式忽略了注意力计算中与序列长度相关的部分，在序列长度远小于模型维度的若干倍时误差不大。</p>
-<p>以 GPT-3 为例，<span class="math inline">\(N = 1.75 \times 10^{11}\)</span>，<span class="math inline">\(D = 3 \times 10^{11}\)</span>，则</p>
-<p><span class="math display">\[C \approx 6 \times 1.75 \times 10^{11} \times 3 \times 10^{11} \approx 3.15 \times 10^{23}\ \text{FLOPs}\]</span></p>
-<p>这与 OpenAI 公布的约 <span class="math inline">\(3.14 \times 10^{23}\)</span> FLOPs 基本一致。</p>
-<p><strong>2．训练时间估算</strong></p>
-<p>已知计算量后，训练时间可以按下式估算：</p>
-<p><span class="math inline">\(\text{训练时间} \approx \frac{C}{n_{GPU} \times F_{peak} \times MFU}\quad\)</span> (3-17)</p>
-<p>其中 <span class="math inline">\(n_{GPU}\)</span> 为 GPU 数量，<span class="math inline">\(F_{peak}\)</span> 为单卡在所用精度下的理论峰值算力，MFU（Model FLOPs Utilization，模型算力利用率）是实际有效算力占理论峰值的比例。由于通信、访存和调度等开销，大规模训练的 MFU 通常只有 30%～60%。</p>
-<p><strong>【例 3-1】</strong> LLaMA-7B 的参数量约为 <span class="math inline">\(6.7 \times 10^{9}\)</span>，训练数据为 <span class="math inline">\(1.0 \times 10^{12}\)</span> 个 Token，使用 NVIDIA A100-80GB GPU 训练（BF16 稠密计算峰值为 312 TFLOPS）。论文报告的训练消耗为 82,432 GPU 小时。试估算训练期间的 MFU。</p>
-<p><strong>解：</strong> 训练计算量为</p>
-<p><span class="math display">\[C \approx 6 \times 6.7 \times 10^{9} \times 1.0 \times 10^{12} \approx 4.0 \times 10^{22}\ \text{FLOPs}\]</span></p>
-<p>82,432 GPU 小时折合 <span class="math inline">\(82432 \times 3600 \approx 2.97 \times 10^{8}\)</span> GPU 秒，因此单卡实际有效算力约为</p>
-<p><span class="math display">\[\frac{4.0 \times 10^{22}}{2.97 \times 10^{8}} \approx 1.35 \times 10^{14}\ \text{FLOP/s} = 135\ \text{TFLOPS}\]</span></p>
-<p><span class="math inline">\(MFU \approx 135/312 \approx 43\%\)</span>。同样的方法可以用于 LLaMA-65B：<span class="math inline">\(6 \times 6.5 \times 10^{10} \times 1.4 \times 10^{12} \approx 5.5 \times 10^{23}\)</span> FLOPs，论文报告约 102 万 GPU 小时；在 2048 张 A100 上训练，约需 <span class="math inline">\(1.02 \times 10^{6}/2048 \approx 500\)</span> 小时，即约 21 天，与论文所述一致。</p>
-<p>从这个例子可以直观地感受到预训练的规模：即使是”只有”70 亿参数的模型，用单张 A100 训练也需要约 9 年；650 亿参数的模型即使动用 2048 张 A100，也要连续训练三周。又如，1760 亿参数的多语言模型 BLOOM 使用了 48 个计算节点、每节点 8 张 A100-80GB，共训练了约 3.5 个月。<strong>单个计算设备完全不足以支撑大模型训练，必须采用分布式训练。</strong></p>
-</section>
-<section id="显存需求估算" class="level2">
-<h2 class="anchored" data-anchor-id="显存需求估算">3.4.6　显存需求估算</h2>
-<p>算力决定了训练”要多久”，显存则决定了训练”能不能进行”。训练时，显存主要被以下四部分占用：</p>
-<p><span class="math inline">\(M_{\text{训练}} = M_{\text{权重}} + M_{\text{梯度}} + M_{\text{优化器状态}} + M_{\text{激活值}}\quad\)</span> (3-18)</p>
-<p>设模型参数量为 <span class="math inline">\(\Psi\)</span>，前三项只与参数量和所用精度、优化器有关，统称为<strong>模型状态</strong>；激活值则与批量大小、序列长度有关。</p>
-<p><strong>1．模型状态</strong></p>
-<p>表 3-6 列出了不同训练配置下，每个参数需要占用的字节数。</p>
-<p>表3-6 不同训练配置下每个参数的显存占用（单位：字节）</p>
-<table class="caption-top table">
-<caption>表3-6 不同训练配置下每个参数的显存占用（单位：字节）</caption>
-<colgroup>
-<col style="width: 24%">
-<col style="width: 16%">
-<col style="width: 10%">
-<col style="width: 26%">
-<col style="width: 10%">
-<col style="width: 12%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>训练配置</th>
-<th>权重</th>
-<th>梯度</th>
-<th>优化器状态</th>
-<th>合计</th>
-<th>7B 模型</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>FP32 + SGD（无动量）</td>
-<td>4</td>
-<td>4</td>
-<td>0</td>
-<td>8</td>
-<td>56 GB</td>
-</tr>
-<tr class="even">
-<td>FP32 + SGD（带动量）</td>
-<td>4</td>
-<td>4</td>
-<td>4（动量）</td>
-<td>12</td>
-<td>84 GB</td>
-</tr>
-<tr class="odd">
-<td>FP32 + AdamW</td>
-<td>4</td>
-<td>4</td>
-<td>8（<span class="math inline">\(\mathbf{m}\)</span>、<span class="math inline">\(\mathbf{v}\)</span>）</td>
-<td>16</td>
-<td>112 GB</td>
-</tr>
-<tr class="even">
-<td>混合精度 + AdamW</td>
-<td>2（FP16/BF16）</td>
-<td>2</td>
-<td>12（FP32 主权重、<span class="math inline">\(\mathbf{m}\)</span>、<span class="math inline">\(\mathbf{v}\)</span>）</td>
-<td>16</td>
-<td>112 GB</td>
-</tr>
-</tbody>
-</table>
-<p>可以看到，在最常用的”混合精度 + AdamW”配置下，<strong>每个参数需要约 16 字节的模型状态，其中优化器状态占了四分之三</strong>。混合精度训练并不会减少模型状态的总占用（FP32 主权重仍需保存），它节省的主要是激活值显存和计算时间。</p>
-<p><strong>2．激活值</strong></p>
-<p>前向传播过程中产生的中间结果（激活值）需要保存下来，供反向传播计算梯度时使用。激活值的大小与批量大小 <span class="math inline">\(b\)</span>、序列长度 <span class="math inline">\(s\)</span> 成正比。根据 Korthikanti 等人（2022）的分析，在 16 位精度、不使用并行切分时，一个 Transformer 层需要保存的激活值约为</p>
-<p><span class="math inline">\(M_{\text{激活}}^{\text{每层}} \approx s\, b\, h\left( 34 + \frac{5\, a\, s}{h} \right)\ \text{字节}\quad\)</span> (3-19)</p>
-<p>其中 <span class="math inline">\(a\)</span> 为注意力头数。括号中的第二项来自注意力分数矩阵，随序列长度平方增长。</p>
-<p><strong>【例 3-2】</strong> 以混合精度 + AdamW 训练 LLaMA-7B（<span class="math inline">\(L = 32\)</span>，<span class="math inline">\(h = 4096\)</span>，<span class="math inline">\(a = 32\)</span>），序列长度 <span class="math inline">\(s = 2048\)</span>，批量大小 <span class="math inline">\(b = 1\)</span>，估算所需显存。</p>
-<p><strong>解：</strong> 按表 3-6，模型状态约为每参数 16 字节，按 7B 参数计约 <span class="math inline">\(16 \times 7 = 112\ \text{GB}\)</span>。由式（3-19），每层激活值约为</p>
-<p><span class="math display">\[2048 \times 1 \times 4096 \times \left( 34 + \frac{5 \times 32 \times 2048}{4096} \right) = 8388608 \times 114 \approx 0.96\ \text{GB}\]</span></p>
-<p>32 层合计约 30.6 GB。因此总显存约为 <span class="math inline">\(112 + 30.6 \approx 143\ \text{GB}\)</span>，远超单张 80 GB 显卡的容量（图 3-7）。若批量大小增加到 8，激活值将增至约 245 GB。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId61.png" style="width:4.66667in;height:2.45in" class="figure-img"></p>
-<figcaption>图3-7 训练一个 7B 模型所需显存的构成</figcaption>
-</figure>
+<p>计算量最大的矩阵乘法在低精度下进行，速度显著提高；参数更新在 FP32 下进行，避免许多微小的更新量在低精度下被舍入为零。使用 FP16 时，很多梯度会因范围太小而下溢为 0，需要<strong>损失缩放</strong>（loss scaling）：先把损失乘以较大的系数 <span class="math inline">\(s\)</span> 再反向传播，使梯度落入 FP16 的表示范围，更新前再除以 <span class="math inline">\(s\)</span>。BF16 的指数位与 FP32 相同，基本不需要损失缩放，因此成为当前的首选。DeepSeek-V3 等模型进一步在大规模训练中使用了 FP8 混合精度<sup><a href="../ch3/references.html#ref-18">[18]</a></sup>。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>混合精度<strong>不会</strong>减少模型状态的显存。实现方式有两种：Megatron-LM、DeepSpeed 等框架同时保存 BF16 权重与梯度（2 + 2 字节）和 FP32 主权重；PyTorch 的自动混合精度只保存 FP32 权重与梯度（4 + 4 字节），计算时临时转换为低精度。两种方式加上 AdamW 的 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span>，都约为 16 字节/参数（见下一节的表 <a href="../ch3/s3-5.html#c3-tab-bytes">3-7</a>）。混合精度节省的主要是计算时间和激活值显存。</p>
 </div>
-<p>图3-7 训练一个 7B 模型所需显存的构成</p>
-<p>为了减少激活值显存，常用<strong>激活重计算</strong>（Activation Recomputation，也称梯度检查点）：前向传播时只保存每层的输入，反向传播时再重新做一次该层的前向计算来恢复所需的激活值。这样每层只需保存约 <span class="math inline">\(2sbh\)</span> 字节（上例中 32 层合计约 0.5 GB），代价是增加约一次前向传播的计算量（总计算量增加约 1/3）。</p>
-<p><strong>【易错点】</strong> 估算训练显存时常见三种错误：一是把 AdamW 的优化器状态算成”一倍”或”三倍”模型大小，正确的是 <span class="math inline">\(\mathbf{m}\)</span>、<span class="math inline">\(\mathbf{v}\)</span> 两个状态（FP32 下为 8 字节/参数，混合精度下若计入 FP32 主权重则为 12 字节/参数）；二是认为”激活值可以忽略”，实际上在长序列、大批量时它可能超过模型状态本身；三是认为混合精度能把模型状态减半，实际上并不能。一个实用的经验法则是：<strong>用混合精度 + AdamW 全量训练，模型状态约为”参数量（以 B 计）× 16 GB”。</strong></p>
-</section>
-<section id="分布式训练面临的挑战" class="level2">
-<h2 class="anchored" data-anchor-id="分布式训练面临的挑战">3.4.7　分布式训练面临的挑战</h2>
-<p>以上分析表明，一个 7B 模型的训练已经放不进单张显卡；而对于千亿参数的模型，问题会严重得多。大模型训练面临的挑战通常被概括为”四堵墙”：</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
 <ul>
-<li><strong>内存墙</strong>：单卡显存远远装不下模型状态和激活值。例如，2000 亿参数的模型在不做任何显存优化时，仅模型状态就需要 <span class="math inline">\(2 \times 10^{11} \times 16\ \text{B} = 3200\ \text{GB}\)</span>，加上激活值超过 3500 GB，相当于数十张 80 GB 显卡的总显存。</li>
-<li><strong>性能墙</strong>：即使显存够用，单卡算力也远远不够（见例 3-1）。这要求 AI 芯片本身足够强大，同时训练的调度效率和各种并行优化手段要足够好。</li>
-<li><strong>通信墙</strong>：把计算分摊到多张卡上之后，卡与卡之间需要频繁交换梯度、参数和激活值。通信量取决于参数量、计算类型、数据量、集群的带宽拓扑和通信策略等多种因素，设计不当时，GPU 大部分时间都在等待通信。</li>
-<li><strong>调优墙</strong>：在数千个节点的集群上，同时保证计算的正确性、性能和可用性极其困难：任何一张卡故障都可能导致训练中断，手工设计的分布式方案也难以兼顾各方面。</li>
+<li><p>参数量 <span class="math inline">\(N\approx12Ld^2+2\lvert\mathcal{V}\rvert d\)</span>；LLaMA-7B 约 <span class="math inline">\(6.7\times10^9\)</span>。</p></li>
+<li><p>训练步：取批次、前向、损失、反向、更新；AdamW 为每个参数多存 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 两个状态。</p></li>
+<li><p>标准配置：AdamW + 线性预热与余弦衰减 + 梯度裁剪 + BF16 混合精度（FP32 主权重）。</p></li>
+<li><p>案例进度：课程语料上的继续预训练沿用同样的配置，但学习率取得更小，以免遗忘通用能力。</p></li>
 </ul>
-<p><strong>分布式训练</strong>正是为突破这些障碍而生：它把模型训练任务分解为多个子任务，分配到多个计算设备上并行执行。按照切分对象的不同，主要有数据并行、模型并行（包括流水线并行和张量并行）以及将它们组合起来的混合并行，三种基本方式如图 3-8 所示。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId65.png" style="width:5.83333in;height:2.17424in" class="figure-img"></p>
-<figcaption>图3-8 三种基本的并行方式</figcaption>
-</figure>
 </div>
-<p>图3-8 三种基本的并行方式</p>
-</section>
-<section id="数据并行" class="level2">
-<h2 class="anchored" data-anchor-id="数据并行">3.4.8　数据并行</h2>
-<p><strong>1．基本过程</strong></p>
-<p><strong>数据并行</strong>（Data Parallelism）把训练数据切分到多个设备上，每个设备保存一份完整的模型副本。一个训练步的过程如下：</p>
-<ol type="1">
-<li>把当前批次的数据平均分成 <span class="math inline">\(N_{d}\)</span> 份，每个设备分得一份；</li>
-<li>每个设备用自己的数据独立完成前向传播和反向传播，得到本地梯度 <span class="math inline">\(\mathbf{g}^{(i)}\)</span>；</li>
-<li>所有设备通过通信对梯度求平均：</li>
-</ol>
-<p><span class="math inline">\(\mathbf{g} = \frac{1}{N_{d}}\sum_{i = 1}^{N_{d}}\mathbf{g}^{(i)}\quad\)</span> (3-20)</p>
-<ol start="4" type="1">
-<li>每个设备用相同的平均梯度更新自己的模型副本，各副本因此始终保持一致。</li>
-</ol>
-<p>数据并行实现简单、扩展性好，是加快训练最直接的方法。在”去中心化”架构下，步骤 3 通常通过 <strong>Ring All-Reduce</strong> 完成：<span class="math inline">\(N_{d}\)</span> 个设备首尾相连成环，梯度被切成 <span class="math inline">\(N_{d}\)</span> 块，沿环依次传递和累加。可以证明，每个设备需要发送（和接收）的数据量约为</p>
-<p><span class="math inline">\(2 \cdot \frac{N_{d} - 1}{N_{d}} \cdot M_{\text{梯度}}\quad\)</span> (3-21)</p>
-<p>当 <span class="math inline">\(N_{d}\)</span> 较大时约为梯度大小的 2 倍，<strong>几乎与设备数量无关</strong>，这正是 Ring All-Reduce 扩展性好的原因。例如，7B 模型的 BF16 梯度约 14 GB，则每一步每张卡要收发约 28 GB 数据，这对设备间的互联带宽提出了很高要求。</p>
-<p><strong>2．ZeRO：消除数据并行中的冗余</strong></p>
-<p>普通数据并行的显存问题在于：每个设备都保存了一份<strong>完整的</strong>模型状态。8 张卡做数据并行，就有 8 份完全相同的优化器状态、梯度和参数，这是巨大的浪费，而且并不能解决单卡放不下模型的问题。</p>
-<p>微软 DeepSpeed 提出的 <strong>ZeRO</strong>（Zero Redundancy Optimizer）的思路是：既然每个设备只需要在用到的时候拿到完整数据，那么平时就让每个设备只保存模型状态的 <span class="math inline">\(1/N_{d}\)</span>。ZeRO 分为三个阶段，依次切分优化器状态（<span class="math inline">\(P_{os}\)</span>）、梯度（<span class="math inline">\(P_{g}\)</span>）和参数（<span class="math inline">\(P_{p}\)</span>）。在混合精度 + Adam 训练下，每个设备的模型状态显存如表 3-7 所示（<span class="math inline">\(K = 12\)</span> 为优化器状态的字节数）。</p>
-<p>表3-7 ZeRO 各阶段每个设备的模型状态显存</p>
-<table class="caption-top table">
-<caption>表3-7 ZeRO 各阶段每个设备的模型状态显存</caption>
-<colgroup>
-<col style="width: 30%">
-<col style="width: 27%">
-<col style="width: 16%">
-<col style="width: 26%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>方案</th>
-<th>每卡显存</th>
-<th>7B 模型、8 卡</th>
-<th>7.5B 模型、64 卡（ZeRO 论文示例）</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>普通数据并行</td>
-<td><span class="math inline">\((2 + 2 + K)\Psi\)</span></td>
-<td>112 GB</td>
-<td>120 GB</td>
-</tr>
-<tr class="even">
-<td>ZeRO-1（切分优化器状态）</td>
-<td><span class="math inline">\(4\Psi + \frac{K\Psi}{N_{d}}\)</span></td>
-<td>38.5 GB</td>
-<td>31.4 GB</td>
-</tr>
-<tr class="odd">
-<td>ZeRO-2（再切分梯度）</td>
-<td><span class="math inline">\(2\Psi + \frac{(2 + K)\Psi}{N_{d}}\)</span></td>
-<td>26.25 GB</td>
-<td>16.6 GB</td>
-</tr>
-<tr class="even">
-<td>ZeRO-3（再切分参数）</td>
-<td><span class="math inline">\(\frac{(2 + 2 + K)\Psi}{N_{d}}\)</span></td>
-<td>14 GB</td>
-<td>1.9 GB</td>
-</tr>
-</tbody>
-</table>
-<p>ZeRO-1 和 ZeRO-2 的通信量与普通数据并行相同，却能大幅降低显存；ZeRO-3 需要在每一层计算前临时收集该层的完整参数，通信量增加约 50%，但每卡显存随设备数线性下降。PyTorch 中的<strong>完全分片数据并行</strong>（Fully Sharded Data Parallel，FSDP）实现了与 ZeRO-3 相同的思想。ZeRO 还可以进一步把优化器状态卸载到 CPU 内存（ZeRO-Offload），以在显卡数量较少时训练更大的模型。</p>
-</section>
-<section id="模型并行" class="level2">
-<h2 class="anchored" data-anchor-id="模型并行">3.4.9　模型并行</h2>
-<p>当单个模型（或模型的某一层）大到无法放入一个设备时，就需要<strong>模型并行</strong>（Model Parallelism）：把模型的不同部分分布到多个设备上，而不是像数据并行那样在每个设备上保存完整副本。前向传播时，数据依次流过各设备上的模型部分，并在设备间传输；反向传播时，梯度沿相反方向跨设备传播，每个设备只计算并更新自己负责的那部分参数。按照切分方式的不同，模型并行分为流水线并行和张量并行两类。</p>
-<p><strong>1．流水线并行</strong></p>
-<p><strong>流水线并行</strong>（Pipeline Parallelism）按<strong>层</strong>切分模型，把连续的若干层组成一个<strong>阶段</strong>（Stage），分配给一个设备。如果简单地让一批数据依次流过各阶段，那么在任意时刻只有一个设备在工作，其余设备都在等待。为此，流水线并行把一个批次进一步切分为 <span class="math inline">\(m\)</span> 个<strong>微批次</strong>（Micro-batch），让不同阶段同时处理不同的微批次，就像工厂装配线上不同工位同时加工不同的产品。</p>
-<p>图 3-9 展示了 <span class="math inline">\(p = 4\)</span> 个阶段、<span class="math inline">\(m = 4\)</span> 个微批次时的执行过程（GPipe 调度方式）。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId70.png" style="width:5.13333in;height:1.6412in" class="figure-img"></p>
-<figcaption>图3-9 流水线并行的执行过程与”气泡”（p = 4，m = 4）</figcaption>
-</figure>
-</div>
-<p>图3-9 流水线并行的执行过程与”气泡”（p = 4，m = 4）</p>
-<p>可以看到，流水线在”灌满”和”排空”时，总有部分设备处于空闲状态，这些空闲时间称为<strong>气泡</strong>（Bubble）。气泡占总时间的比例为</p>
-<p><span class="math inline">\(\text{气泡率} = \frac{p - 1}{m + p - 1}\quad\)</span> (3-22)</p>
-<p>图 3-9 中 <span class="math inline">\(p = m = 4\)</span>，气泡率为 <span class="math inline">\(3/7 \approx 43\%\)</span>。增大微批次数 <span class="math inline">\(m\)</span> 可以降低气泡率，例如 <span class="math inline">\(m = 32\)</span> 时气泡率降至约 <span class="math inline">\(3/35 \approx 8.6\%\)</span>；但微批次越多，需要同时保存的激活值也越多。为此，PipeDream 等工作提出了”一次前向、一次反向”交替进行的 1F1B 调度，以减少激活值显存。流水线并行只需在相邻阶段之间传递激活值，通信量较小，适合跨服务器使用。</p>
-<p><strong>2．张量并行</strong></p>
-<p><strong>张量并行</strong>（Tensor Parallelism）在<strong>层内</strong>切分，把一个大的权重矩阵拆分到多个设备上，每个设备只计算矩阵乘法的一部分。以 Megatron-LM 对前馈网络的切分为例，设前馈网络为 <span class="math inline">\(\mathbf{Z} = GeLU\left( \mathbf{X}\mathbf{A} \right)\,\mathbf{B}\)</span>，在两个设备上：</p>
-<ul>
-<li>把第一个矩阵按<strong>列</strong>切分为 <span class="math inline">\(\mathbf{A} = \left\lbrack \mathbf{A}_{1},\mathbf{A}_{2} \right\rbrack\)</span>，两个设备分别计算 <span class="math inline">\(\mathbf{Y}_{i} = GeLU\left( \mathbf{X}\mathbf{A}_{i} \right)\)</span>。由于 GeLU 逐元素作用，这一步不需要任何通信；</li>
-<li>把第二个矩阵按<strong>行</strong>切分为 <span class="math inline">\(\mathbf{B} = \begin{bmatrix}
-\mathbf{B}_{1} \\
-\mathbf{B}_{2}
-\end{bmatrix}\)</span>，两个设备分别计算 <span class="math inline">\(\mathbf{Y}_{i}\mathbf{B}_{i}\)</span>，最后通过一次 All-Reduce 求和：</li>
-</ul>
-<p><span class="math inline">\(\mathbf{Z} = \mathbf{Y}_{1}\mathbf{B}_{1} + \mathbf{Y}_{2}\mathbf{B}_{2}\quad\)</span> (3-23)</p>
-<p>注意力层则可以按注意力头切分，让每个设备负责一部分头。张量并行的优点是能把单层的计算和显存同时分摊开；缺点是每一层的前向和反向都需要通信，对带宽和延迟要求极高，因此通常只在同一台服务器内、通过 NVLink 等高速互联的 GPU 之间使用，并行度一般不超过 8。</p>
-</section>
-<section id="混合并行" class="level2">
-<h2 class="anchored" data-anchor-id="混合并行">3.4.10　混合并行</h2>
-<p>单一的并行方式各有局限：数据并行解决不了单卡放不下模型的问题，张量并行难以跨服务器扩展，流水线并行存在气泡。实际训练千亿级模型时，通常把它们组合起来使用，称为<strong>混合并行</strong>，其中最典型的是同时使用数据并行、张量并行和流水线并行的<strong>三维并行</strong>（3D Parallelism）。若数据并行度为 <span class="math inline">\(d\)</span>、张量并行度为 <span class="math inline">\(t\)</span>、流水线并行度为 <span class="math inline">\(p\)</span>，则所需 GPU 总数为</p>
-<p><span class="math inline">\(n_{GPU} = d \times t \times p\quad\)</span> (3-24)</p>
-<p>常见的做法是：在服务器内部用张量并行，充分利用高速互联；在服务器之间用流水线并行，降低跨机通信量；在此基础上再复制多组，用数据并行提高吞吐量。例如，5300 亿参数的 Megatron-Turing NLG 使用了 8 路张量并行、35 路流水线并行和 8 路数据并行，共 2240 张 A100 GPU。表 3-8 对几种并行方式做了比较。</p>
-<p>表3-8 几种并行方式的比较</p>
-<table class="caption-top table">
-<caption>表3-8 几种并行方式的比较</caption>
-<colgroup>
-<col style="width: 14%">
-<col style="width: 17%">
-<col style="width: 20%">
-<col style="width: 29%">
-<col style="width: 17%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>并行方式</th>
-<th>切分对象</th>
-<th>主要解决的问题</th>
-<th>通信内容与开销</th>
-<th>典型使用范围</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>数据并行</td>
-<td>训练数据</td>
-<td>加快训练速度</td>
-<td>每步 All-Reduce 梯度，开销中等</td>
-<td>跨服务器、大规模</td>
-</tr>
-<tr class="even">
-<td>ZeRO / FSDP</td>
-<td>数据 + 模型状态</td>
-<td>数据并行的显存冗余</td>
-<td>在数据并行基础上增加参数收集</td>
-<td>跨服务器</td>
-</tr>
-<tr class="odd">
-<td>流水线并行</td>
-<td>模型的层</td>
-<td>整个模型放不进单卡</td>
-<td>相邻阶段传递激活值，开销小，但有气泡</td>
-<td>跨服务器</td>
-</tr>
-<tr class="even">
-<td>张量并行</td>
-<td>单层的权重矩阵</td>
-<td>单层过大、单卡算不动</td>
-<td>每层都要 All-Reduce，开销大</td>
-<td>服务器内部</td>
-</tr>
-<tr class="odd">
-<td>混合并行</td>
-<td>以上多种组合</td>
-<td>超大模型训练</td>
-<td>综合权衡</td>
-<td>千卡乃至万卡集群</td>
-</tr>
-</tbody>
-</table>
-<p>除此之外，针对长序列训练还有沿序列维度切分的<strong>序列并行</strong>和<strong>上下文并行</strong>，针对混合专家（MoE）模型还有把不同专家分配到不同设备的<strong>专家并行</strong>，它们都可以与上述方法组合使用。</p>
-</section>
-<section id="分布式训练系统" class="level2">
-<h2 class="anchored" data-anchor-id="分布式训练系统">3.4.11　分布式训练系统</h2>
-<p><strong>1．集群拓扑</strong></p>
-<p>大模型训练集群由大量带有加速设备的服务器组成。每台服务器通常装有 2～16 个（最常见为 8 个）加速设备，服务器内部的设备通过 NVLink 等高速总线互联；多台服务器放置在一个机柜（Rack）中，通过<strong>架顶交换机</strong>（Top of Rack Switch，ToR）连接到网络；当架顶交换机端口用满时，再通过上层的<strong>骨干交换机</strong>（Spine Switch）接入更多机柜。由此形成的拓扑结构通常是一个多层树（Multi-Level Tree），服务器之间常采用 InfiniBand 等基于 RDMA 的高速低延迟网络。这种层次结构意味着，服务器内部的通信带宽远高于服务器之间，这正是前面”张量并行放在服务器内、流水线和数据并行跨服务器”的原因。关于这些硬件的细节，将在第四章介绍。</p>
-<p><strong>2．参数服务器架构</strong></p>
-<p>早期的分布式训练系统多采用<strong>参数服务器</strong>（Parameter Server）架构（图 3-10(a)）。系统中有两种服务器：<strong>训练服务器</strong>负责前向和反向计算，需要大量计算资源；<strong>参数服务器</strong>负责保存全局参数、聚合梯度并更新参数，需要充足的内存和通信资源。按参数更新的时机，训练分为两种模式：</p>
-<ul>
-<li><strong>同步训练</strong>：参数服务器收到所有训练服务器的梯度后，统一聚合并更新参数，再把新参数分发下去。结果与单机训练等价，但整体速度受最慢的训练服务器拖累；</li>
-<li><strong>异步训练</strong>：参数服务器不再等待所有梯度，每收到一个训练服务器的梯度就直接更新参数。速度快，但部分训练服务器会基于过时的参数计算梯度（梯度陈旧问题），可能影响收敛。</li>
-</ul>
-<p>参数服务器架构的主要问题是<strong>中心节点容易成为通信瓶颈</strong>：所有训练服务器都要与它交换数据，设备越多，它的负担越重。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId75.png" style="width:5.83333in;height:1.97034in" class="figure-img"></p>
-<figcaption>图3-10 两种分布式训练系统架构</figcaption>
-</figure>
-</div>
-<p>图3-10 两种分布式训练系统架构</p>
-<p><strong>3．去中心化架构与集合通信</strong></p>
-<p>当前大模型训练主要采用<strong>去中心化架构</strong>（图 3-10(b)）：没有中央服务器，各节点之间直接通信和协调。节点可以并行地进行训练和通信，通信负载被均匀分摊，显著降低了通信开销，缓解了”通信墙”。节点之间周期性交换参数和梯度，通过<strong>集合通信</strong>（Collective Communication）实现。常用的通信原语如表 3-9 所示。</p>
-<p>表3-9 常用的集合通信原语</p>
-<table class="caption-top table">
-<caption>表3-9 常用的集合通信原语</caption>
-<colgroup>
-<col style="width: 17%">
-<col style="width: 39%">
-<col style="width: 42%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>原语</th>
-<th>含义</th>
-<th>在大模型训练中的典型用途</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Broadcast</td>
-<td>一个节点把数据发送给所有节点</td>
-<td>训练开始时同步初始参数</td>
-</tr>
-<tr class="even">
-<td>Scatter</td>
-<td>一个节点把数据切成多块，分别发给各节点</td>
-<td>分发数据分片</td>
-</tr>
-<tr class="odd">
-<td>Gather</td>
-<td>所有节点把各自的数据汇集到一个节点</td>
-<td>汇总评测结果</td>
-</tr>
-<tr class="even">
-<td>Reduce</td>
-<td>所有节点的数据经求和等运算后汇集到一个节点</td>
-<td>汇总损失值</td>
-</tr>
-<tr class="odd">
-<td>All-Reduce</td>
-<td>所有节点的数据经运算后，结果分发给所有节点</td>
-<td>数据并行的梯度平均、张量并行的结果合并</td>
-</tr>
-<tr class="even">
-<td>All-Gather</td>
-<td>每个节点都获得所有节点数据的拼接</td>
-<td>ZeRO-3 / FSDP 计算前收集完整参数</td>
-</tr>
-<tr class="odd">
-<td>Reduce-Scatter</td>
-<td>先求和，再把结果切块分发给各节点</td>
-<td>ZeRO-2/3 中聚合并切分梯度</td>
-</tr>
-<tr class="even">
-<td>All-to-All</td>
-<td>每个节点向其他每个节点发送不同的数据</td>
-<td>MoE 模型中把 Token 分发给不同专家</td>
-</tr>
-</tbody>
-</table>
-<p>值得一提的是，All-Reduce 可以分解为一次 Reduce-Scatter 加一次 All-Gather，Ring All-Reduce 正是这样实现的。NVIDIA 的 NCCL 库为 GPU 提供了这些原语的高效实现。</p>
-<p><strong>4．分布式训练框架</strong></p>
-<p>工程实践中，研发者通常借助成熟的框架完成分布式训练，而不是从零实现上述机制：</p>
-<ul>
-<li><strong>PyTorch</strong> 原生提供了分布式数据并行（DDP）和完全分片数据并行（FSDP）；</li>
-<li><strong>DeepSpeed</strong>（微软）实现了 ZeRO 系列优化、流水线并行和 CPU 卸载等功能；</li>
-<li><strong>Megatron-LM</strong>（NVIDIA）提供了高效的张量并行、流水线并行和序列并行实现，常与 DeepSpeed 结合使用；</li>
-<li><strong>Horovod</strong>（Uber）是面向 TensorFlow、Keras 和 PyTorch 的分布式训练框架，基于 Ring All-Reduce；</li>
-<li><strong>TensorFlow</strong> 内置了分布式训练策略，Amazon SageMaker 等云平台也提供了支持数据并行和模型并行的分布式训练库。</li>
-</ul>
-</section>
-<section id="训练的稳定性与容错" class="level2">
-<h2 class="anchored" data-anchor-id="训练的稳定性与容错">3.4.12　训练的稳定性与容错</h2>
-<p>在数千张卡上连续训练数周，“训练能否顺利跑完”本身就是一个工程难题。常见的问题和对策包括：</p>
-<ul>
-<li><strong>损失尖峰与发散</strong>：训练中损失突然飙升，有时会自行恢复，有时会导致训练彻底发散。常用的对策包括梯度裁剪、降低学习率、跳过导致问题的数据批次，以及从较早的检查点回退后重新训练。</li>
-<li><strong>硬件故障</strong>：卡数越多，在训练期间遇到 GPU、网络或节点故障的概率越高。因此训练系统需要定期保存<strong>检查点</strong>（Checkpoint），包括模型参数、优化器状态和数据读取位置，以便故障后从最近的检查点恢复。Meta 公开的 OPT-175B 训练日志就记录了大量因硬件故障和损失发散而进行的人工重启。</li>
-<li><strong>监控与评估</strong>：在训练过程中持续监控损失、梯度范数、学习率和吞吐量等指标，并定期在下游基准上评估检查点，及时发现异常。</li>
-</ul>
-<p><strong>【本节小结】</strong> 预训练的核心算法并不复杂：前向传播、计算交叉熵损失、反向传播、用 AdamW 更新参数。真正的难度在于规模。用 <span class="math inline">\(C \approx 6ND\)</span> 可以估算需要多少算力，用”每参数 16 字节 + 激活值”可以估算需要多少显存；当二者都远超单卡能力时，就需要数据并行、ZeRO、流水线并行和张量并行等分布式技术，把计算和显存分摊到成百上千张卡上，同时尽量降低通信开销和空闲时间。</p>
 
 
 </section>
@@ -1762,13 +1432,13 @@ window.Quarto = {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch3/s3-5.html" class="pagination-link" aria-label="3.5　大语言模型微调与领域适配">
-        <span class="nav-page-text">3.5　大语言模型微调与领域适配</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch3/s3-5.html" class="pagination-link" aria-label="3.5　算力、显存与分布式训练">
+        <span class="nav-page-text">3.5　算力、显存与分布式训练</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

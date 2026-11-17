@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3.11 综合案例：一个 7B 课程问答模型的诞生 – 大语言模型原理与技术</title>
+<title>3.11 推理引擎、模型文件与部署 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-11.html">3.11　综合案例：一个 7B 课程问答模型的诞生</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-11.html">3.11　推理引擎、模型文件与部署</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -718,23 +754,18 @@ window.Quarto = {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#第一步选择基础模型而不是从零预训练" id="toc-第一步选择基础模型而不是从零预训练" class="nav-link active" data-scroll-target="#第一步选择基础模型而不是从零预训练">3.11.1　第一步：选择基础模型，而不是从零预训练</a></li>
-  <li><a href="#第二步领域继续预训练" id="toc-第二步领域继续预训练" class="nav-link" data-scroll-target="#第二步领域继续预训练">3.11.2　第二步：领域继续预训练</a></li>
-  <li><a href="#第三步指令微调" id="toc-第三步指令微调" class="nav-link" data-scroll-target="#第三步指令微调">3.11.3　第三步：指令微调</a></li>
-  <li><a href="#第四步偏好对齐" id="toc-第四步偏好对齐" class="nav-link" data-scroll-target="#第四步偏好对齐">3.11.4　第四步：偏好对齐</a></li>
-  <li><a href="#第五步评估" id="toc-第五步评估" class="nav-link" data-scroll-target="#第五步评估">3.11.5　第五步：评估</a></li>
-  <li><a href="#第六步合并与量化" id="toc-第六步合并与量化" class="nav-link" data-scroll-target="#第六步合并与量化">3.11.6　第六步：合并与量化</a></li>
-  <li><a href="#第七步部署与容量估算" id="toc-第七步部署与容量估算" class="nav-link" data-scroll-target="#第七步部署与容量估算">3.11.7　第七步：部署与容量估算</a></li>
-  <li><a href="#第八步处理一次用户请求" id="toc-第八步处理一次用户请求" class="nav-link" data-scroll-target="#第八步处理一次用户请求">3.11.8　第八步：处理一次用户请求</a></li>
+  <li><a href="#推理引擎与推理平台" id="toc-推理引擎与推理平台" class="nav-link active" data-scroll-target="#推理引擎与推理平台">3.11.1　推理引擎与推理平台</a></li>
+  <li><a href="#模型文件" id="toc-模型文件" class="nav-link" data-scroll-target="#模型文件">3.11.2　模型文件</a></li>
+  <li><a href="#部署方案的选择" id="toc-部署方案的选择" class="nav-link" data-scroll-target="#部署方案的选择">3.11.3　部署方案的选择</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-11.html">3.11　综合案例：一个 7B 课程问答模型的诞生</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-11.html">3.11　推理引擎、模型文件与部署</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3.11　综合案例：一个 7B 课程问答模型的诞生</h1>
+<h1 class="title">3.11　推理引擎、模型文件与部署</h1>
 </div>
 
 
@@ -751,158 +782,237 @@ window.Quarto = {
 </header>
 
 
-<p>前面各节分别讨论了预训练、微调、对齐和推理。本节通过一个完整的案例，把这些知识串联起来。假设某高校希望为一门专业课程构建一个<strong>课程问答助手</strong>：学生可以随时提问课程中的概念、公式和习题思路，模型给出准确、清晰的解答，并部署在学校自己的服务器上，以保证数据不外流。整个流程如图 3-28 所示，以下逐步说明每一步做什么、用到哪些技术、需要多少资源。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/media/rId181.png" style="width:3.61667in;height:3.04345in" class="figure-img"></p>
-<figcaption>图3-28 课程问答模型从训练到部署的完整流程</figcaption>
-</figure>
+<div class="bookbox guide">
+<p>前面的原理和优化最终要落到具体软件上：从模型仓库下载的一堆文件是什么，用什么软件把它跑起来，跑在笔记本、服务器还是云端？本节先区分两类常被混淆的软件——负责“怎么算”的推理引擎和负责“怎么用”的推理平台，再说明模型文件的组成与格式，最后给出部署方案的选择方法。部署工具的整体分类见第 <a href="../ch4/s4-5.html">4.5</a> 节。结论是：平台不会给模型增加任何能力；选方案先看模型规模、并发与延迟、数据安全和成本，再用显存估算判断能否运行。</p>
 </div>
-<p>图3-28 课程问答模型从训练到部署的完整流程</p>
-<p>为使估算具体，本节以 Qwen2.5-7B 的结构参数为例（实际参数量约 76 亿，28 层，4 个 KV 头，每头维度 128）。</p>
-<section id="第一步选择基础模型而不是从零预训练" class="level2">
-<h2 class="anchored" data-anchor-id="第一步选择基础模型而不是从零预训练">3.11.1　第一步：选择基础模型，而不是从零预训练</h2>
-<p>从零预训练一个 7B 模型需要多少资源？按 3.4.5 节的方法估算：若使用 2 万亿 Token 训练，计算量约为</p>
-<p><span class="math display">\[C \approx 6 \times 7 \times 10^{9} \times 2 \times 10^{12} = 8.4 \times 10^{22}\ \text{FLOPs}\]</span></p>
-<p>在 256 张 A100 上，按每卡有效算力 125 TFLOPS（MFU 约 40%）计算，需要约 <span class="math inline">\(8.4 \times 10^{22}/\left( 256 \times 1.25 \times 10^{14} \right) \approx 2.6 \times 10^{6}\)</span> 秒，即约 30 天；这还不包括数据准备、调试和故障恢复的开销。对于一所高校的一门课程而言，这样的投入显然没有必要。</p>
-<p>因此，合理的做法是<strong>选择一个已经完成预训练的开源基础模型</strong>，把它作为起点。这正体现了 3.1 节所说的”预训练一次投入、多次复用”。选择时主要考虑：模型的中文能力和与课程相关的知识水平、模型许可证是否允许所需的使用方式、模型规模与可用硬件是否匹配。</p>
-</section>
-<section id="第二步领域继续预训练" class="level2">
-<h2 class="anchored" data-anchor-id="第二步领域继续预训练">3.11.2　第二步：领域继续预训练</h2>
-<p>如果课程涉及大量通用模型不熟悉的专业知识，可以先收集教材、讲义、课程笔记、相关论文等无标注文本，按 3.3 节的流程清洗、去重后，进行<strong>继续预训练</strong>，为模型补充领域知识。</p>
-<p>假设整理出约 2 亿 Token 的课程语料，计算量约为 <span class="math inline">\(6 \times 7 \times 10^{9} \times 2 \times 10^{8} = 8.4 \times 10^{18}\)</span> FLOPs，在 8 张 A100 上约需 <span class="math inline">\(8.4 \times 10^{18}/\left( 8 \times 1.25 \times 10^{14} \right) \approx 8400\)</span> 秒，即两个多小时。由于是全参数训练，模型状态约需 <span class="math inline">\(16 \times 7.6 \approx 122\)</span> GB（见 3.4.6 节），需要借助 ZeRO-3 或 FSDP 分摊到 8 张卡上，每卡约 15 GB。为了避免灾难性遗忘，通常还会在课程语料中混入一定比例的通用语料，并使用较小的学习率。</p>
-</section>
-<section id="第三步指令微调" class="level2">
-<h2 class="anchored" data-anchor-id="第三步指令微调">3.11.3　第三步：指令微调</h2>
-<p><strong>数据构造。</strong> 指令数据可以综合 3.5.4 节介绍的几种方法：把教材中的例题和课后习题整理成”问题—解答”对；以教材章节为参考材料，让更强的大模型生成多样化的问答；再由助教对生成的数据进行抽查和修改。假设最终得到 5 万条问答，平均每条约 500 个 Token。此外，再混入约 20% 的通用指令数据，以保持模型的通用对话能力。所有数据都按照模型的对话模板拼接，训练时只在回答部分计算损失（3.5.3 节）。</p>
-<p><strong>训练配置。</strong> 采用 QLoRA（3.6.8 节）：基础模型以 NF4 量化加载，在全部线性层上添加 <span class="math inline">\(r = 16\)</span> 的 LoRA 模块，可训练参数约 4000 万个。按 3.6.9 节的估算，模型相关的显存约 4～5 GB，加上开启激活重计算后的激活值，一张 24 GB 的消费级显卡即可完成训练。</p>
-<p><strong>训练时间。</strong> 5 万条 × 500 Token × 3 个轮次，共约 <span class="math inline">\(7.5 \times 10^{7}\)</span> 个 Token。计算量的上限约为 <span class="math inline">\(6 \times 7 \times 10^{9} \times 7.5 \times 10^{7} \approx 3.2 \times 10^{18}\)</span> FLOPs（LoRA 省去了大部分权重梯度的计算，实际计算量要更少）。若单卡有效算力约 50 TFLOPS，约需 18 小时，一天之内即可完成。</p>
-</section>
-<section id="第四步偏好对齐" class="level2">
-<h2 class="anchored" data-anchor-id="第四步偏好对齐">3.11.4　第四步：偏好对齐</h2>
-<p>指令微调后的模型已经能够回答课程问题，但回答的详略、讲解方式未必符合教学需要。例如，学生问作业题时，我们可能希望模型引导思路，而不是直接给出最终答案。这类”风格和行为”上的要求，适合通过偏好对齐来实现。</p>
-<p>具体做法是：准备约 5000 个问题，让 SFT 模型对每个问题生成两个不同的回答；由助教按照预先制定的标准（准确性、讲解清晰度、是否符合教学要求）选出较好的一个，得到 5000 对偏好数据。若人力有限，也可以按照同样的标准，让更强的大模型充当评判者（RLAIF 的思路），再由助教抽查。然后使用 DPO（3.7.5 节）在 SFT 模型的基础上继续训练，只需要策略模型和参考模型两个模型，同样可以用 LoRA 在单卡上完成。</p>
-</section>
-<section id="第五步评估" class="level2">
-<h2 class="anchored" data-anchor-id="第五步评估">3.11.5　第五步：评估</h2>
-<p>在部署之前，必须对模型进行系统的评估：</p>
-<ul>
-<li><strong>准确性</strong>：用往年试题等<strong>没有出现在训练数据中</strong>的题目构成测试集（注意防止 3.3.5 节所说的数据污染），比较基础模型、SFT 模型和 DPO 模型的正确率；</li>
-<li><strong>人工评估</strong>：请助教和学生对一批真实问题的回答进行盲评；</li>
-<li><strong>通用能力</strong>：在通用基准上检查模型是否出现了明显的能力退化；</li>
-<li><strong>安全性</strong>：检查模型面对不当请求时能否正确拒绝，以及微调是否削弱了原有的安全对齐（3.5.5 节）。</li>
-</ul>
-<p>只有在各项指标达到预期后，才进入部署阶段；否则，需要回到数据或训练环节进行调整。</p>
-</section>
-<section id="第六步合并与量化" class="level2">
-<h2 class="anchored" data-anchor-id="第六步合并与量化">3.11.6　第六步：合并与量化</h2>
-<p>训练得到的 LoRA 模块可以按照 <span class="math inline">\(W = W_{0} + \frac{\alpha}{r}BA\)</span> 合并到原始权重中（3.6.6 节），得到一个与原模型结构完全相同、以 BF16 存储的完整模型，约 15 GB。根据部署方式的不同，再选择合适的量化方案（3.9.6 节）：</p>
-<ul>
-<li>在服务器上用 vLLM 部署时，可以保持 BF16，或使用 AWQ、GPTQ 等方法量化为 4 位，以容纳更多并发请求；</li>
-<li>如果希望学生也能在自己的电脑上离线使用，可以转换为 GGUF 格式的 Q4_K_M 量化版本（约 4.7 GB），通过 Ollama 或 LM Studio 运行。</li>
-</ul>
-</section>
-<section id="第七步部署与容量估算" class="level2">
-<h2 class="anchored" data-anchor-id="第七步部署与容量估算">3.11.7　第七步：部署与容量估算</h2>
-<p>假设学校用一台配有一张 24 GB 显卡的服务器，以 vLLM 部署 BF16 版本的模型。按例 3-8 的方法估算容量：</p>
-<ul>
-<li>设推理框架可使用 90% 的显存，即约 21.6 GB；</li>
-<li>模型权重约 15.2 GB，框架和临时张量约占 1 GB，剩余约 5.4 GB 可用于 KV Cache；</li>
-<li>每个 Token 的 KV Cache 约 56 KB，5.4 GB 可容纳约 9.4 万个 Token。若每段对话的上下文按 4096 个 Token 计算，约可同时服务 23 个对话。</li>
-</ul>
-<p>单个请求的解码速度上限约为 <span class="math inline">\(1008\ \text{GB/s} \div 15.2\ \text{GB} \approx 66\)</span> tokens/s（以显存带宽约 1 TB/s 的显卡计，见式（3-41））。如果并发需求更高，可以改用 4 位量化版本：权重降到约 5 GB 后，KV Cache 的可用空间扩大到约 15 GB，并发数可提高到 60 个左右，单请求的解码速度上限也相应提高。如果仍不够，再考虑增加显卡、使用张量并行。</p>
-</section>
-<section id="第八步处理一次用户请求" class="level2">
-<h2 class="anchored" data-anchor-id="第八步处理一次用户请求">3.11.8　第八步：处理一次用户请求</h2>
-<p>部署完成后，一名学生在网页上提问”什么是 KV Cache？“，系统内部依次发生以下过程：</p>
-<ol type="1">
-<li>服务端把系统提示词和学生的问题按对话模板拼接，由分词器转换为约 100 个 Token；</li>
-<li>推理引擎把这个请求加入连续批处理队列（3.9.3 节），并通过 PagedAttention 为它分配 KV Cache 块（3.9.4 节）；如果系统提示词与其他请求相同，可以直接复用前缀缓存；</li>
-<li><strong>预填充</strong>：并行处理这约 100 个输入 Token，建立初始的 KV Cache，生成第一个输出 Token，学生在不到一秒内就看到回答开始出现（TTFT）；</li>
-<li><strong>解码</strong>：逐个生成后续 Token，每一步读取模型权重和 KV Cache，并把新 Token 的 K、V 追加到缓存中（3.8.3 节）；</li>
-<li>每一步按照设定的解码策略选择 Token。由于这是知识问答，采用较低的温度（如 <span class="math inline">\(T = 0.3\)</span>）和 top-p 采样，以保证回答准确、稳定（3.8.6 节）；</li>
-<li>生成的 Token 被实时转换回文字，以流式方式推送到学生的屏幕上，直到生成结束标记。若回答约 300 个 Token、TPOT 约 20 毫秒，整个回答约 6 秒完成（式（3-42））。</li>
-</ol>
-<p>表 3-21 汇总了整个案例中各步骤所用的技术和资源。</p>
-<p>表3-21 课程问答模型案例的各步骤汇总</p>
+<section id="推理引擎与推理平台" class="level2">
+<h2 class="anchored" data-anchor-id="推理引擎与推理平台">3.11.1　推理引擎与推理平台</h2>
+<p><strong>推理引擎</strong>（inference engine）负责<strong>运行模型</strong>，解决“模型怎么算”：加载权重、管理运行数据，调用硬件完成预填充和解码。<strong>推理平台</strong>负责<strong>把模型用起来、管起来</strong>，解决“用户怎么方便地使用”：模型从哪里下载、怎样启动和切换、其他程序如何调用，都可以通过平台完成。一个平台通常建立在一个或多个引擎之上。打个比方，引擎是汽车的发动机，决定车能跑多快；平台是驾驶舱和仪表盘，决定开起来是否方便。<strong>平台不会给模型增加任何知识或能力</strong>，它只是省去了配置和管理工作。</p>
+<p>推理引擎主要做三件事。<strong>模型加载</strong>：识别模型结构、读取权重、为运行准备内存，决定全部由 GPU 计算还是部分交给 CPU；下载完成后要确认引擎能识别它的<strong>模型结构、文件格式和量化方式</strong>，三者缺一不可。<strong>预填充与解码</strong>：用户的问题先由分词器转换成 token，引擎在两个阶段为不同硬件选择合适的计算内核、安排计算顺序、分配临时空间，并管理 KV 缓存等运行数据。<strong>多请求调度</strong>：十个人同时提问时，决定怎样组批、何时插入新请求、显存不够时先处理谁、是否复用相同前缀的 KV 缓存；连续批处理、PagedAttention、前缀缓存都在这一层实现。</p>
+<p>表 <a href="../ch3/s3-11.html#c3-tab-engines">3-18</a> 列出了常用的引擎和平台（截至 2026 年 11 月）。</p>
+<div id="c3-tab-engines" class="booktab">
+<div class="tabcap">
+<p>表 3-18　常用的推理引擎与推理平台</p>
+</div>
 <table class="caption-top table">
-<caption>表3-21 课程问答模型案例的各步骤汇总</caption>
-<colgroup>
-<col style="width: 20%">
-<col style="width: 23%">
-<col style="width: 23%">
-<col style="width: 20%">
-<col style="width: 12%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>步骤</th>
-<th>关键技术</th>
-<th>主要资源</th>
-<th>产物</th>
-<th>对应章节</th>
+<th style="text-align: left;">名称</th>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">主要特点</th>
+<th style="text-align: left;">典型场景</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>① 选择基础模型</td>
-<td>预训练（复用已有成果）</td>
-<td>—</td>
-<td>7B 基础模型</td>
-<td>3.2～3.4</td>
+<td style="text-align: left;">llama.cpp</td>
+<td style="text-align: left;">引擎</td>
+<td style="text-align: left;">C/C++ 实现、依赖少；支持 CPU、Metal、CUDA、Vulkan 等后端和部分层卸载；使用 GGUF 格式与丰富的量化类型</td>
+<td style="text-align: left;">个人电脑、边缘设备</td>
 </tr>
 <tr class="even">
-<td>② 继续预训练</td>
-<td>数据清洗、ZeRO-3</td>
-<td>8 张 A100，约 2～3 小时</td>
-<td>领域基础模型</td>
-<td>3.3、3.4、3.5.5</td>
+<td style="text-align: left;">vLLM^[[45]](reference</td>
+<td style="text-align: left;">s.qmd#r</td>
+<td style="text-align: left;">ef-45)^ 引擎 PagedAttention、连续批处理、张量并行，多种量化格式，OpenAI 兼容接口</td>
+<td style="text-align: left;">高吞吐在线服务</td>
 </tr>
 <tr class="odd">
-<td>③ 指令微调</td>
-<td>指令数据构造、损失掩码、QLoRA</td>
-<td>1 张 24 GB 显卡，约 1 天</td>
-<td>课程指令模型</td>
-<td>3.5、3.6</td>
+<td style="text-align: left;">SGLang</td>
+<td style="text-align: left;">引擎</td>
+<td style="text-align: left;">RadixAttention 前缀缓存、结构化输出，调度高效</td>
+<td style="text-align: left;">高并发、智能体与多轮对话</td>
 </tr>
 <tr class="even">
-<td>④ 偏好对齐</td>
-<td>偏好数据、DPO（或 RLAIF）</td>
-<td>1 张 24 GB 显卡</td>
-<td>对齐后的模型</td>
-<td>3.7</td>
+<td style="text-align: left;">TensorRT-LLM</td>
+<td style="text-align: left;">引擎</td>
+<td style="text-align: left;">NVIDIA 针对自家 GPU 深度优化的编译内核，支持 FP8 等低精度</td>
+<td style="text-align: left;">NVIDIA 数据中心</td>
 </tr>
 <tr class="odd">
-<td>⑤ 评估</td>
-<td>测试集、人工评估、安全测试</td>
-<td>少量 GPU 与人力</td>
-<td>评估报告</td>
-<td>3.3.5、3.5.5</td>
+<td style="text-align: left;">TokenSpeed^[[54]](ref</td>
+<td style="text-align: left;">erences</td>
+<td style="text-align: left;">.qmd#ref-54)^ 引擎 LightSeek 基金会 2026 年开源，面向智能体负载，调度与内核模块化</td>
+<td style="text-align: left;">智能体服务（早期项目）</td>
 </tr>
 <tr class="even">
-<td>⑥ 合并与量化</td>
-<td>LoRA 合并、AWQ / GGUF 量化</td>
-<td>单机即可</td>
-<td>可部署的模型文件</td>
-<td>3.6.6、3.9.6、3.10.4</td>
+<td style="text-align: left;">LMDeploy</td>
+<td style="text-align: left;">引擎</td>
+<td style="text-align: left;">上海人工智能实验室开发，自研 TurboMind 推理内核，量化与服务一体</td>
+<td style="text-align: left;">服务化部署</td>
 </tr>
 <tr class="odd">
-<td>⑦ 部署</td>
-<td>vLLM、连续批处理、PagedAttention</td>
-<td>1 张 24 GB 显卡</td>
-<td>在线问答服务</td>
-<td>3.9、3.10</td>
+<td style="text-align: left;">MLX</td>
+<td style="text-align: left;">框架</td>
+<td style="text-align: left;">苹果面向统一内存架构的数组计算框架</td>
+<td style="text-align: left;">Mac 本地推理与微调</td>
 </tr>
 <tr class="even">
-<td>⑧ 处理请求</td>
-<td>Prefill、KV Cache、Decode、采样</td>
-<td>—</td>
-<td>流式输出的回答</td>
-<td>3.8</td>
+<td style="text-align: left;">Ollama</td>
+<td style="text-align: left;">平台</td>
+<td style="text-align: left;">把下载、运行和接口调用整合在一起，命令行或应用界面对话，也可供程序调用</td>
+<td style="text-align: left;">个人本地使用</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LM Studio</td>
+<td style="text-align: left;">平台</td>
+<td style="text-align: left;">可视化桌面界面，集成模型搜索、下载、聊天和参数设置，可提供 API</td>
+<td style="text-align: left;">个人本地使用</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lemonade</td>
+<td style="text-align: left;">平台</td>
+<td style="text-align: left;">在同一本地服务中管理模型和多种后端：llama.cpp，以及在受支持设备上的 FastFlowLM、Ryzen AI 等面向 AMD 处理器内置 NPU 的后端</td>
+<td style="text-align: left;">带 NPU 的个人电脑</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Xinference</td>
+<td style="text-align: left;">平台</td>
+<td style="text-align: left;">统一部署对话、文本向量、重排序、语音等多种模型，可从单机扩展到多机</td>
+<td style="text-align: left;">团队与企业</td>
 </tr>
 </tbody>
 </table>
-<p>从这个案例可以看到，借助开源基础模型和参数高效微调，构建一个可用的领域模型所需的资源已经从”数百张 GPU、数月时间”降低到了”几张 GPU、几天时间”。而决定最终效果的关键，往往不再是算力，而是<strong>数据的质量</strong>和<strong>评估的严谨程度</strong>。</p>
+</div>
+<p>大多数引擎和平台都提供与 OpenAI API <strong>兼容的接口</strong>：同一段调用代码只需改服务地址，就能在云端 API、本地 Ollama 和自建的 vLLM 服务之间切换。例如用 vLLM 启动服务再调用：</p>
+<pre><code># 启动服务（默认监听 8000 端口）
+vllm serve Qwen/Qwen2.5-7B-Instruct --max-model-len 8192
+# 调用 OpenAI 兼容的对话接口
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "Qwen/Qwen2.5-7B-Instruct",
+       "messages": [{"role": "user", "content": "什么是 KV 缓存？"}],
+       "temperature": 0.7, "max_tokens": 512}'</code></pre>
+<p>请求中的 <code>temperature</code>、<code>max_tokens</code> 正对应第 <a href="../ch3/s3-9.html#c3-subsec-decoding">3.9.5</a> 小节的解码策略。</p>
+</section>
+<section id="模型文件" class="level2">
+<h2 class="anchored" data-anchor-id="模型文件">3.11.2　模型文件</h2>
+<p><strong>模型仓库里有什么</strong>　 从 Hugging Face、ModelScope 等仓库下载模型，通常得到一个文件夹，里面有一个或多个权重文件、模型结构与运行配置、分词器及其配置，多模态模型还有图像或音频的预处理配置。以一个 7B 指令模型为例：</p>
+<pre><code>Qwen2.5-7B-Instruct/
+|-- config.json                       # 结构：层数、隐藏维度、注意力头数、KV 头数
+|-- generation_config.json            # 默认的解码参数
+|-- model-00001-of-00004.safetensors  # 权重分片 1（共 4 片）
+|-- ...
+|-- model.safetensors.index.json      # 索引：每个参数在哪个分片中
+|-- tokenizer.json                    # 分词器的词表与合并规则
+`-- tokenizer_config.json             # 分词器配置，含对话模板</code></pre>
+<p>权重太大时会拆成多个<strong>分片</strong>，合在一起才是一套完整模型，并不是每个文件都能单独运行；不同框架需要的文件也不完全相同。只复制一个分片或直接改文件后缀，通常得不到能运行的模型。<code>config.json</code> 里的层数、KV 头数正是估算 KV 缓存所需的参数（图 <a href="../ch3/s3-9.html#c3-fig-infermem">3-21</a>）。</p>
+<p><strong>权重文件格式</strong>　 常见格式见表 <a href="../ch3/s3-11.html#c3-tab-formats">3-19</a>。</p>
+<div id="c3-tab-formats" class="booktab">
+<div class="tabcap">
+<p>表 3-19　常见的模型权重文件格式</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">格式</th>
+<th style="text-align: left;">扩展名</th>
+<th style="text-align: left;">特点</th>
+<th style="text-align: left;">主要使用者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PyTorch 原生</td>
+<td style="text-align: left;">.bin / .pt</td>
+<td style="text-align: left;">基于 Python 的 pickle 序列化，加载时可能执行任意代码，有安全风险</td>
+<td style="text-align: left;">早期模型仓库</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Safetensors</td>
+<td style="text-align: left;">.safetensors</td>
+<td style="text-align: left;">只存张量数据，加载安全、速度快，支持内存映射</td>
+<td style="text-align: left;">Hugging Face 生态、vLLM</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GGUF</td>
+<td style="text-align: left;">.gguf</td>
+<td style="text-align: left;">单个文件同时包含权重、结构、分词器和对话模板等元数据，内置多种量化类型</td>
+<td style="text-align: left;">llama.cpp、Ollama、LM Studio</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ONNX</td>
+<td style="text-align: left;">.onnx</td>
+<td style="text-align: left;">跨框架、跨硬件的通用计算图格式</td>
+<td style="text-align: left;">ONNX Runtime、端侧与 NPU</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>读懂文件名</strong>　 文件名包含选型所需的关键信息。以 <code>Qwen2.5-7B-Instruct-Q4_K_M.gguf</code> 为例：<code>Qwen2.5</code> 是模型系列和版本；<code>7B</code> 是参数规模；<code>Instruct</code> 表示经过指令微调和对齐的对话模型（不带此后缀或带 <code>Base</code> 的通常是基础模型，不适合直接对话）；<code>Q4_K_M</code> 是 llama.cpp 的一种 4 位混合量化类型（K 表示分块的 k-quant 量化方案，M 表示中等档，部分重要矩阵用更高位数），平均每个权重约 4.8 位；<code>.gguf</code> 是文件格式。</p>
+</section>
+<section id="部署方案的选择" class="level2">
+<h2 class="anchored" data-anchor-id="部署方案的选择">3.11.3　部署方案的选择</h2>
+<p>先判断“能不能跑”，用式 <a href="../ch3/s3-9.html#c3-eq-infer-mem">（3-37）</a> 估算显存。</p>
+<div id="c3-ex-laptop" class="bookbox example">
+<div class="boxtitle">
+<p>例 3-10　笔记本能否运行 7B 模型</p>
+</div>
+<p>在 16 GB 统一内存的笔记本上运行 Qwen2.5-7B-Instruct 的 Q4_K_M 版本（文件约 4.7 GB），上下文设为 8192。该模型 28 层、4 个 KV 头、每头 128 维，KV 缓存以 FP16 存储，开销按 15% 计。</p>
+<div class="cthreecalc">
+<p>1 &amp; 权重 &amp; 文件大小 &amp; 4.7 GB &amp; GGUF 文件即权重（已含量化开销）<br>
+2 &amp; 每 token KV &amp; <span class="math inline">\(2\times28\times4\times128\times2\)</span> &amp; 57 344 B &amp; 式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a>；层数、KV 头数来自 <code>config.json</code><br>
+3 &amp; KV 总量 &amp; <span class="math inline">\(57\,344\times8192\)</span> &amp; 0.47 GB &amp; 上下文 8192，1 个用户<br>
+4 &amp; 开销 &amp; <span class="math inline">\((4.7+0.47)\times15\%\)</span> &amp; 0.78 GB &amp; 按前两项之和的 15%<br>
+5 &amp; 合计 &amp; <span class="math inline">\(4.7+0.47+0.78\)</span> &amp; 约 6 GB &amp; 远小于 16 GB<br>
+</p>
+</div>
+<p>数据流向文件大小 → 权重；配置文件 → 每 token KV → 乘上下文长度；两者之和乘 1.15。 可以流畅运行，还能给操作系统和其他程序留出内存。若改用 FP16 原始精度，仅权重就要 <span class="math inline">\(7.6\times10^{9}\times2\approx15\,\text{GB}\)</span>，就很难运行了。</p>
+</div>
+<p>再决定“跑在哪里”。表 <a href="../ch3/s3-11.html#c3-tab-deploy">3-20</a> 比较了四种典型方案。选择时综合考虑<strong>模型规模</strong>（需要多聪明）、<strong>并发与延迟</strong>（服务多少人、多快响应）、<strong>数据安全</strong>（数据能否离开本地）和<strong>成本</strong>（买硬件还是按量付费）。对学习和个人使用，在本地电脑上用 Ollama 或 LM Studio 运行一个量化后的 7B 左右模型，是了解大模型推理最便捷的起点。</p>
+<div id="c3-tab-deploy" class="booktab">
+<div class="tabcap">
+<p>表 3-20　大模型部署方案的比较</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">方案</th>
+<th style="text-align: left;">典型工具</th>
+<th style="text-align: left;">适用的模型与精度</th>
+<th style="text-align: left;">优点</th>
+<th style="text-align: left;">局限</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">个人电脑本地</td>
+<td style="text-align: left;">Ollama、LM Studio、llama.cpp</td>
+<td style="text-align: left;">数十亿参数，4～8 位量化</td>
+<td style="text-align: left;">数据不出本机、可离线、无调用费</td>
+<td style="text-align: left;">模型规模和并发有限</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">单机服务器</td>
+<td style="text-align: left;">vLLM、SGLang、LMDeploy</td>
+<td style="text-align: left;">数十亿到数百亿参数，BF16 / FP8 / INT4</td>
+<td style="text-align: left;">支持多用户并发，可提供 API</td>
+<td style="text-align: left;">需购置和运维 GPU 服务器</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">多机集群</td>
+<td style="text-align: left;">vLLM、SGLang、TensorRT-LLM 的分布式部署</td>
+<td style="text-align: left;">千亿参数级，张量并行 + 流水线并行，PD 分离</td>
+<td style="text-align: left;">能运行最大的模型，吞吐高</td>
+<td style="text-align: left;">成本和工程复杂度最高</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">云端 API</td>
+<td style="text-align: left;">各模型厂商的开放平台</td>
+<td style="text-align: left;">最强的闭源与开源模型</td>
+<td style="text-align: left;">无需硬件，即开即用</td>
+<td style="text-align: left;">按 token 计费，数据要发给服务方</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>推理引擎管“怎么算”（加载、预填充与解码、调度），推理平台管“怎么用”（下载、启动、接口）。</p></li>
+<li><p>模型是“结构 + 格式 + 量化方式”的组合，三者都要被引擎支持；分片合起来才是一套模型。</p></li>
+<li><p>案例进度：课程问答模型在服务器上用 vLLM 部署，另转换一份 GGUF Q4_K_M 供学生离线使用。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1386,18 +1496,18 @@ window.Quarto = {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch3/s3-10.html" class="pagination-link" aria-label="3.10　推理引擎、平台与模型部署">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.10　推理引擎、平台与模型部署</span>
+      <a href="../ch3/s3-10.html" class="pagination-link" aria-label="3.10　推理加速：围绕带宽与显存做文章">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.10　推理加速：围绕带宽与显存做文章</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch3/s3-12.html" class="pagination-link" aria-label="3.12　本章小结与习题">
-        <span class="nav-page-text">3.12　本章小结与习题</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch3/s3-12.html" class="pagination-link" aria-label="3.12　综合案例：一个 7B 课程问答模型的诞生">
+        <span class="nav-page-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

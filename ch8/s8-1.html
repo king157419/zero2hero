@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,18 +754,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#上下文窗口大一些就够了吗" id="toc-上下文窗口大一些就够了吗" class="nav-link active" data-scroll-target="#上下文窗口大一些就够了吗">8.1.1　上下文窗口大一些，就够了吗</a></li>
-  <li><a href="#窗口管理不等于记忆系统" id="toc-窗口管理不等于记忆系统" class="nav-link" data-scroll-target="#窗口管理不等于记忆系统">8.1.2　窗口管理不等于记忆系统</a></li>
-  <li><a href="#从聊天记录到状态系统" id="toc-从聊天记录到状态系统" class="nav-link" data-scroll-target="#从聊天记录到状态系统">8.1.3　从聊天记录到状态系统</a></li>
-  <li><a href="#记忆为什么重要" id="toc-记忆为什么重要" class="nav-link" data-scroll-target="#记忆为什么重要">8.1.4　记忆为什么重要</a></li>
-  <li><a href="#短期记忆与长期记忆" id="toc-短期记忆与长期记忆" class="nav-link" data-scroll-target="#短期记忆与长期记忆">8.1.5　短期记忆与长期记忆</a></li>
-  <li><a href="#三类基础记忆情景语义与程序" id="toc-三类基础记忆情景语义与程序" class="nav-link" data-scroll-target="#三类基础记忆情景语义与程序">8.1.6　三类基础记忆：情景、语义与程序</a></li>
-  <li><a href="#七类记忆及其状态含义" id="toc-七类记忆及其状态含义" class="nav-link" data-scroll-target="#七类记忆及其状态含义">8.1.7　七类记忆及其状态含义</a></li>
-  <li><a href="#记忆系统的本质是状态工程" id="toc-记忆系统的本质是状态工程" class="nav-link" data-scroll-target="#记忆系统的本质是状态工程">8.1.8　记忆系统的本质是状态工程</a></li>
-  <li><a href="#从三种实现思路看记忆系统" id="toc-从三种实现思路看记忆系统" class="nav-link" data-scroll-target="#从三种实现思路看记忆系统">8.1.9　从三种实现思路看记忆系统</a></li>
-  <li><a href="#好记忆不是把所有事情都记住" id="toc-好记忆不是把所有事情都记住" class="nav-link" data-scroll-target="#好记忆不是把所有事情都记住">8.1.10　好记忆不是把所有事情都记住</a></li>
-  <li><a href="#本节小结" id="toc-本节小结" class="nav-link" data-scroll-target="#本节小结">8.1.11　本节小结</a></li>
-  <li><a href="#思考与讨论" id="toc-思考与讨论" class="nav-link" data-scroll-target="#思考与讨论">8.1.12　思考与讨论</a></li>
+  <li><a href="#c8-subsec-window" id="toc-c8-subsec-window" class="nav-link active" data-scroll-target="#c8-subsec-window">8.1.1　上下文窗口大一些，就够了吗</a></li>
+  <li><a href="#c8-subsec-ctx" id="toc-c8-subsec-ctx" class="nav-link" data-scroll-target="#c8-subsec-ctx">8.1.2　上下文工程：决定这一次看到什么</a></li>
+  <li><a href="#c8-subsec-what" id="toc-c8-subsec-what" class="nav-link" data-scroll-target="#c8-subsec-what">8.1.3　记忆是什么：从聊天记录到状态系统</a></li>
+  <li><a href="#c8-subsec-types" id="toc-c8-subsec-types" class="nav-link" data-scroll-target="#c8-subsec-types">8.1.4　记忆的分类</a></li>
+  <li><a href="#c8-subsec-rag" id="toc-c8-subsec-rag" class="nav-link" data-scroll-target="#c8-subsec-rag">8.1.5　长期记忆与 RAG、长上下文、微调</a></li>
+  <li><a href="#c8-subsec-state" id="toc-c8-subsec-state" class="nav-link" data-scroll-target="#c8-subsec-state">8.1.6　记忆系统的本质：状态工程</a></li>
   </ul>
 </nav>
     </div>
@@ -726,247 +785,625 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>如果一位助手每次打开新对话，都要重新问你是谁、上次做到哪里、你不喜欢什么表达方式，你会觉得它不够聪明；可它可能只是没有记住。智能体的”聪明”很容易被理解成推理能力更强、工具更多或者回答更长，但在许多真实任务里，决定体验能否连续的，是它能不能保留并正确使用过去的状态。</p>
-<p>前七章已经为这个问题搭好了几块地基。第一讲把记忆和反思作为智能体的能力之一；第四讲解释了长上下文带来的显存与推理成本；第五讲讨论了 RAG 如何从外部知识库补充信息；第六讲把记忆放进智能体架构，并给出三层记忆的框架；第七讲从上下文工程的角度讨论工作集、压缩、持久化和恢复。本节不再重复这些技术细节，而是回答更靠前的问题：上下文窗口和记忆是什么关系，记忆到底是什么，记忆有哪些类型，以及一个记忆系统为什么不能只靠”多存一点”。</p>
-<p>读完后，你应当能够解释为什么更长的上下文仍不能替代记忆；区分短期记忆、长期记忆以及情景、语义、程序等不同类型；用”状态工程”的视角描述记忆从写入到遗忘的完整过程；并判断一份记忆是否真正有用。</p>
-<section id="上下文窗口大一些就够了吗" class="level2">
-<h2 class="anchored" data-anchor-id="上下文窗口大一些就够了吗">8.1.1　上下文窗口大一些，就够了吗</h2>
-<p>语言模型的上下文窗口，是它在一次请求中能够接收和处理的 token 范围。输入、历史对话、检索到的资料以及模型即将生成的输出，都要放进这个窗口。token 不等于汉字，不同模型的分词方式也不同，因此两者只能做近似换算。作为理解成本的量级参照，可以把常见上下文窗口列成下面的范围。</p>
-<p><strong>表 8-1 上下文窗口的量级参照</strong></p>
+<div class="bookbox guide">
+<p>上下文窗口已经能装下一本书，为什么智能体还需要记忆？记忆到底是什么，和上下文工程、RAG 有什么区别？本节先算一笔账，说明把全部历史塞进窗口既贵又不可靠；再说明上下文工程管的是“这一次让模型看到什么”，记忆系统管的是“跨会话的状态怎样保存、更新和遗忘”。结论是：记忆不是一份更长的聊天记录，而是模型之外一层可长期读写的状态系统，它有自己的数据结构、生命周期和分类。</p>
+</div>
+<section id="c8-subsec-window" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-window">8.1.1　上下文窗口大一些，就够了吗</h2>
+<p>大语言模型（Large Language Model，LLM）每次生成回答，都只能依据这一次请求送进来的内容。这些内容的长度上限叫<strong>上下文窗口</strong>（context window），以 <strong>token</strong>（词元，模型处理文本的最小单位）计数：系统指令、历史对话、检索到的资料、工具结果，以及模型即将生成的输出，都要挤在这个窗口里。token 与汉字之间没有固定比例，取决于模型的分词器。以 DeepSeek 的官方文档为例，1 个中文字符约折合 0.6 个 token<sup><a href="../ch8/references.html#ref-1">[1]</a></sup>，即 1 个 token 约对应 1.7 个汉字；较早的分词器对中文切得更碎，1 个汉字可能占 1 个甚至 2～3 个 token。表 <a href="../ch8/s8-1.html#c8-tab-window">8-1</a> 按“1 个 token 约合 1～1.7 个汉字”给出常见窗口的量级。</p>
+<div id="c8-tab-window" class="booktab">
+<div class="tabcap">
+<p>表 8-1　上下文窗口的量级参照（1 个 token 按 1～1.7 个汉字估算）</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 22%">
-<col style="width: 33%">
-<col style="width: 44%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>Token 范围</strong></th>
-<th><strong>大致汉字区间</strong></th>
-<th><strong>典型应用场景</strong></th>
+<th style="text-align: left;">窗口</th>
+<th style="text-align: left;">大致汉字数</th>
+<th style="text-align: left;">大致能放下</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>8K</td>
-<td>约 1.04 万至 1.2 万字</td>
-<td>短对话、代码补全、单页文档处理</td>
+<td style="text-align: left;">8K（8192 token）</td>
+<td style="text-align: left;">0.8 万～1.4 万字</td>
+<td style="text-align: left;">一段较长的对话、一篇短文档</td>
 </tr>
 <tr class="even">
-<td>32K</td>
-<td>约 4.16 万至 4.8 万字</td>
-<td>长文档、复杂代码分析</td>
+<td style="text-align: left;">32K</td>
+<td style="text-align: left;">3.3 万～5.6 万字</td>
+<td style="text-align: left;">一份长报告、一个中等规模的代码文件集合</td>
 </tr>
 <tr class="odd">
-<td>64K</td>
-<td>约 8.32 万至 9.6 万字</td>
-<td>合同、企业报表分析</td>
+<td style="text-align: left;">128K</td>
+<td style="text-align: left;">13 万～22 万字</td>
+<td style="text-align: left;">一本书，或几周的聊天记录</td>
 </tr>
 <tr class="even">
-<td>128K</td>
-<td>约 16.6 万至 19.2 万字</td>
-<td>整本书总结、多轮深度对话</td>
-</tr>
-<tr class="odd">
-<td>200K</td>
-<td>约 26 万至 30 万字</td>
-<td>超长文本或海量数据分析</td>
+<td style="text-align: left;">1M（约 <span class="math inline">\(10^{6}\)</span> token）</td>
+<td style="text-align: left;">100 万～170 万字</td>
+<td style="text-align: left;">多本书、大型代码仓库</td>
 </tr>
 </tbody>
 </table>
-<p>看到 128K、200K 这样的数字，很容易产生一个直觉：既然窗口已经能装下一本书，何必再设计记忆系统？问题在于，能放进去不等于能用得好。长上下文中的”Lost in the Middle”现象说明，信息可能被稀释，处在中间位置的关键内容未必能被稳定利用。上下文越长，模型保持注意力的难度也越高。与此同时，首 token 延迟（TTFT）、每秒 token 数（TPS）以及从请求开始到响应结束的总时间，都会受到计算量和窗口规模的影响。</p>
-<p><strong>先看一个小案例。</strong>用户周一说：“周五下午三点前交季度汇报，结论放前面，上次的图表把月份写错了。”周二，用户让助手整理新的销售数据。如果助手没有记忆，它可能重新询问截止时间，甚至再次生成上个月出错的图表。若把全部聊天记录原封不动塞回窗口，它又要在一堆闲聊、试错和旧版本里寻找真正有关的内容。窗口变大只是给了更多房间，房间里堆什么、怎么找、过期的东西何时扔掉，仍然是另一类问题。</p>
-<p>因此，长上下文首先要面对容量之外的三个约束。第一是成本，更多 token 会带来更多计算和显存开销；第二是延迟，用户不愿意为每条短问题等待大量历史内容被重新处理；第三是可靠使用，相关内容可能被无关内容淹没。第四讲已经解释了 KV 缓存和显存代价，这里只需保留结论：窗口尺寸是一项珍贵资源，不能把”全部历史都带上”当成默认策略。</p>
+</div>
+<p>既然窗口已经能装下几周的聊天记录，何必再设计记忆系统？问题在于“放得进去”不等于“用得好”。把全部历史都带进每次请求，至少有六类代价：</p>
+<ol type="1">
+<li><p><strong>成本</strong>：按 token 计费的服务，输入费用随长度线性增长；自建服务则要为更长的序列付出显存（见例 <a href="../ch8/s8-1.html#c8-ex-fullhist">8-1</a>）。</p></li>
+<li><p><strong>延迟</strong>：首 token 延迟（Time To First Token，TTFT）中的预填充时间随输入长度增长，用户问一句短话也要等模型把全部历史读一遍。</p></li>
+<li><p><strong>噪声</strong>：寒暄、试错和已被推翻的旧版本与有用信息一起进入窗口，降低了有效信息的占比。</p></li>
+<li><p><strong>中间遗忘</strong>：Liu 等人发现，相关信息位于长输入的开头或结尾时，模型利用得最好；位于中间时，准确率明显下降<sup><a href="../ch8/references.html#ref-2">[2]</a></sup>。这一现象被称为 <strong>Lost in the Middle</strong>。</p></li>
+<li><p><strong>冲突混淆</strong>：同一件事的新旧说法同时出现时，窗口本身不提供“哪条更新、哪条已作废”的判断依据。</p></li>
+<li><p><strong>安全风险</strong>：带进来的历史文档和网页越多，其中夹带的恶意指令（提示注入）越容易生效。</p></li>
+</ol>
+<p>第一类代价可以直接计算。第 4 章第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节已经给出 KV 缓存的估算式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a>：<span class="math inline">\(M_{\mathrm{KV}}\approx 2\times L\times H_{\mathrm{KV}}\times d_{\mathrm{head}}\times T\times B\times b_{\mathrm{KV}}\)</span>，其中 <span class="math inline">\(L\)</span> 为层数，<span class="math inline">\(H_{\mathrm{KV}}\)</span> 为 KV 头数，<span class="math inline">\(d_{\mathrm{head}}\)</span> 为每个头的维度，<span class="math inline">\(T\)</span> 为序列长度，<span class="math inline">\(B\)</span> 为同时驻留的请求数，<span class="math inline">\(b_{\mathrm{KV}}\)</span> 为每个元素的字节数。预填充的计算量则约为每个 token <span class="math inline">\(2N\)</span> 次浮点运算（<span class="math inline">\(N\)</span> 为参数量）。下面用这两个式子比较“带全部历史”与“只带检索出的记忆”两种做法。</p>
+<div id="c8-ex-fullhist" class="bookbox example">
+<div class="boxtitle">
+<p>例 8-1　把三个月的聊天记录全部放进上下文要付出多少</p>
+</div>
+<p>某助手部署在单张 80 GB 显卡上，模型为 8B（B = billion，十亿，即 <span class="math inline">\(N=8\times10^{9}\)</span>），结构与第 4 章例题相同：32 层，KV 头数 8，每头 128 维，KV 缓存以 BF16 存储（每元素 2 字节），BF16 权重约占 16 GB。某用户三个月的聊天记录约 20 万汉字。比较两种做法：（甲）每次请求都带上全部记录；（乙）由记忆系统检索出相关条目，连同系统指令和当前对话，每次请求共 4096 个 token。设显卡有效算力为 <span class="math inline">\(4\times10^{14}\)</span> FLOP/s。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">甲的 token 数</td>
+<td style="text-align: left;"><span class="math inline">\((2\times10^{5}\ \text{字})\times(0.6\ \text{token/字})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.2\times10^{5}\)</span> token</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">每 token 的 KV 缓存</td>
+<td style="text-align: left;"><span class="math inline">\(2\times32\times8\times128\times2\)</span></td>
+<td style="text-align: left;">131 072 字节</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">甲的 KV 缓存</td>
+<td style="text-align: left;"><span class="math inline">\((1.2\times10^{5})\times131\,072\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1.57\times10^{10}\)</span> 字节 <span class="math inline">\(\approx\)</span> 15.7 GB</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">乙的 KV 缓存</td>
+<td style="text-align: left;"><span class="math inline">\(4096\times131\,072\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(5.4\times10^{8}\)</span> 字节 <span class="math inline">\(\approx\)</span> 0.54 GB</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">可用显存下的并发数</td>
+<td style="text-align: left;"><span class="math inline">\((80-16)\div15.7\)</span>；<span class="math inline">\((80-16)\div0.537\)</span></td>
+<td style="text-align: left;">甲 4 个；乙约 119 个</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">甲的预填充时间</td>
+<td style="text-align: left;"><span class="math inline">\((2\times8\times10^{9}\times1.2\times10^{5})\div(4\times10^{14})\)</span></td>
+<td style="text-align: left;">约 4.8 s</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">乙的预填充时间</td>
+<td style="text-align: left;"><span class="math inline">\((2\times8\times10^{9}\times4096)\div(4\times10^{14})\)</span></td>
+<td style="text-align: left;">约 0.16 s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据从哪来</strong>：0.6 token/字取自 DeepSeek 文档的换算<sup><a href="../ch8/references.html#ref-1">[1]</a></sup>；第 2 步各数为模型结构参数，代入式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 并取 <span class="math inline">\(T=1\)</span>、<span class="math inline">\(B=1\)</span>；第 4 步的 0.54 GB 精确值为 <span class="math inline">\(5.37\times10^{8}\)</span> 字节；第 5 步的 64 GB 是显存减去权重，未计运行时开销，因此结果偏乐观，并向下取整；第 6、7 步只计了 <span class="math inline">\(2N\)</span> 的线性部分，没有计注意力随 <span class="math inline">\(T^{2}\)</span> 增长的那部分，序列越长低估越多。</p>
+<p><strong>结论</strong>：带全部历史时，单个请求的 KV 缓存是乙的约 29 倍，一张卡只能同时服务 4 个用户，每次提问还要多等约 4.6 s。而且这还没算成本以外的五类代价。推理引擎的前缀缓存可以在两次请求开头完全相同的部分上免去重复的预填充计算（历史只在末尾追加时能命中，中间一改就失效），但缓存本身仍占显存，也解决不了噪声、冲突和中间遗忘。</p>
+</div>
+<p>因此，窗口尺寸是一项珍贵资源，“把全部历史都带上”不能当成默认策略。窗口变大只是给了更多房间；房间里放什么、怎么找、过期的东西何时扔掉，是另一类问题。</p>
 </section>
-<section id="窗口管理不等于记忆系统" class="level2">
-<h2 class="anchored" data-anchor-id="窗口管理不等于记忆系统">8.1.2　窗口管理不等于记忆系统</h2>
-<p>在单次任务中，智能体常用若干办法管理窗口。可以按时间保留最近几轮对话，也可以按重要性优先保留关键信息；可以把记忆分成短期、中期和长期，可以按主题分组并在组内分层，还可以把旧对话压缩成摘要。这些方法的共同目标，是让当前上下文尽量装下”现在最需要的内容”。</p>
-<p>这里需要区分提示词工程和上下文工程。提示词工程主要优化”怎样把任务说清楚”，关注指令、示例与输出格式；上下文工程则设计模型当前能看到什么，包括任务材料、历史、检索结果、工具状态和记忆。两者会相互影响，但只改写一句提示，无法修复缺失证据、错误记忆或混乱的工具结果。</p>
+<section id="c8-subsec-ctx" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-ctx">8.1.2　上下文工程：决定这一次看到什么</h2>
+<p>先把问题说清楚。模型每次生成输出 <span class="math inline">\(y\)</span>，依据的只有拼接起来的上下文 <span class="math inline">\(c\)</span>： <span class="math display">\[P(y \mid c),\qquad c=\bigl[\,c_{\mathrm{sys}};\ c_{\mathrm{hist}};\ c_{\mathrm{ret}};\ c_{\mathrm{mem}};\ c_{\mathrm{user}}\,\bigr],
+\tag{8-1}\]</span> 其中 <span class="math inline">\(c_{\mathrm{sys}}\)</span> 为系统指令与角色设定，<span class="math inline">\(c_{\mathrm{hist}}\)</span> 为本次会话的历史，<span class="math inline">\(c_{\mathrm{ret}}\)</span> 为检索到的外部资料，<span class="math inline">\(c_{\mathrm{mem}}\)</span> 为从记忆系统取回的条目，<span class="math inline">\(c_{\mathrm{user}}\)</span> 为当前用户输入。式 <a href="../ch8/s8-1.html#c8-eq-ctx">（8-1）</a> 说明了一条朴素的规则：<strong>不在当前上下文里的信息，对这一次推理相当于不存在</strong>。模型参数里学到的一般知识除外，但它记不住某位用户上周说过什么。</p>
+<p>决定 <span class="math inline">\(c\)</span> 里放什么，就是<strong>上下文工程</strong>（context engineering）的工作，它的细节在第 7 章展开。这里只区分它和<strong>提示词工程</strong>（prompt engineering），见表 <a href="../ch8/s8-1.html#c8-tab-prompt-ctx">8-2</a>。</p>
+<div id="c8-tab-prompt-ctx" class="booktab">
+<div class="tabcap">
+<p>表 8-2　提示词工程与上下文工程</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">提示词工程</th>
+<th style="text-align: left;">上下文工程</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>关注点</td>
+<td style="text-align: left;">怎样把任务说清楚</td>
+<td style="text-align: left;">模型此刻应该看到哪些信息</td>
+</tr>
+<tr class="even">
+<td>主要对象</td>
+<td style="text-align: left;">指令写法、少样本示例、输出格式</td>
+<td style="text-align: left;">当前任务、历史拼接、检索片段、工具状态、记忆</td>
+</tr>
+<tr class="odd">
+<td>典型问题</td>
+<td style="text-align: left;">“怎么问，模型才答得更清楚？”</td>
+<td style="text-align: left;">“哪些信息该进窗口，哪些该剔除？”</td>
+</tr>
+<tr class="even">
+<td>修不了的问题</td>
+<td style="text-align: left;">缺失的证据、错误的记忆、混乱的工具结果</td>
+<td style="text-align: left;">跨会话没有保存下来的信息</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>上下文工程常归纳为四个动作：<strong>选择</strong>（Select），从大量对话与文档中挑出当前任务真正必需的信息；<strong>压缩</strong>（Compress），用摘要或删减在减少 token 的同时保留关键约束；<strong>排序</strong>（Order），把系统规则和关键材料放在开头、结尾等模型更容易利用的位置；<strong>隔离</strong>（Isolate），把系统指令、不可信的用户文本、第三方检索结果分开标注，降低提示注入的风险。管理会话历史时常用的几种做法都可以归到这四个动作里：时间滑动窗口（只留最近几轮，属于选择）、按重要性筛选（选择）、把旧对话压成摘要（压缩）、按主题分组再取组内细节（选择）、把即时状态与阶段摘要分层维护（隔离）。</p>
+<p>在系统里执行这四个动作的模块叫<strong>上下文构建器</strong>（Context Builder）。一次请求的处理顺序是：接收用户输入；读取当前会话状态和记忆片段；检索外部知识库；由上下文构建器做选择、压缩、排序与隔离；组装成最终提示交给模型。组装前它要过一遍检查清单：必要条件是否齐全？只是“可能有用”的冗余是否已剔除？是否存在版本冲突或已失效的约束？系统指令是否保持最高优先级？</p>
+<p>看一个例子。学生问课程助手：“考试是哪一天？”</p>
+<ul>
+<li><p><strong>版本 A，信息不足</strong>：上下文里只有这句问话。模型不知道是哪门课，只能说不清楚，甚至编一个日期。</p></li>
+<li><p><strong>版本 B，全量堆叠</strong>：把八周以来所有课程群消息约两万字连同问题一起送入。模型被延期前的旧通知干扰，答出了作废的日期。</p></li>
+<li><p><strong>版本 C，精细上下文</strong>：系统指令 + 最新一条更新通知“考试定于 6 月 20 日” + 问题。回答正确、延迟低，还能指明出处。</p></li>
+</ul>
+<p>版本 C 好在“放得对”，而不是“放得多”。但要做到版本 C，系统得先<strong>知道</strong>“最新通知”是哪一条、旧通知已经作废。这个信息从哪来？</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>上下文工程与记忆系统</strong>。上下文工程管理“这一次请求、此刻需要看到什么”，作用范围是单次调用的窗口；记忆系统管理“跨会话、跨任务的状态怎样长期保存、更新和遗忘”，作用范围是会话结束之后。两者是先后衔接的关系：记忆系统负责把状态存好、维护好，上下文工程负责在每次请求时从中挑出该用的部分装进窗口。只做窗口裁剪，用户第二天回来时什么都不剩；只做记忆存储而不做上下文工程，取回的记忆又会把窗口塞满。</p>
+</div>
+</section>
+<section id="c8-subsec-what" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-what">8.1.3　记忆是什么：从聊天记录到状态系统</h2>
+<p>最常见的误解，是把记忆等同于“一份超长聊天记录加一个搜索框”。聊天记录可以当素材，但里面充满重复、口语、临时信息和已被推翻的决定。保存全部文本只是保存了“过去说过什么”，并没有形成“现在处于什么状态”。四句话可以帮助区分：<strong>相似不等于有用</strong>——一段内容与问题语义接近，可能只是都提到了“预算”；<strong>新鲜不等于正确</strong>——昨天刚写入的一条，可能是用户纠正之前的错误说法；<strong>重复不等于重要</strong>——一件事被提了三次，可能只是助手在反复确认；<strong>召回不等于理解</strong>——找到了相关记录，还要判断它在当前任务中是否仍然适用。</p>
+<p>记忆值得专门设计，是因为它承担了四件事：<strong>连续性</strong>，任务跨越多次对话时不必每次从零开始；<strong>个性化</strong>，用户偏好、历史约束和已确认的决定能影响后续回答；<strong>经验复用</strong>，失败过的路径、成功的流程可以在相似任务中少走弯路；<strong>稳定状态</strong>，多步执行时计划、工具结果和待办事项保持一致。由此可以给出本章使用的定义：</p>
 <blockquote class="blockquote">
-<p>时间滑动窗口：保留最近发生的内容，简单但容易丢掉较早的关键约束。</p>
-<p>重要性筛选：根据任务相关性、用户关注度或风险选择内容，需要额外的判断依据。</p>
-<p>分层管理：把即时状态、阶段摘要和长期资料分开维护，降低相互干扰。</p>
-<p>主题与分组：先找到相关任务或主题，再在组内选择细节，适合项目较多的场景。</p>
-<p>摘要记忆：用较短文本保留较长时间跨度的信息，但压缩也可能损失条件、数字和例外。</p>
+<p>智能体的<strong>长期记忆</strong>，是系统跨交互保存信息，并在未来任务中选择性地写入、组织、检索、更新和遗忘这些信息的能力。</p>
 </blockquote>
-<p>从上下文构建器（Context Builder）的角度看，这些方法可以进一步归纳为选择、压缩、排序和隔离四个动作。选择解决”哪些材料值得进入”，压缩解决”怎样用更少 token 保留关键约束”，排序处理关键信息在长上下文中的位置，隔离则把系统指令、用户文本、检索文档和工具结果放在不同信任层级，降低提示注入与相互污染的风险。</p>
-<p>排序常被误解为只要把规则放开头、把问题放结尾就足够。位置确实会影响注意力，但它不能替代内容筛选。一个更稳妥的上下文构建器会先检查必要条件是否齐全，再删除”可能有用”的冗余内容，处理新旧信息冲突，最后确认系统指令不可被外部文本覆盖。上下文工程的目标是提高信息密度和约束清晰度，而不是追求窗口占用率。</p>
-<p>这些策略属于上下文工程。第六讲已经讨论过保存、筛选、压缩和隔离，第七讲又把它放到单次任务的工作集管理中。它们确实能缓解窗口压力，却还没有回答一个更持久的问题：当会话结束、进程关闭、用户第二天再回来时，哪些信息应当留下来？留下以后存放在哪里？下一次凭什么找到它？找到以后，旧信息和新事实冲突又该怎么办？</p>
-<p>这就是记忆系统要接手的部分。上下文工程主要管理”这一次任务此刻需要看到什么”，记忆系统还要管理”跨会话、跨任务的状态如何长期保存和更新”。两者不是替代关系。记忆最终仍要通过检索、筛选和组装进入上下文；没有上下文工程，长期记忆可能变成负担。反过来，只做窗口裁剪，也无法形成真正的连续性。</p>
-</section>
-<section id="从聊天记录到状态系统" class="level2">
-<h2 class="anchored" data-anchor-id="从聊天记录到状态系统">8.1.3　从聊天记录到状态系统</h2>
-<p>最容易出现的误解，是把记忆等同于一份超长聊天记录，再加一个搜索框。聊天记录当然可以成为素材，但它通常充满重复、口语、临时信息和已被推翻的决定。把全部内容保存下来，只是保存了过去发生过的文本，并没有形成当前任务可以使用的状态。</p>
-<p>可以用四句话提醒我们：相似不等于有用，新鲜不等于正确，重复不等于重要，召回不等于理解。一段内容和当前问题语义相近，可能只是都在说”预算”；一条昨天刚写入的记忆，可能包含用户当场纠正前的错误；同一件事被重复提及三次，也可能只是助手在反复确认；即使系统成功找到了相关记录，模型还需要结合当前指令、证据和任务目标判断它是否仍然适用。</p>
-<p>从工程角度看，记忆是模型之外的一层可长期读写的状态系统。它可以使用文本描述文件、Markdown 文件、知识图谱、冷热分层的数据库，也可以混合使用这些载体。但”用了哪个数据库”只是实现细节，不是记忆的定义。真正关键的是，系统怎样把一次交互中的信息提取出来，怎样与已有状态合并，怎样组织索引，怎样在需要时取回，以及怎样处理遗忘和纠错。</p>
-<p>记忆也不是一个静态仓库，而是一条行动链：接收输入，提取并写入信息，完成存储与建索引，按当前任务检索和路由，筛选出可用内容并组装进上下文，再结合当前证据和指令进行判断。行动产生新的结果后，系统还要根据结果更新、压缩、过期或删除旧状态。少了后半段，记忆就只会越积越多，不会随任务成长。</p>
-<p>如果把这条行动链展开，一条可维护的记忆通常不只有文本本身，还应带有类型、时间、来源、重要性、所有者、置信度和关联链接等元数据。类型说明它是情景、语义还是程序记忆；时间和来源帮助判断新旧与可信度；所有者与作用域防止跨用户串用；链接则让检索可以沿相关记录扩展。比起只保存一段孤立文本，这些字段使后续的合并、冲突处理和删除成为可能。</p>
-<p>完整生命周期可以概括为感知、编码、巩固、存储、检索、使用、遗忘和更新。更新并不只有一种形式：彼此独立的新事件可以追加，相互替代的事实需要修正，重复的小片段可以合并，过期或已撤回的数据则应当删除。系统如果只会追加，最终就会同时保留多个互相矛盾的”当前状态”。</p>
-<p>可以把一套成熟的记忆理解为多个不同生命周期的状态系统。临时任务状态可能需要几小时后消失，用户偏好可能稳定数月，项目约定可能只在一个项目内有效，安全权限则必须有明确的来源和更新边界。它们不该被塞进同一种存储，也不该用同一条保留规则。</p>
-<p><strong>据此，可以把智能体记忆定义为：</strong>用于记录、维护与调取交互信息和历史经验的认知模块。它涵盖工作记忆与长期记忆，支持信息编码、存储、检索和动态更新，帮助智能体连续、个性化地执行任务。这里的”认知模块”是功能层面的说法，不表示系统真的拥有人脑那样的记忆机制。</p>
-<p>从一次调用看，记忆最终还要通过上下文工程进入模型视野。系统不会把整座仓库一起搬给模型，而是先判断什么与当前任务有关，再按重要度压缩、筛选和组装。因此，记忆既是一条有生命周期的信息序列，也是一组分层维护的状态。能被准确取回、正确理解并在当前任务中用上的内容，才算真正完成了记忆的闭环。</p>
-</section>
-<section id="记忆为什么重要" class="level2">
-<h2 class="anchored" data-anchor-id="记忆为什么重要">8.1.4　记忆为什么重要</h2>
-<p>记忆首先提供连续性。一个任务很少总在一次对话里完成，用户可能今天确认需求、明天补充材料、下周回来查看结果。没有记忆，智能体每次都要从零开始建立情境，用户也会不断重复已经说过的信息。</p>
-<p>其次，记忆支持个性化。用户偏好、历史约束和已经确认的决定，会影响后续回答的组织方式。不过，个性化不等于把用户的每句话都当成永久标签。一次临时要求可能只适用于当前任务，系统中的记忆需要保留适用条件和时间边界。</p>
-<p>再次，记忆让经验可以复用。失败过的工具调用路径、成功完成某类任务的流程、一个项目长期采用的规范，都可以在下一次相似任务中减少试错。这让智能体不只在单轮对话里表现得好，还能在持续工作里积累可用经验。</p>
-<p>最后，复杂自主任务需要稳定状态。计划、工具结果、阶段性决定和待办事项要在多步执行中保持一致。如果系统记不住刚刚调用了哪个工具、已经完成哪一步、哪条证据还没有验证，就很难可靠地连续行动。从这个意义上说，记忆是智能体水平的一项基础设施，而不只是一个附加的聊天功能。</p>
-</section>
-<section id="短期记忆与长期记忆" class="level2">
-<h2 class="anchored" data-anchor-id="短期记忆与长期记忆">8.1.5　短期记忆与长期记忆</h2>
-<p>按是否跨越会话，可以将智能体记忆分成短期记忆和长期记忆。这个分法很实用，因为它直接对应两种不同的生命周期。</p>
-<p>短期记忆通常也叫工作记忆，限定在当前会话中。它保存本轮交互的上下文、推理中间态和任务状态，例如用户刚上传了哪个文件、当前做到第几步、还需要调用什么工具。工作记忆受上下文窗口限制，会话结束后通常不承担跨会话持久保存的职责。</p>
-<p>工作记忆管理的重点，是让当前任务的工作集足够小、足够相关。上下文工程可以概括为缩减、卸载和隔离：缩减是压缩或去掉当前不需要的内容，卸载是把一部分状态移到外部存储，隔离则是把不同任务、不同用户的上下文分开，避免相互污染。这些策略与第六讲的保存、筛选、压缩、隔离一脉相承。</p>
-<p>长期记忆独立于即时上下文窗口，负责持久保存交互历史、用户特征和任务经验。它要支持跨会话检索与动态更新，让智能体在很久以后仍能延续一个项目、遵守一个稳定偏好，或者复用一次成功的工作方法。</p>
-<p><strong>表 8-2 短期记忆与长期记忆的比较</strong></p>
+<p>这个定义包含四个要素：它<strong>跨时间存在</strong>（会话结束后仍在）；它<strong>影响未来行为</strong>（不是只存不用的档案）；它<strong>能被更新和治理</strong>（可以修改、删除、限定访问范围）；它<strong>能接受反馈评估</strong>（可以检验用了它之后任务是否做得更好）。从工程上看，记忆是模型之外一层可长期读写的<strong>状态系统</strong>，载体可以是文本文件、数据库、知识图谱，也可以混合使用。用了哪种数据库只是实现细节，不是定义的一部分。这里所说的“记忆”是功能层面的说法，不表示系统拥有人脑那样的机制。</p>
+<p><strong>一条记忆的字段</strong>　 既然记忆要被更新、删除、限定范围，一条记忆就不能只是一段文字。表 <a href="../ch8/s8-1.html#c8-tab-record">8-3</a> 列出一条记忆常见的字段。</p>
+<div id="c8-tab-record" class="booktab">
+<div class="tabcap">
+<p>表 8-3　一条记忆的常见字段（以“用户现在主要用 Python”为例）</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 36%">
-<col style="width: 47%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>比较项</strong></th>
-<th><strong>短期记忆</strong></th>
-<th><strong>长期记忆</strong></th>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">例子</th>
+<th style="text-align: left;">用途</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>典型范围</td>
-<td>当前会话或多步任务</td>
-<td>多个会话、多个任务阶段</td>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">内容（文本或图谱三元组）</td>
+<td style="text-align: left;">用户现在主要用 Python 开发</td>
+<td style="text-align: left;">被检索、被装进上下文</td>
 </tr>
 <tr class="even">
-<td>主要用途</td>
-<td>保持当前推理与执行状态</td>
-<td>延续用户、项目和经验状态</td>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">类型</td>
+<td style="text-align: left;">语义记忆（偏好）</td>
+<td style="text-align: left;">决定保留期限和检索路由</td>
 </tr>
 <tr class="odd">
-<td>容量约束</td>
-<td>直接受上下文窗口限制</td>
-<td>可扩展到外部存储，但检索难度增加</td>
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">产生与更新时间</td>
+<td style="text-align: left;">2025-05-12 写入</td>
+<td style="text-align: left;">判断新旧、处理冲突</td>
 </tr>
 <tr class="even">
-<td>生命周期</td>
-<td>会话结束或任务完成后清理</td>
-<td>按事实、事件和策略分别设定保留期</td>
+<td style="text-align: left;">source</td>
+<td style="text-align: left;">来源</td>
+<td style="text-align: left;">用户原话（而非系统推测）</td>
+<td style="text-align: left;">判断可信度</td>
 </tr>
 <tr class="odd">
-<td>核心风险</td>
-<td>信息过多、注意分散</td>
-<td>陈旧、冲突、错误扩散和隐私越界</td>
+<td style="text-align: left;">owner</td>
+<td style="text-align: left;">归属的用户、会话或项目</td>
+<td style="text-align: left;">用户 A</td>
+<td style="text-align: left;">防止跨用户串用</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">importance</td>
+<td style="text-align: left;">重要性（0～1）</td>
+<td style="text-align: left;">0.7</td>
+<td style="text-align: left;">决定保留与检索优先级</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">confidence</td>
+<td style="text-align: left;">置信度</td>
+<td style="text-align: left;">0.9</td>
+<td style="text-align: left;">区分确认事实与推测</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">links</td>
+<td style="text-align: left;">关联记忆的指针</td>
+<td style="text-align: left;">指向“此前主要用 Java”那一条</td>
+<td style="text-align: left;">沿关系扩展检索、追溯版本</td>
 </tr>
 </tbody>
 </table>
-<p>这组区分还带来一个关键边界。长期记忆不同于 RAG：RAG 主要从外部知识库召回公共知识或文档内容，记忆更关注”这个用户、这个任务经历过什么，现在处于什么状态”。例如，从手册中查到接口如何调用，是知识召回；记住某位用户上周已经把这个接口切换成测试环境，是状态召回。两者会共享向量检索、重排序和上下文管理等工具，但回答的问题不同。</p>
-<p>这一区别也体现在系统动作上。静态 RAG 主要回答”库里哪段资料与当前提问相似”，其内容通常只读、无个人归属，也缺少随反馈改变状态的完整过程。长期记忆还要回答信息是否值得保存、是否推翻了旧结论、属于谁、何时失效，以及是否应主动遗忘。因此，把向量数据库接进模型并不自动得到长期记忆；只有把写入、时间、来源、权限、更新和治理一起纳入系统，检索层才可能成为状态系统的一部分。</p>
-<p>微调也属于另一种改动：它通过训练改变模型的知识、风格或特定行为，但训练完成后不会像外部状态那样逐条增删和审计。处理需要频繁变化的用户事实与任务进度时，外部长期记忆通常更合适；需要改变稳定的输出习惯或领域能力时，才考虑参数更新。</p>
-</section>
-<section id="三类基础记忆情景语义与程序" class="level2">
-<h2 class="anchored" data-anchor-id="三类基础记忆情景语义与程序">8.1.6　三类基础记忆：情景、语义与程序</h2>
-<p>长期记忆还可以从内容性质继续细分。认知学中一种有代表性的划分是情景记忆、语义记忆和程序记忆。它们之间的差别，不在于存放在哪个数据库，而在于记录的内容回答了什么类型的问题。</p>
-<p>情景记忆回答”过去发生过什么”。它保存会话记录、工具调用轨迹、失败路径和用户反馈。比如，助手曾经在导出报告时漏掉附件，用户随后指出问题；这段经历就是情景记忆。它适合保留事件的顺序和因果线索，常见载体包括日志、轨迹和会话历史。</p>
-<p>语义记忆回答”长期稳定的事实是什么”。它保存用户画像、项目规则、系统约定和外部事实。例如，用户习惯先看结论，某项目只使用指定模板，某个组织规定敏感数据不能上传到外部服务。语义记忆的载体可以是结构化 Profile、Schema、知识库或图谱节点。这里的”稳定”是相对任务而言的，任何事实仍然需要来源、时间和适用范围。</p>
-<p>程序记忆回答”事情通常怎么做”。它保存工作流、SOP、代码套路、工具使用经验和可复用的操作手册。例如，生成周报的标准顺序是先核对指标口径，再生成图表，最后检查日期和单位。程序记忆不只描述某个事实，还规定了行动步骤和约束。Skills、Workflow 和 CLAUDE.md 等文件都可以成为程序记忆的载体。</p>
-<p>三类记忆经常一起工作。只记事实，助手知道用户喜欢简洁，却不知道怎样组织一份合格报告；只记流程，助手会按步骤执行，却可能忽略用户的特殊情况；只有情景，助手能复述上次发生了什么，却不一定能从中抽出下一次可用的规则。真正有用的长期记忆，需要把事件沉淀成事实或方法，同时也保留证据，避免概括过头。</p>
-</section>
-<section id="七类记忆及其状态含义" class="level2">
-<h2 class="anchored" data-anchor-id="七类记忆及其状态含义">8.1.7　七类记忆及其状态含义</h2>
-<p>在情景、语义和程序三类之外，还可以进一步划分出七类记忆。这个分法更适合系统设计，因为每一类记忆都对应一种需要维护的状态。需要注意的是，它们是观察记忆的不同角度，并不要求工程系统一定建立七个互不相干的数据库。</p>
-<p><strong>表 8-3 七类记忆及其典型状态</strong></p>
+</div>
+<p><strong>生命周期</strong>　 一条记忆从产生到消失，要经过八个环节（图 <a href="../ch8/s8-1.html#c8-fig-lifecycle">8-2</a>）：<strong>感知</strong>（接收对话、工具结果、文件等输入）、<strong>编码</strong>（判断值不值得记，并抽取成结构化条目）、<strong>巩固</strong>（与已有记忆合并、建立联系，从多次经历中提炼稳定规律）、<strong>存储</strong>（写入合适的载体并建立索引）、<strong>检索</strong>（按当前任务找出候选）、<strong>使用</strong>（装进上下文参与判断）、<strong>更新</strong>（根据新证据修改旧条目）和<strong>遗忘</strong>（删除或降权过期、低价值、被用户撤回的条目）。前四个环节构成写入路径，后四个构成读取与维护路径；使用的结果又会反馈回来，决定哪些记忆该强化、哪些该修正。每个环节都含有决策：要不要记？以什么形式记？什么时候取？用过之后它有没有证明自己的价值？</p>
+<div id="c8-fig-lifecycle" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch8-lifecycle.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 8-2　记忆的生命周期。上排为写入路径，下排为读取与维护路径；虚线表示使用的结果反馈给巩固环节，决定哪些记忆被强化、哪些被修正。每个环节都要依靠条目上的元数据做判断</p>
+</div>
+</div>
+<p><strong>四种更新操作</strong>　 只会追加的系统，迟早会同时保留几个互相矛盾的“当前状态”。表 <a href="../ch8/s8-1.html#c8-tab-update">8-4</a> 列出四种更新操作。</p>
+<div id="c8-tab-update" class="booktab">
+<div class="tabcap">
+<p>表 8-4　记忆的四种更新操作</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>记忆类型</strong></th>
-<th><strong>回答的问题</strong></th>
-<th><strong>典型状态或载体</strong></th>
+<th style="text-align: left;">操作</th>
+<th style="text-align: left;">适用情况</th>
+<th style="text-align: left;">例子</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>工作记忆</td>
-<td>当前正在做什么，进展到哪一步</td>
-<td>当前任务、变量、短期对话、工具中间结果</td>
+<td style="text-align: left;">追加（Append）</td>
+<td style="text-align: left;">新事件与已有记忆独立、不冲突</td>
+<td style="text-align: left;">新增“5 月 12 日提交了第 3 次作业”</td>
 </tr>
 <tr class="even">
-<td>语义记忆</td>
-<td>哪些事实和规则长期有效</td>
-<td>用户画像、Schema、项目规则、知识库、图谱节点</td>
+<td style="text-align: left;">修正（Update）</td>
+<td style="text-align: left;">新事实替代旧事实</td>
+<td style="text-align: left;">“主要用 Java”被“现在主要用 Python”覆盖，旧条目标为失效</td>
 </tr>
 <tr class="odd">
-<td>情景记忆</td>
-<td>过去发生过哪些事件</td>
-<td>会话记录、日志、调用轨迹、失败路径、反馈</td>
+<td style="text-align: left;">合并（Merge）</td>
+<td style="text-align: left;">多条同类碎片可以压成一条</td>
+<td style="text-align: left;">三次关于格式偏好的零散反馈合成一条“偏好先给结论”</td>
 </tr>
 <tr class="even">
-<td>程序记忆</td>
-<td>这类任务应当怎样完成</td>
-<td>Skills、Workflow、SOP、代码套路、CLAUDE.md</td>
-</tr>
-<tr class="odd">
-<td>检索记忆</td>
-<td>当前任务需要从外部取回什么</td>
-<td>外部文档、知识库、向量索引、图谱检索入口</td>
-</tr>
-<tr class="even">
-<td>参数记忆</td>
-<td>模型内部已经学会了什么</td>
-<td>模型参数中内化的语言、知识和一般能力</td>
-</tr>
-<tr class="odd">
-<td>前瞻记忆</td>
-<td>未来还要完成什么</td>
-<td>任务清单、提醒、日历、尚未触发的计划</td>
+<td style="text-align: left;">删除（Delete）</td>
+<td style="text-align: left;">过期、错误或被用户注销的数据</td>
+<td style="text-align: left;">用户要求删除自己的家庭住址</td>
 </tr>
 </tbody>
 </table>
-<p>工作记忆是当前状态。它像桌面上摊开的材料，只保留正在处理的问题和必要的中间结果。语义记忆是长期事实，情景记忆是历史事件，程序记忆是行为策略。检索记忆对应外部知识，强调信息在需要时被取回；参数记忆对应模型内化能力，通常无法像普通文件那样直接读取和局部改写；前瞻记忆保存未来任务，让系统知道后面还有哪些事情没有发生或没有完成。</p>
-<p><strong>把这七类记忆放进同一个任务里，会更容易理解。</strong>用户让工作助手准备周五的季度汇报。当前做到哪一步，属于工作记忆；用户的领导偏好看结论，项目名称和指标口径属于语义记忆；上次图表把月份写错，属于情景记忆；按什么步骤检查图表和附件，属于程序记忆；公司报告模板需要从外部知识库取回，属于检索记忆；模型本身能够理解表格和常见绘图指令，依赖参数记忆；周四晚上提醒助手做最终检查，则属于前瞻记忆。</p>
-<p>这个例子也说明，七类记忆不是一个任务只能选一种类型。一次完整任务往往同时依赖多种状态。设计系统时首先应当问：这份状态由谁写入，谁能读取，什么时候失效，出错后怎样纠正。存储形式反而可以在这些问题之后决定。例如，用户偏好既可以写成简短文本，也可以存为结构化 Profile；选择哪种实现，要看读取方式、更新频率和权限边界，而不是因为某种数据库”更像记忆”。</p>
-<p>从内容边界看，记忆通常保存可恢复的任务状态、过去经历、稳定知识、可重复流程、长期偏好，以及权限和安全边界。前三类告诉智能体现在处于什么位置、曾经发生过什么、哪些事实仍然成立；可重复流程规定怎样行动；长期偏好影响行为选择；权限与安全边界则限制哪些状态可以被读写、哪些信息不能跨任务使用。把这些内容混在同一个无差别存储里，往往会让更新和隔离变得困难。</p>
+</div>
 </section>
-<section id="记忆系统的本质是状态工程" class="level2">
-<h2 class="anchored" data-anchor-id="记忆系统的本质是状态工程">8.1.8　记忆系统的本质是状态工程</h2>
-<p>到这里，可以把记忆系统的工作概括成一句话：维护智能体在执行任务时需要的状态，并让这些状态在正确的时间、以正确的形式进入当前判断。这种视角可以称为状态工程。</p>
-<p>所谓状态，不只是用户说过的几句话。它可以是当前任务进度，也可以是长期事实、历史事件、行为策略、外部知识、模型能力和未来计划。七类记忆分别对应七种状态。状态工程关心的不是”有没有保存”，而是这些状态是否完整、是否仍有效、是否来自可信来源、是否允许被某个任务读取，以及发生冲突时依据什么更新。</p>
-<p>一套可用的状态系统至少要处理五个动作。写入时，系统要从输入中提取值得保存的内容，并记录来源；合并时，要把新状态与已有状态对齐，避免产生多个互相矛盾的用户画像；组织时，要建立适合检索的索引和分组；取回时，要根据任务、作用域和风险选择内容；遗忘时，要处理过期、低价值或不允许继续保留的状态。这五个动作形成循环，而不是一次性的数据迁移。</p>
-<p>状态还需要边界。当前会话的临时猜测不应自动变成长期用户偏好；某项目中的规则不应扩散到所有项目；不同用户或不同权限空间的数据不应在检索时混在一起；涉及隐私和安全的记忆更需要在写入前判断是否应该保存。第六讲把记忆看成智能体组件，第七讲强调上下文隔离，到了这里，两者汇聚成一个系统问题：让正确的状态被正确的人、在正确的任务中使用。</p>
-<p>这也是为什么”记忆是一个自我成长的系统”这一说法有价值。它不会因为保存的数据越来越多就自然变聪明。只有当系统能从经历中提炼事实、从失败中修正流程、从反馈中调整用户模型，并根据新证据淘汰旧状态时，记忆才会随使用变得更有用。</p>
+<section id="c8-subsec-types" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-types">8.1.4　记忆的分类</h2>
+<p>记忆可以从两个角度分类：按<strong>存在多久</strong>分为短期和长期，按<strong>记的是什么</strong>分为情景、语义和程序。两种分法是交叉的，不是同一层级上的并列。</p>
+<p><strong>短期记忆与长期记忆</strong>　 <strong>短期记忆</strong>通常就是<strong>工作记忆</strong>，限于当前会话或当前任务：用户刚上传了哪个文件、做到第几步、还要调用什么工具。它直接受上下文窗口限制，会话结束后一般不再保留。管理短期记忆靠的正是上一小节的上下文工程。<strong>长期记忆</strong>独立于窗口，保存跨会话的交互历史、用户特征和任务经验，需要时再被检索出来。表 <a href="../ch8/s8-1.html#c8-tab-stlt">8-5</a> 对比了两者。</p>
+<div id="c8-tab-stlt" class="booktab">
+<div class="tabcap">
+<p>表 8-5　短期记忆与长期记忆</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">比较项</th>
+<th style="text-align: left;">短期记忆（工作记忆）</th>
+<th style="text-align: left;">长期记忆</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">范围</td>
+<td style="text-align: left;">当前会话或一项多步任务</td>
+<td style="text-align: left;">多个会话、多个任务阶段</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">用途</td>
+<td style="text-align: left;">保持当前推理与执行状态</td>
+<td style="text-align: left;">延续用户、项目和经验状态</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">容量约束</td>
+<td style="text-align: left;">直接受上下文窗口限制</td>
+<td style="text-align: left;">可扩展到外部存储，但检索难度随之增加</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">生命周期</td>
+<td style="text-align: left;">会话结束或任务完成后清理</td>
+<td style="text-align: left;">按事实、事件、流程分别设定保留期</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">管理手段</td>
+<td style="text-align: left;">上下文工程（选择、压缩、排序、隔离）</td>
+<td style="text-align: left;">写入、合并、索引、检索、更新、遗忘</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">主要风险</td>
+<td style="text-align: left;">信息过多、注意力分散</td>
+<td style="text-align: left;">陈旧、冲突、错误扩散、隐私越界</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>情景、语义与程序记忆</strong>　 长期记忆按内容性质还可细分。这一划分来自认知心理学：情景记忆与语义记忆的区分由 Tulving 在 1972 年提出<sup><a href="../ch8/references.html#ref-4">[4]</a></sup>，程序记忆则属于 Squire 所说的非陈述性记忆<sup><a href="../ch8/references.html#ref-5">[5]</a></sup>。三者的差别不在于存放在哪个数据库，而在于回答什么类型的问题（表 <a href="../ch8/s8-1.html#c8-tab-esp">8-6</a>）。</p>
+<div id="c8-tab-esp" class="booktab">
+<div class="tabcap">
+<p>表 8-6　情景记忆、语义记忆与程序记忆（以编程辅导助手为例）</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">回答的问题</th>
+<th style="text-align: left;">例子</th>
+<th style="text-align: left;">常见载体</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>情景记忆</strong></td>
+<td style="text-align: left;">我经历过什么？</td>
+<td style="text-align: left;">学生在上周三的第 3 题中把循环边界写错了</td>
+<td style="text-align: left;">会话记录、工具调用轨迹、日志</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>语义记忆</strong></td>
+<td style="text-align: left;">我知道哪些事实？</td>
+<td style="text-align: left;">该学生偏好 Python，已掌握基础语法</td>
+<td style="text-align: left;">用户画像、结构化字段、知识图谱节点</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>程序记忆</strong></td>
+<td style="text-align: left;">这件事该怎么做？</td>
+<td style="text-align: left;">回答前先查讲义，再调用代码执行工具验证</td>
+<td style="text-align: left;">工作流、SOP、技能文件、代码片段</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>三类记忆经常一起工作。只记事实，助手知道用户喜欢简洁，却不知道怎样组织一份合格的报告；只记流程，助手会按步骤执行，却可能忽略用户的特殊情况；只有情景，助手能复述上次发生了什么，却不一定能从中抽出下次可用的规则。把多次情景提炼成语义或程序记忆，就是第 <a href="../ch8/s8-3.html#c8-subsec-ecr">8.3.5</a> 小节要讲的“巩固”。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>情景记忆与语义记忆</strong>。区分的关键是有没有<strong>具体的时间和情境</strong>。“5 月 12 日用户说他改用 Python 了”是情景记忆，记录的是一次事件；“用户主要用 Python”是语义记忆，是从事件中抽象出的、脱离具体时间的事实。同一信息可以两种形式都存：语义条目供快速使用，情景条目作为证据，以便日后核对和纠错。程序记忆则与两者都不同，它记的是“怎么做”，往往直接表现为可执行的步骤或代码。</p>
+</div>
+<p><strong>七类记忆</strong>　 设计系统时，还可以把智能体需要维护的状态细分为七类（表 <a href="../ch8/s8-1.html#c8-tab-seven">8-7</a>）。其中<strong>参数记忆</strong>（parametric memory）指模型在预训练和微调中固化在权重里的知识，更新代价高；与之相对，存放在外部数据库或文档中、可以随时增删改的内容称为<strong>非参数记忆</strong>（non-parametric memory），表中除参数记忆外的各类都属于此。这七类是观察同一个系统的不同角度，并不要求建七个互不相干的数据库。</p>
+<div id="c8-tab-seven" class="booktab">
+<div class="tabcap">
+<p>表 8-7　七类记忆与典型状态</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">回答的问题</th>
+<th style="text-align: left;">典型状态或载体</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">工作记忆</td>
+<td style="text-align: left;">现在在做什么，做到哪一步</td>
+<td style="text-align: left;">当前任务、变量、近几轮对话、工具中间结果</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">语义记忆</td>
+<td style="text-align: left;">哪些事实和规则长期有效</td>
+<td style="text-align: left;">用户画像、项目规则、知识图谱节点</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">情景记忆</td>
+<td style="text-align: left;">过去发生过哪些事件</td>
+<td style="text-align: left;">会话记录、日志、调用轨迹、失败路径、反馈</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">程序记忆</td>
+<td style="text-align: left;">这类任务该怎样完成</td>
+<td style="text-align: left;">工作流、SOP、技能文件、代码套路</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">检索记忆</td>
+<td style="text-align: left;">当前任务要从外部取回什么</td>
+<td style="text-align: left;">外部文档库、向量索引、图谱检索入口</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">参数记忆</td>
+<td style="text-align: left;">模型内部已经学会了什么</td>
+<td style="text-align: left;">权重中的语言能力与一般知识</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">前瞻记忆</td>
+<td style="text-align: left;">将来还要完成什么</td>
+<td style="text-align: left;">待办清单、提醒、尚未触发的计划</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>把七类放进同一个任务里看。用户让助手准备周五的季度汇报：当前做到哪一步是工作记忆；领导偏好先看结论、项目指标口径是语义记忆；上次图表把月份写错是情景记忆；检查图表和附件的步骤是程序记忆；公司报告模板要从知识库取回，属于检索记忆；模型本身能读懂表格、会写绘图代码，依赖参数记忆；周四晚上提醒做最终检查是前瞻记忆。一个任务往往同时依赖多种状态。设计时先问“这份状态由谁写入、谁能读取、何时失效、出错怎样纠正”，存储形式放在这些问题之后决定。</p>
 </section>
-<section id="从三种实现思路看记忆系统" class="level2">
-<h2 class="anchored" data-anchor-id="从三种实现思路看记忆系统">8.1.9　从三种实现思路看记忆系统</h2>
-<p>可以用三种有代表性的方案，说明记忆从理念走向实现时的不同取舍。第一种是分层记忆：按时效性把内容放入不同物理存储层，检索时再结合向量相似度和 BM25 关键词匹配，例如用”向量搜索乘 0.7，加 BM25 乘 0.3”的混合策略。分层让不同生命周期的数据有不同管理方式，混合检索则同时利用语义相似和关键词命中。</p>
-<p>第二种是”文件即记忆”。代表方案把原始全文长期保存在文件中，并让”什么时候该召回”和”记忆实际保存了什么”分开处理。这样做保留了完整证据，也给召回策略留下独立调整空间；代价是文件越多，组织、检索和去重越需要投入。</p>
-<p>第三种是完全基于文件系统，把语言模型本身当作检索引擎。它实现直接，适合文件规模和任务复杂度相对可控的场景，但检索开销、上下文窗口和稳定性会形成天花板。三种思路没有谁天然更高级，它们分别把复杂度放在了不同位置。</p>
-<p>这些实现方式也提醒我们，记忆系统不应只用”存了多少”衡量。真正决定效果的是存储粒度是否合理，索引是否适合当前问题，读取是否遵循任务边界，以及系统能否处理过期和冲突。接下来讨论的设计能力，正是围绕这些环节展开。</p>
+<section id="c8-subsec-rag" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-rag">8.1.5　长期记忆与 RAG、长上下文、微调</h2>
+<p>长期记忆最容易和第 5 章的<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）混为一谈，因为二者都“从外部取回内容放进上下文”。先简要回顾 RAG 的流程：离线阶段把文档清洗、保留标题结构、附上作者与日期等元数据，再切成块（固定长度切块、按文档结构切块或按语义切块），用嵌入模型把每块编码成向量存入向量数据库；在线阶段改写用户问题，用稀疏检索（如 BM25，按词频与逆文档频率给关键词匹配打分，擅长专有名词、编号和精确数字）和稠密检索（向量相似度，擅长同义改写）召回候选，再用交叉编码器（把问题与候选片段拼在一起送入模型打分，比分别编码更准但更慢）重排序，取少量片段装进上下文生成回答。RAG 答错通常出在六处：库里根本没有答案、切块切断了关键条件、措辞差异太大没召回、召回了相似但错误的内容、模型无视了上下文中的证据、召回了旧版本而缺少时间判断。这些机制的细节见第 5 章。</p>
+<div id="c8-tab-routes" class="booktab">
+<div class="tabcap">
+<p>表 8-8　长上下文、RAG、微调与长期记忆</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">技术路线</th>
+<th style="text-align: left;">主要解决的问题</th>
+<th style="text-align: left;">更新方式与代价</th>
+<th style="text-align: left;">跨会话状态</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">长上下文</td>
+<td style="text-align: left;">单次推理中通读大量材料</td>
+<td style="text-align: left;">不需要“更新”，但每次请求都要重新付全部 token 的计算</td>
+<td style="text-align: left;">无，会话结束即消失</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RAG</td>
+<td style="text-align: left;">从外部知识库查找证据</td>
+<td style="text-align: left;">更新文档并重建索引，代价低</td>
+<td style="text-align: left;">无，知识库不记录“谁、何时、经历了什么”</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">微调</td>
+<td style="text-align: left;">改变模型的行为、文风或领域能力</td>
+<td style="text-align: left;">重新训练参数，代价高，不能逐条增删与审计</td>
+<td style="text-align: left;">固化在权重中，不区分用户</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">长期记忆</td>
+<td style="text-align: left;">保存、巩固、更新跨时间的经验与状态</td>
+<td style="text-align: left;">逐条增删改，代价低，但要设计写入与冲突规则</td>
+<td style="text-align: left;">有，且按用户、项目归属</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>表 <a href="../ch8/s8-1.html#c8-tab-routes">8-8</a> 把四条路线放在一起。长期记忆与 RAG 的分界，在于“静态知识库”与“有状态的系统”。普通 RAG 只回答一个问题：“库里哪段文本与当前提问相似？”长期记忆还要回答：这条信息值得保存吗？它推翻了旧结论吗？它属于谁？何时失效？是否该主动遗忘？表 <a href="../ch8/s8-1.html#c8-tab-rag-ltm">8-9</a> 列出了具体差别。</p>
+<div id="c8-tab-rag-ltm" class="booktab">
+<div class="tabcap">
+<p>表 8-9　普通 RAG 与长期记忆系统</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">普通 RAG（静态知识库）</th>
+<th style="text-align: left;">长期记忆系统</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">内容来源</td>
+<td style="text-align: left;">预先整理好的文档</td>
+<td style="text-align: left;">交互中不断产生的对话、反馈与行动结果</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">写入</td>
+<td style="text-align: left;">运营者批量导入，运行时只读</td>
+<td style="text-align: left;">运行时由系统自己判断并写入</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">时间线</td>
+<td style="text-align: left;">一般没有“新旧”与有效期概念</td>
+<td style="text-align: left;">每条带时间戳，区分“当时为真”与“现在为真”</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">归属</td>
+<td style="text-align: left;">公共知识，不属于某个用户</td>
+<td style="text-align: left;">属于特定用户、会话或项目，需隔离</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">更新与冲突</td>
+<td style="text-align: left;">替换文档即可</td>
+<td style="text-align: left;">追加、修正、合并、删除，需处理冲突</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">遗忘</td>
+<td style="text-align: left;">不涉及</td>
+<td style="text-align: left;">按价值、期限或用户要求主动遗忘</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">典型问题</td>
+<td style="text-align: left;">“接口 X 怎么调用？”（知识召回）</td>
+<td style="text-align: left;">“这位用户上周把接口切到测试环境了吗？”（状态召回）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>RAG 与长期记忆</strong>。两者可以共用向量检索、重排序等组件，所以“把向量数据库接到模型上”并不自动得到长期记忆。缺的是写入判断、时间、来源、归属、更新和遗忘这些<strong>状态管理</strong>环节。反过来，长期记忆的“检索”一步常常就借用 RAG 的检索器。可以说：RAG 是一种取回机制，长期记忆是一个有生命周期的状态系统，前者可以是后者的一个组件。</p>
+</div>
 </section>
-<section id="好记忆不是把所有事情都记住" class="level2">
-<h2 class="anchored" data-anchor-id="好记忆不是把所有事情都记住">8.1.10　好记忆不是把所有事情都记住</h2>
-<p>记忆系统追求高密度压缩，而不是全量保存。真实交互里有大量寒暄、重复确认和临时试错，它们对理解当下有用，却不必永久占用长期状态。系统应当把低密度文本提炼成可执行的事实、事件或方法，同时保留必要证据。例如，与其完整保存”用户周三上午十点说过第二句里有个’尽量’“，不如提炼成”用户希望周五前完成，周五是硬截止时间”。后一句同时包含结论和时间边界，也不容易在后续被误用。</p>
-<p>检索也不能只靠语义相似。相似内容只是一个候选入口，随后还要按任务类型、作用域、时间和风险做路由。一个关于”预算”的问题，可能同时召回财务制度、某个项目的预算表和用户的一次随口抱怨；真正适合当前任务的，往往只有其中一部分。系统需要知道哪份记忆和当前任务属于同一范围，哪个来源更新，哪类信息一旦用错会造成更大风险。</p>
-<p>遗忘是在保护注意力，不是能力缺陷。过期偏好会干扰新需求，失败路径可能不再适用，临时权限更不应无限保留。适当的遗忘减少了检索噪声，也降低了错误信息被反复使用的概率。问题不在于是否遗忘，而在于系统能否解释为什么保留、为什么删除，以及删除后还能否从原始记录恢复必要证据。</p>
-<p>冲突则是长期使用中的常态。用户上周说”回答尽量详细”，本周又说”没时间，先给三点结论”；旧项目文档中的接口参数已经被新版本替换；两条记忆分别来自用户原话和系统推测。遇到这些情况，系统不能简单选择”最新”或”最相似”的一条，而要看时间、来源、适用任务和证据强度。记忆的可靠性，往往取决于它是否保留这些判断线索。</p>
-<p>最后，系统追求的不是复制一个完整的人。所谓”数字孪生”，在可用的工程形态下，是一个在任务中维护的用户模型：它应该可解释、可更新、可纠错，让智能体知道用户在当前任务中的偏好、约束和经历，同时承认它只掌握与任务有关的一部分信息。把用户简化成一串永久标签，既容易失真，也可能越过隐私边界。</p>
-</section>
-<section id="本节小结" class="level2">
-<h2 class="anchored" data-anchor-id="本节小结">8.1.11　本节小结</h2>
-<p>上下文窗口是智能体的即时工作空间，却无法独自承担跨会话的连续性。窗口管理能缓解容量、成本和注意力问题，记忆系统则进一步维护不同生命周期的长期状态。记忆不是聊天记录、文件或向量库本身，而是一套包含写入、合并、组织、检索、使用、更新和遗忘的行动链。</p>
-<p>从时间边界看，记忆分为短期和长期；从内容性质看，可以形成情景、语义、程序等类型；从系统状态看，又可展开为工作、语义、情景、程序、检索、参数和前瞻记忆。这些划分共同指向一个核心：记忆系统的任务是维护状态，而不是堆积文本。</p>
-<p>判断一份记忆是否好，不应只看它能否被召回到，还要看它是否有用、是否及时、是否属于正确作用域、是否可纠错，以及是否会挤占当前任务真正需要的注意力。下一部分将沿着这些标准，考察当前工业界怎样实现记忆系统，以及不同实现方式各自付出了什么代价。</p>
-</section>
-<section id="思考与讨论" class="level2">
-<h2 class="anchored" data-anchor-id="思考与讨论">8.1.12　思考与讨论</h2>
-<p>1. 如果把全部聊天记录都放进一个足够大的上下文窗口，是否仍然需要长期记忆？请从成本、延迟、信息冲突和任务连续性四个角度说明。</p>
-<p>2. 为一位个人工作助手分别举出一个工作记忆、语义记忆、情景记忆、程序记忆和前瞻记忆的例子，并指出每种记忆适合保存多久。</p>
-<p>3. 用户先说”所有回答都要详细”，后又说”现在只要结论”。如果两种要求同时出现在记忆库中，系统应根据什么信息判断当前应采用哪一条？</p>
+<section id="c8-subsec-state" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-state">8.1.6　记忆系统的本质：状态工程</h2>
+<p>到这里，可以把记忆系统的工作概括为一句话：维护智能体执行任务所需的状态，并让这些状态在正确的时间、以正确的形式进入当前判断。这种视角可以称为<strong>状态工程</strong>。它关心的不是“有没有存”，而是状态是否完整、是否仍然有效、是否来自可信来源、是否允许被当前任务读取，以及冲突时依据什么更新。</p>
+<p><strong>五个动作与边界</strong>　 一套可用的状态系统要循环执行五个动作：<strong>写入</strong>，从输入中提取值得保存的内容并记录来源；<strong>合并</strong>，把新状态与已有状态对齐，避免出现几个互相矛盾的用户画像；<strong>组织</strong>，建立适合检索的索引和分组；<strong>取回</strong>，按任务、作用域和风险挑选内容；<strong>遗忘</strong>，处理过期、低价值或不允许继续保留的状态。状态还需要边界：当前会话里的临时猜测不应自动变成长期偏好；某个项目的规则不应扩散到所有项目；不同用户的数据在检索时不能混在一起。</p>
+<p><strong>三种实现思路</strong>　 从理念到实现，有三种有代表性的做法，它们把复杂度放在了不同位置。第一种是<strong>分层存储加混合检索</strong>：按时效把内容放进不同的存储层，检索时把向量相似度与 BM25 关键词得分加权融合（例如向量得分乘 0.7、BM25 得分乘 0.3）。第二种是<strong>文件即记忆</strong>：原始全文长期保存在文件里，“什么时候召回”和“记忆里存了什么”分开设计，保留了完整证据，代价是文件越多，组织和去重越费事。第三种是<strong>纯文件系统、让模型自己当检索器</strong>：把记忆写成若干 Markdown 文件，由模型阅读目录和文件来找内容，实现最直接，但文件规模一大，检索开销和上下文窗口就成了天花板。</p>
+<p>混合检索怎样把两路得分合在一起？常用两种办法：加权求和，以及<strong>倒数排名融合</strong>（Reciprocal Rank Fusion，RRF）<sup><a href="../ch8/references.html#ref-3">[3]</a></sup>。RRF 不看原始得分，只看每路检索给出的名次 <span class="math inline">\(r\)</span>： <span class="math display">\[s_{\mathrm{RRF}}(m)=\sum_{j}\frac{1}{k+r_{j}(m)},
+\tag{8-2}\]</span> 其中 <span class="math inline">\(r_{j}(m)\)</span> 是记忆 <span class="math inline">\(m\)</span> 在第 <span class="math inline">\(j\)</span> 路检索中的名次，没被某一路召回的则不计该项；<span class="math inline">\(k\)</span> 是平滑常数，原论文取 60。加权求和要求两路得分先归一化到同一尺度，RRF 则绕开了“向量得分和 BM25 得分不可比”的问题。</p>
+<div id="c8-ex-fusion" class="bookbox example">
+<div class="boxtitle">
+<p>例 8-2　两种融合方式给出不同的排序</p>
+</div>
+<p>用户问：“我上次说的 CS302 作业截止时间是哪天？”记忆库中有四条候选：A“用户说操作系统作业下周交”，B“CS302 作业截止日改为 5 月 20 日”，C“用户抱怨作业太多”，D“CS302 第二次作业已提交”。两路检索的结果如下（向量得分为余弦相似度，BM25 得分已除以最高分归一化到 0～1，“—”表示未召回）：</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">记忆</th>
+<th style="text-align: center;">向量得分</th>
+<th style="text-align: center;">向量名次</th>
+<th style="text-align: center;">BM25 得分</th>
+<th style="text-align: center;">BM25 名次</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: center;">0.92</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.20</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">语义最接近，但不含“CS302”</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: center;">0.88</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">同时命中“CS302”和“截止”</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: left;">只在语义上相近</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: center;">0.70</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">命中“CS302”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>加权求和</strong>（<span class="math inline">\(0.7\times\)</span> 向量 <span class="math inline">\(+\,0.3\times\)</span> BM25）： A <span class="math inline">\(=0.7\times0.92+0.3\times0.20=0.644+0.060=0.704\)</span>； B <span class="math inline">\(=0.7\times0.88+0.3\times1.00=0.616+0.300=0.916\)</span>； C <span class="math inline">\(=0.7\times0.85+0=0.595\)</span>； D <span class="math inline">\(=0.7\times0.70+0.3\times0.75=0.490+0.225=0.715\)</span>。 排序为 B <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> C。</p>
+<p><strong>RRF</strong>（<span class="math inline">\(k=60\)</span>，按式 <a href="../ch8/s8-1.html#c8-eq-rrf">（8-2）</a>）： A <span class="math inline">\(=1/(60+1)+1/(60+3)\approx0.01639+0.01587\approx0.03227\)</span>； B <span class="math inline">\(=1/(60+2)+1/(60+1)\approx0.01613+0.01639\approx0.03252\)</span>； C <span class="math inline">\(=1/(60+3)\approx0.01587\)</span>； D <span class="math inline">\(=1/(60+4)+1/(60+2)\approx0.01563+0.01613\approx0.03175\)</span>。 排序为 B <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> C。</p>
+<p><strong>结论</strong>：两种方法都把真正有用的 B 排在第一，但第二名不同。加权求和让精确命中“CS302”的 D 胜出，RRF 则因为 A 在向量一路排第一而让 A 胜出。RRF 的各项得分差距很小（<span class="math inline">\(k=60\)</span> 把名次差异压平了），它适合两路得分尺度不可比的场合；加权求和对权重和归一化方式很敏感，权重要在自己的数据上调。无论哪种方法，都还需要后面的时间过滤：如果 B 已被更新的通知取代，排第一也没用。</p>
+</div>
+<p><strong>什么是好记忆</strong>　 记住所有事情不是目标。评价一套记忆，至少看五点。</p>
+<ul>
+<li><p><strong>高密度压缩</strong>：寒暄、重复确认和临时试错不必长期占用状态。与其保存“用户周三上午十点说的第二句话里有个‘尽量’”，不如提炼成“用户希望周五前完成，周五是硬截止”，并保留原话作为证据。</p></li>
+<li><p><strong>按任务路由</strong>：相似只是候选入口。一个关于“预算”的问题，可能同时召回财务制度、某项目的预算表和用户的一句抱怨，还要按任务类型、作用域、时间和风险筛选。</p></li>
+<li><p><strong>合理遗忘</strong>：过期偏好会干扰新需求，临时权限更不应无限保留。遗忘减少了检索噪声，问题在于系统能否解释为什么保留、为什么删除。</p></li>
+<li><p><strong>处理冲突</strong>：用户上周说“回答尽量详细”，本周说“没时间，先给三点结论”。系统不能简单选“最新”或“最相似”的一条，而要看时间、来源、适用任务和证据强度——本周的要求可能只针对这一次。</p></li>
+<li><p><strong>可解释、可纠错</strong>：有人把对用户的长期建模称为用户的“数字孪生”，在工程上它只是一个在任务中维护的用户模型。它应当让用户看得到、改得了，承认自己只掌握与任务有关的一部分信息。</p></li>
+</ul>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>把全部历史放进窗口，KV 缓存随长度线性增长，预填充计算量至少线性增长（注意力部分随长度平方增长），还带来噪声、中间遗忘、冲突和注入风险。</p></li>
+<li><p>上下文工程决定单次请求看到什么；记忆系统维护跨会话的状态。前者是后者进入模型的出口。</p></li>
+<li><p>一条记忆带有类型、时间、来源、归属、重要性、置信度和链接，经历感知、编码、巩固、存储、检索、使用、更新、遗忘八个环节。</p></li>
+<li><p>RAG 是取回机制，长期记忆是有写入、更新、遗忘和归属的状态系统。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1455,13 +1892,13 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch8/s8-2.html" class="pagination-link" aria-label="8.2　当前记忆系统">
-        <span class="nav-page-text">8.2　当前记忆系统</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch8/s8-2.html" class="pagination-link" aria-label="8.2　代表性记忆系统">
+        <span class="nav-page-text">8.2　代表性记忆系统</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

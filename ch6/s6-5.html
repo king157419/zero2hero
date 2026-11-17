@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6.5 相关技术 – 大语言模型原理与技术</title>
+<title>6.5 支撑智能体的技术与工程 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-5.html">6.5　相关技术</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-5.html">6.5　支撑智能体的技术与工程</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,23 +754,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#大语言模型认知内核与它的边界" id="toc-大语言模型认知内核与它的边界" class="nav-link active" data-scroll-target="#大语言模型认知内核与它的边界">6.5.1　大语言模型：认知内核与它的边界</a></li>
-  <li><a href="#机器学习从数据中习得策略" id="toc-机器学习从数据中习得策略" class="nav-link" data-scroll-target="#机器学习从数据中习得策略">6.5.2　机器学习：从数据中习得策略</a></li>
-  <li><a href="#规划算法从经典搜索到-llm-规划" id="toc-规划算法从经典搜索到-llm-规划" class="nav-link" data-scroll-target="#规划算法从经典搜索到-llm-规划">6.5.3　规划算法：从经典搜索到 LLM 规划</a></li>
-  <li><a href="#知识图谱结构化的外部记忆" id="toc-知识图谱结构化的外部记忆" class="nav-link" data-scroll-target="#知识图谱结构化的外部记忆">6.5.4　知识图谱：结构化的外部记忆</a></li>
-  <li><a href="#其他使能技术" id="toc-其他使能技术" class="nav-link" data-scroll-target="#其他使能技术">6.5.5　其他使能技术</a></li>
-  <li><a href="#上下文工程智能体的第一工程问题" id="toc-上下文工程智能体的第一工程问题" class="nav-link" data-scroll-target="#上下文工程智能体的第一工程问题">6.5.6　上下文工程：智能体的第一工程问题</a></li>
-  <li><a href="#开发框架把模式固化为基础设施" id="toc-开发框架把模式固化为基础设施" class="nav-link" data-scroll-target="#开发框架把模式固化为基础设施">6.5.7　开发框架：把模式固化为基础设施</a></li>
-  <li><a href="#开发流程从定义到运营" id="toc-开发流程从定义到运营" class="nav-link" data-scroll-target="#开发流程从定义到运营">6.5.8　开发流程：从定义到运营</a></li>
+  <li><a href="#c6-subsec-llm" id="toc-c6-subsec-llm" class="nav-link active" data-scroll-target="#c6-subsec-llm">6.5.1　大语言模型：认知核心与它的边界</a></li>
+  <li><a href="#c6-subsec-ml" id="toc-c6-subsec-ml" class="nav-link" data-scroll-target="#c6-subsec-ml">6.5.2　机器学习：从数据中习得策略</a></li>
+  <li><a href="#c6-subsec-planalg" id="toc-c6-subsec-planalg" class="nav-link" data-scroll-target="#c6-subsec-planalg">6.5.3　规划算法：从经典搜索到 LLM 规划</a></li>
+  <li><a href="#c6-subsec-kg" id="toc-c6-subsec-kg" class="nav-link" data-scroll-target="#c6-subsec-kg">6.5.4　知识图谱：结构化的外部知识</a></li>
+  <li><a href="#c6-subsec-others" id="toc-c6-subsec-others" class="nav-link" data-scroll-target="#c6-subsec-others">6.5.5　其他使能技术</a></li>
+  <li><a href="#c6-subsec-context" id="toc-c6-subsec-context" class="nav-link" data-scroll-target="#c6-subsec-context">6.5.6　上下文工程</a></li>
+  <li><a href="#c6-subsec-frameworks" id="toc-c6-subsec-frameworks" class="nav-link" data-scroll-target="#c6-subsec-frameworks">6.5.7　开发框架</a></li>
+  <li><a href="#c6-subsec-lifecycle" id="toc-c6-subsec-lifecycle" class="nav-link" data-scroll-target="#c6-subsec-lifecycle">6.5.8　开发流程：从定义到运营</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-5.html">6.5　相关技术</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-5.html">6.5　支撑智能体的技术与工程</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">6.5　相关技术</h1>
+<h1 class="title">6.5　支撑智能体的技术与工程</h1>
 </div>
 
 
@@ -722,248 +787,234 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>智能体不是一个孤立的技术，而是多种技术交汇的产物。本节按”认知内核—学习方法—决策算法—知识支撑—工程环境—开发工具”的顺序，梳理支撑智能体的关键技术。理解这些技术的边界，比记住它们的名词更重要：每一种技术解决什么问题、在什么条件下失效，决定了智能体系统的能力上限与失效模式。</p>
-<section id="大语言模型认知内核与它的边界" class="level2">
-<h2 class="anchored" data-anchor-id="大语言模型认知内核与它的边界">6.5.1　大语言模型：认知内核与它的边界</h2>
-<p>LLM 是智能体的核心认知引擎。它常被用作智能体的中央处理单元，负责解析用户输入、理解任务目标、进行推理和规划、并生成自然语言响应或行动指令。除此之外，它还提供三样基础设施。</p>
-<p>自然语言接口。 <strong>自然语言处理技术使智能体能够理解人类的自然语言指令，并以自然语言方式与用户沟通，提供更友好、更直观的交互体验。这不只是”好用”，而是</strong>降低了任务委托的门槛：用户不需要学习特定的指令语法，只需要说清想要什么。</p>
-<p>知识来源。 LLM 本身蕴含大量世界知识，可以作为智能体的内置知识库，用于回答问题或提供决策所需的信息。这使智能体在缺乏外部数据时仍能作出合理判断，也是它相对于传统规则系统的最大优势。</p>
-<p>内容生成。 智能体可以利用 LLM 生成各种文本内容，如报告、摘要、代码、邮件。生成能力使智能体不仅能”做事”，还能”交付”，这是任务级委托的必要条件。</p>
-<p>但把 LLM 当作认知内核，必须清楚它的边界。这些边界不是工程瑕疵，而是当前范式的内在特征，短期内难以根除：</p>
-<blockquote class="blockquote">
-<p>· <strong>幻觉</strong>：模型会生成看似合理但事实错误的内容，且置信度与正确性不相关。智能体的每一步都建立在前一步输出之上，错误会被放大。</p>
-<p>· <strong>知识截止</strong>：参数中的知识停留在训练数据的时间点，对实时信息无能为力。</p>
-<p>· <strong>上下文限制</strong>：窗口再长也是有限的，长任务必然面临信息的取舍。</p>
-<p>· <strong>推理不稳定</strong>：同一问题的不同表述可能得到不同结论，多步推理的误差会累积。</p>
-<p>· <strong>对齐不足</strong>：模型可能迎合用户、回避冲突、或过度自信，这些倾向在任务执行中会被放大。</p>
-</blockquote>
-<p>这些边界共同决定了智能体架构的形态：<strong>因为会幻觉，所以需要工具校验；因为知识截止，所以需要检索；因为上下文有限，所以需要记忆；因为推理不稳定，所以需要反思与多路径验证；因为对齐不足，所以需要人在回路。</strong> 换句话说，本章讨论的每一个组件，都可以在 LLM 的某条边界上找到它的存在理由。</p>
-<p>理解这一点，对技术选型有直接帮助。当有人问”要不要上智能体”，真正该问的是”这个任务的容错率有多高、外部信息的获取有多难、任务链条有多长”。如果任务短、容错低、信息全在模型里，一次调用就够了；只有当任务长、需要外部信息、且错误可被校验时，智能体的复杂度才是值得付出的。</p>
+<div class="bookbox guide">
+<p>七项能力靠什么技术实现？怎样把这些技术组织成一个能上线的系统？本节先按“认知核心—学习方法—规划算法—结构化知识—其他使能技术”的顺序介绍支撑技术，重点说明每种技术解决什么问题、在什么条件下失效；然后讨论把它们组织起来的三项工程工作：上下文工程决定每一步让模型看到什么，开发框架提供现成的循环、工具与记忆部件，开发流程从定义验收标准一直走到上线后的持续运营。结论是：智能体的每个部件，都能在 LLM 的某条局限上找到存在的理由。</p>
+</div>
+<section id="c6-subsec-llm" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-llm">6.5.1　大语言模型：认知核心与它的边界</h2>
+<p>LLM 常被用作智能体的中央处理单元：解析用户输入、理解任务目标、进行推理和规划，并生成自然语言回复或行动指令。除此之外，它还提供三样东西：<strong>自然语言接口</strong>——借助自然语言处理技术，用户用日常语言（文字或语音）下达指令，不必学习特定语法，降低了委托任务的门槛；<strong>知识来源</strong>——参数中蕴含大量世界知识，可以充当内置知识库，在缺少外部数据时也能做出合理判断；<strong>内容生成</strong>——撰写报告、摘要、代码、邮件，使智能体不仅能“做事”，还能“交付”。</p>
+<p>但把 LLM 作为认知核心，必须清楚它的边界。这些边界源自当前模型的工作方式，短期内难以根除：</p>
+<ul>
+<li><p><strong>幻觉</strong>：生成看似合理但与事实不符的内容，且语气的笃定程度与正确与否无关（成因见第 2 章）。智能体的每一步都建立在上一步之上，错误会被放大。</p></li>
+<li><p><strong>知识截止</strong>：参数中的知识停留在训练数据的时间点。</p></li>
+<li><p><strong>上下文有限</strong>：窗口再长也有上限，长任务必然要取舍信息。</p></li>
+<li><p><strong>推理不稳定</strong>：同一问题换个说法可能得出不同结论，多步推理的误差会累积。</p></li>
+<li><p><strong>对齐与校准不足</strong>：模型可能迎合用户（即所谓“谄媚”），也可能对错误答案过度自信（置信度与正确率不匹配，称为校准不良），这些倾向在执行任务时会被放大。</p></li>
+</ul>
+<p>这些边界决定了智能体的结构：<strong>为缓解幻觉，要用工具校验；为弥补知识截止，要检索；为突破上下文限制，要记忆；为应对推理不稳定，要反思和多路径验证；为防范对齐与校准不足，要人参与把关</strong>。这些手段只能缓解，不能根除——工具和检索本身也可能出错。</p>
+<p>这也给出了“要不要做成智能体”的判断方法：看任务链条有多长、外部信息是否必需、错误能否被发现。任务短、信息都在模型里，一次调用就够了；任务长或需要外部信息，<strong>并且</strong>错误能被校验时，智能体增加的复杂度才值得；如果错误无法校验，宁可缩小任务范围或保留人工审核。</p>
 </section>
-<section id="机器学习从数据中习得策略" class="level2">
-<h2 class="anchored" data-anchor-id="机器学习从数据中习得策略">6.5.2　机器学习：从数据中习得策略</h2>
-<p>智能体的”学习”能力，底层由机器学习提供。三类学习范式在智能体中有不同的落点。</p>
-<p>监督学习（supervised learning） 通过带标签的数据进行训练，使智能体能够学习输入与输出之间的映射关系。在智能体中，它主要用于两类组件：感知（如意图分类、实体抽取、图像识别）与工具选择（给定上下文，预测应调用哪个工具、填什么参数）。监督学习的优点是稳定、可评估，缺点是需要标注数据，且难以覆盖长尾情形。</p>
-<p>无监督学习（unsupervised learning） 从未标记数据中发现隐藏的模式或结构。它在智能体中最典型的应用是表示学习：把文本、记忆片段、工具描述编码为向量，使语义相似度可以计算。向量检索、聚类去重、异常检测都建立在这一基础之上。无监督学习不需要标注，但对”什么是有用的结构”缺乏直接约束。</p>
-<p>强化学习（reinforcement learning，RL） 通过与环境的交互来学习。智能体采取行动，环境给予奖励或惩罚作为反馈，智能体的目标是学习一个策略，即在特定状态下应采取何种行动，以最大化累积奖励。形式化地，策略 π 的优化目标是</p>
-<p><em>J(π) = Eτ~π [ Σₜ=₀T γᵗ rₜ ]</em> (6-4)</p>
-<p>其中 γ ∈ (0, 1] 为折扣因子，τ 为轨迹。式 (6-4) 是强化学习的核心目标函数，也是理解”智能体为什么会在意长期后果”的数学基础：折扣因子决定了它愿意为多远之后的收益付出当下代价。</p>
-<p>强化学习与智能体的关系最为紧密，因为二者共享同一个问题结构：序贯决策。但把 RL 用在 LLM 智能体上有三个现实困难。<strong>奖励稀疏</strong>：一个长任务只有最终成败一个信号，中间步骤的好坏难以归因。<strong>试错昂贵</strong>：真实环境中试错的成本可能无法承受。<strong>非平稳</strong>：模型、工具、用户偏好都在变化，学到的策略可能迅速过时。</p>
-<p>因此，当前工业界的做法多是”轻量 RL”：用人类反馈做偏好对齐（RLHF），用可验证的奖励（如单元测试是否通过）做特定能力的强化，而不是端到端地训练一个通用智能体策略。这一现状也提示我们：<strong>智能体的”学习”目前主要发生在提示与记忆层，而非参数层。</strong> 这既是局限，也是机会——提示与记忆的迭代成本远低于重新训练。</p>
+<section id="c6-subsec-ml" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-ml">6.5.2　机器学习：从数据中习得策略</h2>
+<p>智能体的“学习”能力由机器学习提供。三类学习范式在智能体中各有落点。</p>
+<p><strong>监督学习</strong>（supervised learning）用带标签的数据训练，学习输入到输出的映射。在智能体中主要用于感知（意图分类、实体抽取、图像识别）和工具选择（给定上下文，预测该调用哪个工具、填什么参数）。它稳定、便于评估，但需要标注数据，难以覆盖少见情形。</p>
+<p><strong>无监督学习</strong>（unsupervised learning）从未标注数据中发现隐藏的模式或结构。它在智能体中最典型的应用是<strong>表示学习</strong>：把文本、记忆片段、工具说明编码成向量，使语义相似度可以计算。向量检索、聚类去重、异常检测都建立在这一基础上。</p>
+<p><strong>强化学习</strong>（Reinforcement Learning，RL）通过与环境交互来学习：智能体采取行动，环境给出奖励或惩罚，智能体学习一个策略 <span class="math inline">\(\pi\)</span>（在什么状态下采取什么行动），以最大化累积奖励。形式上，优化目标是 <span class="math display">\[J(\pi) = \mathbb{E}_{\tau\sim\pi}\Bigl[\,\sum_{t=0}^{T_{\mathrm{ep}}} \gamma^{t} R_t\Bigr],
+\tag{6-6}\]</span> 其中 <span class="math inline">\(\tau\)</span> 是按策略 <span class="math inline">\(\pi\)</span> 与环境交互得到的一条轨迹，<span class="math inline">\(R_t\)</span> 是第 <span class="math inline">\(t\)</span> 步的奖励，<span class="math inline">\(T_{\mathrm{ep}}\)</span> 是一个回合的步数，<span class="math inline">\(\gamma\in(0,1]\)</span> 是<strong>折扣因子</strong>，决定了智能体有多看重远期收益。强化学习与智能体共享同一个问题结构——<strong>序贯决策</strong>，也就是式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 中的闭环。</p>
+<p>把 RL 直接用于训练 LLM 智能体有三个困难：<strong>奖励稀疏</strong>——长任务往往只有最终成败一个信号，难以判断中间哪一步做得好；<strong>试错昂贵</strong>——真实环境中的错误可能无法承受；<strong>环境在变</strong>——模型、工具、用户偏好都在变化，学到的策略可能很快过时。因此实践中多用两种较“轻”的方式：用人类反馈做偏好对齐，即基于人类反馈的强化学习（Reinforcement Learning from Human Feedback，RLHF），以及在结果可以自动判定的任务上（例如单元测试是否通过）用可验证奖励做强化学习（二者见第 3 章）。智能体在上线运行中的“学习”，目前主要发生在提示和记忆层面；参数层面的学习多在离线开发阶段进行。</p>
 </section>
-<section id="规划算法从经典搜索到-llm-规划" class="level2">
-<h2 class="anchored" data-anchor-id="规划算法从经典搜索到-llm-规划">6.5.3　规划算法：从经典搜索到 LLM 规划</h2>
-<p>规划算法为智能体提供”如何从当前状态走到目标状态”的求解能力。它有两个传统：符号规划与决策论规划。</p>
-<p>经典规划算法包括搜索算法（广度优先、深度优先、Dijkstra）、启发式搜索（A*、贪心最佳优先）、STRIPS 类规划器、以及部分有序规划。它们的共同假设是：状态可以用符号精确描述，动作的效果是确定的。在这一假设下，规划器可以给出完备甚至最优的解。</p>
-<p>高级规划技术放宽了上述假设：时间规划处理带时限与并发约束的任务；概率规划处理动作效果不确定的情形（如马尔可夫决策过程）；偏好规划处理多目标之间的权衡；条件规划处理”执行过程中才发现的信息”，生成带分支的计划而非单一路径。这些技术更贴近真实世界，但求解复杂度显著上升。</p>
-<p>LLM 在规划中的应用提供了另一条路径。模型可以通过单路径推理（如思维链 CoT）或多路径推理（如思维树 ToT）来分解复杂任务并生成行动步骤，也可以与外部经典规划器结合：模型负责理解与翻译，规划器负责求解与验证。这条路径的优势是无需形式化建模，劣势是缺乏正确性保证。</p>
-<p>实践中，一个稳健的规划子系统往往同时包含三者：用经典算法处理可形式化的子问题（如路径、排期），用 LLM 处理需要常识与语义的子问题（如”这份材料应该包含哪些部分”），用高级规划技术处理不确定性与多目标。三者之间的接口是”计划”，而计划的可执行性由框架在执行阶段校验。</p>
+<section id="c6-subsec-planalg" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-planalg">6.5.3　规划算法：从经典搜索到 LLM 规划</h2>
+<p>规划算法回答“如何从当前状态走到目标状态”，第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节讲了规划能力，这里列出可用的算法。</p>
+<p><strong>经典规划算法</strong>包括：搜索算法（广度优先、深度优先、Dijkstra 最短路径）；<strong>启发式搜索</strong>（A* 算法、贪心最佳优先），用一个估计“离目标还有多远”的启发函数引导搜索；STRIPS 类规划器，用前置条件与效果描述动作；以及<strong>部分有序规划</strong>，只规定必须先后执行的步骤顺序，其余步骤可以任意排列或并行。它们假设状态能被符号精确描述、动作效果是确定的，在此假设下能给出完备甚至最优的解。</p>
+<p><strong>高级规划技术</strong>放宽了这些假设：<strong>时间规划</strong>处理有时限和并发约束的任务（会议 9 点开始，酒店 14 点才能入住）；<strong>概率规划</strong>处理动作效果不确定的情形，常建模为马尔可夫决策过程（Markov Decision Process，MDP，用状态、动作、转移概率和奖励描述序贯决策；它假设状态完全可观测，式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 的 POMDP 则去掉了这一假设）；<strong>偏好规划</strong>处理多个目标之间的权衡（省钱与省时）；<strong>条件规划</strong>为执行中才会知道的信息预留分支（“如果航班取消，就改乘高铁”）。它们更贴近真实世界，求解难度也明显上升。</p>
+<p><strong>LLM 规划</strong>提供了另一条路：通过单路径推理（如思维链）或多路径推理（如思维树）分解任务、生成步骤，也可以与外部经典规划器结合（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节的“翻译器”方式）。它不需要先把问题形式化，代价是没有正确性保证。稳健的规划子系统往往三者并用：经典算法处理能形式化的子问题（路线、排期），LLM 处理需要常识的子问题（“这次出差需要准备哪些材料”），高级规划技术处理不确定性和多目标。</p>
 </section>
-<section id="知识图谱结构化的外部记忆" class="level2">
-<h2 class="anchored" data-anchor-id="知识图谱结构化的外部记忆">6.5.4　知识图谱：结构化的外部记忆</h2>
-<p>知识图谱（knowledge graph，KG）以”实体—关系—实体”的三元组为基本单元，把世界知识组织成可查询、可推理的网络。它在智能体中承担五项职能。</p>
-<p>提供上下文与背景知识。 智能体可以查询 KG 以获取关于特定实体或概念的详细信息，从而更好地理解用户请求或当前环境。例如用户说”老地方”，系统通过 KG 查到该用户的历史订单与常用地址，从而消解指代。</p>
-<p>支持结构化推理。 KG 中的显式关系可以用于逻辑推断和演绎推理，补充 LLM 可能存在的常识推理不足。“A 是 B 的子公司，B 在制裁名单上”这类多跳关系，用图查询可以精确得到，用语言模型则容易出错。</p>
-<p>增强记忆系统。 KG 可以作为智能体长期记忆的一部分，存储结构化的事实和经验，供智能体在需要时检索和使用。相比纯文本记忆，结构化记忆在”精确召回”与”关系推理”上更有优势。</p>
-<p>处理歧义与不完整信息。 KG 能够编码语义信息，帮助智能体区分输入信息的多种可能解释（例如”苹果”是指公司还是水果），并基于上下文、先前交互或领域知识进行判断。同时，KG 还能通过推理填补不完整数据中的空白。</p>
-<p>作为多智能体系统的共享记忆。 在多智能体系统中，KG 可以充当通信媒介和共享记忆库，确保所有智能体对特定领域有一致的理解。这一点在多智能体协作中尤为重要：如果每个智能体各自维护一份”事实”，冲突几乎不可避免。</p>
-<p>知识图谱的局限同样明显：构建成本高、更新滞后、覆盖面有限。因此，当前的主流做法不是”用 KG 替代文本”，而是”图谱与文本混合检索”：结构化查询负责精确约束，向量检索负责语义召回，二者结果合并后交给模型综合。</p>
+<section id="c6-subsec-kg" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-kg">6.5.4　知识图谱：结构化的外部知识</h2>
+<p><strong>知识图谱</strong>（Knowledge Graph，KG）以“实体—关系—实体”的三元组为基本单元，把知识组织成可查询、可推理的网络，例如（甲酒店，位于，浦东新区）。它在智能体中承担五项职能：</p>
+<ul>
+<li><p><strong>提供上下文与背景知识</strong>：查询特定实体或概念的详细信息，帮助理解用户请求。用户说“还是老地方”，系统查到该用户常住的酒店，从而弄清指代。</p></li>
+<li><p><strong>支持结构化推理</strong>：图中的显式关系可用于逻辑推断，补充 LLM 在常识推理上的不足。“A 是 B 的子公司，B 在供应商黑名单上”这类多跳关系，用图查询可以精确得到。</p></li>
+<li><p><strong>增强记忆</strong>：作为长期记忆的一部分，存储结构化的事实和经验。与纯文本相比，它在精确召回和关系推理上更有优势。</p></li>
+<li><p><strong>处理歧义与不完整信息</strong>：编码的语义信息帮助区分多种解释（“苹果”指公司还是水果），并能通过推理填补数据中的空白。</p></li>
+<li><p><strong>作为多智能体的共享记忆</strong>：充当通信媒介和共享知识库，使所有智能体对同一领域有一致的理解，避免各自维护一份“事实”而产生冲突。</p></li>
+</ul>
+<p>知识图谱构建成本高、更新慢、覆盖面有限，因此常与文本检索混合使用：结构化查询负责精确约束，向量检索负责语义召回（GraphRAG 等做法见第 5 章）。</p>
 </section>
-<section id="其他使能技术" class="level2">
-<h2 class="anchored" data-anchor-id="其他使能技术">6.5.5　其他使能技术</h2>
-<p>计算机视觉（computer vision） 使智能体能够”看见”并理解视觉环境，识别物体、场景、人脸等。视觉语言模型（VLM）的出现，让智能体可以直接处理截图、表格、图表与文档版面，这极大扩展了可自动化的任务范围——大量企业流程的入口正是一张扫描件或一个网页界面。</p>
-<p>机器人流程自动化（RPA） 用于自动化那些基于规则的、重复性的数字系统任务，例如数据输入、表单处理。RPA 与智能体是互补关系：RPA 提供稳定可靠的”手”，智能体提供灵活应变的”脑”。在没有 API 的遗留系统中，“智能体决策 + RPA 执行”往往是唯一可行的方案。</p>
-<p>云计算（cloud computing） 为智能体的训练、部署和扩展提供了必要的计算资源、存储和可伸缩性。智能体的成本结构与传统应用不同：它的主要开销是推理调用而非服务器租用，且随任务长度线性增长，因此成本控制需要专门的设计（缓存、批处理、模型分级）。</p>
-<p>边缘计算（edge AI） 将 AI 处理能力部署到靠近数据源的边缘设备上，可以减少对云端连接的依赖，提高实时性和数据隐私性。对具身智能体与隐私敏感场景（如医疗、家居），边缘部署往往是刚需。</p>
-<p>表 6-7 把上述技术与智能体组件的对应关系整理出来，可以看出每一项技术都不是”可选项”，而是针对特定约束的必要补充。</p>
-<p>表 6-7 使能技术与智能体组件的对应关系</p>
+<section id="c6-subsec-others" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-others">6.5.5　其他使能技术</h2>
+<p><strong>计算机视觉</strong>（computer vision）使智能体能“看见”并理解视觉环境，识别物体、场景、人脸等。视觉语言模型让智能体可以直接读截图、表格、图表和扫描件，很多企业流程的入口恰恰是一张扫描件或一个网页界面。<strong>机器人流程自动化</strong>（RPA）自动执行基于规则的重复性操作，例如数据录入、表单处理；它通过软件模拟人在界面上的点击和输入，依赖固定的界面元素定位，界面一改版就会失效。它与智能体互补：智能体通过工具调用触发 RPA 脚本，RPA 提供稳定的“手”，智能体提供灵活的“脑”，在没有 API 的老旧系统里，“智能体决策 + RPA 执行”常是唯一可行的方案。<strong>云计算</strong>为智能体的训练、部署和扩展提供算力、存储和弹性；智能体的主要开销是模型调用，并随任务轮数增长（例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a>），成本控制需要专门设计。<strong>边缘计算</strong>（edge AI）把 AI 处理能力部署到靠近数据源的设备上，减少对云端连接的依赖，提高实时性和数据隐私性，对机器人和隐私敏感场景往往是刚需。</p>
+<p>表 <a href="../ch6/s6-5.html#c6-tab-tech">6-10</a> 汇总了各项技术与智能体组件的对应关系。</p>
+<div id="c6-tab-tech" class="booktab">
+<div class="tabcap">
+<p>表 6-10　使能技术与智能体组件的对应关系</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 27%">
-<col style="width: 27%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>技术</strong></th>
-<th><strong>主要支撑的组件</strong></th>
-<th><strong>解决的核心问题</strong></th>
-<th><strong>主要局限</strong></th>
+<th style="text-align: left;">技术</th>
+<th style="text-align: left;">主要支撑</th>
+<th style="text-align: left;">解决的问题</th>
+<th style="text-align: left;">主要局限</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>大语言模型</td>
-<td>决策系统</td>
-<td>语义理解、推理、生成</td>
-<td>幻觉、知识截止、上下文有限</td>
+<td style="text-align: left;">大语言模型</td>
+<td style="text-align: left;">决策系统</td>
+<td style="text-align: left;">语义理解、推理、生成</td>
+<td style="text-align: left;">幻觉、知识截止、上下文有限</td>
 </tr>
 <tr class="even">
-<td>监督/无监督学习</td>
-<td>感知、表示</td>
-<td>分类、抽取、语义匹配</td>
-<td>依赖数据质量与覆盖度</td>
+<td style="text-align: left;">监督/无监督学习</td>
+<td style="text-align: left;">感知、表示</td>
+<td style="text-align: left;">分类、抽取、语义匹配</td>
+<td style="text-align: left;">依赖数据质量与覆盖面</td>
 </tr>
 <tr class="odd">
-<td>强化学习</td>
-<td>策略优化</td>
-<td>序贯决策的长期回报优化</td>
-<td>奖励稀疏、试错昂贵</td>
+<td style="text-align: left;">强化学习</td>
+<td style="text-align: left;">策略优化</td>
+<td style="text-align: left;">序贯决策的长期回报</td>
+<td style="text-align: left;">奖励稀疏、试错昂贵</td>
 </tr>
 <tr class="even">
-<td>经典与高级规划</td>
-<td>规划模块</td>
-<td>多步行动的可执行性与最优性</td>
-<td>需要形式化建模</td>
+<td style="text-align: left;">经典与高级规划</td>
+<td style="text-align: left;">规划</td>
+<td style="text-align: left;">多步行动的可行性与最优性</td>
+<td style="text-align: left;">需要形式化建模</td>
 </tr>
 <tr class="odd">
-<td>知识图谱</td>
-<td>记忆、推理</td>
-<td>结构化事实与关系推理</td>
-<td>构建成本高、更新滞后</td>
+<td style="text-align: left;">知识图谱</td>
+<td style="text-align: left;">记忆、推理</td>
+<td style="text-align: left;">结构化事实与关系推理</td>
+<td style="text-align: left;">构建成本高、更新慢</td>
 </tr>
 <tr class="even">
-<td>计算机视觉</td>
-<td>感知</td>
-<td>图像、版面、场景理解</td>
-<td>复杂版面与低质图像易错</td>
+<td style="text-align: left;">计算机视觉</td>
+<td style="text-align: left;">感知</td>
+<td style="text-align: left;">图像、版面、场景理解</td>
+<td style="text-align: left;">复杂版面和低质量图像易错</td>
 </tr>
 <tr class="odd">
-<td>RPA</td>
-<td>执行器</td>
-<td>无 API 系统的操作自动化</td>
-<td>界面变化即失效</td>
+<td style="text-align: left;">RPA</td>
+<td style="text-align: left;">执行器</td>
+<td style="text-align: left;">无 API 系统的操作自动化</td>
+<td style="text-align: left;">界面一变就失效</td>
 </tr>
 <tr class="even">
-<td>云计算/边缘计算</td>
-<td>运行时</td>
-<td>算力、弹性、时延与隐私</td>
-<td>成本与运维复杂度</td>
+<td style="text-align: left;">云计算/边缘计算</td>
+<td style="text-align: left;">运行环境</td>
+<td style="text-align: left;">算力、弹性、时延与隐私</td>
+<td style="text-align: left;">成本与运维复杂度</td>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
-<section id="上下文工程智能体的第一工程问题" class="level2">
-<h2 class="anchored" data-anchor-id="上下文工程智能体的第一工程问题">6.5.6　上下文工程：智能体的第一工程问题</h2>
-<p>如果说 LLM 是智能体的”大脑”，那么上下文就是它每一刻的”意识内容”。上下文工程（context engineering）是围绕”在上下文窗口中为下一步操作填充恰好适量的信息”这一目标形成的方法论。有从业者把它称为构建 AI 智能体的首要任务，这一判断并不夸张：在模型能力既定的情况下，<strong>上下文的质量往往比提示词的措辞更决定成败</strong>。</p>
-<p>上下文的三种类型。 <strong>进入窗口的信息可以分为三类：</strong>指令<strong>，包括系统提示、角色设定、少样本示例、工具描述；</strong>知识<strong>，包括事实、检索到的文档、记忆片段；</strong>工具反馈，即工具调用后返回的信息。三类信息的性质不同，管理策略也不同：指令相对稳定，可以缓存；知识随任务变化，需要按需检索；工具反馈不可预测，需要压缩与结构化。</p>
-<p><img src="media/media/image5.png" style="width:4.72441in;height:2.13973in"></p>
-<p>图 6-6 上下文窗口的构成与四种调控手段</p>
-<p>说明：左侧为上下文的典型构成及其相对预算，右侧为写入、筛选、压缩、隔离四种调控手段。</p>
-<p>上下文导致的四类性能问题。 上下文不是越多越好，过量的、错误的、矛盾的信息会主动损害性能。业界总结出四种典型失效模式：</p>
-<blockquote class="blockquote">
-<p>· <strong>上下文污染（context poisoning）</strong>：当幻觉信息混入上下文时，后续推理会把它当作事实，错误被反复引用而不断强化。污染的特点是”自我确认”——模型看到自己此前的错误陈述，更倾向于认为它是对的。</p>
-<p>· <strong>上下文干扰（context distraction）</strong>：当信息过多、超出模型的有效处理范围时，注意力被稀释，关键信息被淹没。即使窗口装得下，模型也未必用得上。</p>
-<p>· <strong>上下文混淆（context confusion）</strong>：当冗余信息、格式混乱的信息干扰决策时，模型可能抓错重点，或把不同来源的信息混为一谈。</p>
-<p>· <strong>上下文冲突（context clash）</strong>：当上下文内容相互矛盾时，模型需要在冲突的信息之间选择，选择往往不可预测，且可能在不同轮次给出不同答案。</p>
-</blockquote>
-<p>四大调控策略。 针对上述问题，实践中形成了四种普遍应用的策略：</p>
-<p>1. <strong>保存上下文（write）</strong>：将信息存储到上下文窗口之外，供智能体后续任务使用。这是记忆系统的职责，也是”窗口有限”这一约束的根本解法。</p>
-<p>2. <strong>筛选上下文（select）</strong>：将相关信息拉入上下文窗口，辅助智能体进行当前任务。核心是检索质量——召回不准，后续一切白费；召回过多，又会引入干扰。</p>
-<p>3. <strong>压缩上下文（compress）</strong>：通过总结或裁剪，仅保留任务所需的核心令牌。压缩的关键是”保信息、去冗余”，而不是简单截断。</p>
-<p>4. <strong>隔离上下文（isolate）</strong>：通过多智能体、沙箱或状态管理进行上下文分割。让不同的子任务在各自的窗口中工作，避免相互污染。这是多智能体架构在工程上最重要的收益之一——它首先是一种上下文管理手段，其次才是一种协作手段。</p>
-<p>上下文工程的核心组件。 <strong>一个完整的上下文工程体系通常包含四个部分：</strong>智能信息检索（RAG）<strong>，负责从外部知识源召回相关内容；</strong>动态上下文组装<strong>，负责按任务阶段、模型能力与预算，把指令、知识、工具反馈拼装成最优的窗口布局；</strong>智能记忆管理<strong>，负责跨轮次的信息保存与召回；</strong>多模态信息处理，负责把图像、表格、音频等非文本信息转化为模型可消费的形式。</p>
-<p>从 token 限制到记忆架构。 <strong>当前大模型在长任务中面临两个具体困境：</strong>token 限制<strong>，窗口再大也有上限，且成本随长度上升；</strong>状态丢失，会话中断或上下文被裁剪后，之前的工作状态无法恢复。针对这两个问题，工程上出现了以 MCP（Model Context Protocol）为代表的上下文管理方案，其思路包括三层：</p>
-<blockquote class="blockquote">
-<p>· <strong>智能化的上下文分层管理</strong>：把上下文按稳定性与重要性分层，稳定的部分缓存复用，易变的部分按需加载。</p>
-<p>· <strong>会话管理机制</strong>：显式地保存与恢复会话状态，使任务可以跨会话延续。</p>
-<p>· <strong>智能化的上下文压缩</strong>：在接近上限时自动摘要、裁剪、外置，保持关键信息不丢失。</p>
-</blockquote>
-<p>与之配套的是三层记忆架构：<strong>即时记忆层</strong>保存当前对话内容、近期操作记录与暂时工作状态；<strong>工作记忆层</strong>保存项目相关上下文、任务执行状态与决策历程记录；<strong>长期记忆层</strong>保存历史对话摘要、学习模式记录与知识库累积。三层架构的核心价值在于四点：<strong>连续性</strong>，跨会话保持工作状态和决策记录；<strong>智能性</strong>，自动评估和管理上下文重要性；<strong>可扩展性</strong>，支持企业级的大规模部署；<strong>安全性</strong>，保护敏感信息和个人隐私。</p>
-<p>值得强调的是，上下文工程不是”提示词工程的升级版”，二者的关注点不同。提示词工程关注”如何把一句话说清楚”，上下文工程关注”在正确的时刻，让模型看到正确的信息组合”。后者是一个系统问题，涉及检索、记忆、压缩、隔离、预算分配与安全边界，其复杂度远高于前者。</p>
+<section id="c6-subsec-context" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-context">6.5.6　上下文工程</h2>
+<p>模型在每一步能依据的，只有这一刻上下文窗口里的内容。<strong>上下文工程</strong>（context engineering）就是围绕“<strong>在上下文窗口中为下一步操作填充恰好适量的信息</strong>”这一目标形成的一套方法<sup><a href="../ch6/references.html#ref-21">[21]</a>,<a href="../ch6/references.html#ref-22">[22]</a></sup>。有从业者把它称为构建 AI 智能体的工程师的首要任务<sup><a href="../ch6/references.html#ref-23">[23]</a></sup>：模型能力既定时，上下文的质量往往比提示词的措辞更决定成败。本小节介绍它的基本框架，作为编程智能体四类工程之一的系统论述见第 7 章。</p>
+<p><strong>三类上下文</strong>　 进入窗口的信息可分为三类：<strong>指令</strong>，包括系统提示词、少样本示例、工具说明和从记忆中取出的规则；<strong>知识</strong>，包括事实、检索到的文档和记忆片段；<strong>工具反馈</strong>，即工具调用后返回的结果。三类信息的管理方式不同：指令相对稳定，可以缓存复用；知识随任务变化，按需检索；工具反馈不可预测，常需压缩和结构化。图 <a href="../ch6/s6-5.html#c6-fig-context">6-8</a> 左侧是一个典型窗口的构成。</p>
+<div id="c6-fig-context" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-context.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:88.1%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-8　上下文窗口的典型构成（左，框高示意各部分的相对占用，右侧小字为所属类型）与四种调控策略（右）。四类失效——污染、干扰、混淆、冲突——都发生在窗口内部，四种策略分别从窗口外存储、进入窗口、窗口内精简和窗口之间分隔四个方向加以控制</p>
+</div>
+</div>
+<p><strong>四类失效</strong>　 上下文不是越多越好。Breunig 总结了长上下文导致性能下降的四种方式<sup><a href="../ch6/references.html#ref-24">[24]</a></sup>：</p>
+<ul>
+<li><p><strong>上下文污染</strong>（context poisoning）：幻觉信息混入上下文后，被后续步骤当作事实反复引用。模型看到自己先前的错误陈述，更倾向于认为它是对的。</p></li>
+<li><p><strong>上下文干扰</strong>（context distraction）：信息过多，超出模型训练时能有效利用的范围，关键信息被淹没；窗口装得下，不等于模型用得上。</p></li>
+<li><p><strong>上下文混淆</strong>（context confusion）：冗余或无关的信息（例如几十个用不上的工具说明）干扰决策，模型抓错重点。</p></li>
+<li><p><strong>上下文冲突</strong>（context clash）：上下文中的内容相互矛盾（例如先后两轮给出的不同条件），模型的选择不可预测。</p></li>
+</ul>
+<p><strong>四种策略</strong>　 针对这些问题，实践中常用四种调控策略<sup><a href="../ch6/references.html#ref-25">[25]</a></sup>（图 <a href="../ch6/s6-5.html#c6-fig-context">6-8</a> 右侧）：</p>
+<ol type="1">
+<li><p><strong>保存</strong>（write）：把信息存到窗口之外（文件、记忆库、任务状态），供以后使用。</p></li>
+<li><p><strong>筛选</strong>（select）：只把与当前步骤相关的信息拉进窗口，例如按相似度检索文档、按任务挑选工具。</p></li>
+<li><p><strong>压缩</strong>（compress）：通过摘要或裁剪，只保留任务需要的 token，例如把已完成的轮次合并成一段摘要。</p></li>
+<li><p><strong>隔离</strong>（isolate）：用多个智能体、沙箱或状态字段把上下文分开，让子任务在各自的窗口中工作，互不污染。这是多智能体架构在工程上的重要收益之一。</p></li>
+</ol>
+<p><strong>核心组件</strong>　 一个完整的上下文工程体系通常包含四个部分：<strong>智能信息检索</strong>（即 RAG，从外部知识源召回相关内容，见第 5 章）；<strong>动态上下文组装</strong>（按任务阶段和 token 预算，把指令、知识、工具反馈拼成窗口）；<strong>智能记忆管理</strong>（跨轮次、跨会话地保存与召回）；<strong>多模态信息处理</strong>（把图像、表格、音频转成模型可用的形式）。</p>
+<p><strong>从 token 限制到记忆架构</strong>　 长任务中，当前大模型面临两个具体困境：<strong>token 限制</strong>，窗口有上限且成本随长度上升；<strong>状态丢失</strong>，会话中断或上下文被裁剪后，之前的工作状态无法恢复。一类常见做法是借助 MCP，把记忆和会话状态做成外部服务：智能体通过 MCP 服务器提供的工具读写记忆（MCP 官方的参考实现中就有一个基于知识图谱的记忆服务器<sup><a href="../ch6/references.html#ref-20">[20]</a></sup>），从而实现三件事——按稳定性和重要性<strong>分层管理</strong>上下文，稳定部分缓存复用、易变部分按需加载；显式地保存与恢复会话，使任务能<strong>跨会话延续</strong>；在接近上限时自动摘要、裁剪、外置，<strong>压缩</strong>上下文而不丢关键信息。需要注意，MCP 本身只是连接协议，并不负责压缩或分层，这些功能由接在协议另一端的记忆服务实现。与之配套的正是第 <a href="../ch6/s6-4.html#c6-subsec-memory">6.4.4</a> 小节的三层记忆，它带来四点好处：<strong>连续性</strong>（跨会话保持工作状态和决策记录）、<strong>智能化</strong>（自动评估和管理信息的重要性）、<strong>可扩展性</strong>（支持企业级的大规模部署）和<strong>安全性</strong>（按层级控制敏感信息与个人隐私的存取）。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>上下文工程不是“提示词工程的升级版”。提示词工程关心“如何把一段指令写清楚”；上下文工程关心“在每一步，让模型看到哪些信息、以什么顺序、占多少预算”，涉及检索、记忆、压缩、隔离和安全边界，是一个系统设计问题。提示词只是上下文中“指令”那一部分。</p>
+</div>
 </section>
-<section id="开发框架把模式固化为基础设施" class="level2">
-<h2 class="anchored" data-anchor-id="开发框架把模式固化为基础设施">6.5.7　开发框架：把模式固化为基础设施</h2>
-<p>智能体的很多模式（循环、工具调用、记忆、多智能体协作）在 2023—2024 年间迅速沉淀为开发框架。框架的价值在于把重复的”脚手架”固化下来，让开发者专注于任务逻辑；框架的风险在于抽象泄漏——当框架的默认行为与任务需求不符时，开发者需要深入内部才能修正。</p>
-<p>表 6-8 对当前主流的五个框架作了对照。需要说明的是，框架的迭代速度极快，表中的”成熟度”只具有阶段性参考意义，选型时应以当时的官方文档与实际压测为准。</p>
-<p>表 6-8 主流智能体开发框架对照</p>
+<section id="c6-subsec-frameworks" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-frameworks">6.5.7　开发框架</h2>
+<p>循环、工具调用、记忆、多智能体协作等常用模式，在 2023—2025 年间沉淀为一批开发框架。框架把重复的“脚手架”固化下来，让开发者专注于任务逻辑；风险在于<strong>抽象泄漏</strong>——当框架的默认行为不符合需求时，开发者不得不深入框架内部修改。表 <a href="../ch6/s6-5.html#c6-tab-frameworks">6-11</a> 对照了五个常用框架<sup><a href="../ch6/references.html#ref-26">[26]</a>,<a href="../ch6/references.html#ref-27">[27]</a>,<a href="../ch6/references.html#ref-28">[28]</a></sup>。框架迭代很快，表中状态截至 2026 年 11 月，选型时应以官方文档和实际测试为准。</p>
+<div id="c6-tab-frameworks" class="booktab">
+<div class="tabcap">
+<p>表 6-11　常用智能体开发框架对照（状态截至 2026 年 11 月）</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 14%">
-<col style="width: 14%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>框架</strong></th>
-<th><strong>特性</strong></th>
-<th><strong>典型应用场景</strong></th>
-<th><strong>模块化</strong></th>
-<th><strong>可扩展性</strong></th>
-<th><strong>成熟度</strong></th>
-<th><strong>学习曲线</strong></th>
+<th style="text-align: left;">框架</th>
+<th style="text-align: left;">特性</th>
+<th style="text-align: left;">典型场景</th>
+<th style="text-align: left;">学习曲线</th>
+<th style="text-align: left;">状态</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>LangChain</td>
-<td>LLM 应用开发，链式调用，Agent、记忆、工具集成</td>
-<td>聊天机器人、文档处理、RAG、企业工作流自动化</td>
-<td>高</td>
-<td>中</td>
-<td>Beta</td>
-<td>较陡</td>
+<td style="text-align: left;">LangChain</td>
+<td style="text-align: left;">链式调用，集成模型、工具、记忆与 Agent</td>
+<td style="text-align: left;">聊天机器人、文档处理、RAG、企业流程</td>
+<td style="text-align: left;">较陡</td>
+<td style="text-align: left;">2025 年 10 月发布 1.0 稳定版</td>
 </tr>
 <tr class="even">
-<td>LangGraph</td>
-<td>构建状态化、可控的（多）Agent 工作流，基于图</td>
-<td>复杂多步骤流程、动态决策、人工介入</td>
-<td>高</td>
-<td>中高</td>
-<td>Beta</td>
-<td>陡峭</td>
+<td style="text-align: left;">LangGraph</td>
+<td style="text-align: left;">以图描述有状态、可控的（多）Agent 工作流</td>
+<td style="text-align: left;">多步骤流程、动态决策、人工介入</td>
+<td style="text-align: left;">陡峭</td>
+<td style="text-align: left;">2025 年 10 月发布 1.0 稳定版</td>
 </tr>
 <tr class="odd">
-<td>AutoGen</td>
-<td>多 Agent 对话与协作，异步，可定制 Agent 角色</td>
-<td>群聊式问题求解、代码生成与调试、动态交互场景</td>
-<td>高</td>
-<td>高</td>
-<td>预览</td>
-<td>较陡</td>
+<td style="text-align: left;">AutoGen</td>
+<td style="text-align: left;">多 Agent 对话与协作，异步，可定制角色</td>
+<td style="text-align: left;">群聊式求解、代码生成与调试</td>
+<td style="text-align: left;">较陡</td>
+<td style="text-align: left;">已并入 Microsoft Agent Framework，原项目以维护为主</td>
 </tr>
 <tr class="even">
-<td>CrewAI</td>
-<td>角色扮演型 Agent 团队协作，任务委派</td>
-<td>研究团队、项目管理、内容创作、多 Agent 协作</td>
-<td>中</td>
-<td>高</td>
-<td>可用</td>
-<td>简单</td>
+<td style="text-align: left;">CrewAI</td>
+<td style="text-align: left;">角色扮演式 Agent 团队，任务委派</td>
+<td style="text-align: left;">调研、项目管理、内容创作</td>
+<td style="text-align: left;">简单</td>
+<td style="text-align: left;">独立开源框架，已发布 1.x 版本</td>
 </tr>
 <tr class="odd">
-<td>Semantic Kernel</td>
-<td>企业级 SDK，技能封装，规划器，多语言支持</td>
-<td>将 AI 嵌入现有业务流程、企业应用、与云平台集成</td>
-<td>中</td>
-<td>高</td>
-<td>生产</td>
-<td>中等</td>
+<td style="text-align: left;">Semantic Kernel</td>
+<td style="text-align: left;">企业级 SDK，技能封装、规划器，多语言</td>
+<td style="text-align: left;">把 AI 嵌入现有业务系统，与 Azure 集成</td>
+<td style="text-align: left;">中等</td>
+<td style="text-align: left;">与 AutoGen 一起并入 Microsoft Agent Framework（2026 年 4 月发布 1.0），原项目继续维护</td>
 </tr>
 </tbody>
 </table>
-<p>选型时可以用三个问题快速定位。<strong>第一，控制流的复杂度。</strong> 如果流程是线性的、步骤固定的，轻量框架足矣；如果流程包含循环、分支、并行与人工介入，需要图式编排能力。<strong>第二，可观测性的要求。</strong> 生产系统必须能回放每一次运行的完整轨迹，包括每次模型调用的输入输出、每次工具调用的参数与结果。框架若没有内建的追踪能力，需要额外的埋点。<strong>第三，团队的技术栈。</strong> 企业环境往往要求与既有的身份、权限、监控体系集成，此时”与现有基础设施的贴合度”比”功能丰富度”更重要。</p>
-<p>一个常被忽略的事实是：<strong>框架不能替你解决任务定义问题。</strong> 大量项目失败，不是因为框架选错，而是因为任务边界、成功标准、异常处理没有想清楚。这也是下一节要把开发流程单独讨论的原因。</p>
+</div>
+<p>表中保留五个框架分列，是因为它们的设计思路不同；AutoGen 与 Semantic Kernel 的后续开发已汇入同一个 Microsoft Agent Framework。按 2024 年前后一种常见的定性评估，在模块化程度上，LangChain、LangGraph、AutoGen 较高，CrewAI、Semantic Kernel 居中；在可扩展性上，AutoGen、CrewAI、Semantic Kernel 较高，LangGraph 次之，LangChain 居中。2024 年时这五个框架的成熟度大致是：Semantic Kernel 已用于生产，CrewAI 可用，LangChain 与 LangGraph 处于 Beta 阶段，AutoGen 为预览版；到 2026 年这一格局已明显变化（见表中“状态”一列）。此外，主要模型厂商也推出了自己的智能体开发工具包，例如 OpenAI Agents SDK、Google 的 Agent Development Kit 和 Anthropic 的 Claude Agent SDK，它们与各自的模型服务结合更紧密。</p>
+<p>选型时可以先问三个问题。<strong>第一，控制流有多复杂？</strong>流程线性、步骤固定，轻量框架就够；包含循环、分支、并行与人工介入，就需要图式编排。<strong>第二，对可观测性要求多高？</strong>生产系统必须能回放每次运行的完整轨迹，包括每次模型调用和工具调用的输入输出；框架若不内建追踪，需要额外埋点。<strong>第三，团队已有什么技术栈？</strong>企业环境往往要求与既有的身份认证、权限和监控体系集成，这比功能多少更重要。还要记住，<strong>框架不能替你定义任务</strong>：许多项目失败，不是框架选错，而是任务边界、成功标准和异常处理没有想清楚。</p>
 </section>
-<section id="开发流程从定义到运营" class="level2">
-<h2 class="anchored" data-anchor-id="开发流程从定义到运营">6.5.8　开发流程：从定义到运营</h2>
-<p>智能体的开发流程与常规软件工程有相似之处，但重心明显不同。图 6-3 给出了一个六阶段的典型生命周期。</p>
-<p><img src="media/media/image6.png" style="width:4.72441in;height:2.08224in"></p>
-<p>图 6-3 智能体系统的开发生命周期</p>
-<p>说明：六个阶段构成闭环：定义、设计、开发、测试、部署、运营。右侧虚线表示运营阶段的反馈会回流到定义与设计。</p>
-<p>一、定义（目标、范围、指标）。 <strong>明确任务边界：系统要完成什么、不完成什么、在什么条件下算成功。这一步的产出应当是</strong>可检验的验收标准，而不是一段愿景描述。“帮助用户规划差旅”不是验收标准，“在 5 分钟内给出满足预算、时间与偏好约束的方案，且所有价格可溯源”才是。同时要明确失败模式：哪些错误可以接受，哪些绝对不能发生。</p>
-<p>二、设计（架构、模型选择、数据策略）。 架构选择包括：单智能体还是多智能体、循环式还是计划式、是否需要长期记忆、工具边界如何划分。模型选择不是”越强越好”，而要综合考虑能力、时延、成本与可控性，常见做法是分级：用强模型做规划与复杂推理，用轻模型做分类、抽取与格式转换。数据策略包括：工具返回的数据如何规范化、历史轨迹如何留存、评估集如何构建。</p>
-<p>三、开发（数据准备、模型训练/微调、工具集成）。 这一阶段的重点是工具集成与上下文工程。工具要按第 6.2.3 节的原则设计：单一职责、强类型、错误可读。上下文要按第 6.5.6 节的策略组织：什么常驻、什么按需检索、什么压缩、什么隔离。</p>
-<p>四、测试（验证、性能评估、用户验收）。 <strong>智能体的测试比常规软件困难得多，因为输出不确定、路径不唯一。有效的做法包括：</strong>回放测试<strong>，把历史真实请求固定下来，比较改动前后的行为差异；</strong>断言式评估<strong>，不比对完整输出，只检查关键约束（价格是否在预算内、是否包含必要字段）；</strong>对抗测试<strong>，构造注入攻击、边界输入、冲突指令，检验系统的防御；</strong>用户验收，让真实用户在真实任务上使用，观察完成率与干预率。</p>
-<p>五、部署（集成、上线）。 部署的关键词是”渐进”：灰度发布、影子模式（让新系统在后台运行但不影响用户）、功能开关。智能体的行为依赖模型版本，因此模型升级必须像代码发布一样对待——需要回归测试，需要可回滚。</p>
-<p>六、监控与优化（性能跟踪、反馈收集、持续改进）。 上线不是终点。需要持续跟踪的指标包括：任务成功率、平均轮数、平均成本、人工干预率、失败原因分布。这些指标共同构成”效果—成本—风险”三角，任何一项恶化都应触发排查。</p>
-<p>一个来自可靠性的算术。 假设单步成功率为 0.95，一个需要 10 步的任务，整体成功率约为 0.95^10 ≈ 0.60；若单步成功率为 0.99，则约 0.90。这个简单的计算解释了两件事：为什么长任务智能体如此难做，以及为什么”减少步数”和”提高单步可靠性”是两条并行的优化路径。前者靠更好的规划与工具合并，后者靠校验、重试与更专一的工具设计。</p>
-<p>这也是图 6-3 中”运营”被单列的原因。智能体的质量不是一次性交付的，而是在真实分布的反馈中逐步收敛的。一个没有运营闭环的智能体系统，其效果会在环境变化后迅速衰减。</p>
+<section id="c6-subsec-lifecycle" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-lifecycle">6.5.8　开发流程：从定义到运营</h2>
+<p>智能体的开发流程与常规软件工程相似，但重心不同。图 <a href="../ch6/s6-5.html#c6-fig-lifecycle">6-9</a> 给出一个六阶段的生命周期，运营阶段的反馈会回到定义与设计。</p>
+<div id="c6-fig-lifecycle" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-lifecycle.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:86.5%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-9　智能体系统的开发生命周期。实线箭头为开发顺序；虚线表示运营阶段收集到的数据与反馈回流到定义和设计阶段</p>
+</div>
+</div>
+<p><strong>定义</strong>　 明确目标、范围和成功指标：系统完成什么、不完成什么、什么条件下算成功。产出应是<strong>可检验的验收标准</strong>，而不是愿景描述。“帮用户规划差旅”不是验收标准，“5 分钟内给出满足预算、时间与偏好约束的方案，所有价格都能追溯到查询结果”才是。同时要列出边界场景，明确哪些错误可以接受、哪些绝不能发生。</p>
+<p><strong>设计</strong>　 确定架构、模型与数据策略。架构选择包括：单智能体还是多智能体，ReAct 式还是计划—执行式，是否需要长期记忆，工具边界如何划分。模型选择不是越强越好，要综合能力、时延、成本和可控性，常见做法是分级使用：强模型做规划和复杂推理，轻量模型做分类、抽取和格式转换。数据策略包括工具返回数据如何整理、轨迹如何留存、评估集如何构建。</p>
+<p><strong>开发</strong>　 包括数据准备、必要时的模型微调，以及工具集成和上下文组织。工具按第 <a href="../ch6/s6-2.html#c6-subsec-actuator">6.2.3</a> 小节的原则设计；上下文按第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节的策略组织：什么常驻、什么按需检索、什么压缩、什么隔离。</p>
+<p><strong>测试</strong>　 智能体的输出不确定、路径不唯一，测试比常规软件难。有效做法包括：<strong>回放评估</strong>，把真实请求固定下来，比较改动前后的行为差异；<strong>断言式检查</strong>，不比对完整输出，只检查关键约束（价格在预算内、必填字段齐全）；<strong>对抗测试</strong>，构造注入攻击、边界输入和互相冲突的指令；<strong>用户验收</strong>，让真实用户在真实任务上使用，观察完成率和需要人工干预的比例。</p>
+<p><strong>部署</strong>　 关键词是“渐进”：灰度发布，<strong>影子模式</strong>（新系统在后台运行但不影响用户），功能开关，以及权限隔离和监控埋点。智能体的行为依赖模型版本，模型升级要像代码发布一样做回归测试，并保证可以回滚。</p>
+<p><strong>运营</strong>　 上线不是终点。需要持续跟踪任务成功率、平均轮数、平均成本、人工干预率和失败原因分布，用看板呈现并把用户反馈送回前面各阶段。例 <a href="../ch6/s6-3.html#c6-ex-reliability">6-2</a> 已经说明，单步可靠性的微小变化会被步数放大，因此环境或模型一有变化，效果就可能明显下降；没有运营闭环的系统会在环境变化后迅速失效。</p>
 
 
 </section>
@@ -1447,8 +1498,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch6/s6-4.html" class="pagination-link" aria-label="6.4　关键能力">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.4　关键能力</span>
+      <a href="../ch6/s6-4.html" class="pagination-link" aria-label="6.4　智能体的关键能力">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.4　智能体的关键能力</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1458,7 +1509,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8.2 当前记忆系统 – 大语言模型原理与技术</title>
+<title>8.2 代表性记忆系统 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-2.html">8.2　当前记忆系统</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-2.html">8.2　代表性记忆系统</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,27 +754,25 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#从扩展到组织代表性路线的时间线" id="toc-从扩展到组织代表性路线的时间线" class="nav-link active" data-scroll-target="#从扩展到组织代表性路线的时间线">8.2.1　从扩展到组织：代表性路线的时间线</a></li>
-  <li><a href="#memgpt-与-letta把记忆当作操作系统" id="toc-memgpt-与-letta把记忆当作操作系统" class="nav-link" data-scroll-target="#memgpt-与-letta把记忆当作操作系统">8.2.2　MemGPT 与 Letta：把记忆当作操作系统</a></li>
-  <li><a href="#mem0-与-mem0g为不同查询组织记忆" id="toc-mem0-与-mem0g为不同查询组织记忆" class="nav-link" data-scroll-target="#mem0-与-mem0g为不同查询组织记忆">8.2.3　Mem0 与 Mem0g：为不同查询组织记忆</a></li>
-  <li><a href="#generative-agents让记忆参与反思与计划" id="toc-generative-agents让记忆参与反思与计划" class="nav-link" data-scroll-target="#generative-agents让记忆参与反思与计划">8.2.4　Generative Agents：让记忆参与反思与计划</a></li>
-  <li><a href="#memorybank记忆会遗忘也会被强化" id="toc-memorybank记忆会遗忘也会被强化" class="nav-link" data-scroll-target="#memorybank记忆会遗忘也会被强化">8.2.5　MemoryBank：记忆会遗忘，也会被强化</a></li>
-  <li><a href="#a-mem从独立条目到可演化的记忆网络" id="toc-a-mem从独立条目到可演化的记忆网络" class="nav-link" data-scroll-target="#a-mem从独立条目到可演化的记忆网络">8.2.6　A-MEM：从独立条目到可演化的记忆网络</a></li>
-  <li><a href="#locomo检验真的记得还是碰巧答对" id="toc-locomo检验真的记得还是碰巧答对" class="nav-link" data-scroll-target="#locomo检验真的记得还是碰巧答对">8.2.7　LoCoMo：检验”真的记得”还是”碰巧答对”</a></li>
-  <li><a href="#五类系统的横向比较" id="toc-五类系统的横向比较" class="nav-link" data-scroll-target="#五类系统的横向比较">8.2.8　五类系统的横向比较</a></li>
-  <li><a href="#从更多系统看记忆设计谱系" id="toc-从更多系统看记忆设计谱系" class="nav-link" data-scroll-target="#从更多系统看记忆设计谱系">8.2.9　从更多系统看记忆设计谱系</a></li>
-  <li><a href="#发展脉络与仍未解决的问题" id="toc-发展脉络与仍未解决的问题" class="nav-link" data-scroll-target="#发展脉络与仍未解决的问题">8.2.10　发展脉络与仍未解决的问题</a></li>
-  <li><a href="#本节小结" id="toc-本节小结" class="nav-link" data-scroll-target="#本节小结">8.2.11　本节小结</a></li>
-  <li><a href="#思考与讨论" id="toc-思考与讨论" class="nav-link" data-scroll-target="#思考与讨论">8.2.12　思考与讨论</a></li>
+  <li><a href="#c8-subsec-timeline" id="toc-c8-subsec-timeline" class="nav-link active" data-scroll-target="#c8-subsec-timeline">8.2.1　发展脉络：从扩大窗口到组织状态</a></li>
+  <li><a href="#c8-subsec-memgpt" id="toc-c8-subsec-memgpt" class="nav-link" data-scroll-target="#c8-subsec-memgpt">8.2.2　MemGPT 与 Letta：把上下文当作内存来管理</a></li>
+  <li><a href="#c8-subsec-mem0" id="toc-c8-subsec-mem0" class="nav-link" data-scroll-target="#c8-subsec-mem0">8.2.3　Mem0 与 Mem0g：先提取，再决定增删改</a></li>
+  <li><a href="#c8-subsec-ga" id="toc-c8-subsec-ga" class="nav-link" data-scroll-target="#c8-subsec-ga">8.2.4　Generative Agents：让记忆驱动反思与计划</a></li>
+  <li><a href="#c8-subsec-memorybank" id="toc-c8-subsec-memorybank" class="nav-link" data-scroll-target="#c8-subsec-memorybank">8.2.5　MemoryBank：记忆会遗忘，也会被强化</a></li>
+  <li><a href="#c8-subsec-amem" id="toc-c8-subsec-amem" class="nav-link" data-scroll-target="#c8-subsec-amem">8.2.6　A-MEM：从独立条目到可演化的记忆网络</a></li>
+  <li><a href="#c8-subsec-more" id="toc-c8-subsec-more" class="nav-link" data-scroll-target="#c8-subsec-more">8.2.7　更多路线：经验、技能、模型内记忆与时序图</a></li>
+  <li><a href="#c8-subsec-locomo" id="toc-c8-subsec-locomo" class="nav-link" data-scroll-target="#c8-subsec-locomo">8.2.8　LoCoMo：检验“真的记得”还是“碰巧答对”</a></li>
+  <li><a href="#c8-subsec-compare" id="toc-c8-subsec-compare" class="nav-link" data-scroll-target="#c8-subsec-compare">8.2.9　横向比较</a></li>
+  <li><a href="#c8-subsec-frontier" id="toc-c8-subsec-frontier" class="nav-link" data-scroll-target="#c8-subsec-frontier">8.2.10　前沿方向与未解问题</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-2.html">8.2　当前记忆系统</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch8/index.html">第 8 章　记忆系统</a></li><li class="breadcrumb-item"><a href="../ch8/s8-2.html">8.2　代表性记忆系统</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">8.2　当前记忆系统</h1>
+<h1 class="title">8.2　代表性记忆系统</h1>
 </div>
 
 
@@ -726,305 +789,511 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>8.1 讨论的是记忆为什么重要、应当保存什么。到了 8.2，问题变成：系统怎样把这些状态真正写进去、组织起来，并在下一次任务中重新找出来。本节不会穷举所有记忆产品，而是沿着几条代表性路线，观察 2023 年到 2025 年的设计变化。</p>
-<p>这些工作回答的问题并不相同。MemGPT/Letta 关心怎样用有限上下文模拟更大的记忆空间；Mem0 关心怎样把记忆能力做成低开销、可调用的工程接口；Generative Agents 把记忆与反思、计划连成一个行为循环；MemoryBank 研究记忆怎样随时间衰减和被强化；A-MEM 关注记忆之间怎样建立关系并互相修正。LoCoMo 则不是记忆系统，而是用来检验这些系统的评测基准。把研究系统、工程框架和评测工具放在同一条时间线上，更容易看清领域是怎样发展的。</p>
-<section id="从扩展到组织代表性路线的时间线" class="level2">
-<h2 class="anchored" data-anchor-id="从扩展到组织代表性路线的时间线">8.2.1　从扩展到组织：代表性路线的时间线</h2>
-<p>早期工作的共同出发点是上下文窗口不够用，但解决思路逐渐发生了变化。最初，研究者想把窗口”变大”；随后，人们发现更重要的是把信息分层、压缩、更新和路由。下面的时间线给出了本节讨论的主要节点。具体产品仍在持续迭代，表中的日期以代表性论文、正式发表或官方发布为准。</p>
-<p><strong>表 8-4 代表性记忆工作的发展脉络</strong></p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>时间</strong></th>
-<th><strong>对象</strong></th>
-<th><strong>教材中的定位</strong></th>
-<th><strong>主要变化</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>2023.04</td>
-<td>Generative Agents</td>
-<td>研究系统</td>
-<td>用记忆流、反思和计划支撑连续行为</td>
-</tr>
-<tr class="even">
-<td>2023.05</td>
-<td>MemoryBank</td>
-<td>研究系统</td>
-<td>引入遗忘、强化和动态用户画像；AAAI 2024 正式发表</td>
-</tr>
-<tr class="odd">
-<td>2023.10</td>
-<td>MemGPT</td>
-<td>研究系统</td>
-<td>借鉴操作系统虚拟内存，分层管理上下文</td>
-</tr>
-<tr class="even">
-<td>2024.02</td>
-<td>LoCoMo</td>
-<td>评测基准</td>
-<td>构建超长多会话数据与多类记忆任务</td>
-</tr>
-<tr class="odd">
-<td>2024.09</td>
-<td>Letta</td>
-<td>工程框架</td>
-<td>区分 MemGPT 设计模式与 Letta 工程实现</td>
-</tr>
-<tr class="even">
-<td>2025.02</td>
-<td>A-MEM</td>
-<td>研究系统</td>
-<td>让记忆形成关联网络并随新信息演化</td>
-</tr>
-<tr class="odd">
-<td>2025.04</td>
-<td>Mem0/Mem0g</td>
-<td>生产导向方法</td>
-<td>统一记忆提取、整合、检索与图关系表示</td>
-</tr>
-<tr class="even">
-<td>2025.04</td>
-<td>Letta 睡眠期计算</td>
-<td>工程扩展</td>
-<td>把记忆整理从在线响应路径移到异步后台</td>
-</tr>
-</tbody>
-</table>
-<p>从这条时间线可以看到几个方向。记忆对象由原始对话逐渐变成提取后的事实、结构化笔记和关系网络；写入方式从”遇到内容就追加”发展为合并、更新和遗忘；检索从单次相似度匹配扩展到按类型路由、图遍历和多信号融合；记忆维护也从每次回答前同步完成，逐渐转向后台整理。这些变化都没有绕开成本和可靠性，只是把复杂度从上下文窗口转移到了存储、索引和更新策略中。</p>
+<div class="bookbox guide">
+<p>第 <a href="../ch8/s8-1.html">8.1</a> 节说明了记忆应当保存什么、经历哪些环节。系统实际上怎样把状态写进去、组织起来，并在下一次任务中找出来？本节沿生命周期拆解几条代表性路线：MemGPT/Letta 用操作系统的分层思想管理有限窗口，Mem0 把提取与更新做成低开销的工程接口，Generative Agents 让记忆驱动反思与计划，MemoryBank 给记忆加上遗忘曲线，A-MEM 让记忆互相链接并演化；再简述 Reflexion、Voyager、LongMem、HippoRAG、Zep、MemOS 等补充路线，以及用来检验它们的 LoCoMo 基准。结论是：这些系统各自把生命周期的某一段做深，而且各论文的评测口径不同，无法排出统一的名次；选型要先看任务需要哪类状态。</p>
+</div>
+<section id="c8-subsec-timeline" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-timeline">8.2.1　发展脉络：从扩大窗口到组织状态</h2>
+<p>2023 至 2025 年间，多数记忆系统的出发点是“上下文窗口不够用”，但解法逐渐变化。最早的工作想让有限窗口“看起来更大”；随后人们发现，更关键的是把信息分层、提炼、更新和路由。具体说，有四个方向的变化：</p>
+<ul>
+<li><p><strong>记忆对象</strong>从原始对话变成提炼后的事实、结构化笔记和关系网络；</p></li>
+<li><p><strong>写入方式</strong>从“遇到就追加”变成合并、修正和遗忘；</p></li>
+<li><p><strong>检索方式</strong>从单一的相似度匹配变成多信号打分、按类型路由和图遍历；</p></li>
+<li><p><strong>维护时机</strong>从每次回答前同步完成，部分转移到后台异步整理。</p></li>
+</ul>
+<p>这些变化都没有绕开成本和可靠性，只是把复杂度从上下文窗口转移到了存储、索引和更新策略上。各系统的时间、机构和评测结论汇总在第 <a href="../ch8/s8-2.html#c8-subsec-compare">8.2.9</a> 小节的表 <a href="../ch8/s8-2.html#c8-tab-compare">8-13</a> 中。</p>
 </section>
-<section id="memgpt-与-letta把记忆当作操作系统" class="level2">
-<h2 class="anchored" data-anchor-id="memgpt-与-letta把记忆当作操作系统">8.2.2　MemGPT 与 Letta：把记忆当作操作系统</h2>
-<p>加州大学伯克利分校团队在 2023 年提出 MemGPT，其核心是”虚拟上下文管理”。它借用操作系统的分层思路：CPU 寄存器容量很小但访问很快，硬盘容量大但需要显式调入。对应到语言模型，常驻上下文相当于快速工作区，外部数据库和事件日志相当于较慢的长期存储。模型通过函数调用提出读写请求，系统再完成内容搬运。这种设计让一个有限的上下文窗口表现得像拥有更多可用记忆。[1]</p>
-<p>MemGPT 把与模型直接相关的记忆分成三层。三层之间不存在物理意义上的寄存器和硬盘，它们是一种便于理解的设计类比。</p>
-<p><strong>表 8-5 MemGPT 的记忆层级</strong></p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>记忆层级</strong></th>
-<th><strong>类比</strong></th>
-<th><strong>保存什么</strong></th>
-<th><strong>使用方式</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Core Memory</td>
-<td>寄存器与缓存</td>
-<td>系统提示、角色定义、用户画像和当前关键状态</td>
-<td>始终位于上下文中，语言模型可直接读取和修改</td>
-</tr>
-<tr class="even">
-<td>Recall Memory</td>
-<td>系统日志</td>
-<td>原始对话与事件流</td>
-<td>按时序回放，或从时间窗口中检索</td>
-</tr>
-<tr class="odd">
-<td>Archival Memory</td>
-<td>外部存储</td>
-<td>历史文档、笔记和长期对话</td>
-<td>先被显式调入上下文，再参与当前回答</td>
-</tr>
-</tbody>
-</table>
+<section id="c8-subsec-memgpt" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-memgpt">8.2.2　MemGPT 与 Letta：把上下文当作内存来管理</h2>
+<p>MemGPT 由加州大学伯克利分校团队于 2023 年 10 月提出<sup><a href="../ch8/references.html#ref-6">[6]</a></sup>，核心思想是<strong>虚拟上下文管理</strong>。它借用操作系统的分层存储：内存小而快，磁盘大而慢，程序需要的数据由操作系统在两者之间换入换出。对应到语言模型，窗口内的内容相当于内存，称为<strong>主上下文</strong>；窗口外的数据库相当于磁盘，称为<strong>外部上下文</strong>。与操作系统不同的是，决定“换入什么、换出什么”的不是固定算法，而是模型自己：它通过函数调用（function calling）发出读写请求，由系统执行。</p>
+<p>图 <a href="../ch8/s8-2.html#c8-fig-memgpt">8-3</a> 给出了 MemGPT 的结构，表 <a href="../ch8/s8-2.html#c8-tab-memgpt">8-10</a> 列出各部分的职责。主上下文分为三块：只读的<strong>系统指令</strong>，说明控制流程和可用的记忆函数；可读写的<strong>工作上下文</strong>，存放关键事实与用户偏好，只能通过函数修改；<strong>FIFO 队列</strong>，即滚动的消息历史，第一条是对已被移出消息的递归摘要。外部上下文分为两块：<strong>回忆存储</strong>保存全部消息历史，包括已被移出窗口的消息；<strong>归档存储</strong>保存任意长度的文本，如文档和长期笔记。</p>
+<div id="c8-fig-memgpt" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/image1.png" title="image16" style="width:5.98425in;height:2.24007in" class="figure-img"></p>
-<figcaption>MemGPT 架构示意图，展示有限上下文窗口、函数调用、归档存储、回忆存储、队列管理和输出缓冲之间的关系</figcaption>
+<p><img src="../figs/ch8-memgpt.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:99.0%"></p>
 </figure>
 </div>
-<p><strong>图 8-1 MemGPT 的主上下文、检索存储与归档存储（机制见文献[1]）</strong></p>
-<p>这一架构的关键不只是”外挂数据库”，而是让语言模型参与记忆管理。模型需要判断哪些信息值得放进口袋里的 Core Memory，哪些内容可以留在外部；当上下文接近上限时，系统还要在对话和记忆操作之间切换。function calling 驱动的 agent loop，指的就是这种由模型发起工具调用、系统执行、结果再回到模型的循环。设计上的难点也在这里：写入是否值得、搬运是否及时、模型调用失败后状态是否一致，都会直接影响记忆质量。</p>
-<p>2024 年，MemGPT 背后的工程继续演进，并采用 Letta 作为代理框架名称。更准确的区分是：MemGPT 指最初论文中的自编辑记忆设计模式，Letta 指支持工具、数据源、持久化代理和记忆管理的工程框架。[2]这一拆分有助于我们把概念贡献和产品实现分开理解。</p>
-<p>Letta 把 Core Memory 进一步拆成多个 Memory Blocks。每个 Block 带有标签、模板和当前值，可以用结构化 JSON 保存，也可以通过工具修改。这比一整块系统提示更接近”带索引的抽屉”：人物偏好放在一个 Block，当前任务放在另一个 Block，系统规则又可以单独维护。结构变清楚以后，代理能更有针对性地读写，人和调试工具也更容易看懂当前记忆。</p>
-<p>2025 年公开的睡眠期计算进一步把记忆维护移出在线响应路径。主代理负责和用户交互，睡眠期代理在没有即时请求时整理记忆、合并信息并修改主代理的 Memory Blocks。[3]这样做有两个好处：用户不必等待长篇整理过程，记忆也可以从零散增量变成更连贯的摘要。代价是后台计算仍然需要资源，异步写入还可能带来时序问题，例如主代理在整理完成前又产生了新信息。睡眠期计算因此更像一种调度策略，并不能自动保证记忆正确。</p>
-</section>
-<section id="mem0-与-mem0g为不同查询组织记忆" class="level2">
-<h2 class="anchored" data-anchor-id="mem0-与-mem0g为不同查询组织记忆">8.2.3　Mem0 与 Mem0g：为不同查询组织记忆</h2>
-<p>Mem0 团队在 2025 年的论文中把目标定得更接近工程落地：在持续对话中动态提取、整合和检索重要信息，减少反复处理完整历史的成本。[4]它并不把每次交互原文直接塞进长期库，而是先让语言模型提取候选事实，再与已有相似记忆比较，决定新增、更新、删除或保持原状。这一提取与更新两阶段流程，是 Mem0 和简单”向量数据库加搜索”的关键区别。</p>
-<p>可以用三类查询说明为什么一种存储不够。模糊主题适合向量检索，精确事实适合键值查找，多跳关系适合图结构。统一接口的意义在于，应用只调用 add 或 search，不必在业务代码里判断该访问哪种数据库。</p>
-<p><strong>表 8-6 不同查询类型与记忆组织的对应关系</strong></p>
+<div class="figcap">
+<p>图 8-3　MemGPT 的结构（据文献 <sup><a href="../ch8/references.html#ref-6">[6]</a></sup>的图重画）。上方为主上下文，即模型每次能看到的全部输入；下方两侧的归档存储与回忆存储位于窗口之外。模型通过函数执行器读写工作上下文和归档存储、检索回忆存储；队列管理器负责消息进出 FIFO 队列，并把被移出的消息写入回忆存储</p>
+</div>
+</div>
+<div id="c8-tab-memgpt" class="booktab">
+<div class="tabcap">
+<p>表 8-10　MemGPT 的存储层级</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>查询类型</strong></th>
-<th><strong>示例</strong></th>
-<th><strong>适合的组织方式</strong></th>
-<th><strong>原因</strong></th>
+<th style="text-align: left;">位置</th>
+<th style="text-align: left;">组成部分</th>
+<th style="text-align: left;">保存什么</th>
+<th style="text-align: left;">怎样读写</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>语义相似</td>
-<td>上周讨论过哪些智能体漂移问题</td>
-<td>Vector</td>
-<td>用嵌入向量召回语义接近但措辞不同的内容</td>
+<td style="text-align: left;">主上下文</td>
+<td style="text-align: left;">系统指令</td>
+<td style="text-align: left;">控制流程、记忆函数的用法</td>
+<td style="text-align: left;">只读</td>
 </tr>
 <tr class="even">
-<td>精确事实</td>
-<td>用户登记的手机号是什么</td>
-<td>KV</td>
-<td>按键值直接查找，适合稳定字段和精确匹配</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">工作上下文</td>
+<td style="text-align: left;">关键事实、用户偏好、当前角色</td>
+<td style="text-align: left;">模型调用函数改写</td>
 </tr>
 <tr class="odd">
-<td>关系推理</td>
-<td>哪些客户共享同一个开票主体</td>
-<td>Graph</td>
-<td>沿实体关系进行多跳遍历</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">FIFO 队列</td>
+<td style="text-align: left;">最近消息 + 已移出消息的递归摘要</td>
+<td style="text-align: left;">队列管理器追加与移出</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">外部上下文</td>
+<td style="text-align: left;">回忆存储</td>
+<td style="text-align: left;">完整的消息历史</td>
+<td style="text-align: left;">队列管理器写入；模型调用函数检索</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">归档存储</td>
+<td style="text-align: left;">文档、长期笔记等任意文本</td>
+<td style="text-align: left;">模型调用函数读写</td>
 </tr>
 </tbody>
 </table>
-<p>这里的 Vector、KV 和 Graph 更适合被理解为三种索引思想，而不是要求每个版本的产品都固定使用三套数据库。Mem0 的基础方法重点使用语义检索与增量更新；Mem0g 再增加图结构，把实体和关系显式保存，以便处理相互关联的事实。同一个系统也可能用 SQL 保存事实和元数据、用向量库保存嵌入、用实体图支持关系召回。教材关心的是查询与组织的匹配，而不是某一种后端产品。</p>
-<p>Mem0 的论文在 LoCoMo 实验设置中报告，相比把所有历史放进上下文，其方法显著降低了响应延迟和 token 成本；论文摘要给出的数字是 p95 延迟降低约 91%，token 成本节省超过 90%。[4]这些结果说明了”只取相关记忆”在工程上的价值，但它们是特定实验条件下的结果，不能直接外推成所有真实业务的性能承诺。同样，图结构也不是越多越好。实体抽取、关系维护和图遍历都会增加写入成本，具体任务是否需要还得依靠评测决定。</p>
+</div>
+<p>换入换出怎样触发？队列管理器监视窗口占用：达到“警告阈值”（论文举例为窗口的 70%）时，向模型插入一条“内存压力”提示，让它抓紧把重要信息写进工作上下文或归档存储；达到“刷新阈值”（例如 100%）时，按比例（例如一半）移出最早的消息，写入回忆存储，并更新递归摘要。模型每次函数调用后可以要求立即继续执行下一步（类似操作系统的分页调度），也可以交出控制权、等待下一个事件（论文称为 yield）。这种“模型发起调用—系统执行—结果回到模型”的循环，正是第 6 章所讲的智能体循环在记忆管理上的应用。</p>
+<p>在多会话聊天的“深度记忆检索”（Deep Memory Retrieval，DMR）任务中，模型要回答关于很早以前会话的问题。论文报告，GPT-4 单独作答的准确率为 32.1%，加上 MemGPT 后为 92.5%<sup><a href="../ch8/references.html#ref-6">[6]</a></sup>。代价也很明显：记忆质量取决于模型是否在正确时机写入和检索，函数调用能力弱的模型（论文中的 GPT-3.5）表现明显变差；模型也常在没翻完归档存储时就停止检索。</p>
+<p>2024 年 9 月，MemGPT 的开源项目并入 Letta 公司，代码和包名改为 Letta<sup><a href="../ch8/references.html#ref-7">[7]</a></sup>。Letta 把工作上下文进一步拆成多个<strong>记忆块</strong>（memory block），每块有标签、字数上限和当前值，例如“用户偏好”一块、“当前任务”一块，代理可以有针对性地改写其中一块，开发者也更容易看懂当前记忆。2025 年 4 月，该团队提出<strong>睡眠期计算</strong>（sleep-time compute）<sup><a href="../ch8/references.html#ref-8">[8]</a></sup>：在用户还没提问的空闲时段，另一个“睡眠期代理”预先整理上下文、推断可能的问题，并改写主代理的记忆块。论文在改造过的数学推理任务上报告，达到同样准确率所需的测试时计算约减少到原来的五分之一。代价是后台计算仍要花钱，异步写入还会带来时序问题：主代理可能在整理完成之前又产生了新信息。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>MemGPT 与 Letta</strong>。MemGPT 指 2023 年论文提出的设计模式：模型通过工具自己编辑分层记忆。Letta 指承载这一模式的工程框架和公司，提供持久化代理、记忆块、工具与数据源管理等功能。讨论概念贡献时说 MemGPT，讨论现在可用的软件时说 Letta。</p>
+</div>
 </section>
-<section id="generative-agents让记忆参与反思与计划" class="level2">
-<h2 class="anchored" data-anchor-id="generative-agents让记忆参与反思与计划">8.2.4　Generative Agents：让记忆参与反思与计划</h2>
-<p>Stanford 团队在 2023 年提出的 Generative Agents，把记忆放在一个持续行动的角色内部，而不只是检索模块。[5]每个角色把经历写成带时间戳的自然语言条目，组成 Memory Stream。条目创建时由语言模型评估重要性，系统再综合新近程度、重要性和与当前情境的相关性，选出需要进入当前决策的内容。</p>
-<p>当近期记忆的重要性累计到一定程度，系统触发 Reflection。反思不是简单重复原记录，而是从多段经历中形成更高层的判断，例如”这个人重视准时”或”那家店周六不营业”。这些判断重新写回记忆流，成为后续行为的依据。Planning 再把高层结论展开成当天计划和更细的行动序列，经典实现采用约 15 分钟的行动粒度；新的观察进入后，计划还可以调整。</p>
-<p>这里形成了一个闭环：经历进入记忆，记忆经反思生成概括，概括影响计划，计划执行又产生新经历。这让记忆从”回答问题时可查的资料”变成”决定下一步做什么的状态”。它的代价是调用链更长，一次行为可能涉及多次打分、反思和计划；若反思把偶发事件概括成稳定特征，错误还会进入后续决策。论文实验也观察到代理会记住内容，但有时会加入原对话并不存在的细节，这提醒我们”会生成记忆”本身就带来一致性风险。[5]</p>
-</section>
-<section id="memorybank记忆会遗忘也会被强化" class="level2">
-<h2 class="anchored" data-anchor-id="memorybank记忆会遗忘也会被强化">8.2.5　MemoryBank：记忆会遗忘，也会被强化</h2>
-<p>中山大学等团队在 2023 年提出 MemoryBank，并把长期陪伴场景作为主要对象。系统保存每日对话、事件摘要和不断变化的用户画像，并通过检索把相关经历带回当前回答；论文后来发表于 AAAI 2024。[6]它和只追加记录的方案最大的区别，是为记忆设置了明显的生命周期。</p>
-<p>MemoryBank 借鉴艾宾浩斯遗忘曲线：一条记忆随时间流逝可能逐渐减弱，但如果再次被回忆或使用，它的强度就会提高，保留时间也会延长。可以把它想成一本经常翻阅的笔记：总被用到的页会留下，长期无人使用的页逐渐淡出。这一机制同时沿”数据维度”和”自然语言维度”工作：一边根据时间与访问频率调整保留，另一边由语言模型总结用户性格和经历。</p>
-<p>这种动态更新让系统有机会越用越了解用户，也避免数据库无限膨胀。它同时暴露了一个长期问题：遗忘规则是预测，不是事实。某个偏好很久没被提起，不代表它已经失效；一次情绪化表达也不一定应当成为稳定用户画像。论文中的遗忘模型是对人类记忆的简化，适合展示生命周期思想，距离可靠处理复杂隐私、例外和人格变化仍有距离。[6]</p>
-</section>
-<section id="a-mem从独立条目到可演化的记忆网络" class="level2">
-<h2 class="anchored" data-anchor-id="a-mem从独立条目到可演化的记忆网络">8.2.6　A-MEM：从独立条目到可演化的记忆网络</h2>
-<p>罗格斯大学等团队在 2025 年提出 A-MEM，提供了一种更主动的记忆组织方式。它受 Zettelkasten 卡片笔记法启发：每一条记忆不是孤立的文本块，而是一张有上下文、标签和链接的卡片。[7]新内容进入系统后，会先生成结构化记忆笔记，其中包含原始内容、时间戳、关键词、标签、语言模型生成的上下文描述、嵌入向量和相关链接。</p>
-<p>写入过程包含三个连续动作。第一步是 Note Construction，把交互加工成自包含的笔记；第二步是 Link Generation，检索已有记忆中可能相关的条目，让语言模型判断是否建立连接；第三步是 Memory Evolution，新笔记可能改变旧笔记的上下文、关键词或标签，使整个网络重新理解过去的信息。这与把每条记忆当作不可更改的独立向量有明显区别：旧记忆也会随新证据被修订。</p>
+<section id="c8-subsec-mem0" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-mem0">8.2.3　Mem0 与 Mem0g：先提取，再决定增删改</h2>
+<p>Mem0 团队在 2025 年 4 月发表的论文中，把目标定得更接近生产环境：在持续对话中动态提取、整合和检索要点，不必每次都重新处理完整历史<sup><a href="../ch8/references.html#ref-9">[9]</a></sup>。它与“向量数据库加搜索”的关键区别是一个两阶段流程（图 <a href="../ch8/s8-2.html#c8-fig-mem0">8-4</a>）。</p>
+<p><strong>提取阶段</strong>：每来一对新消息（用户一句、助手一句），系统把三样东西交给语言模型——数据库里的会话摘要、新消息之前的最近 <span class="math inline">\(m\)</span> 条消息（论文取 <span class="math inline">\(m=10\)</span>）、这对新消息——让它抽出若干<strong>候选事实</strong>，例如“用户对坚果过敏”“用户下周三出国开会”。</p>
+<p><strong>更新阶段</strong>：对每条候选事实，先从向量库中检索语义最接近的 <span class="math inline">\(s\)</span> 条已有记忆（论文取 <span class="math inline">\(s=10\)</span>），再让语言模型通过函数调用在四种操作中选一种：<code>ADD</code>（新增）、<code>UPDATE</code>（用新信息补充或改写某条旧记忆）、<code>DELETE</code>（删除被新信息否定的旧记忆）、<code>NOOP</code>（已有等价记忆，不做任何事）。这四种操作就是表 <a href="../ch8/s8-1.html#c8-tab-update">8-4</a> 中追加、修正、合并、删除的一个具体实现。</p>
+<div id="c8-fig-mem0" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/image2.png" title="image22" style="width:5.98425in;height:2.93117in" class="figure-img"></p>
-<figcaption>A-MEM 架构示意图，展示记忆笔记构建、关联生成、记忆演化和基于向量及链接的记忆检索</figcaption>
+<p><img src="../figs/ch8-mem0.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
-<p><strong>图 8-2 A-MEM 的笔记构建、关联与记忆演化（机制见文献[7]）</strong></p>
-<p>检索时，系统先用查询向量找到种子记忆，再沿已建立的关系扩展相邻条目。这个过程可以概括为”向量找种子，图遍历扩展”，从而获得更完整的上下文。例如，用户问”为什么这个项目改了发布时间”，直接命中的可能只是一条会议记录；沿关系还能带回需求变更、供应链延迟和负责人的说明。这适合跨记忆的多跳推理，也让系统有机会发现零散事实之间的共同模式。</p>
-<p>A-MEM 的代价同样来自”演化”。新记忆修改旧记忆，意味着系统必须处理版本、证据和错误传播；如果一条错误笔记被连接到很多条目，影响可能沿着图扩散。关系越多，检索路径和存储成本越高，语言模型在建立连接时也会产生额外调用。它比单纯的向量检索更接近知识组织，却也更依赖更新规则是否可控。</p>
-</section>
-<section id="locomo检验真的记得还是碰巧答对" class="level2">
-<h2 class="anchored" data-anchor-id="locomo检验真的记得还是碰巧答对">8.2.7　LoCoMo：检验”真的记得”还是”碰巧答对”</h2>
-<p>前面的系统都在提出机制，LoCoMo 解决的则是怎样比较它们。北卡罗来纳大学教堂山分校等团队在 2024 年发布这一长期对话记忆评测基准，它不属于某一种记忆架构。[8]数据集包含 50 段长对话，每段平均约 300 轮、9K token，平均跨越约 19 个会话，最长可达 35 个会话。对话由人物设定和事件图驱动，并经过人工检查，以保证长距离一致性。</p>
-<p>LoCoMo 不只考回忆单条事实。问答部分包含单跳、多跳、时序、开放域常识和对抗性五类问题。单跳问题在一个会话内就能找到答案；多跳问题要求合并多个会话的信息；时序问题要理解事件先后；开放域问题要结合对话内信息与外部常识；对抗性问题故意设置无法回答或前提错误的请求，检验系统是否会编造答案。</p>
-<p>除问答外，基准还要求系统整理事件摘要，并进行多模态对话生成。这样的设计区分了三种能力：能不能找到相关记忆，能不能把跨时间的因果和事件关系组织起来，以及能不能用这些记忆生成前后一致的回应。如果只看单轮问答，系统可能凭当前上下文猜对；放到几十个会话之后，记忆是否稳定、是否被正确归属、是否混淆人物和时间，才更容易暴露出来。</p>
-<p>论文结果显示，长上下文模型和 RAG 都能改善部分问答表现，但与人类仍有明显差距，时序推理和对抗性问题尤其困难。[8]“所有现有方案整体不及格”这一概括强调的是差距之大。这里的”不及格”没有统一分数线，也不是说每个方案所有指标都失败；更准确的理解是，在非常长期的对话里，现有系统普遍还不能稳定达到可用的人类水平。这正是评测基准的价值：它把”感觉效果不错”转成可以复现和比较的失败案例。</p>
-</section>
-<section id="五类系统的横向比较" class="level2">
-<h2 class="anchored" data-anchor-id="五类系统的横向比较">8.2.8　五类系统的横向比较</h2>
-<p>把前面五个记忆系统放在同一张表里，会发现它们不是同一种做法的不同实现。MemGPT/Letta 以操作系统的分层和分页为核心，Mem0 以提取、整合和多类查询为核心，Generative Agents 以经历、反思和计划为核心，MemoryBank 以动态衰减和用户画像为核心，A-MEM 以记忆网络和条目演化为核心。比较它们时，首先要问各自把哪一段记忆生命周期做得最深。</p>
-<p>读这张表时，不必寻找一个总体最高分。先看某套系统保存什么，再看它何时修改旧内容，最后看查询时靠什么找到相关信息。表中的”优势与边界”描述的是设计重心带来的直接后果；同一套机制换到不同任务、模型和数据规模后，实际表现仍可能变化。</p>
-<p><strong>表 8-7 代表性记忆系统比较</strong></p>
+<div class="figcap">
+<p>图 8-4　Mem0 的两阶段流程（据文献 <sup><a href="../ch8/references.html#ref-9">[9]</a></sup>绘制）。提取阶段从新消息及其上下文中抽出候选事实；更新阶段对每条候选事实检索最相近的已有记忆，由语言模型通过函数调用选择四种操作之一，结果写回记忆库</p>
+</div>
+</div>
+<p>Mem0g 在此基础上增加图结构：把实体（人、地点、事件）存为节点，把关系存为带标签的有向边，例如（用户，居住于，上海）。新信息与旧关系冲突时，系统不直接删除旧边，而是将其标记为失效，以便回答“以前住在哪里”这类时间问题。为什么要多一种组织方式？因为不同查询适合不同的索引（表 <a href="../ch8/s8-2.html#c8-tab-query">8-11</a>）。</p>
+<div id="c8-tab-query" class="booktab">
+<div class="tabcap">
+<p>表 8-11　查询类型与记忆组织方式</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>系统</strong></th>
-<th><strong>核心问题</strong></th>
-<th><strong>主要组织形式</strong></th>
-<th><strong>更新与检索</strong></th>
-<th><strong>优势与边界</strong></th>
+<th style="text-align: left;">查询类型</th>
+<th style="text-align: left;">例子</th>
+<th style="text-align: left;">适合的组织</th>
+<th style="text-align: left;">原因</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>MemGPT/Letta</td>
-<td>有限窗口怎样表现得更像无限记忆</td>
-<td>核心、回忆、归档三层；Letta 用结构化 Blocks</td>
-<td>模型调用记忆工具；睡眠期异步整理</td>
-<td>分层灵活；依赖模型决策，写入与并发一致性复杂</td>
+<td style="text-align: left;">语义相近</td>
+<td style="text-align: left;">上周讨论过哪些关于智能体漂移的问题？</td>
+<td style="text-align: left;">向量索引</td>
+<td style="text-align: left;">召回措辞不同但意思接近的内容</td>
 </tr>
 <tr class="even">
-<td>Mem0/Mem0g</td>
-<td>怎样低成本提取并取回对话中的关键信息</td>
-<td>提取事实、向量索引；可选实体关系图</td>
-<td>新增、更新、删除、合并；按查询路由</td>
-<td>工程开销较低；依赖提取质量，存储与版本变化会影响结果</td>
+<td style="text-align: left;">精确事实</td>
+<td style="text-align: left;">用户登记的手机号是多少？</td>
+<td style="text-align: left;">键值或关系表</td>
+<td style="text-align: left;">按字段直接查找，不需要相似度</td>
 </tr>
 <tr class="odd">
-<td>Generative Agents</td>
-<td>记忆怎样支持可信的连续行为</td>
-<td>带时间戳的自然语言记忆流</td>
-<td>相关性、新近性和重要性检索；反思与计划</td>
-<td>形成行为闭环；调用链长，反思可能放大细节偏差</td>
-</tr>
-<tr class="even">
-<td>MemoryBank</td>
-<td>记忆怎样随时间衰减和被强化</td>
-<td>对话、事件摘要、用户画像</td>
-<td>基于时间与访问的遗忘、强化</td>
-<td>强调生命周期；遗忘模型简化，长期人格变化难处理</td>
-</tr>
-<tr class="odd">
-<td>A-MEM</td>
-<td>独立记录怎样支持跨记忆推理</td>
-<td>结构化笔记、向量、链接网络</td>
-<td>新增时建链并修订旧笔记；种子检索后图扩展</td>
-<td>多跳上下文更完整；更新成本高，错误可能沿网络传播</td>
+<td style="text-align: left;">关系推理</td>
+<td style="text-align: left;">哪些客户共用同一个开票主体？</td>
+<td style="text-align: left;">图</td>
+<td style="text-align: left;">沿实体关系做多跳遍历</td>
 </tr>
 </tbody>
 </table>
-<p>可以从四个轴继续比较。第一，记忆粒度：Generative Agents 保留较多原始经历，Mem0 更偏向提炼事实，A-MEM 则把原文加工成带语义说明的笔记。第二，控制方式：MemGPT 和 Letta 让语言模型通过工具决定何时读写，MemoryBank 更依赖时间与访问规则，A-MEM 在写入时自动触发关系的生成和演化。第三，生命周期：有的系统主要追加，有的会合并、改写或遗忘。第四，检索方式：有全文重读、向量召回、多存储路由，也有图遍历和多种分数融合。</p>
-<p>这些维度之间经常需要交换。保留原文有利于追溯，但会增加存储和检索噪声；提炼事实便于快速使用，却可能丢掉语气、例外和因果关系；图结构擅长多跳关系，但构图和更新更贵；异步整理降低响应延迟，却增加状态时序和并发控制难度。因此，“采用哪种记忆系统”不能只看向量库大小或演示效果，而要先明确任务需要的是事实召回、事件追溯、关系推理，还是用户画像。</p>
+</div>
+<p>论文在 LoCoMo 基准（第 <a href="../ch8/s8-2.html#c8-subsec-locomo">8.2.8</a> 小节）上用“以大模型作评判”（LLM-as-a-Judge，记为 J 分）比较各方案。Mem0 的 J 分为 66.9%，Mem0g 为 68.4%，OpenAI 的记忆功能为 52.9%；把整段对话全部放进上下文的做法为 72.9%，反而最高。但全量上下文每次查询要处理约 2.6 万个 token，p95 延迟（最慢 5% 请求的延迟）约 17.1 s；Mem0 每次只取回约 1800 个 token 的记忆，p95 延迟约 1.44 s，即论文摘要所说的“p95 延迟降低 91%、token 成本节省 90% 以上”<sup><a href="../ch8/references.html#ref-9">[9]</a></sup>。这组数字很能说明问题：在这个基准上，记忆系统用少量准确率换来了一个数量级的延迟和成本下降。它们是特定实验设置下的结果，不能直接外推到所有业务；图结构也不是越多越好，实体抽取和关系维护都会增加写入成本。</p>
 </section>
-<section id="从更多系统看记忆设计谱系" class="level2">
-<h2 class="anchored" data-anchor-id="从更多系统看记忆设计谱系">8.2.9　从更多系统看记忆设计谱系</h2>
-<p>前面的五个案例主要展示了记忆流、分层存储和显式事实管理。进一步观察其他代表性工作，还能看到几条补充路线。Reflexion 把任务失败后的语言反思写入独立经验库，下次遇到相似任务时不必重新踩一遍同样的坑；Voyager 则把成功的动作序列整理成可执行代码并加入技能库，把”发生过什么”进一步转化为”以后怎样做”。这两种做法都说明，可供复用的经验既可能是叙事，也可能是可执行程序。[26][27]</p>
-<p>LongMem 采用另一条思路：主语言模型保持冻结，通过侧路网络和缓存记忆处理超长历史。它把记忆能力部分做进模型运行机制，而不是只在外部数据库与应用层之间搬运文本。HippoRAG 和 Zep/Graphiti 则偏重关系与时间：前者从文本建立实体关系图并沿图进行多跳检索，后者用带有效时间的事实关系记录偏好和状态如何变化。对于”曾经喜欢 Java，后来改用 Python”这类问题，单纯的当前事实表往往不够，时序图能保留事实从何时开始、何时失效。[28][29][30]</p>
-<p>MemOS 进一步把记忆提升为系统级资源，试图统一管理参数记忆、激活态记忆、明文记忆和图结构记忆，并考虑多个智能体之间的隔离、共享、迁移和生命周期审计。这代表了一种从”给模型外挂一个记忆插件”向”为智能体提供统一记忆操作系统”的变化。它的价值不只在检索，还在于不同记忆形态使用同一套治理与调度规则。</p>
+<section id="c8-subsec-ga" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-ga">8.2.4　Generative Agents：让记忆驱动反思与计划</h2>
+<p>斯坦福大学与谷歌的研究者在 2023 年提出 Generative Agents<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>，在一个名为 Smallville 的沙盒小镇中放入 25 个由语言模型驱动的角色，让它们自主起床、工作、聊天，甚至自发组织一场情人节派对。这里的记忆不是一个被动的检索模块，而是决定角色下一步做什么的状态。</p>
+<p>每个角色把自己的经历写成带时间戳的自然语言条目，按时间排成<strong>记忆流</strong>（memory stream）。每次需要决策时，系统按三个信号给每条记忆打分：<strong>新近性</strong>，距上次被访问过去的游戏小时数为 <span class="math inline">\(\Delta h\)</span>，得分按 <span class="math inline">\(0.995^{\Delta h}\)</span> 指数衰减；<strong>重要性</strong>，条目创建时由语言模型打 1（如“吃早饭”）到 10（如“分手”）的整数分；<strong>相关性</strong>，条目嵌入向量与当前查询的余弦相似度。三项分别在候选集合内做最小—最大归一化（<span class="math inline">\(\hat{x}=(x-x_{\min})/(x_{\max}-x_{\min})\)</span>，映射到 0～1）后加权求和： <span class="math display">\[s(m)=\alpha_{\mathrm{rec}}\,\hat{s}_{\mathrm{rec}}(m)+\alpha_{\mathrm{imp}}\,\hat{s}_{\mathrm{imp}}(m)+\alpha_{\mathrm{rel}}\,\hat{s}_{\mathrm{rel}}(m),
+\tag{8-3}\]</span> 论文中三个权重 <span class="math inline">\(\alpha\)</span> 都取 1。得分最高、能放进窗口的若干条进入当前上下文。</p>
+<div id="c8-ex-ga" class="bookbox example">
+<div class="boxtitle">
+<p>例 8-3　三信号检索打分</p>
+</div>
+<p>角色 Isabella 正在想“周末该邀请谁”。记忆流中有三条候选： <span class="math inline">\(m_1\)</span>“Isabella 计划 2 月 14 日在咖啡馆办情人节派对”，重要性 8，20 小时前被访问过，与查询的余弦相似度 0.82； <span class="math inline">\(m_2\)</span>“早上吃了吐司”，重要性 1，1 小时前，相似度 0.35； <span class="math inline">\(m_3\)</span>“Klaus 在写一篇关于城市变迁的论文”，重要性 5，100 小时前，相似度 0.60。按式 <a href="../ch8/s8-2.html#c8-eq-ga">（8-3）</a>、三个权重均为 1 计算：</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果（<span class="math inline">\(m_1\)</span> / <span class="math inline">\(m_2\)</span> / <span class="math inline">\(m_3\)</span>）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">新近性原始分</td>
+<td style="text-align: left;"><span class="math inline">\(0.995^{20}\)</span>；<span class="math inline">\(0.995^{1}\)</span>；<span class="math inline">\(0.995^{100}\)</span></td>
+<td style="text-align: left;">0.905 / 0.995 / 0.606</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">新近性归一化</td>
+<td style="text-align: left;">最小 0.606，最大 0.995，差 0.389；<span class="math inline">\((0.905-0.606)\div0.389\)</span></td>
+<td style="text-align: left;">0.768 / 1 / 0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">重要性归一化</td>
+<td style="text-align: left;">最小 1，最大 8，差 7；<span class="math inline">\((5-1)\div7\)</span></td>
+<td style="text-align: left;">1 / 0 / 0.571</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">相关性归一化</td>
+<td style="text-align: left;">最小 0.35，最大 0.82，差 0.47；<span class="math inline">\((0.60-0.35)\div0.47\)</span></td>
+<td style="text-align: left;">1 / 0 / 0.532</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">总分</td>
+<td style="text-align: left;">三项相加</td>
+<td style="text-align: left;">2.768 / 1.000 / 1.103</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据从哪来</strong>：衰减因子 0.995、重要性 1～10、权重均为 1 取自论文<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>；三条记忆的具体数值为本题设定。<span class="math inline">\(0.995^{20}=\mathrm{e}^{20\ln0.995}\approx\mathrm{e}^{-0.100}\approx0.905\)</span>，<span class="math inline">\(0.995^{100}\approx\mathrm{e}^{-0.501}\approx0.606\)</span>。</p>
+<p><strong>结论</strong>：排序为 <span class="math inline">\(m_1&gt;m_3&gt;m_2\)</span>，派对计划被取回。若只看新近性，排第一的会是刚吃的早饭 <span class="math inline">\(m_2\)</span>；若只看相关性，<span class="math inline">\(m_1\)</span> 虽仍第一，但 <span class="math inline">\(m_2\)</span> 与 <span class="math inline">\(m_3\)</span> 的差距无法反映“分手”与“早饭”这类重要性差别。多信号打分正是为了避免任何一个信号单独主导。注意归一化是在候选集合内做的，换一批候选，同一条记忆的归一化分数就会变。</p>
+</div>
+<p>光有检索还不够。当最近一批经历的重要性之和超过阈值（论文取 150）时，系统触发<strong>反思</strong>（reflection）：读取最近约 100 条记忆，让模型提出三个高层问题，再检索相关记忆回答，得出“Klaus 致力于研究”这类带引用的高层判断，并写回记忆流。实际运行中，角色大约每天反思两三次。<strong>计划</strong>（planning）则自上而下展开：先把一天粗分成五到八段，再细化到小时，最后细化到 5～15 分钟的动作；遇到新的观察时可以修改计划。于是形成一个闭环（图 <a href="../ch8/s8-2.html#c8-fig-ga">8-5</a>）：经历写入记忆流，记忆经反思生成概括，概括和检索结果影响计划，计划执行又产生新经历。</p>
+<div id="c8-fig-ga" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/image3.png" title="image24" style="width:5.98425in;height:2.13669in" class="figure-img"></p>
-<figcaption>MemOS 示意图，展示显式和隐式记忆、记忆管理与更新、增删改接口以及统一记忆系统之间的关系</figcaption>
+<p><img src="../figs/ch8-ga.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.2%"></p>
 </figure>
 </div>
-<p><strong>图 8-3 MemOS 对异构记忆资源的统一管理（机制见文献[31]）</strong></p>
-<p>这些补充路线可以归纳为四个设计维度。第一，复用对象可以是事件、语言反思或可执行技能；第二，记忆可以与模型运行机制结合，而不只存放在外部库；第三，关系和时间可以成为一等索引，而不只是附加元数据；第四，系统层需要统一治理异构记忆。它们没有取代先前案例，反而说明长期记忆并不存在一种”标准架构”，不同任务需要在保真、更新、推理、成本和治理之间做取舍。</p>
+<div class="figcap">
+<p>图 8-5　Generative Agents 的记忆—反思—计划闭环（据文献 <sup><a href="../ch8/references.html#ref-10">[10]</a></sup>绘制）。记忆流是中心：感知写入经历，反思从中归纳高层判断并写回，计划依据检索结果制定并写回，行动又产生新经历</p>
+</div>
+</div>
+<p>论文请评估者比较各个变体的回答可信度，用 TrueSkill 评分排序：完整架构得 29.89，去掉反思得 26.88，再去掉计划得 25.64，三者都去掉只剩 21.21，由众包人员扮演角色撰写的回答得 22.95<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>。这说明记忆、反思与计划各有贡献。代价是调用链长，一次行为可能涉及多次打分、反思和计划；反思若把偶发事件概括成稳定特征，错误会进入后续决策；论文也观察到角色有时会给记忆添加原本不存在的细节。</p>
 </section>
-<section id="发展脉络与仍未解决的问题" class="level2">
-<h2 class="anchored" data-anchor-id="发展脉络与仍未解决的问题">8.2.10　发展脉络与仍未解决的问题</h2>
-<p>从 2023 年到 2025 年，记忆系统大致经历了五个变化。第一，目标从扩大上下文转向组织状态。模型不必一次看到全部历史，而是要能选择正确的状态。第二，记忆从原始文本转向提炼后的事实、摘要和结构化条目。第三，组织从独立记录转向多层、多索引和关系网络。第四，维护从同步追加转向合并、遗忘、反思和异步更新。第五，研究从展示单个系统转向用长对话基准做横向评测。</p>
-<p>这些变化不是简单替代。MemGPT 的分层仍能解释 Letta 的 Blocks，Generative Agents 的反思仍对应”把事件沉淀成更高层状态”，MemoryBank 的生命周期问题也仍在今天的冲突处理与遗忘策略中出现。A-MEM 和 Mem0g 则把早期系统中的关联需求进一步显式化。回头看，领域真正积累下来的不是某一种数据库，而是几条相对稳定的设计问题：写入什么、何时更新、怎样取回、如何遗忘，以及怎样证明效果。</p>
-<p>仍未解决的问题也很集中。长期记忆中的事实可能随时间变化，系统需要区分”曾经为真”和”现在仍为真”；用户在不同任务中可能有不同偏好，系统需要控制作用域；自动提取和反思可能产生看似合理但未经证实的记忆；异步维护和多代理共享记忆会带来覆盖与并发冲突；记忆数量增长后，召回延迟、存储成本和隐私风险都会上升。LoCoMo 提供了共同考试题，但它主要衡量长期对话能力，并不能穷尽真实产品中的权限、审计、纠错和多模态长期状态问题。</p>
-<p>如果要在具体应用中选型，可以先回答六个问题：系统需要记住的是事实、事件、流程，还是关系？一条记忆由谁写入，是否可以追溯来源？旧信息和新信息冲突时按什么顺序处理？读取时需要向量、精确键值、时间窗口还是图遍历？响应延迟和整理成本分别能承受多少？最后，怎样用任务级指标证明记忆确实改善了结果？这些问题比”用了哪个框架”更能决定记忆系统是否可靠。</p>
-<p>记忆研究还可以沿四条相互关联的路线继续展开：评估定义什么叫”好记忆”，注意偏向决定什么值得进入记忆，巩固把零散情景提炼成可泛化结构，强化学习则根据长期任务反馈调整保存、检索与遗忘策略。其中，记忆评估不应只测事实准确率，还要观察时间理解、知识更新、干扰抵抗、合理遗忘和认知合理性。这组维度把”记住”与”记对、记新、知道何时不用”区分开来，也为后续系统设计提供了更完整的评价目标。</p>
+<section id="c8-subsec-memorybank" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-memorybank">8.2.5　MemoryBank：记忆会遗忘，也会被强化</h2>
+<p>中山大学等单位的研究者在 2023 年 5 月提出 MemoryBank，论文后来发表于 AAAI 2024<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>。它面向长期陪伴类聊天：保存每天的对话、每日事件摘要和逐步更新的用户画像（性格、兴趣等），用双塔稠密检索把相关记忆取回当前对话。与只会追加的方案相比，它最大的不同是给每条记忆设了生命周期。</p>
+<p>这个生命周期借鉴了<strong>艾宾浩斯遗忘曲线</strong>：记忆随时间衰减，复习会让它衰减得更慢。MemoryBank 用的保留率公式是 <span class="math display">\[R=\mathrm{e}^{-t/S},
+\tag{8-4}\]</span> 其中 <span class="math inline">\(R\)</span> 为保留率（0～1），<span class="math inline">\(t\)</span> 为距上次学习或回忆经过的时间，<span class="math inline">\(S\)</span> 为记忆强度。论文把 <span class="math inline">\(S\)</span> 设为离散值：一条记忆首次出现时 <span class="math inline">\(S=1\)</span>；每当它在对话中被回忆一次，<span class="math inline">\(S\)</span> 加 1，同时 <span class="math inline">\(t\)</span> 归零<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>。论文没有限定 <span class="math inline">\(t\)</span> 的单位，本书按“天”计。</p>
+<div id="c8-ex-forget" class="bookbox example">
+<div class="boxtitle">
+<p>例 8-4　遗忘曲线与强化</p>
+</div>
+<p>用户第 0 天提到“下个月要考雅思”。比较两种情况：（甲）此后从未被提起；（乙）第 1 天、第 3 天各被回忆一次。另设一条本书自定的规则：保留率低于 0.1 时，该记忆不再参与检索。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">甲在第 3 天的保留率</td>
+<td style="text-align: left;"><span class="math inline">\(S=1,\ t=3\)</span>：<span class="math inline">\(\mathrm{e}^{-3/1}\)</span></td>
+<td style="text-align: left;">0.050，已低于 0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">乙在第 1 天回忆前</td>
+<td style="text-align: left;"><span class="math inline">\(S=1,\ t=1\)</span>：<span class="math inline">\(\mathrm{e}^{-1}\)</span></td>
+<td style="text-align: left;">0.368；回忆后 <span class="math inline">\(S=2\)</span>，<span class="math inline">\(t\)</span> 归零</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">乙在第 3 天回忆前</td>
+<td style="text-align: left;"><span class="math inline">\(S=2,\ t=2\)</span>：<span class="math inline">\(\mathrm{e}^{-2/2}\)</span></td>
+<td style="text-align: left;">0.368；回忆后 <span class="math inline">\(S=3\)</span>，<span class="math inline">\(t\)</span> 归零</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">乙在第 7 天</td>
+<td style="text-align: left;"><span class="math inline">\(S=3,\ t=4\)</span>：<span class="math inline">\(\mathrm{e}^{-4/3}\)</span></td>
+<td style="text-align: left;">0.264</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">各强度下降到 0.1 所需时间</td>
+<td style="text-align: left;">由 <span class="math inline">\(\mathrm{e}^{-t/S}=0.1\)</span> 得 <span class="math inline">\(t=S\ln10\approx2.303\,S\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(S=1\)</span>：2.3 天；<span class="math inline">\(S=2\)</span>：4.6 天；<span class="math inline">\(S=3\)</span>：6.9 天</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据从哪来</strong>：公式与 <span class="math inline">\(S\)</span> 的更新规则取自论文<sup><a href="../ch8/references.html#ref-11">[11]</a></sup>；阈值 0.1 和时间单位“天”为本书设定。</p>
+<p><strong>结论</strong>：不被提起的记忆 2.3 天后就退出检索；被回忆两次的记忆到第 7 天仍有 0.264，还要再过约 <span class="math inline">\(6.9-4=2.9\)</span> 天才降到 0.1。每次回忆既把 <span class="math inline">\(t\)</span> 归零，又让曲线变平，这就是“经常被用到的记忆越来越牢固”。图 <a href="../ch8/s8-2.html#c8-fig-forget">8-6</a> 画出了这两条曲线。</p>
+</div>
+<div id="c8-fig-forget" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch8-forget.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 8-6　MemoryBank 的遗忘曲线 <span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span>。灰线为从未被回忆的记忆；青绿线在第 1、3 天各被回忆一次，每次回忆使保留率回到 1、强度 S 加 1，此后衰减变慢（数值见例 <a href="../ch8/s8-2.html#c8-ex-forget">8-4</a>）</p>
+</div>
+</div>
+<p>这种机制让记忆库不会无限膨胀，也让常用信息更容易留下。但它也暴露了一个长期问题：遗忘规则是一种<strong>预测</strong>，不是事实。某个偏好很久没被提起，不代表它已失效（例如“对花生严重过敏”）；一次情绪化的表达也不该成为稳定画像。论文本身也说明，这是一个探索性的、高度简化的模型。实际系统常把遗忘曲线与重要性、用户的显式标记结合使用。</p>
 </section>
-<section id="本节小结" class="level2">
-<h2 class="anchored" data-anchor-id="本节小结">8.2.11　本节小结</h2>
-<p>当前记忆系统已经从”把历史放进更大上下文”发展为多种状态工程路线。MemGPT/Letta 把有限窗口分成可调度的记忆层级；Mem0 强调从对话中提取、整合并高效检索信息；Generative Agents 把记忆、反思与计划连起来；MemoryBank 关注遗忘、强化和用户画像；A-MEM 用笔记网络表达记忆之间的关系和演化。LoCoMo 则提醒我们，系统能否讲清架构，不等于它真的能在长期对话中找对、用对信息。</p>
-<p>这些方案没有统一赢家。原始记录、结构化事实、用户画像和关系网络各自保存不同状态，适合不同查询。一个好系统通常需要组合多种表示，并为每类状态设计独立的写入、更新、读取、遗忘和权限规则。下一部分将进一步回到认知学，看看人类记忆的分类与规律，如何为这些工程取舍提供新的解释框架。</p>
+<section id="c8-subsec-amem" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-amem">8.2.6　A-MEM：从独立条目到可演化的记忆网络</h2>
+<p>罗格斯大学等单位的研究者在 2025 年 2 月提出 A-MEM（Agentic Memory），论文发表于 NeurIPS 2025<sup><a href="../ch8/references.html#ref-12">[12]</a></sup>。它借鉴了<strong>卡片笔记法</strong>（Zettelkasten）：每条记忆不是孤立的文本块，而是一张带上下文、关键词、标签并与其他卡片相连的笔记。写入分三步（图 <a href="../ch8/s8-2.html#c8-fig-amem">8-7</a>）：</p>
+<ol type="1">
+<li><p><strong>构建笔记</strong>：把一次交互加工成自包含的笔记，字段包括原始内容、时间戳、关键词、标签、由语言模型生成的上下文描述，以及嵌入向量。</p></li>
+<li><p><strong>生成链接</strong>：用新笔记的嵌入向量找出最相近的若干条旧笔记，由语言模型判断哪些真正相关并建立链接。</p></li>
+<li><p><strong>记忆演化</strong>：新笔记可能改变旧笔记的上下文描述、关键词或标签，使整个网络重新理解过去的信息。旧记忆因此不是写入后就不可更改的。</p></li>
+</ol>
+<p>检索时先用查询向量找到种子笔记，再沿链接带回相邻笔记，即“向量找种子、链接作扩展”。例如用户问“这个项目为什么改了发布时间”，直接命中的可能只是一条会议记录，沿链接还能带回需求变更、供应商延迟和负责人的说明。</p>
+<div id="c8-fig-amem" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch8-amem.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.2%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 8-7　A-MEM 的写入与检索（据文献 <sup><a href="../ch8/references.html#ref-12">[12]</a></sup>的图重画）。写入时依次构建笔记、生成链接、演化旧笔记，形成一张笔记网络；检索时先用向量找到种子笔记，再沿链接把相邻笔记一起带回</p>
+</div>
+</div>
+<p>论文在 LoCoMo 上用六种基座模型做了比较。A-MEM 每次记忆操作约用 1200 个 token，而 LoCoMo 原文方法和 MemGPT 约用 16 900 个；在多跳问题上，A-MEM 的 F1 普遍高于基线，但提升幅度随基座模型变化很大，对 GPT-4o 约为 1.2 倍，对一些小模型可达 2～4 倍<sup><a href="../ch8/references.html#ref-12">[12]</a></sup>。它的代价同样来自“演化”：新记忆会改写旧记忆，系统就必须处理版本、证据和错误传播；一条错误笔记若连接了很多条目，影响会沿网络扩散；建立链接也要额外调用语言模型。</p>
 </section>
-<section id="思考与讨论" class="level2">
-<h2 class="anchored" data-anchor-id="思考与讨论">8.2.12　思考与讨论</h2>
-<p>1. MemGPT 的 Core、Recall、Archival 三层能否直接对应 8.1 中的工作、情景和语义记忆？请说明哪些地方可以对应，哪些地方不能简单画等号。</p>
-<p>2. 如果要回答”一个项目的两次延期分别由什么原因造成”，你会选择向量检索、图遍历、事件时间线，还是多种方式结合？请给出理由。</p>
-<p>3. 为什么一个系统在 LoCoMo 上取得了更高分数，仍不能证明它适合作为个人工作助手？请从数据范围、权限、纠错和真实延迟四个方面讨论。</p>
+<section id="c8-subsec-more" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-more">8.2.7　更多路线：经验、技能、模型内记忆与时序图</h2>
+<p>前面五个系统主要展示了分层存储、事实提取、记忆流、遗忘曲线和笔记网络。还有几条路线从不同方向补充了记忆设计。</p>
+<ul>
+<li><p><strong>Reflexion</strong>（2023）<sup><a href="../ch8/references.html#ref-13">[13]</a></sup>：智能体执行任务失败后，根据环境反馈用语言写一段自我反思（“我上次在这里失败是因为……”），存进情景反思记忆，下次尝试时放入上下文。它不修改模型权重，只靠记住教训来改进。论文报告在 HumanEval 编程基准上 pass@1 达到 91%，高于当时 GPT-4 的 80%。</p></li>
+<li><p><strong>Voyager</strong>（2023）<sup><a href="../ch8/references.html#ref-14">[14]</a></sup>：在游戏《我的世界》（Minecraft）中，智能体把成功完成的复杂动作写成可复用的 JavaScript 函数，存入不断扩充的<strong>技能库</strong>；遇到新任务时检索并组合旧技能。它记住的不是“发生过什么”，而是“这件事以后怎么做”，是程序记忆的直接实现。论文报告获得的独特物品数约为此前最好方法的 3.3 倍，解锁关键科技树节点最快可达 15.3 倍。</p></li>
+<li><p><strong>LongMem</strong>（2023）<sup><a href="../ch8/references.html#ref-15">[15]</a></sup>：主语言模型保持冻结，旁边接一个可训练的残差<strong>旁路网络</strong>（SideNet），把很长的历史以注意力键值对的形式缓存进记忆库，需要时取回并融合进当前层。它把记忆做进模型的运行机制，记忆长度可扩展到约 6.5 万个 token。</p></li>
+<li><p><strong>HippoRAG</strong>（2024）<sup><a href="../ch8/references.html#ref-16">[16]</a></sup>：受海马体为大脑皮层记忆建立索引的理论启发，用开放信息抽取（Open Information Extraction，OpenIE）从文本中抽出实体和三元组，建成知识图谱；检索时以问题中的实体为起点运行个性化 PageRank（Personalized PageRank，PPR），让相关性沿图传播，从而一步找到需要多跳才能串起来的事实。论文报告在多跳问答上最多提升 20%，且比迭代检索方法 IRCoT 便宜 10～30 倍、快 6～13 倍。</p></li>
+<li><p><strong>Zep 与 Graphiti</strong>（2025）<sup><a href="../ch8/references.html#ref-17">[17]</a></sup>：用<strong>时序知识图谱</strong>记录事实的有效期。例如（用户 A，偏好，Java）的有效期为 2024—2025，（用户 A，偏好，Python）为 2025 至今。新事实到来时，旧关系被标记为失效而非删除，因此既能回答“现在用什么”，也能回答“以前用什么、何时改的”。论文报告其在 DMR 上的准确率为 94.8%，对照的是 MemGPT 论文中最好的一组结果（配 GPT-4 Turbo 时为 93.4%，与前文配 GPT-4 时的 92.5% 是不同的基座模型），在 LongMemEval 基准上准确率最多提高 18.5%，响应延迟降低约 90%。</p></li>
+<li><p><strong>MemOS</strong>（2025）<sup><a href="../ch8/references.html#ref-18">[18]</a></sup>：把记忆当作和算力、存储同等的系统资源来调度，统一管理三类记忆：<strong>明文记忆</strong>（文档、知识图谱等外部可读内容）、<strong>激活记忆</strong>（KV 缓存等推理时的中间状态）和<strong>参数记忆</strong>（权重及 LoRA 等增量参数）。三类记忆都封装成带来源、版本等元数据的 MemCube，可以组合、迁移，也可以相互转化：常用的明文内容可以预先算成 KV 缓存，稳定的知识可以蒸馏进参数。它还考虑多个智能体之间的记忆隔离、共享与生命周期审计（图 <a href="../ch8/s8-2.html#c8-fig-memos">8-8</a>）。</p></li>
+</ul>
+<div id="c8-fig-memos" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch8-memos.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:94.4%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 8-8　MemOS 对三类记忆的统一管理（据文献 <sup><a href="../ch8/references.html#ref-18">[18]</a></sup>的描述绘制）。明文、激活、参数三类记忆都以 MemCube 封装，经统一接口读写，由系统层调度与治理；三类记忆之间可以相互转化，图中只画了两个典型方向</p>
+</div>
+</div>
+<p>这几条路线可以归纳为四个设计维度：可复用的经验既可以是叙事（Reflexion 的反思），也可以是可执行程序（Voyager 的技能）；记忆既可以放在外部库，也可以与模型运行机制结合（LongMem、MemOS 的激活与参数记忆）；关系和时间可以成为一等索引，而不只是附加字段（HippoRAG、Zep）；异构记忆需要系统层统一治理（MemOS）。</p>
+</section>
+<section id="c8-subsec-locomo" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-locomo">8.2.8　LoCoMo：检验“真的记得”还是“碰巧答对”</h2>
+<p>前面的系统都在提出机制，LoCoMo 解决的是怎样比较它们。它由北卡罗来纳大学教堂山分校、南加州大学和 Snap 公司的研究者于 2024 年发布，发表于 ACL 2024<sup><a href="../ch8/references.html#ref-19">[19]</a></sup>。数据集有 50 段超长对话，每段平均约 300 轮、9000 个 token，平均跨 19 个会话，最长 35 个会话；对话由语言模型代理根据人物设定和时间事件图生成，再经人工检查修改，以保证长距离一致。它包含三项任务：问答、事件摘要和多模态对话生成。问答部分共 7512 道题，分五类（表 <a href="../ch8/s8-2.html#c8-tab-locomo">8-12</a>）。</p>
+<div id="c8-tab-locomo" class="booktab">
+<div class="tabcap">
+<p>表 8-12　LoCoMo 问答的五类题目</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: right;">题数</th>
+<th style="text-align: left;">考查什么</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">单跳</td>
+<td style="text-align: right;">2705</td>
+<td style="text-align: left;">答案在一个会话内就能找到</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">多跳</td>
+<td style="text-align: right;">1104</td>
+<td style="text-align: left;">需要合并多个会话中的信息</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">时序推理</td>
+<td style="text-align: right;">1547</td>
+<td style="text-align: left;">理解事件的先后与时间间隔</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">开放域知识</td>
+<td style="text-align: right;">285</td>
+<td style="text-align: left;">把对话内容与外部常识结合</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">对抗</td>
+<td style="text-align: right;">1871</td>
+<td style="text-align: left;">无法回答或前提错误的问题，检验系统是否编造</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>论文结果显示，长上下文模型和 RAG 都能改善问答表现，但离人类仍很远：人类的总体 F1 为 87.9，表中最好的模型配置（GPT-3.5-turbo-16K）为 37.8；时序推理和对抗类问题尤其困难<sup><a href="../ch8/references.html#ref-19">[19]</a></sup>。这说明在跨几十个会话的长期对话中，现有系统还不能稳定地找对、用对信息。此后，Mem0、A-MEM、Zep 等系统都把 LoCoMo 作为主要的比较基准。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p><strong>LoCoMo 是基准，不是记忆系统</strong>。它提供的是统一的“考题”和评分方式，本身不存储、不检索任何记忆。还要注意：各论文在 LoCoMo 上报告的数字，评分方式（F1 或 J 分）、所用模型和题目子集常常不同，不能直接横向比较；分数高也只说明长期对话问答做得好，不能说明系统在权限、纠错、真实延迟等方面适合做个人助手。</p>
+</div>
+</section>
+<section id="c8-subsec-compare" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-compare">8.2.9　横向比较</h2>
+<p>表 <a href="../ch8/s8-2.html#c8-tab-compare">8-13</a> 用统一的维度汇总本节的系统。读这张表时不必找总分最高的一行，而要问：它保存什么？何时修改旧内容？查询时靠什么找到相关信息？它把生命周期的哪一段做得最深？</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">系统</th>
+<th style="text-align: left;">时间与机构</th>
+<th style="text-align: left;">记忆组织</th>
+<th style="text-align: left;">写入与更新</th>
+<th style="text-align: left;">检索</th>
+<th style="text-align: left;">评测结论</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">系统</td>
+<td style="text-align: left;">时间与机构</td>
+<td style="text-align: left;">记忆组织</td>
+<td style="text-align: left;">写入与更新</td>
+<td style="text-align: left;">检索</td>
+<td style="text-align: left;">评测结论</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Generative Agents</td>
+<td style="text-align: left;">2023.04；斯坦福大学、谷歌</td>
+<td style="text-align: left;">带时间戳的自然语言记忆流</td>
+<td style="text-align: left;">追加经历；反思生成高层判断并写回</td>
+<td style="text-align: left;">新近性、重要性、相关性加权</td>
+<td style="text-align: left;">消融实验中完整架构可信度最高（TrueSkill 29.89，去掉三者为 21.21）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MemoryBank</td>
+<td style="text-align: left;">2023.05（AAAI 2024）；中山大学等</td>
+<td style="text-align: left;">对话、每日摘要、用户画像</td>
+<td style="text-align: left;">按遗忘曲线衰减，被回忆即强化</td>
+<td style="text-align: left;">双塔稠密检索</td>
+<td style="text-align: left;">15 名模拟用户、194 道探测题上展示记忆召回与画像理解</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MemGPT / Letta</td>
+<td style="text-align: left;">2023.10；伯克利（2024.09 并入 Letta）</td>
+<td style="text-align: left;">主上下文三块 + 回忆存储 + 归档存储；Letta 用记忆块</td>
+<td style="text-align: left;">模型调用函数读写；睡眠期代理异步整理</td>
+<td style="text-align: left;">函数调用检索、分页翻阅</td>
+<td style="text-align: left;">DMR 准确率：GPT-4 单独 32.1%，加 MemGPT 92.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LoCoMo（基准）</td>
+<td style="text-align: left;">2024.02（ACL 2024）；北卡大学教堂山分校等</td>
+<td style="text-align: left;">50 段超长对话，平均 19 个会话</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">最好模型 F1 37.8，人类 87.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mem0 / Mem0g</td>
+<td style="text-align: left;">2025.04；Mem0 团队</td>
+<td style="text-align: left;">提炼后的事实 + 向量索引；Mem0g 加实体关系图</td>
+<td style="text-align: left;">先提取，再 ADD、UPDATE、DELETE 或 NOOP；图中旧边标为失效</td>
+<td style="text-align: left;">向量相似度；图遍历</td>
+<td style="text-align: left;">LoCoMo J 分 66.9% / 68.4%，全量上下文 72.9%；p95 延迟 1.44 s 对 17.1 s</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A-MEM</td>
+<td style="text-align: left;">2025.02（NeurIPS 2025）；罗格斯大学等</td>
+<td style="text-align: left;">结构化笔记 + 链接网络</td>
+<td style="text-align: left;">建链并修订旧笔记</td>
+<td style="text-align: left;">向量找种子，沿链接扩展</td>
+<td style="text-align: left;">每次操作约 1200 token（基线约 16 900）；多跳 F1 提升幅度随模型而异</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reflexion</td>
+<td style="text-align: left;">2023.03（NeurIPS 2023）；东北大学（美）、普林斯顿大学等</td>
+<td style="text-align: left;">语言形式的失败反思</td>
+<td style="text-align: left;">每次失败后追加反思</td>
+<td style="text-align: left;">放入下一次尝试的上下文</td>
+<td style="text-align: left;">HumanEval pass@1 91%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Voyager</td>
+<td style="text-align: left;">2023.05；英伟达、加州理工学院等</td>
+<td style="text-align: left;">可执行的 JavaScript 技能库</td>
+<td style="text-align: left;">成功后写入新技能</td>
+<td style="text-align: left;">按任务描述检索技能</td>
+<td style="text-align: left;">独特物品数约 3.3 倍，科技树最快 15.3 倍</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LongMem</td>
+<td style="text-align: left;">2023.06（NeurIPS 2023）；加州大学圣塔芭芭拉分校、微软研究院</td>
+<td style="text-align: left;">模型内的键值缓存记忆库</td>
+<td style="text-align: left;">旁路网络写入缓存</td>
+<td style="text-align: left;">注意力层内取回</td>
+<td style="text-align: left;">记忆长度约 6.5 万 token</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HippoRAG</td>
+<td style="text-align: left;">2024.05（NeurIPS 2024）；俄亥俄州立大学等</td>
+<td style="text-align: left;">OpenIE 知识图谱</td>
+<td style="text-align: left;">抽取三元组建图</td>
+<td style="text-align: left;">个性化 PageRank</td>
+<td style="text-align: left;">多跳问答最多提升 20%，比 IRCoT 快 6～13 倍</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Zep / Graphiti</td>
+<td style="text-align: left;">2025.01；Zep 公司</td>
+<td style="text-align: left;">带有效期的时序知识图谱</td>
+<td style="text-align: left;">新事实使旧关系失效</td>
+<td style="text-align: left;">语义、关键词与图搜索结合</td>
+<td style="text-align: left;">DMR 94.8%；LongMemEval 最多提升 18.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MemOS</td>
+<td style="text-align: left;">2025.07；记忆张量公司、上海交通大学等</td>
+<td style="text-align: left;">明文、激活、参数三类记忆，以 MemCube 封装</td>
+<td style="text-align: left;">统一调度、迁移与转化</td>
+<td style="text-align: left;">按类型调度</td>
+<td style="text-align: left;">论文自报多项基准提升，尚缺独立复现</td>
+</tr>
+</tbody>
+</table>
+<p>比较时可以抓住四条轴。<strong>记忆粒度</strong>：Generative Agents 保留较多原始经历，Mem0 偏向提炼事实，A-MEM 把原文加工成带说明的笔记。<strong>控制方式</strong>：MemGPT/Letta 让模型通过工具决定何时读写，MemoryBank 依赖时间与回忆规则，A-MEM 在写入时自动触发建链和演化。<strong>生命周期</strong>：有的只追加，有的会合并、改写或遗忘。<strong>检索方式</strong>：全文翻阅、向量召回、多信号打分、图遍历。这些维度之间需要取舍：保留原文利于追溯，但增加噪声；提炼事实便于使用，却可能丢掉语气、例外和因果；图结构擅长多跳，但构图和更新更贵；异步整理降低响应延迟，却增加时序与并发控制的难度。</p>
+</section>
+<section id="c8-subsec-frontier" class="level2">
+<h2 class="anchored" data-anchor-id="c8-subsec-frontier">8.2.10　前沿方向与未解问题</h2>
+<p>从这些系统回头看，领域积累下来的不是某一种数据库，而是几个稳定的设计问题：写入什么、何时更新、怎样取回、如何遗忘，以及怎样证明有效。围绕这些问题，研究大致沿四个相互关联的方向推进：<strong>评估</strong>定义什么是“好记忆”，<strong>注意偏向</strong>决定“记什么”，<strong>巩固</strong>负责“怎样整合”，<strong>强化学习</strong>负责“怎样持续优化”。</p>
+<p><strong>超越准确率的评估</strong>　 现有基准大多只测“能否回答关于过去的事实”。一个更完整的评估至少看六个维度：<strong>准确回忆</strong>，能否在海量历史中找回事实；<strong>时间理解</strong>，能否判断事件先后与有效期；<strong>知识更新</strong>，新事实到来时能否正确覆盖旧观念；<strong>干扰抵抗</strong>，在大量无关对话中能否保持稳定；<strong>合理遗忘</strong>，能否清除过期、低价值和冲突的数据；<strong>认知合理性</strong>，遗忘与检索行为是否符合人类认知规律。设想这样一个测试：第 1 周用户说“我主要用 Java”；第 3 周插入大量无关闲聊；第 5 周用户说“我现在主要用 Python”；第 8 周用户要求“用我最熟悉的语言写一段解析代码”。系统会误用旧偏好吗？能过滤掉第 3 周的噪声吗？能解释偏好是何时改变的吗？</p>
+<p><strong>认知启发的巩固</strong>　 现有系统常见的问题是：对话形成孤立片段，重复经历无法抽象，新旧知识难以融合，记得细节却总结不出规律。借鉴人类记忆研究，可以在后台运行一个巩固引擎：由<strong>预测误差</strong>（新信息与已有预期不符）触发巩固；经<strong>注意偏向</strong>筛选出值得整合的内容；通过<strong>离线重放</strong>（在空闲时重新处理近期经历）把相关情景放在一起；抽取出<strong>图式</strong>（schema），即从多次经历中概括出的一般规则；当旧知识被重新取用并与新信息冲突时进行<strong>再巩固</strong>（reconsolidation），修改原有结构。目标不是保留更多细节，而是形成稳定、可泛化、可更新的知识。</p>
+<p><strong>注意偏向驱动的选择性记忆</strong>　 智能体每天接收大量输入，真正影响未来决策的只占很少一部分。例如在“谢谢！”“今天天气不错”“我对花生严重过敏，请记住”“以后请优先用 Python 示例”“刚才那段格式有点乱”“下个月项目目标改为大模型”这串输入中，值得长期记住的主要是第三、四、六句。可以设计一个<strong>注意偏向评分器</strong>，综合与任务和长期目标的相关度、用户的显性与隐性偏好、信息的新颖度与预测误差、情感强度与反馈、未来潜在使用价值，再在三个阶段使用它：<strong>选择性编码</strong>决定什么有资格写入，<strong>选择性巩固</strong>决定离线时优先整合什么，<strong>选择性检索</strong>决定当前任务优先取回什么。</p>
+<p><strong>用强化学习学会记与忘</strong>　 目前的系统大多依赖工程师写死的规则：重要性高于 0.8 才保存、只保留最近 <span class="math inline">\(N\)</span> 条、超过 30 天自动删除、检索固定取前 <span class="math inline">\(k\)</span> 条。这些规则难以适应多变的用户和任务。另一种思路是把记忆管理建模为强化学习问题：<strong>状态</strong>是当前任务上下文和记忆库负载，<strong>动作</strong>是保存、丢弃、调整巩固强度、剪枝，<strong>奖励</strong>是长期任务成功率减去存储和检索成本，学到的<strong>策略</strong>决定不同场景下的最佳记忆动作。核心转变是从“工程师规定怎样记”走向“智能体通过长期反馈学会怎样记”。</p>
+<p><strong>仍未解决的问题</strong>　 事实会随时间变化，系统要区分“曾经为真”和“现在为真”；同一用户在不同任务中偏好不同，需要控制作用域；自动提取和反思可能产生看似合理却未经证实的记忆；异步维护和多代理共享记忆会带来覆盖与并发冲突；记忆数量增长后，延迟、存储成本和隐私风险都会上升。选型时，与其先问“用哪个框架”，不如先回答六个问题：要记的是事实、事件、流程还是关系？一条记忆由谁写入，能否追溯来源？新旧冲突按什么规则处理？读取需要向量、精确键值、时间窗口还是图遍历？延迟和整理成本各能承受多少？用什么任务级指标证明记忆确实改善了结果？</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>MemGPT 让模型用函数调用在主上下文与外部存储之间换入换出；Letta 是它的工程延续。</p></li>
+<li><p>Mem0 先提取候选事实，再用 ADD/UPDATE/DELETE/NOOP 维护记忆；在 LoCoMo 上以少量准确率换来约 90% 的延迟与 token 下降。</p></li>
+<li><p>Generative Agents 用新近性、重要性、相关性三信号检索，并以反思和计划形成行为闭环；MemoryBank 用 <span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span> 实现遗忘与强化；A-MEM 让记忆互相链接并演化。</p></li>
+<li><p>LoCoMo 是评测基准：长上下文和 RAG 都远低于人类水平，时序与对抗类问题最难。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1519,7 +1788,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

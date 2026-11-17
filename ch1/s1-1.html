@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1.1 从人工智能到大语言模型 – 大语言模型原理与技术</title>
+<title>1.1 什么是大语言模型：从人工智能说起 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/s1-1.html">1.1　从人工智能到大语言模型</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/s1-1.html">1.1　什么是大语言模型：从人工智能说起</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,19 +754,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#人工智能机器学习与深度学" id="toc-人工智能机器学习与深度学" class="nav-link active" data-scroll-target="#人工智能机器学习与深度学">1.1.1　人工智能、机器学习与深度学��</a></li>
-  <li><a href="#生成式人工智能" id="toc-生成式人工智能" class="nav-link" data-scroll-target="#生成式人工智能">1.1.2　生成式人工智能</a></li>
-  <li><a href="#基础模型大语言模型与多模态模型" id="toc-基础模型大语言模型与多模态模型" class="nav-link" data-scroll-target="#基础模型大语言模型与多模态模型">1.1.3　基础模型、大语言模型与多模态模型</a></li>
-  <li><a href="#世界模型与大语言模型" id="toc-世界模型与大语言模型" class="nav-link" data-scroll-target="#世界模型与大语言模型">1.1.4　世界模型与大语言模型</a></li>
+  <li><a href="#c1-subsec-ai-ml-dl" id="toc-c1-subsec-ai-ml-dl" class="nav-link active" data-scroll-target="#c1-subsec-ai-ml-dl">1.1.1　人工智能、机器学习与深度学习</a></li>
+  <li><a href="#c1-subsec-genai" id="toc-c1-subsec-genai" class="nav-link" data-scroll-target="#c1-subsec-genai">1.1.2　生成式人工智能与决策式人工智能</a></li>
+  <li><a href="#c1-subsec-llm" id="toc-c1-subsec-llm" class="nav-link" data-scroll-target="#c1-subsec-llm">1.1.3　大语言模型、基础模型与多模态模型</a></li>
+  <li><a href="#c1-subsec-world" id="toc-c1-subsec-world" class="nav-link" data-scroll-target="#c1-subsec-world">1.1.4　世界模型：另一条路线</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/s1-1.html">1.1　从人工智能到大语言模型</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch1/index.html">第 1 章　大语言模型的由来与现状</a></li><li class="breadcrumb-item"><a href="../ch1/s1-1.html">1.1　什么是大语言模型：从人工智能说起</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">1.1　从人工智能到大语言模型</h1>
+<h1 class="title">1.1　什么是大语言模型：从人工智能说起</h1>
 </div>
 
 
@@ -718,45 +783,145 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="人工智能机器学习与深度学" class="level2">
-<h2 class="anchored" data-anchor-id="人工智能机器学习与深度学">1.1.1　人工智能、机器学习与深度学��</h2>
-<p>人工智能（Artificial Intelligence，AI）研究如何使机器表现出通常需要人类智能才能完成的能力，例如感知、学习、推理、规划、交流和行动。人工智能是一个目标广泛的研究领域，并不等同于某一种算法。早期系统常依赖人工编写的规则与符号推理；现代人工智能则大量采用从数据中学习规律的方法。</p>
-<p>机器学习是实现人工智能的一类主要技术路线。它不要求开发者为所有情形逐条编写规则，而是通过样本估计函数、概率分布或决策策略。深度学习属于机器学习，其核心是包含多层参数化变换的神经网络。深度学习能够从原始数据中逐层学习表示，在语音、图像和自然语言处理领域推动了多次性能跃迁。</p>
-<p>这几个概念存在包含关系：人工智能的范围最广，机器学习是其中的重要分支，深度学习又是机器学习的一类方法。大语言模型通常采用深度神经网络训练，因此处在这一技术谱系之中；但大语言模型的完整系统还包括数据工程、分布式计算、对齐、安全评测、检索和工具调用等环节，不能只用一个网络结构来概括。</p>
+<div class="bookbox guide">
+<p>谈论大语言模型时，人们常把人工智能、生成式人工智能、大模型、多模态、世界模型混在一起用。这些词并不处在同一个层级：有的是包含关系，有的是按不同标准做的划分。本节先用一张谱系图把它们摆到各自的位置上。结论是：人工智能、机器学习、深度学习、生成式人工智能层层包含，大语言模型是生成式人工智能中以文本为对象的一类；“基础模型”是按用法划分的说法；多模态模型扩展了输入输出的种类；世界模型学习的是“动作会带来什么后果”，与大语言模型是两条不同的路线。</p>
+</div>
+<section id="c1-subsec-ai-ml-dl" class="level2">
+<h2 class="anchored" data-anchor-id="c1-subsec-ai-ml-dl">1.1.1　人工智能、机器学习与深度学习</h2>
+<p><strong>人工智能</strong>（Artificial Intelligence，AI）研究如何让机器完成通常需要人类智能才能完成的任务，例如感知、推理、规划、交流和行动<sup><a href="../ch1/references.html#ref-1">[1]</a></sup>。它是一个按<strong>目标</strong>界定的研究领域，并不指某一种算法。实现这个目标有两种基本思路。一种是由人写规则：例如早期的垃圾邮件过滤器由工程师列出“含有‘中奖’且含有链接就判为垃圾邮件”这样的条件，再由程序逐条匹配。规则清楚易懂，但现实情况千变万化，规则永远写不全。另一种是让机器从数据中学规律，这就是机器学习。</p>
+<p><strong>机器学习</strong>（Machine Learning，ML）不要求开发者为每种情形写规则，而是给出大量样本（例如一百万封标注过“垃圾/正常”的邮件），让算法自动调整一个带参数的函数，使它在这些样本上尽量答对，并期望它在没见过的新样本上也答对。模型“学到”的东西就保存在这些参数里。</p>
+<p><strong>深度学习</strong>（Deep Learning，DL）是机器学习的一类方法，所用的函数是由很多层简单变换叠起来的<strong>神经网络</strong>。层数多带来的好处是：网络能够从原始数据（像素、声波、文字编号）开始逐层提炼出越来越抽象的<strong>表示</strong>，不必再由人设计特征<sup><a href="../ch1/references.html#ref-2">[2]</a></sup>。2010 年代以来，语音识别、图像识别和机器翻译的性能跃升，主要都来自深度学习。</p>
+<p>三者是层层包含的关系：人工智能范围最广，机器学习是实现它的主要途径，深度学习又是机器学习中最成功的一类方法（图 <a href="../ch1/s1-1.html#c1-fig-concepts">1-3</a>）。大语言模型是一个深度神经网络，因此位于这一谱系之内。神经网络本身如何计算、如何训练，是第 2 章的内容。</p>
+<div id="c1-fig-concepts" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch1-concepts.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:99.4%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 1-3　人工智能相关概念的谱系。实线框表示层层包含；虚线框表示“基础模型”是按用法划分的类别，与按处理对象划分的大语言模型、多模态大模型交叉，而非又一层包含</p>
+</div>
+</div>
 </section>
-<section id="生成式人工智能" class="level2">
-<h2 class="anchored" data-anchor-id="生成式人工智能">1.1.2　生成式人工智能</h2>
-<p>生成式人工智能关注数据分布的学习与新内容的生成。给定提示或条件，系统可以产生文本、图像、音频、视频、代码或结构化数据。这里的”新”不是指模型凭空创造信息，而是指模型根据训练中形成的统计表示，对可能的输出进行组合与采样。生成结果可以具有连贯结构，但连贯并不自动意味着真实、可靠或原创。</p>
-<p>与以分类、检测、评分或路径选择为主要输出的判别式、决策式系统相比，生成式系统的直接输出往往是开放式内容。例如，图像识别模型回答”图中有什么”，文本生成模型则依据提示续写说明。二者的边界并非绝对：现代系统常在同一个模型中结合理解、判断和生成能力。</p>
-</section>
-<section id="基础模型大语言模型与多模态模型" class="level2">
-<h2 class="anchored" data-anchor-id="基础模型大语言模型与多模态模型">1.1.3　基础模型、大语言模型与多模态模型</h2>
-<p>基础模型（foundation model）通常先在广泛数据上进行大规模训练，再通过提示、微调或其他方式适配多种下游任务。这个术语强调模型的”基础设施”地位，也提醒人们：一个上游模型的缺陷可能被许多下游应用继承和放大[14]。</p>
-<p>大语言模型（Large Language Model，LLM）是以语言序列为主要建模对象、具有大量可学习参数并在大规模语料上训练的神经网络模型。它通常把文本切分为词元（token），学习在已有上下文条件下预测词元的概率。通过反复执行这种预测，模型能够生成长文本；通过预训练形成的表示，它也能完成问答、摘要、翻译、信息抽取、代码生成等任务。参数多并非唯一标准。训练数据规模、计算量、网络结构、训练目标和对齐方法共同决定模型能力。</p>
-<p>多模态模型把处理范围扩展到图像、音频、视频或传感器数据。它需要把不同模态映射到能够联合计算的表示空间，并学习跨模态对应关系。多模态大模型可以执行图像问答、文档理解、语音交互和视频分析等任务。大语言模型可以成为多模态系统中的语言推理与交互核心，但多模态模型并不只是”给语言模型增加一个图片入口”，其训练数据、编码器、对齐方法与评测方式都更加复杂。</p>
-</section>
-<section id="世界模型与大语言模型" class="level2">
-<h2 class="anchored" data-anchor-id="世界模型与大语言模型">1.1.4　世界模型与大语言模型</h2>
-<p>世界模型旨在学习环境状态、动作与后续状态之间的关系，使系统能够在采取行动之前预测可能结果。它常用于机器人、自动驾驶、游戏和具身智能。世界模型需要表示空间位置、物体关系、时间变化和因果约束；语言模型则首先学习符号序列中的统计规律。两者可以结合：语言模型负责理解目标、分解任务和沟通，世界模型负责对环境变化进行预测。将二者简单等同，会忽略物理交互与语言建模之间的重要差别。</p>
-<table>
-<colgroup>
-<col style="width: 100%">
-</colgroup>
+<section id="c1-subsec-genai" class="level2">
+<h2 class="anchored" data-anchor-id="c1-subsec-genai">1.1.2　生成式人工智能与决策式人工智能</h2>
+<p>按照模型<strong>输出什么</strong>，可以把人工智能系统再分一次。</p>
+<p><strong>生成式人工智能</strong>（Generative AI）先从大量数据中学习这类数据“通常长什么样”，即学习数据的概率分布；使用时再按这个分布<strong>采样</strong>，产生训练集中没有出现过、但看起来属于同一类的新内容，例如文章、图像、语音、视频和代码。生成的内容也常被称为 <strong>AIGC</strong>（AI-Generated Content，人工智能生成内容）。学者李宏毅给过一个直观的说法：生成式人工智能让机器产生“复杂而有结构的物件”。“复杂”指可能的结果多到无法穷举——用 5000 个常用汉字写一段 100 字的话，可能的组合有 <span class="math inline">\(5000^{100}\)</span> 种，不可能把它们一一列成选项；“有结构”指结果必须符合语法、逻辑或画面规律，不能是随机拼凑。这就决定了生成式模型不能“从选项里挑一个”，只能一个部分接一个部分地构造出来。第 <a href="../ch1/s1-2.html">1.2</a> 节会看到，大语言模型正是一个词元接一个词元地构造回答。</p>
+<p>与之相对的是<strong>判别式</strong>和<strong>决策式人工智能</strong>。判别式模型对输入做判断，输出取自一个有限的集合，例如图像识别判断“图中是猫还是狗”，信用评分给出“通过/拒绝”；决策式模型在给定目标下选择动作，例如自动驾驶中的路径规划、围棋程序的落子选择。表 <a href="../ch1/s1-1.html#c1-tab-gen-vs-dec">1-1</a> 对比了这两类系统。</p>
+<div id="c1-tab-gen-vs-dec" class="booktab">
+<div class="tabcap">
+<p>表 1-1　生成式与判别式/决策式人工智能的对比</p>
+</div>
+<table class="caption-top table">
 <thead>
 <tr class="header">
-<th>
-<p>
-<strong>概念辨析：能力表现不等于内部理解</strong>
-</p>
-<p>
-大语言模型能够输出解释、计划和推理步骤，但其基本训练目标仍是根据上下文估计后续词元。模型生成了正确答案，不代表它以与人相同的方式理解问题；模型语言流畅，也不保证其中的事实正确。评价模型时应区分输出表现、内部机制和真实世界能力。
-</p>
-</th>
+<th style="text-align: left;">对比项</th>
+<th style="text-align: left;">生成式人工智能</th>
+<th style="text-align: left;">判别式/决策式人工智能</th>
 </tr>
 </thead>
 <tbody>
+<tr class="odd">
+<td style="text-align: left;">学习什么</td>
+<td style="text-align: left;">数据本身的分布：一段文字、一张图“通常长什么样”</td>
+<td style="text-align: left;">输入与标签（或动作与回报）之间的对应关系</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">输出</td>
+<td style="text-align: left;">新的、开放式的内容，可能结果无法穷举</td>
+<td style="text-align: left;">有限集合中的一个类别、分数或动作</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">典型例子</td>
+<td style="text-align: left;">写作、作图、配音、代码生成、药物分子设计、智能客服对话</td>
+<td style="text-align: left;">图像识别、垃圾邮件过滤、信用评分、路径规划</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">如何评价</td>
+<td style="text-align: left;">难以只用“对/错”评价，需要看事实性、连贯性、是否符合要求</td>
+<td style="text-align: left;">通常有明确的正确答案或可计算的回报</td>
+</tr>
 </tbody>
 </table>
+</div>
+<p>生成式人工智能的应用大体分三类：<strong>内容创作</strong>，如撰写文章、生成插图和音乐；<strong>工业与科研辅助</strong>，如编写代码、设计候选药物分子；<strong>交互体验</strong>，如智能客服对话、虚拟主播直播。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>“用了深度学习”不等于“生成式”。图像识别、人脸检测等应用虽然也用深度神经网络，但输出的是类别或位置，属于判别式人工智能。反过来，生成式模型也能完成判别任务：让大语言模型“生成”出“正面”或“负面”两个字，就完成了情感分类。区分的依据是任务的输出形式，而不是用了什么网络。另外，生成内容中的“新”只表示训练集里没有出现过这个组合，<strong>不表示它真实、可靠或具有原创性</strong>。</p>
+</div>
+</section>
+<section id="c1-subsec-llm" class="level2">
+<h2 class="anchored" data-anchor-id="c1-subsec-llm">1.1.3　大语言模型、基础模型与多模态模型</h2>
+<p><strong>大语言模型</strong>　 <strong>大语言模型</strong>是以文本为主要处理对象、参数规模很大、在海量文本上训练出来的深度神经网络。这个定义包含四个要素：它是一个<strong>深度学习模型</strong>（几乎都采用 Transformer 这种神经网络结构，第 <a href="../ch1/s1-3.html#c1-subsec-transformer">1.3.3</a> 小节介绍它的由来，第 2 章讲它的机制）；它从<strong>大量文本数据</strong>中学习语言的规律和其中蕴含的知识；它具备<strong>自然语言理解与生成</strong>能力；同一个模型可以完成问答、摘要、翻译、信息抽取、写代码等多种<strong>自然语言任务</strong>。</p>
+<p>“大”首先指参数多。业内常用“7B”“70B”这样的写法表示参数量，其中 B 是英文 billion（十亿）的缩写，7B 即 <span class="math inline">\(7\times10^{9}\)</span> 个参数。2020 年的 GPT-3 有 1750 亿个参数<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>，此后的前沿模型普遍在千亿到万亿量级。但参数量不是唯一标准：训练数据的数量与质量、训练计算量和训练方法共同决定能力，一个数据充足、训练得当的小模型可以胜过训练不足的大模型（第 <a href="../ch1/s1-3.html#c1-subsec-scale">1.3.4</a> 小节）。</p>
+<p><strong>基础模型</strong>　 2021 年，斯坦福大学的研究者提出<strong>基础模型</strong>（Foundation Model）一词，指在广泛数据上大规模训练、之后可以通过提示或微调适配多种下游任务的模型<sup><a href="../ch1/references.html#ref-4">[4]</a></sup>。这个词强调的是模型的<strong>用法</strong>：先花大成本训练一个通用的“底座”，再由许多应用在它上面搭建。它也提醒了一个风险：底座的缺陷（偏见、错误知识、安全漏洞）会被所有下游应用继承。</p>
+<p><strong>多模态模型</strong>　 <strong>多模态模型</strong>把处理对象从文本扩展到图像、音频、视频等其他“模态”的数据。一种常见做法是：用一个专门的编码器把图像切成小块并转换成一串向量，使它们和文字词元处在同一个表示空间里，再与文字一起送入语言模型统一处理；需要输出图像或语音时，再接上相应的生成模块。这样构成的系统称为<strong>多模态大模型</strong>（Multimodal LLM，MLLM），只处理图像和文字的又常称<strong>视觉语言模型</strong>（Vision-Language Model，VLM）。它能完成看图描述、图表与文档理解、视频理解、语音对话等任务。多模态模型通常以大语言模型为语言与推理的核心，但并不只是“给语言模型开一个图片入口”：不同模态的数据如何对齐、如何评测，都比纯文本复杂得多。</p>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>基础模型和大语言模型是按不同标准划分的，不是同义词。“大语言模型”按<strong>处理对象和规模</strong>命名，“基础模型”按<strong>用法</strong>命名。大多数大语言模型被当作基础模型使用，但基础模型也可以是图像模型或多模态模型；反过来，一个只为某项任务训练、不再适配其他任务的语言模型就不算基础模型。同样，“大模型”是中文语境中的口语说法，可能指大语言模型，也可能泛指各种大规模基础模型，阅读时要看上下文。</p>
+</div>
+</section>
+<section id="c1-subsec-world" class="level2">
+<h2 class="anchored" data-anchor-id="c1-subsec-world">1.1.4　世界模型：另一条路线</h2>
+<p>大语言模型从文字中学习，文字是人对世界的<strong>描述</strong>。另一条研究路线希望模型直接学习世界<strong>本身如何变化</strong>，这就是<strong>世界模型</strong>（World Model）：一个能够学习现实世界的空间、物理和因果规律，并在执行动作之前预测动作后果的“虚拟世界模拟器”。这一方向有几种代表性的提法：NVIDIA 首席执行官黄仁勋提出的“物理人工智能”（Physical AI），强调让机器人和自动驾驶系统理解物理世界；图灵奖得主杨立昆（Yann LeCun，2025 年底离开 Meta 并创办专注世界模型的 AMI Labs）提出的<strong>联合嵌入预测架构</strong>（Joint Embedding Predictive Architecture，JEPA），主张在抽象表示空间里预测未来，而不是逐像素地预测画面<sup><a href="../ch1/references.html#ref-5">[5]</a></sup>；李飞飞提出的“空间智能”（Spatial Intelligence），强调理解和生成三维空间。</p>
+<p>世界模型的工作方式可以概括为一个“看—想—做”的闭环（图 <a href="../ch1/s1-1.html#c1-fig-world">1-4</a>）：</p>
+<ol type="1">
+<li><p><strong>表征</strong>：把相机、雷达等传感器的观测转换成内部状态，看懂环境里有哪些物体、各在什么位置、彼此什么关系；</p></li>
+<li><p><strong>预测推演</strong>：输入“当前状态 + 一个候选动作”，推演下一时刻的状态。例如“把桌边的杯子再推一下”，模型应预测出杯子滑落、摔碎；</p></li>
+<li><p><strong>规划决策</strong>：在内部这个“虚拟沙盘”里试验多种动作方案，比较预测结果，选出最好的一种再到真实世界中执行；执行后的新观测又回到第一步。</p></li>
+</ol>
+<p>一些通俗介绍把这三个部分分别称为渲染器（renderer）、模拟器（simulator）和规划器（planner）。</p>
+<div id="c1-fig-world" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch1-world.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:92.4%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 1-4　世界模型的工作闭环。规划模块在内部反复提出候选动作、由预测模块推演后果，选定后才在真实环境中执行；执行后的新观测重新进入表征模块</p>
+</div>
+</div>
+<p>表 <a href="../ch1/s1-1.html#c1-tab-llm-vs-world">1-2</a> 对比了大语言模型与世界模型。二者可以结合：大语言模型负责理解人的目标、分解任务和与人沟通，世界模型负责预测物理环境的变化，这是机器人、自动驾驶等<strong>具身智能</strong>（Embodied AI，有身体、在物理世界中行动的智能系统）的常见设想。</p>
+<div id="c1-tab-llm-vs-world" class="booktab">
+<div class="tabcap">
+<p>表 1-2　大语言模型与世界模型的对比</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">对比项</th>
+<th style="text-align: left;">大语言模型</th>
+<th style="text-align: left;">世界模型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">学习目标</td>
+<td style="text-align: left;">根据上文预测下一个词元</td>
+<td style="text-align: left;">根据当前状态和动作预测下一状态</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">主要数据</td>
+<td style="text-align: left;">文本（多模态模型还有图像、音频）</td>
+<td style="text-align: left;">视频、传感器数据、交互轨迹、仿真数据</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">对物理规律的掌握</td>
+<td style="text-align: left;">只能从文字描述中间接学到，没有直接的物理约束</td>
+<td style="text-align: left;">直接学习重力、碰撞、遮挡、时间先后等规律</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">典型用途</td>
+<td style="text-align: left;">对话、写作、编程、信息处理</td>
+<td style="text-align: left;">机器人、自动驾驶、游戏与仿真、具身智能</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>能力表现不等于内部理解。大语言模型能写出解释、计划和推理步骤，但它的基本训练目标仍是根据上下文预测下一个词元。有研究发现，语言模型内部确实形成了对地理位置和时间先后的线性表示<sup><a href="../ch1/references.html#ref-6">[6]</a></sup>，说明它学到的不只是表面的词语搭配；但这类发现并不意味着模型以和人相同的方式理解世界，也不保证它在具体问题上不犯常识错误。评价模型时，要把“输出看起来如何”“内部学到了什么”和“在真实世界里能否可靠完成任务”分开讨论。</p>
+</div>
 
 
 </section>
@@ -1245,13 +1410,13 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch1/s1-2.html" class="pagination-link" aria-label="1.2　大语言模型的历史脉络">
-        <span class="nav-page-text">1.2　大语言模型的历史脉络</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch1/s1-2.html" class="pagination-link" aria-label="1.2　大语言模型如何工作">
+        <span class="nav-page-text">1.2　大语言模型如何工作</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

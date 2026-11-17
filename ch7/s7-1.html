@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,11 +754,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#一次代码生成为什么不够" id="toc-一次代码生成为什么不够" class="nav-link active" data-scroll-target="#一次代码生成为什么不够">7.1.1　一次代码生成为什么不够</a></li>
-  <li><a href="#coding-agent-的最小运行结构" id="toc-coding-agent-的最小运行结构" class="nav-link" data-scroll-target="#coding-agent-的最小运行结构">7.1.2　Coding Agent 的最小运行结构</a></li>
-  <li><a href="#从模型能力走向工程系统" id="toc-从模型能力走向工程系统" class="nav-link" data-scroll-target="#从模型能力走向工程系统">7.1.3　从模型能力走向工程系统</a></li>
-  <li><a href="#一个贯穿全章的任务" id="toc-一个贯穿全章的任务" class="nav-link" data-scroll-target="#一个贯穿全章的任务">7.1.4　一个贯穿全章的任务</a></li>
-  <li><a href="#什么是可靠完成" id="toc-什么是可靠完成" class="nav-link" data-scroll-target="#什么是可靠完成">7.1.5　什么是”可靠完成”</a></li>
+  <li><a href="#c7-subsec-why" id="toc-c7-subsec-why" class="nav-link active" data-scroll-target="#c7-subsec-why">7.1.1　一次代码生成为什么不够</a></li>
+  <li><a href="#c7-subsec-min" id="toc-c7-subsec-min" class="nav-link" data-scroll-target="#c7-subsec-min">7.1.2　Coding Agent 的最小运行结构</a></li>
+  <li><a href="#c7-subsec-four" id="toc-c7-subsec-four" class="nav-link" data-scroll-target="#c7-subsec-four">7.1.3　四类工程技术：各管循环的一段</a></li>
+  <li><a href="#c7-subsec-case" id="toc-c7-subsec-case" class="nav-link" data-scroll-target="#c7-subsec-case">7.1.4　贯穿全章的案例：今日工作助手</a></li>
+  <li><a href="#c7-subsec-reliable" id="toc-c7-subsec-reliable" class="nav-link" data-scroll-target="#c7-subsec-reliable">7.1.5　什么是“可靠完成”</a></li>
   </ul>
 </nav>
     </div>
@@ -719,90 +784,143 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>大语言模型已经能够根据自然语言编写函数、解释报错和补全测试。然而，在真实软件项目中，“生成了一段看似正确的代码”与”完成了一项可交付的开发任务”之间还有很长的距离。一个任务可能涉及多个文件、既有接口、依赖版本、运行环境和外部服务。修改完成后，还要检查类型、运行测试、审查差异，并确认没有引入新的风险。Coding Agent 的研究对象，正是如何让模型在这样的环境中持续行动，并依据执行结果调整下一步。</p>
-<p>本章将 Coding Agent 理解为<strong>以软件工程任务为目标，能够读取项目、调用开发工具、修改工作区，并利用反馈决定下一步行动的智能体系统</strong>。这里的”系统”一词很重要：语言模型承担理解和决策，文件系统、终端、工具接口、权限机制和验证程序则提供行动条件。仅有会写代码的模型，尚不足以构成可靠的 Coding Agent。</p>
-<section id="一次代码生成为什么不够" class="level2">
-<h2 class="anchored" data-anchor-id="一次代码生成为什么不够">7.1.1　一次代码生成为什么不够</h2>
-<p>设想用户提出如下需求：“做一个今日工作助手，汇总会议、重要邮件和逾期待办，发现会议冲突，并生成一段简报。”如果把这句话直接交给代码生成模型，模型可能很快写出一个页面。但页面能显示，并不意味着任务已经完成。我们至少还需要回答：会议和邮件来自什么数据源？已有项目是否提供适配器？“逾期”依据哪个时区计算？邮件能否包含正文？助手能否替用户发邮件或改日历？哪些测试能够证明会议冲突判断正确？</p>
-<p>这些问题分属不同层次。数据结构和接口属于项目事实；隐私、权限和业务规则属于约束；测试输出和页面运行结果属于证据。模型若不知道项目事实，容易编造接口；若只收到模糊目标，容易自行扩大范围；若没有运行检查，即使代码可以编译，也可能在时间计算、边界条件或真实账号操作上出错。因此，工程任务不能被压缩为”输入一句话，输出一段代码”的单次映射。</p>
-<p>更贴近实际的任务过程是：先读取仓库，确认已有实现与运行命令；再把需求分解为可检查的目标；随后修改少量相关文件并执行检查；如果检查失败，分析具体错误并继续修正；全部完成后，审查最终差异并报告证据。一个 Coding Agent 可以自主选择其中的许多具体动作，但其自主性应始终处于明确的任务目标和执行边界内。</p>
+<div class="bookbox guide">
+<p>模型已经能写出看似正确的代码，为什么在真实仓库里仍然经常交付失败？本节先拆开一个具体需求，看看“写代码”之外还缺什么；再给出 Coding Agent 的最小运行结构——上下文、模型、工具和执行循环；然后把四类工程技术放到这个循环上，说明各自负责哪一段、谁调用谁；最后引入贯穿全章的“今日工作助手”案例，并约定什么叫“可靠完成”。结论是：可靠交付取决于模型能力和工程系统两方面，任何一方缺失，任务都无法稳定完成。</p>
+</div>
+<section id="c7-subsec-why" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-why">7.1.1　一次代码生成为什么不够</h2>
+<p>设想用户提出：“做一个今日工作助手，汇总会议、重要邮件和逾期待办，发现会议冲突，并生成一段简报。”把这句话直接交给代码生成模型，它可能很快写出一个页面。但页面能显示，不等于任务完成。至少还有这些问题没有答案：会议和邮件来自什么数据源？仓库里是否已有适配器？“逾期”按哪个时区计算？助手能否替用户发邮件或改日历？哪些测试能证明冲突判断是对的？</p>
+<p>这些问题分属三类信息。数据结构、已有接口、运行命令属于<strong>项目事实</strong>；隐私、权限和业务规则属于<strong>约束</strong>；测试输出、构建结果和页面检查属于<strong>证据</strong>。模型不知道项目事实，就会编造接口；只收到模糊目标，就会自行扩大范围；没有运行检查，代码即使能编译，也可能在时区换算、边界条件或真实账号操作上出错。</p>
+<p>更贴近实际的开发过程是：先读仓库，确认已有实现和运行命令；把需求分解成可检查的目标；修改少量相关文件并运行检查；检查失败就分析具体错误继续修正；全部通过后审查最终差异，报告证据。这是一个<strong>多步、有反馈</strong>的过程，而不是“输入一句话、输出一段代码”的单次映射。Coding Agent 可以自主选择其中许多具体动作，但它的自主性应始终处在明确的目标和执行边界之内。</p>
 </section>
-<section id="coding-agent-的最小运行结构" class="level2">
-<h2 class="anchored" data-anchor-id="coding-agent-的最小运行结构">7.1.2　Coding Agent 的最小运行结构</h2>
-<p>从实现角度看，一个 Coding Agent 至少包含模型、上下文、工具和执行循环四个要素。</p>
-<p><strong>模型</strong>根据当前信息选择下一步：读取文件、搜索符号、编辑代码、运行测试、请求用户澄清，或结束任务。<strong>上下文</strong>包含任务目标、项目规则、相关代码、此前动作和工具返回的结果。<strong>工具</strong>把模型的选择转化为可观察的操作，例如读取文件、编辑文件、运行命令和取得测试报告。<strong>执行循环</strong>将工具结果送回模型，使下一步判断能够依据新证据发生变化。</p>
-<p>可以用一个简化的状态关系描述这一过程：</p>
-<blockquote class="blockquote">
-<p>当前上下文 cₜ → 模型选择动作 aₜ → 工具执行并返回观察 oₜ<br>
-→ 更新上下文 cₜ₊₁ → 继续、换方案、询问或结束</p>
-</blockquote>
-<p>这里的”观察”不只包括命令是否成功。测试失败的断言、编译器指出的文件和行号、页面截图、Git Diff，以及用户对某项写入操作的批准或拒绝，都可能改变下一步决策。若系统只是把同一指令和同一错误原样送回模型，循环虽然发生了，却未必产生有效进展。</p>
-<p>这个结构与通用 Agent 的”模型—上下文—工具”视角相通，但 Coding Agent 有鲜明的软件工程特征：工作对象通常是版本化仓库；动作会改变可执行代码；验证可以依赖测试、构建与静态检查；错误可能跨文件传播；有些动作（例如部署、发送消息或修改生产数据）具有外部副作用。因此，除了模型会不会选对动作，我们还必须关心动作<strong>能否被允许、能否被复现、能否被撤销，以及何时可以宣布完成</strong>。</p>
+<section id="c7-subsec-min" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-min">7.1.2　Coding Agent 的最小运行结构</h2>
+<p>从实现上看，一个 Coding Agent 至少由四个要素组成（图 <a href="../ch7/s7-1.html#c7-fig-min">7-1</a>）：</p>
+<ul>
+<li><p><strong>上下文</strong>：本轮送进模型的全部输入，包括任务目标、项目规则、相关代码、此前的动作和工具返回的结果；</p></li>
+<li><p><strong>模型</strong>：根据上下文选择下一步——读文件、搜索符号、编辑代码、运行测试、向用户提问，或者结束；</p></li>
+<li><p><strong>工具</strong>：把模型的选择变成真实操作，并返回可观察的结果，例如文件内容、命令退出码、测试报告；</p></li>
+<li><p><strong>执行循环</strong>：把工具结果写回上下文，让下一步判断能依据新证据改变。</p></li>
+</ul>
+<p>记第 <span class="math inline">\(t\)</span> 轮的上下文为 <span class="math inline">\(c_t\)</span>，模型选择的动作为 <span class="math inline">\(a_t\)</span>，工具执行后返回的观察为 <span class="math inline">\(o_t\)</span>，则一轮循环是 <span class="math display">\[c_t \xrightarrow{\ \text{模型}\ } a_t \xrightarrow{\ \text{工具}\ } o_t,\qquad c_{t+1} = \text{更新}(c_t,\, a_t,\, o_t),
+\tag{7-1}\]</span> 直到模型选择“结束”或“询问用户”，或者外部规则要求停止。这里的“观察”不只是命令成没成功：失败断言给出的期望值与实际值、编译器指出的文件和行号、Git 差异、用户对某项写操作的批准或拒绝，都可能改变下一步。如果系统只是把同一条指令和同一段报错原样送回模型，循环虽然在转，问题却没有缩小。</p>
+<div id="c7-fig-min" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-min.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:92.4%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-1　Coding Agent 的最小运行结构。模型只负责选择动作（高亮），动作由工具在工作区中真正执行；执行结果作为观察写回上下文，构成下一轮决策的依据</p>
+</div>
+</div>
+<p>这一结构与第 6 章的通用智能体闭环一致。Coding Agent 的特殊之处在于工作对象：它操作的是<strong>版本化的代码仓库</strong>，动作会改变可执行代码，验证可以依靠测试、构建和静态检查，错误会跨文件传播，有些动作（部署、发消息、改生产数据）还有外部副作用。因此除了“模型会不会选对动作”，还必须关心：动作<strong>能否被允许</strong>、<strong>能否被复现</strong>、<strong>能否被撤销</strong>，以及<strong>何时可以宣布完成</strong>。</p>
 </section>
-<section id="从模型能力走向工程系统" class="level2">
-<h2 class="anchored" data-anchor-id="从模型能力走向工程系统">7.1.3　从模型能力走向工程系统</h2>
-<p>把模型放进仓库后，常见的失败并不都来自模型”不够聪明”。例如，项目没有记录正确的启动命令；测试依赖一个未配置的服务；终端可以读取与任务无关的密钥；长任务中途结束后没有检查点；或者 Agent 在测试失败时仍报告”已完成”。单纯要求模型”再仔细一些”，通常不能稳定消除这些问题。</p>
-<p>OpenAI 对其 Coding Agent 工程实践的总结提供了一个有代表性的观察：当 Agent 承担大量实际开发工作时，人类工程师的工作更多转向整理仓库知识、建立可执行约束、提供工具和设计反馈回路。[1] 这说明 Coding Agent 的可靠性由模型能力和工程环境共同决定。模型负责提出与选择行动；工程系统负责让行动有依据、受约束，并在完成时留下可以检查的证据。</p>
-<p>本章用四类工程技术组织这一系统：</p>
+<section id="c7-subsec-four" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-four">7.1.3　四类工程技术：各管循环的一段</h2>
+<p>把模型放进仓库以后，常见的失败并不都来自模型“不够聪明”：项目没写明正确的启动命令；测试依赖一个没配置的服务；终端能读到与任务无关的密钥；长任务中断后没有检查点；测试失败时 Agent 仍报告“已完成”。只要求模型“再仔细一些”，不能稳定消除这些问题。OpenAI 的一个内部团队在 2026 年 2 月公开的实践提供了佐证：约五个月里，起初 3 名、后来 7 名工程师驱动 Codex 生成了约 100 万行代码、合并约 1500 个 PR，团队约定人类不手写代码；工程师的工作重心转到整理仓库知识、建立可执行的约束、提供工具和设计反馈回路上<sup><a href="../ch7/references.html#ref-1">[1]</a></sup>。可以把这一观察粗略写成 <span class="math display">\[\text{可靠交付} = \text{模型能力} \times \text{工程系统},\]</span> 乘号表示二者缺一不可：工程系统再完善，模型推理不了也无济于事；模型再强，没有工具、约束和反馈，也落不到真实仓库上。</p>
+<p>本章把“工程系统”拆成四类工程技术。拆分的依据是它们<strong>作用于运行循环的哪一段</strong>（图 <a href="../ch7/s7-1.html#c7-fig-four">7-2</a>）：</p>
+<ul>
+<li><p><strong>Prompt Engineering</strong>（提示工程）作用于循环开始之前：把人的意图写成<strong>任务合同</strong>，写清目标、事实来源、边界、完成证据和交付格式。</p></li>
+<li><p><strong>Context Engineering</strong>（上下文工程）作用于每次模型调用之前：从任务合同、仓库、工具结果和记忆中挑出本轮需要的信息，组装成有限的工作集。</p></li>
+<li><p><strong>Harness Engineering</strong>（驾驭工程）作用于模型提出动作之后：<strong>Harness</strong> 是模型周围的运行系统，负责校验参数、检查权限、在隔离环境里执行、记录结果，并把观察返回。英文 harness 原指马具，这里取“让能力朝指定方向使出来”的意思。</p></li>
+<li><p><strong>Loop Engineering</strong>（循环工程）作用于观察返回之后：更新任务状态，判断继续、换方案、等待人工还是结束。Anthropic、OpenAI 等厂商的文档一般称这个过程为 <strong>Agent Loop</strong>（智能体循环），“Loop Engineering”是本书的归纳，强调循环的状态、反馈、停止和恢复都需要专门设计。</p></li>
+</ul>
+<div id="c7-fig-four" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-four.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:98.8%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-2　四类工程技术在 Agent 运行循环中的位置。Prompt 在循环开始前写定任务合同，其规则流向上下文，边界流向 Harness 的权限检查，完成条件流向 Loop 的退出判断（虚线）；Context、Harness、Loop 分别负责循环的①③④段；②是模型本身的能力</p>
+</div>
+</div>
+<div class="bookbox pitfall">
+<p><span class="boxtitle">辨析</span></p>
+<p>“Harness”有广义和狭义两种用法。广义上，它指模型之外的<strong>全部</strong>运行系统，包括上下文组装、循环控制、工具执行和权限，OpenAI 介绍 Codex 时就是这样用的<sup><a href="../ch7/references.html#ref-1">[1]</a></sup>；这时四类工程中的后三类都可以算作 Harness 的一部分。本书取狭义：Harness 专指“动作提出之后”的执行与检查环节，把上下文和循环单独拿出来讨论，以便出问题时定位到更小的环节。读其他资料时要注意作者用的是哪一种。</p>
+</div>
+<p>四类工程不是四个互不相干的软件组件，它们之间有明确的调用关系。Context 在组装工作集时<strong>读取</strong> Prompt 写下的合同和 Harness 返回的观察；Harness 执行的权限规则，一部分<strong>来自</strong> Prompt 中的边界条款；Loop 在决定能否结束时，<strong>调用</strong> Harness 提供的检查（测试、构建、门禁），并<strong>对照</strong> Prompt 写下的完成条件。一次测试失败，既是 Loop 的反馈，也是 Context 的新证据；测试命令由 Harness 提供，“哪些测试必须通过”又来自 Prompt。区分四者的目的，是在出问题时找到该改进的环节（表 <a href="../ch7/s7-1.html#c7-tab-four">7-1</a>）：Agent 改错了文件，多半是相关代码没进入上下文；它未经确认就发了邮件，首先是权限和工具边界的问题；它反复运行同一个失败的测试，则是循环的决策规则需要改进。</p>
+<div id="c7-tab-four" class="booktab">
+<div class="tabcap">
+<p>表 7-1　四类工程技术的分工</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>工程技术</strong></th>
-<th><strong>首要问题</strong></th>
-<th><strong>在”今日工作助手”中的具体体现</strong></th>
+<th style="text-align: left;">工程技术</th>
+<th style="text-align: left;">作用于循环的哪一段</th>
+<th style="text-align: left;">回答的问题</th>
+<th style="text-align: left;">在“今日工作助手”中的体现</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Prompt Engineering</td>
-<td>要完成什么，什么算完成？</td>
-<td>写明功能范围、只读边界、验收测试和交付形式。</td>
+<td style="text-align: left;">Prompt</td>
+<td style="text-align: left;">循环开始前</td>
+<td style="text-align: left;">要完成什么？什么算完成？</td>
+<td style="text-align: left;">写明功能范围、只读边界、验收测试和交付形式</td>
 </tr>
 <tr class="even">
-<td>Context Engineering</td>
-<td>当前决策需要看到什么？</td>
-<td>加载适配器接口、今日会议、任务规则和最新测试失败；按需检索其余资料。</td>
+<td style="text-align: left;">Context</td>
+<td style="text-align: left;">每次模型调用前</td>
+<td style="text-align: left;">这一步决策需要看到什么？</td>
+<td style="text-align: left;">加载适配器接口、今日会议、最新测试失败；其余按需检索</td>
 </tr>
 <tr class="odd">
-<td>Harness Engineering</td>
-<td>Agent 能做什么，系统如何强制执行边界？</td>
-<td>提供独立工作区、Mock 服务、文件与终端工具、权限控制、Hooks 和 CI。</td>
+<td style="text-align: left;">Harness</td>
+<td style="text-align: left;">模型提出动作后</td>
+<td style="text-align: left;">能做什么？边界由谁强制？</td>
+<td style="text-align: left;">独立工作区、Mock 服务、文件与终端工具、权限规则、Hook 与 CI</td>
 </tr>
 <tr class="even">
-<td>Loop Engineering</td>
-<td>执行结果如何决定下一步与退出？</td>
-<td>先跑相关测试；失败则定位原因；通过后运行完整检查并审查 Diff。</td>
+<td style="text-align: left;">Loop</td>
+<td style="text-align: left;">观察返回后</td>
+<td style="text-align: left;">结果怎样决定下一步和退出？</td>
+<td style="text-align: left;">先跑相关测试；失败就定位原因；通过后跑完整检查并审查差异</td>
 </tr>
 </tbody>
 </table>
-<p>四类工程技术并非彼此独立的四个软件组件。一次测试失败既是 Loop 的反馈，也是 Context 的新证据；测试命令由 Harness 提供，而”哪些测试必须通过”又来自 Prompt 中的完成条件。区分四者的目的，是在分析故障时找到需要改进的环节。例如，Agent 改错了文件，可能是相关代码没有进入上下文；它未经确认发送邮件，则首先是权限和工具边界的问题；它反复运行同一失败测试，则需要改进循环中的决策规则。</p>
+</div>
+<p>图 <a href="../ch7/s7-1.html#c7-fig-map">7-3</a> 给出了本章各节之间的关系。第 <a href="../ch7/s7-2.html">7.2</a> 节先把循环落实为系统分层；四类工程分别在第 <a href="../ch7/s7-3.html">7.3</a>、<a href="../ch7/s7-4.html">7.4</a>、<a href="../ch7/s7-5.html">7.5</a>、<a href="../ch7/s7-7.html">7.7</a> 节展开；第 <a href="../ch7/s7-6.html">7.6</a> 节的 MCP 与 A2A 扩展了 Harness 的工具接口和协作方式；第 <a href="../ch7/s7-8.html">7.8</a> 节把单次任务内的循环推广到跨任务的改进；第 <a href="../ch7/s7-9.html">7.9</a> 节的安全机制横跨循环的每一段。</p>
+<div id="c7-fig-map" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch7-map.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:93.7%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 7-3　本章知识地图。高亮的四节是四类工程技术，点线表示它们在运行循环中的先后顺序；7.6 节扩展 Harness 的工具接口，7.8 节把 Loop 推广到跨任务的改进，7.9 节的安全机制横跨循环的每一段</p>
+</div>
+</div>
 </section>
-<section id="一个贯穿全章的任务" class="level2">
-<h2 class="anchored" data-anchor-id="一个贯穿全章的任务">7.1.4　一个贯穿全章的任务</h2>
-<p>为了让后续概念始终对应同一个具体系统，本章使用”今日工作助手”作为贯穿案例。项目已有 Calendar、Mail 和 Tasks 三个 Mock Adapter，Agent 的任务是实现一个只读工作台：按开始时间展示今日会议，选出三封高优先级邮件，标记逾期待办，识别时间重叠的会议，并生成一段简短的今日安排。发送邮件、创建或取消会议、删除任务等真实写入操作，需要另行获得用户确认。</p>
-<p>这个案例足以暴露 Coding Agent 的典型难点。它要求 Agent 阅读既有接口而不是臆造 API；同时处理多来源数据和时间规则；区分读取与写入权限；以单元测试验证排序、逾期和冲突判断；再用构建及页面检查确认最终交付。我们会在后续小节反复返回同一任务：先写任务契约，再设计信息工作集与运行环境，最后观察一次失败如何推动循环修正。</p>
-<p>以”会议开始前十分钟提醒”的时区错误为例，若测试期望时间为 08:50，实际得到 16:50，新的证据显示两者相差八小时。合理的下一步是检查时间戳解析与时区转换，修改相关函数后先运行时间计算测试。若立即重跑所有测试、改动页面样式，或在没有证据的情况下宣布完成，Agent 虽然持续行动，却没有有效缩小问题。后文讨论 Loop Engineering 时，我们会用这一轨迹分析循环的设计。</p>
+<section id="c7-subsec-case" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-case">7.1.4　贯穿全章的案例：今日工作助手</h2>
+<p>为了让后面的概念始终对应同一个具体系统，本章使用“今日工作助手”作为贯穿案例。设定如下：一个 Next.js + TypeScript 项目已有日历（Calendar）、邮件（Mail）和待办（Tasks）三个 <strong>Mock Adapter</strong>——<strong>Mock</strong> 指用来替代真实服务的模拟对象，<strong>Adapter</strong>（适配器）负责把数据源转换成统一的接口。Mock Adapter 与将来接真实服务的 Adapter 接口相同，开发和测试时用前者，上线时可直接替换。Agent 的任务是实现一个<strong>只读</strong>工作台：按开始时间展示今日会议，选出三封高优先级邮件，标记逾期待办，识别时间重叠的会议，并生成一段 150～200 字的今日安排。发送邮件、创建或取消会议、删除任务等真实写入操作，需要另行获得用户确认。</p>
+<p>这个案例足以暴露 Coding Agent 的典型难点：要读既有接口而不是臆造 API；要处理多来源数据和时间规则；要区分读权限与写权限；要用单元测试验证排序、逾期和冲突判断，再用构建和页面检查确认交付。</p>
+<p>其中有一个小故障会反复出现：会议 09:00 开始，“开始前十分钟提醒”的测试期望 08:50，实际得到 16:50。两者正好相差八小时，这本身就是线索——合理的下一步是检查时间戳解析和时区转换，修改后先跑时间计算的单元测试。如果 Agent 立即重跑全部测试、顺手改页面样式，或者没有证据就宣布完成，它虽然一直在行动，却没有缩小问题。第 <a href="../ch7/s7-7.html">7.7</a> 节将用这条轨迹分析循环的设计。</p>
 </section>
-<section id="什么是可靠完成" class="level2">
-<h2 class="anchored" data-anchor-id="什么是可靠完成">7.1.5　什么是”可靠完成”</h2>
-<p>Coding Agent 的产出应当由外部证据评价，而非由模型自己的完成声明评价。对一个仓库任务，最基本的证据包括：需求中每项功能的对应实现；相关测试和构建的运行结果；最终代码差异；未执行操作与已知限制。涉及权限或外部服务时，还应记录批准、拒绝和工具调用结果。这里的”外部”指模型生成文本之外、可以由人或程序独立检查的材料。</p>
-<p>可靠性也不能只用”测试通过率”概括。测试可能遗漏边界条件，或者与任务目标并不一致。因此，本章将从四个维度考察任务结果：<strong>正确性</strong>，即功能与约束是否满足；<strong>安全性</strong>，即有无越权或敏感数据暴露；<strong>可恢复性</strong>，即中断与失败后能否继续；<strong>成本与时效</strong>，即在给定时间、算力和调用预算内能否完成。这四个维度也为后续多 Agent 协作和边云协同提供共同的评价语言。</p>
-<p>当任务跨多个 Agent、工具提供者或计算节点时，工程问题还会继续扩展。MCP 使工具和数据源可以按统一接口接入，A2A 描述独立 Agent 之间的任务协作；持久记忆帮助 Agent 跨会话恢复；端、边、云的部署选择则影响延迟、可靠性与隐私。但这些能力只有接入可验证的任务、明确的权限和有效的反馈循环，才能形成可交付的系统。后文将分别展开这些机制，并讨论更进一步的问题：Agent 能否依据过去的执行轨迹改进自己的工具、规则和 Harness，同时证明改进能够迁移到新任务。</p>
-<p>本节确立了全章的出发点：<strong>Coding Agent 的价值不止于生成代码，而在于把目标、信息、行动和证据组织为一个能够持续收敛的软件工程过程。</strong></p>
-<section id="参考资料" class="level3">
-<h3 class="anchored" data-anchor-id="参考资料">参考资料</h3>
-<p>[1] Ryan Lopopolo. <a href="https://openai.com/index/harness-engineering/"><u>Harness engineering: leveraging Codex in an agent-first world</u></a>. OpenAI, 2026.</p>
-<p>[2] Anthropic. <a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents"><u>Effective context engineering for AI agents</u></a>. 2025.</p>
-<p>[3] Model Context Protocol. <a href="https://modelcontextprotocol.io/specification/2026-07-28/basic"><u>Base protocol overview</u></a>. 2026.</p>
-<p>[4] Agent2Agent. <a href="https://a2a-protocol.org/latest/specification/"><u>A2A protocol specification</u></a>. 2026.</p>
+<section id="c7-subsec-reliable" class="level2">
+<h2 class="anchored" data-anchor-id="c7-subsec-reliable">7.1.5　什么是“可靠完成”</h2>
+<p>Coding Agent 的产出应当由<strong>外部证据</strong>评价，而不是由模型自己的完成声明评价。“外部”指模型生成的文字之外、可以由人或程序独立检查的材料。对一个仓库任务，最基本的证据包括：需求中每项功能的对应实现，相关测试和构建的运行结果，最终的代码差异，以及未执行的操作和已知限制。涉及权限或外部服务时，还要有批准、拒绝和工具调用的记录。</p>
+<p>可靠性也不能只用“测试通过率”概括，因为测试可能漏掉边界条件，或者与任务目标并不一致。本章从四个维度考察结果：</p>
+<ol type="1">
+<li><p><strong>正确性</strong>：功能和约束是否满足；</p></li>
+<li><p><strong>安全性</strong>：有没有越权动作或敏感数据暴露；</p></li>
+<li><p><strong>可恢复性</strong>：中断和失败之后能否从检查点继续；</p></li>
+<li><p><strong>成本与时效</strong>：在给定的时间、算力和调用预算内能否完成。</p></li>
+</ol>
+<p>这四个维度也是后面讨论多 Agent 协作（第 <a href="../ch7/s7-6.html">7.6</a> 节）、自我改进（第 <a href="../ch7/s7-8.html">7.8</a> 节）和边云协同（第 <a href="../ch7/s7-11.html">7.11</a> 节）时共同的评价语言。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>Coding Agent = 上下文 + 模型 + 工具 + 执行循环；它的价值在于把目标、信息、行动和证据组织成一个能收敛的过程。</p></li>
+<li><p>四类工程按“作用于循环的哪一段”划分：Prompt 在开始前，Context 在模型调用前，Harness 在动作提出后，Loop 在观察返回后。</p></li>
+<li><p>“完成”由外部证据判定，评价维度是正确性、安全性、可恢复性、成本与时效。</p></li>
+</ul>
+</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1289,13 +1407,13 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch7/s7-2.html" class="pagination-link" aria-label="7.2　现有 Agent 产品背后的系统架构">
-        <span class="nav-page-text">7.2　现有 Agent 产品背后的系统架构</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch7/s7-2.html" class="pagination-link" aria-label="7.2　Coding Agent 的系统架构">
+        <span class="nav-page-text">7.2　Coding Agent 的系统架构</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

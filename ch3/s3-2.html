@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3.2 大语言模型预训练基础 – 大语言模型原理与技术</title>
+<title>3.2 预训练基础：目标与规模 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -118,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-2.html">3.2　大语言模型预训练基础</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-2.html">3.2　预训练基础：目标与规模</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -164,19 +164,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,7 +188,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -200,25 +200,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -235,43 +229,55 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +294,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,61 +312,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -442,79 +460,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -531,31 +543,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -567,19 +579,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -602,13 +614,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -626,19 +638,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,19 +662,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -685,7 +709,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -703,7 +727,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -718,21 +754,19 @@ window.Quarto = {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#什么是预训练" id="toc-什么是预训练" class="nav-link active" data-scroll-target="#什么是预训练">3.2.1　什么是预训练</a></li>
-  <li><a href="#为什么需要预训练" id="toc-为什么需要预训练" class="nav-link" data-scroll-target="#为什么需要预训练">3.2.2　为什么需要预训练</a></li>
-  <li><a href="#自监督学" id="toc-自监督学" class="nav-link" data-scroll-target="#自监督学">3.2.3　自监督学��</a></li>
-  <li><a href="#预训练目标" id="toc-预训练目标" class="nav-link" data-scroll-target="#预训练目标">3.2.4　预训练目标</a></li>
-  <li><a href="#预训练的一般过程" id="toc-预训练的一般过程" class="nav-link" data-scroll-target="#预训练的一般过程">3.2.5　预训练的一般过程</a></li>
-  <li><a href="#规模定律模型多大数据多少才合适" id="toc-规模定律模型多大数据多少才合适" class="nav-link" data-scroll-target="#规模定律模型多大数据多少才合适">3.2.6　规模定律：模型多大、数据多少才合适</a></li>
+  <li><a href="#什么是预训练为什么需要它" id="toc-什么是预训练为什么需要它" class="nav-link active" data-scroll-target="#什么是预训练为什么需要它">3.2.1　什么是预训练，为什么需要它</a></li>
+  <li><a href="#自监督学习与预训练目标" id="toc-自监督学习与预训练目标" class="nav-link" data-scroll-target="#自监督学习与预训练目标">3.2.2　自监督学习与预训练目标</a></li>
+  <li><a href="#预训练的一般流程" id="toc-预训练的一般流程" class="nav-link" data-scroll-target="#预训练的一般流程">3.2.3　预训练的一般流程</a></li>
+  <li><a href="#规模定律模型多大数据多少才合适" id="toc-规模定律模型多大数据多少才合适" class="nav-link" data-scroll-target="#规模定律模型多大数据多少才合适">3.2.4　规模定律：模型多大、数据多少才合适</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-2.html">3.2　大语言模型预训练基础</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch3/index.html">第 3 章　大语言模型的预训练、微调与推理</a></li><li class="breadcrumb-item"><a href="../ch3/s3-2.html">3.2　预训练基础：目标与规模</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3.2　大语言模型预训练基础</h1>
+<h1 class="title">3.2　预训练基础：目标与规模</h1>
 </div>
 
 
@@ -749,94 +783,90 @@ window.Quarto = {
 </header>
 
 
-<section id="什么是预训练" class="level2">
-<h2 class="anchored" data-anchor-id="什么是预训练">3.2.1　什么是预训练</h2>
-<p><strong>预训练</strong>是指搭建大规模神经网络，在海量数据上以某种自监督的方法进行训练，从而得到一套通用模型参数的过程。它有两个最显著的特点：训练所用的<strong>数据量足够大</strong>，模型的<strong>参数规模足够大</strong>。</p>
-<p>从机器学习的角度看，预训练属于<strong>迁移学习</strong>（Transfer Learning）的范畴。在传统做法中，每一个任务都要准备一套标注数据、从随机初始化的参数开始训练一个专用模型：</p>
-<blockquote class="blockquote">
-<p>一个任务 → 一套标注数据 → 一个专用模型</p>
-</blockquote>
-<p>而在预训练范式下，模型参数不再随机初始化，而是先在大量低成本获取的通用数据上学习其中的共性，得到一套”预先训练好”的参数，再以此为起点，迁移到具体任务上进一步训练：</p>
-<blockquote class="blockquote">
-<p>海量通用数据 → 预训练基础模型 → 微调适配多个下游任务</p>
-</blockquote>
-<p>这一范式在自然语言处理领域的成功始于 2018 年前后的 GPT 和 BERT，并在此后的 GPT-3、LLaMA、Qwen、DeepSeek 等模型中被推向了前所未有的规模。</p>
+<div class="bookbox guide">
+<p>互联网上的文本几乎取之不尽，却没有人工标签；而传统的监督学习离不开标签。预训练怎样利用这些无标注文本？用什么任务训练，模型又该做多大、喂多少数据？本节先说明预训练属于迁移学习，再讲它的核心——自监督目标“预测下一个 token”，最后用规模定律回答“给定算力，模型与数据怎么配”。结论是：自回归目标与生成任务天然一致，是生成式大模型的统一选择；在训练成本最优的意义下，参数量与训练 token 数应同步增长，经验上每个参数约对应 20 个 token。</p>
+</div>
+<section id="什么是预训练为什么需要它" class="level2">
+<h2 class="anchored" data-anchor-id="什么是预训练为什么需要它">3.2.1　什么是预训练，为什么需要它</h2>
+<p><strong>预训练</strong>（pre-training）指搭建大规模神经网络，在海量数据上用自监督的方法训练，得到一套通用模型参数的过程。它的两个特点是<strong>数据量足够大</strong>、<strong>参数规模足够大</strong>。</p>
+<p>从机器学习的角度看，预训练属于<strong>迁移学习</strong>（transfer learning）。传统做法是“一个任务、一套标注数据、一个从随机参数训起的专用模型”；预训练范式则先在大量低成本获得的通用数据上学到共性，得到一套“预先训练好”的参数，再用它<strong>初始化</strong>模型，迁移（“移植”）到具体任务上继续训练（“微调”）：</p>
+<div class="center">
+<p>海量通用数据 <span class="math inline">\(\;\longrightarrow\;\)</span> 预训练基础模型 <span class="math inline">\(\;\longrightarrow\;\)</span> 微调，适配多个下游任务</p>
+</div>
+<p>这一范式在自然语言处理中始于 2018 年前后的 GPT<sup><a href="../ch3/references.html#ref-1">[1]</a></sup> 和 BERT<sup><a href="../ch3/references.html#ref-2">[2]</a></sup>，此后在 GPT-3<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>、LLaMA<sup><a href="../ch3/references.html#ref-5">[5]</a></sup>、Qwen、DeepSeek 等模型中被推向更大的规模，也被广泛用于视觉、语音等其他机器学习任务。</p>
+<p>为什么要先预训练？原因有四条。</p>
+<ol type="1">
+<li><p><strong>标注数据稀缺，无标注数据丰富</strong>：一条医疗问答的标注可能要专业医生花几分钟，而网上的无标注文本几乎取之不尽。</p></li>
+<li><p><strong>任务需要先验知识</strong>：要判断“他把杯子放在桌子上，然后它碎了”中的“它”指什么，模型需要知道杯子比桌子易碎。这类常识和语言规则很难从某个任务的少量标注数据中学到，却广泛蕴含在海量文本里。</p></li>
+<li><p><strong>任务之间有共性</strong>：文本分类、情感分析、机器翻译、问答都依赖相同的语义理解能力，预训练模型可以作为它们共享的地基。</p></li>
+<li><p><strong>学到的特征更抽象</strong>：预训练模型的中间表示往往对应可解读的语言结构（如词性、句法关系），这为分析模型行为提供了抓手；但需要注意，这并不等于大模型整体是可解释的。</p></li>
+</ol>
+<p>相应的好处是：对未见数据的<strong>泛化能力</strong>更强；下游任务所需的<strong>训练时间和标注数据</strong>大幅减少；预训练参数作为良好的初始值提高了<strong>训练效率</strong>；同一个基础模型能支持<strong>多种任务</strong>，并通常比从零训练取得更高的<strong>精度</strong>。</p>
 </section>
-<section id="为什么需要预训练" class="level2">
-<h2 class="anchored" data-anchor-id="为什么需要预训练">3.2.2　为什么需要预训练</h2>
-<p>预训练之所以成为大语言模型的基础，主要源于以下几个原因。</p>
-<p><strong>（1）标注数据稀缺，无标注数据丰富。</strong> 在许多任务中，高质量的标注数据昂贵且难以获取：一条医疗问答的标注可能需要专业医生花费数分钟。相比之下，互联网上的无标注文本几乎取之不尽。预训练提供了一种利用无标注数据的方法，让模型先从中学到通用能力，再用少量标注数据完成特定任务。</p>
-<p><strong>（2）任务需要先验知识。</strong> 很多语言任务需要模型具备语言结构、语法规则和世界常识等先验知识。例如，要判断”他把杯子放在桌子上，然后它碎了”中的”它”指什么，模型需要知道杯子比桌子更容易碎。这类知识很难从某个任务的小规模标注数据中学到，却广泛蕴含在海量文本之中。</p>
-<p><strong>（3）不同任务之间存在共性。</strong> 文本分类、情感分析、机器翻译、问答等任务表面上各不相同，底层却都依赖相同的语义理解能力。预训练模型可以作为这些任务共享的”地基”，避免每个任务都从零学习一遍语言。</p>
-<p>由此带来的好处也很直接：模型对未见数据的<strong>泛化能力</strong>更强；下游任务所需的<strong>训练时间和标注数据量</strong>大幅减少；预训练参数作为良好的初始值提高了<strong>训练效率</strong>；同一个基础模型可以支持<strong>多种任务</strong>，并在这些任务上取得比从零训练更好的效果。</p>
-</section>
-<section id="自监督学" class="level2">
-<h2 class="anchored" data-anchor-id="自监督学">3.2.3　自监督学��</h2>
-<p>预训练之所以能够利用无标注数据，依赖的是<strong>自监督学习</strong>（Self-supervised Learning）。它的核心思想是：<strong>不需要人工提供标签，而是从数据本身构造训练目标。</strong></p>
-<p>以句子”今天天气很好”为例。如果把最后一个字遮住，得到”今天天气很__“，那么被遮住的”好”就自然成为这条样本的标签。一段长度为 <span class="math inline">\(T\)</span> 的文本，可以按这种方式构造出 <span class="math inline">\(T - 1\)</span> 个”根据前文预测下一个字”的训练样本，完全不需要人工参与。正是这一点，使得用万亿级 Token 训练模型成为可能。</p>
-<p>需要注意，自监督学习并不等于”没有监督信号”，只是监督信号来自数据自身，而非人工标注。从训练机制上看，它和监督学习一样计算预测与标签之间的损失，并通过梯度下降优化参数。</p>
-</section>
-<section id="预训练目标" class="level2">
-<h2 class="anchored" data-anchor-id="预训练目标">3.2.4　预训练目标</h2>
-<p>不同的大模型采用了不同的自监督目标，最典型的是自回归语言建模和掩码语言建模，二者的区别如图 3-2 所示。</p>
+<section id="自监督学习与预训练目标" class="level2">
+<h2 class="anchored" data-anchor-id="自监督学习与预训练目标">3.2.2　自监督学习与预训练目标</h2>
+<p><strong>自监督学习</strong>（self-supervised learning）是预训练能使用无标注数据的原因：<strong>标签不由人提供，而是从数据本身构造</strong>。把“今天天气很好”的最后一个字遮住，被遮住的“好”就是这条样本的标签。对每个位置都这样做——以“今”预测“天”、以“今天”预测“天”……以“今天天气很”预测“好”——一段长 <span class="math inline">\(T\)</span> 的文本就能构造出 <span class="math inline">\(T-1\)</span> 个“根据前文预测下一个字”的样本，完全不需要人工。注意，自监督并不是“没有监督信号”，只是信号来自数据自身；训练时它和监督学习一样，计算预测与标签之间的损失，用梯度下降优化参数。</p>
+<p>不同模型采用的自监督目标不同，最典型的是自回归语言建模和掩码语言建模（图 <a href="../ch3/s3-2.html#c3-fig-objectives">3-2</a>）。</p>
+<div id="c3-fig-objectives" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/rId31.png" style="width:5.13333in;height:2.59288in" class="figure-img"></p>
-<figcaption>图3-2 两种典型的预训练目标</figcaption>
+<p><img src="../figs/ch3-objectives.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:91.3%"></p>
 </figure>
 </div>
-<p>图3-2 两种典型的预训练目标</p>
-<p><strong>1．自回归语言模型</strong></p>
-<p>自回归语言模型（Autoregressive Language Model）把一段文本的联合概率按从左到右的顺序分解为一系列条件概率的乘积：</p>
-<p><span class="math inline">\(P\left( x_{1},x_{2},\ldots,x_{T} \right) = \prod_{t = 1}^{T}P\left( x_{t} \mid x_{1},\ldots,x_{t - 1} \right)\quad\)</span> (3-1)</p>
-<p>其中 <span class="math inline">\(x_{t}\)</span> 表示第 <span class="math inline">\(t\)</span> 个 Token。模型的任务就是根据前面的所有 Token 预测下一个 Token。训练时，模型希望真实文本出现的概率尽可能大，等价于最小化负对数似然损失：</p>
-<p><span class="math inline">\(\mathcal{L}_{AR}(\theta) = - \frac{1}{T}\sum_{t = 1}^{T}\log P_{\theta}\left( x_{t} \mid x_{&lt; t} \right)\quad\)</span> (3-2)</p>
-<p>式中 <span class="math inline">\(\theta\)</span> 为模型参数，<span class="math inline">\(x_{&lt; t}\)</span> 是 <span class="math inline">\(x_{1},\ldots,x_{t - 1}\)</span> 的简写。这一损失本质上是模型预测分布与真实下一个 Token 之间的<strong>交叉熵</strong>（Cross Entropy）。</p>
-<p>为了保证模型在预测第 <span class="math inline">\(t\)</span> 个位置时”看不到答案”，解码器结构使用<strong>因果掩码</strong>（Causal Mask），使每个位置只能关注它左侧的 Token。得益于这种掩码，一个长度为 <span class="math inline">\(T\)</span> 的序列只需一次前向计算，就能同时得到全部 <span class="math inline">\(T\)</span> 个位置的预测和损失，训练效率很高。GPT 系列、LLaMA、Qwen、DeepSeek 等生成式大模型都采用这一目标。</p>
-<p><strong>2．掩码语言模型</strong></p>
-<p>掩码语言模型（Masked Language Model，MLM）随机选取输入中一定比例的 Token（BERT 中为 15%），将其替换为特殊符号 <code>[MASK]</code>，然后让模型根据左右两侧的上下文还原被遮住的内容：</p>
-<p><span class="math inline">\(\mathcal{L}_{MLM}(\theta) = - \sum_{i \in \mathcal{M}}^{}\log P_{\theta}\left( x_{i} \mid \widetilde{\mathbf{x}} \right)\quad\)</span> (3-3)</p>
-<p>其中 <span class="math inline">\(\mathcal{M}\)</span> 是被遮盖位置的集合，<span class="math inline">\(\widetilde{\mathbf{x}}\)</span> 是遮盖后的输入序列。由于能够同时利用左右两侧的上下文，MLM 训练出的编码器模型（如 BERT）在文本分类、实体识别等<strong>理解类任务</strong>上表现出色，但它不擅长从左到右地生成长文本。</p>
-<p><strong>3．序列到序列的去噪目标</strong></p>
-<p>编码器—解码器结构的模型（如 T5）常采用<strong>片段破坏</strong>（Span Corruption）目标：随机遮盖输入中的若干连续片段，由编码器读入破坏后的文本，再由解码器依次生成被遮盖的片段。它兼具双向理解和生成能力，在翻译、摘要等任务上应用广泛。</p>
-<p><strong>为什么生成式大模型普遍选择自回归目标？</strong> 首先，它与生成任务天然一致，训练时怎样预测，推理时就怎样生成；其次，每个 Token 都提供一个训练信号，数据利用率高；最后，大量实践表明，在足够大的规模下，“预测下一个 Token”这一简单目标能够涌现出问答、翻译、推理等多种能力，而不必为每种任务设计专门的目标。</p>
-<p><strong>【思考】</strong> “预测下一个 Token”听起来只是在学习文字接龙，为什么能学到知识和推理能力？一个直观的解释是：要准确预测”中华人民共和国的首都是__“的下一个词，模型必须记住事实；要准确预测一道数学题解答的下一步，模型必须在一定程度上掌握解题规律。预测得越准，模型对数据背后规律的建模就越充分。</p>
+<div class="figcap">
+<p>图 3-2　两种典型的预训练目标。自回归目标让每个位置根据左侧上文预测下一个 token，一次前向就得到整句所有位置的损失；掩码目标遮住一部分 token，让模型借助左右两侧的上下文还原它们</p>
+</div>
+</div>
+<p><strong>自回归语言建模</strong>　 <strong>自回归语言模型</strong>（autoregressive language model）把一段文本的联合概率按从左到右的顺序分解为条件概率的乘积： <span class="math display">\[P(x_1,x_2,\dots,x_T)=\prod_{t=1}^{T}P(x_t\mid x_{&lt;t}),
+\tag{3-1}\]</span> 其中 <span class="math inline">\(x_t\)</span> 是第 <span class="math inline">\(t\)</span> 个 token，<span class="math inline">\(x_{&lt;t}\)</span> 是 <span class="math inline">\(x_1,\dots,x_{t-1}\)</span> 的简写。训练希望真实文本的概率尽可能大，等价于最小化负对数似然： <span class="math display">\[\mathcal{L}_{\mathrm{AR}}(\theta)=-\frac{1}{T}\sum_{t=1}^{T}\log P_\theta(x_t\mid x_{&lt;t}),
+\tag{3-2}\]</span> <span class="math inline">\(\theta\)</span> 为模型参数。把真实的下一个 token 看作一个 one-hot 分布（该 token 处为 1、其余为 0），这个损失就是它与模型预测分布之间的<strong>交叉熵</strong>（cross entropy）。为保证预测第 <span class="math inline">\(t\)</span> 个位置时“看不到答案”，解码器使用<strong>因果掩码</strong>（causal mask），让每个位置只能关注左侧的 token。有了因果掩码，长 <span class="math inline">\(T\)</span> 的序列<strong>只需一次前向计算</strong>就能同时得到全部 <span class="math inline">\(T\)</span> 个位置的预测和损失，训练效率很高。GPT 系列、LLaMA、Qwen、DeepSeek 等生成式模型都用这一目标。</p>
+<p><strong>掩码语言建模</strong>　 <strong>掩码语言模型</strong>（Masked Language Model，MLM）随机选取一部分 token 作为预测目标，把它们遮住，让模型根据左右两侧的上下文还原。BERT 选取 15% 的 token，其中 80% 替换为特殊符号 <code>[MASK]</code>、10% 替换为随机 token、10% 保持不变，以免模型只在见到 <code>[MASK]</code> 时才去预测： <span class="math display">\[\mathcal{L}_{\mathrm{MLM}}(\theta)=-\sum_{i\in\mathcal{M}}\log P_\theta(x_i\mid\tilde{\boldsymbol{x}}),
+\tag{3-3}\]</span> <span class="math inline">\(\mathcal{M}\)</span> 是被遮盖位置的集合，<span class="math inline">\(\tilde{\boldsymbol{x}}\)</span> 是遮盖后的序列。由于能同时利用两侧上下文，用 MLM 训练的编码器（如 BERT）擅长文本分类、实体识别等<strong>理解类</strong>任务，但不擅长从左到右生成长文本。</p>
+<p><strong>序列到序列的去噪</strong>　 编码器—解码器结构的模型（如 T5<sup><a href="../ch3/references.html#ref-3">[3]</a></sup>）常用<strong>片段破坏</strong>（span corruption）目标：遮盖输入中的若干连续片段，编码器读入破坏后的文本，解码器依次生成被遮住的片段。它兼具双向理解与生成能力，常用于翻译、摘要。</p>
+<p>生成式大模型普遍选择自回归目标，原因有三：它与生成任务一致，训练时怎样预测，推理时就怎样生成；每个 token 都提供一个训练信号，数据利用率高；规模足够大时，“预测下一个 token”这一简单目标就能带出问答、翻译、推理等多种能力，不必为每种任务另设目标。为什么“文字接龙”能学到知识？因为要准确预测“中华人民共和国的首都是”，模型必须记住事实；要准确预测解题过程的下一步，模型必须在一定程度上掌握解题规律。预测得越准，对数据背后规律的建模就越充分。</p>
 </section>
-<section id="预训练的一般过程" class="level2">
-<h2 class="anchored" data-anchor-id="预训练的一般过程">3.2.5　预训练的一般过程</h2>
-<p>一次完整的预训练通常包括以下环节：</p>
+<section id="预训练的一般流程" class="level2">
+<h2 class="anchored" data-anchor-id="预训练的一般流程">3.2.3　预训练的一般流程</h2>
+<p>一次完整的预训练包括以下环节，本章依次展开：</p>
 <ul>
-<li><strong>网络设计</strong>：确定模型结构，包括层数（深度）、隐藏层维度（宽度）、注意力头数、位置编码方式、激活函数等。当前主流大模型采用仅解码器（Decoder-only）的 Transformer 结构。</li>
-<li><strong>数据准备</strong>：收集、清洗、去重、配比训练数据，并训练分词器（见 3.3 节）。</li>
-<li><strong>超参数设定</strong>：确定学习率及其调度策略、批量大小、权重衰减强度等，必要时通过小规模实验或自动化搜索确定。</li>
-<li><strong>模型训练</strong>：搭建算力平台，配置分布式训练系统，在成百上千张加速卡上持续训练数周乃至数月（见 3.4 节）。</li>
-<li><strong>评估与迭代</strong>：在训练过程中持续监测损失曲线和下游基准测试的表现，及时发现并处理训练不稳定等问题。</li>
+<li><p><strong>网络设计</strong>：确定层数（深度）、隐藏维度（宽度）、注意力头数、位置编码、激活函数等（第 <a href="../ch3/s3-4.html">3.4</a> 节）。当前主流采用仅解码器的 Transformer。</p></li>
+<li><p><strong>数据准备</strong>：收集、清洗、去重、配比训练数据，训练分词器（第 <a href="../ch3/s3-3.html">3.3</a> 节）。</p></li>
+<li><p><strong>超参数设定</strong>：确定学习率及其调度、批大小、权重衰减等，常借助小规模实验或自动化搜索（第 <a href="../ch3/s3-4.html">3.4</a> 节）。</p></li>
+<li><p><strong>模型训练</strong>：搭建算力平台，配置分布式训练系统，在成百上千张加速卡上训练数周乃至数月（第 <a href="../ch3/s3-5.html">3.5</a> 节）。</p></li>
+<li><p><strong>评估与迭代</strong>：持续监测损失曲线和下游基准表现，及时处理训练不稳定等问题。</p></li>
 </ul>
-<p>预训练完成之后，模型通常还要经过微调、对齐，以及<strong>知识蒸馏</strong>（用大模型的输出指导小模型训练）、<strong>量化</strong>、<strong>剪枝</strong>等压缩与优化手段，才能以合适的成本部署。这些内容将在本章后续各节展开。</p>
+<p>预训练之后，模型通常还要经过微调与对齐（第 <a href="../ch3/s3-6.html">3.6</a>～<a href="../ch3/s3-8.html">3.8</a> 节），以及<strong>知识蒸馏</strong>（用大模型的输出指导小模型训练）、<strong>量化</strong>（降低权重与激活值的数值精度）、<strong>剪枝</strong>和<strong>低秩近似</strong>、<strong>权重共享</strong>等压缩手段（第 <a href="../ch3/s3-10.html">3.10</a> 节），才能以合适的成本部署；训练和推理还依赖 GPU 等专用硬件的加速（第 <a href="../ch3/s3-5.html">3.5</a> 节）。这些压缩与加速手段常被统称为<strong>模型优化</strong>——注意它与第 <a href="../ch3/s3-4.html">3.4</a> 节的“优化器”无关，后者指训练时更新参数的算法。</p>
 </section>
 <section id="规模定律模型多大数据多少才合适" class="level2">
-<h2 class="anchored" data-anchor-id="规模定律模型多大数据多少才合适">3.2.6　规模定律：模型多大、数据多少才合适</h2>
-<p>既然预训练的特点是”数据多、模型大”，一个自然的问题是：给定一笔算力预算，应该训练多大的模型，又该用多少数据？<strong>规模定律</strong>（Scaling Law）回答了这个问题。</p>
-<p><strong>1．损失随规模呈幂律下降</strong></p>
-<p>2020 年，Kaplan 等人通过大量实验发现，在其他因素不构成瓶颈时，语言模型的测试损失 <span class="math inline">\(L\)</span> 与参数量 <span class="math inline">\(N\)</span>、训练数据量 <span class="math inline">\(D\)</span>（以 Token 计）以及训练算力 <span class="math inline">\(C\)</span> 之间分别近似满足幂律关系：</p>
-<p><span class="math inline">\(L(N) \approx \left( \frac{N_{c}}{N} \right)^{\alpha_{N}},\quad\quad L(D) \approx \left( \frac{D_{c}}{D} \right)^{\alpha_{D}},\quad\quad L(C) \approx \left( \frac{C_{c}}{C} \right)^{\alpha_{C}}\quad\)</span> (3-4)</p>
-<p>其中 <span class="math inline">\(N_{c}\)</span>、<span class="math inline">\(D_{c}\)</span>、<span class="math inline">\(C_{c}\)</span> 为拟合常数，指数 <span class="math inline">\(\alpha_{N} \approx 0.076\)</span>、<span class="math inline">\(\alpha_{D} \approx 0.095\)</span>、<span class="math inline">\(\alpha_{C} \approx 0.050\)</span>。幂律意味着在双对数坐标下，损失与规模呈直线关系：模型、数据、算力每扩大一个数量级，损失就按固定比例下降。这一规律使研发者可以先用小模型做实验，再外推预测大模型的表现，从而降低试错成本。</p>
-<p><strong>2．Chinchilla 定律：参数与数据应同步扩大</strong></p>
-<p>2022 年，DeepMind 的 Hoffmann 等人在训练 Chinchilla 模型时对这一问题做了更细致的研究。他们把损失写成参数量和数据量的联合函数：</p>
-<p><span class="math inline">\(L(N,D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}\quad\)</span> (3-5)</p>
-<p>其中 <span class="math inline">\(E\)</span> 表示数据本身固有的、无法消除的损失；第二项反映模型容量不足带来的损失；第三项反映训练数据不足带来的损失。训练算力与参数量、数据量之间近似满足 <span class="math inline">\(C \approx 6ND\)</span>（推导见 3.4.5 节）。在 <span class="math inline">\(C\)</span> 固定的约束下最小化 <span class="math inline">\(L(N,D)\)</span>，即可得到最优的模型规模。</p>
-<p>图 3-3 按式（3-5）绘制了不同算力预算下损失随模型规模变化的曲线（拟合参数采用 Besiroglu 等人 2024 年对 Chinchilla 结果的复现）。每条曲线都呈”U”形：模型太小，容量不够；模型太大，在算力固定时能”喂”的数据又太少。曲线的最低点就是该算力下的最优配置。</p>
+<h2 class="anchored" data-anchor-id="规模定律模型多大数据多少才合适">3.2.4　规模定律：模型多大、数据多少才合适</h2>
+<p>既然预训练要“数据多、模型大”，给定一笔算力预算，应该训练多大的模型、用多少数据？<strong>规模定律</strong>（scaling law，也译缩放定律）回答这个问题。第 2 章讲过它描述的现象，这里关注怎样用它做决策。</p>
+<p><strong>损失随规模呈幂律下降</strong>　 Kaplan 等人（2020）发现<sup><a href="../ch3/references.html#ref-6">[6]</a></sup>，在其他因素不构成瓶颈时，测试损失 <span class="math inline">\(L\)</span> 与参数量 <span class="math inline">\(N\)</span>、训练 token 数 <span class="math inline">\(D\)</span>、训练算力 <span class="math inline">\(C\)</span> 分别近似满足幂律： <span class="math display">\[L(N)\approx\Bigl(\frac{N_c}{N}\Bigr)^{\alpha_N},\qquad
+  L(D)\approx\Bigl(\frac{D_c}{D}\Bigr)^{\alpha_D},\qquad
+  L(C)\approx\Bigl(\frac{C_c}{C}\Bigr)^{\alpha_C},
+\tag{3-4}\]</span> <span class="math inline">\(N_c\)</span>、<span class="math inline">\(D_c\)</span>、<span class="math inline">\(C_c\)</span> 为拟合常数，<span class="math inline">\(\alpha_N\approx0.076\)</span>、<span class="math inline">\(\alpha_D\approx0.095\)</span>、<span class="math inline">\(\alpha_C\approx0.050\)</span>。在双对数坐标下损失与规模呈直线：规模每扩大一个数量级，损失变为原来的 <span class="math inline">\(10^{-\alpha}\)</span> 倍，即按固定比例（而不是固定差值）下降。于是可以先用小模型做实验，再外推大模型的表现，降低试错成本。</p>
+<p><strong>Chinchilla 定律：参数与数据同步扩大</strong>　 Hoffmann 等人（2022）把损失写成参数量与数据量的联合函数<sup><a href="../ch3/references.html#ref-7">[7]</a></sup>： <span class="math display">\[L(N,D)=E+\frac{c_N}{N^{\alpha}}+\frac{c_D}{D^{\beta}},
+\tag{3-5}\]</span> <span class="math inline">\(E\)</span> 是数据本身固有、无法消除的损失；第二项是模型容量不足带来的损失；第三项是数据不足带来的损失；<span class="math inline">\(c_N\)</span>、<span class="math inline">\(c_D\)</span>、<span class="math inline">\(\alpha\)</span>、<span class="math inline">\(\beta\)</span> 为拟合常数。训练算力近似满足 <span class="math inline">\(C\approx6ND\)</span>（第 <a href="../ch3/s3-5.html">3.5</a> 节推导），在 <span class="math inline">\(C\)</span> 固定的约束下最小化 <span class="math inline">\(L(N,D)\)</span>，就得到最优的模型规模。图 <a href="../ch3/s3-2.html#c3-fig-chinchilla">3-3</a> 按式 <a href="../ch3/s3-2.html#c3-eq-chinchilla">（3-5）</a> 画出了四种算力预算下的曲线。</p>
+<div id="c3-fig-chinchilla" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="media/media/rId36.png" style="width:4.55in;height:2.60867in" class="figure-img"></p>
-<figcaption>图3-3 固定算力下的最优模型规模（按 Chinchilla 规模定律绘制）</figcaption>
+<p><img src="../figs/ch3-chinchilla.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:88.6%"></p>
 </figure>
 </div>
-<p>图3-3 固定算力下的最优模型规模（按 Chinchilla 规模定律绘制）</p>
-<p>Chinchilla 的核心结论是：<strong>在计算最优（compute-optimal）的意义下，参数量和训练 Token 数应当大致按相同比例增长，经验上每个参数约对应 20 个训练 Token。</strong> 按这一标准，参数量为 1750 亿、仅用 3000 亿 Token 训练的 GPT-3 是明显”训练不足”的。作为验证，Hoffmann 等人用与 2800 亿参数的 Gopher 相同的算力，训练了只有 700 亿参数、但使用 1.4 万亿 Token 的 Chinchilla，结果后者在大多数任务上都超过了前者。</p>
-<p><strong>3．规模定律之外的考量</strong></p>
-<p>规模定律给出的是”训练成本最优”的方案，而实际工程还要考虑<strong>推理成本</strong>。一个模型训练一次，却要被调用无数次，因此许多开源模型选择”小模型、多数据”的策略，让模型远远超出 Chinchilla 比例地多训练。例如，LLaMA-7B 使用了 1 万亿 Token，每参数约 150 个 Token，之后的开源模型更是普遍使用了数万亿 Token。这样做的训练成本高于计算最优方案，但得到的小模型推理更便宜、部署更容易。</p>
-<p><strong>【小结】</strong> 规模定律告诉我们：大模型的能力提升并非偶然，而是可以从模型规模、数据规模和算力投入中较为准确地预测的。但它也提醒我们，“更大”并不总是”更好”，参数和数据的平衡、训练成本与推理成本的平衡，同样重要。</p>
+<div class="figcap">
+<p>图 3-3　固定算力 <span class="math inline">\(C\)</span> 下损失随模型规模的变化（按式 <a href="../ch3/s3-2.html#c3-eq-chinchilla">（3-5）</a> 绘制，拟合参数取自 Besiroglu 等人对 Chinchilla 结果的复现<sup><a href="../ch3/references.html#ref-8">[8]</a></sup>）。每条曲线呈 U 形：模型太小则容量不足，太大则算力固定时能用的数据太少；最低点即该算力下的最优规模</p>
+</div>
+</div>
+<p>Chinchilla 的核心结论是：<strong>在计算最优</strong>（compute-optimal）<strong>的意义下，参数量与训练 token 数应大致按相同比例增长，经验上每个参数约对应 20 个训练 token</strong>。按此标准，1750 亿参数、只用 3000 亿 token 训练的 GPT-3（约 1.7 token/参数）明显“训练不足”。作为验证，Hoffmann 等人用与 2800 亿参数的 Gopher 相同的算力，训练了只有 700 亿参数、但使用 1.4 万亿 token 的 Chinchilla，后者在大多数任务上超过了前者。</p>
+<p><strong>规模定律之外：推理成本</strong>　 规模定律给出的是<strong>训练成本</strong>最优的方案，而模型训练一次、调用无数次。因此许多开源模型选择“小模型、多数据”，远超 Chinchilla 比例地多训练：LLaMA-7B 用了 1 万亿 token（按 <span class="math inline">\(6.7\times10^{9}\)</span> 参数计，约 150 token/参数）<sup><a href="../ch3/references.html#ref-5">[5]</a></sup>，此后的开源模型普遍用到数万亿乃至十余万亿 token。这样训练更贵，但得到的小模型推理更便宜、部署更容易。“更大”不总是“更好”，参数与数据的平衡、训练成本与推理成本的平衡，都要一并考虑。</p>
+<div class="bookbox keypoints">
+<p><span class="boxtitle">本节要点</span></p>
+<ul>
+<li><p>预训练是迁移学习：先在无标注数据上用自监督目标学到通用参数，再迁移到具体任务。</p></li>
+<li><p>自回归目标最小化下一个 token 的交叉熵，因果掩码使一次前向即可得到所有位置的损失。</p></li>
+<li><p>Chinchilla 定律给出训练计算最优配比约 20 token/参数；若把推理成本也计入，实际常偏离这一配比，让小模型多训练。</p></li>
+<li><p>案例进度：课程问答模型选 7B 级开源模型作起点，这类模型通常已用远超计算最优比例的数据训练过（如 Qwen2.5 系列约 18 万亿 token）。</p></li>
+</ul>
+</div>
 
 
 </section>
@@ -1320,8 +1350,8 @@ window.Quarto = {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch3/s3-1.html" class="pagination-link" aria-label="3.1　大语言模型的训练与使用生命周期">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.1　大语言模型的训练与使用生命周期</span>
+      <a href="../ch3/s3-1.html" class="pagination-link" aria-label="3.1　从随机参数到可用服务：大语言模型的生命周期">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1331,7 +1361,7 @@ window.Quarto = {
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5.5 高级 RAG：把实习生练成老馆员 – 大语言模型原理与技术</title>
+<title>5.5 GraphRAG：当答案藏在关系里 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-5.html">5.5　高级 RAG：把实习生练成老馆员</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-5.html">5.5　GraphRAG：当答案藏在关系里</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,19 +754,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#混合检索让语义和字面各司其职" id="toc-混合检索让语义和字面各司其职" class="nav-link active" data-scroll-target="#混合检索让语义和字面各司其职">5.5.1　混合检索：让”语义”和”字面”各司其职</a></li>
-  <li><a href="#查询改写先替用户把问题问清楚" id="toc-查询改写先替用户把问题问清楚" class="nav-link" data-scroll-target="#查询改写先替用户把问题问清楚">5.5.2　查询改写：先替用户把问题问清楚</a></li>
-  <li><a href="#重排把最该看的放在最前面" id="toc-重排把最该看的放在最前面" class="nav-link" data-scroll-target="#重排把最该看的放在最前面">5.5.3　重排：把最该看的放在最前面</a></li>
-  <li><a href="#压缩摘要与该不该查" id="toc-压缩摘要与该不该查" class="nav-link" data-scroll-target="#压缩摘要与该不该查">5.5.4　压缩、摘要与”该不该查”</a></li>
+  <li><a href="#c5-subsec-kg" id="toc-c5-subsec-kg" class="nav-link active" data-scroll-target="#c5-subsec-kg">5.5.1　知识图谱：用实体和关系表示知识</a></li>
+  <li><a href="#c5-subsec-graphrag" id="toc-c5-subsec-graphrag" class="nav-link" data-scroll-target="#c5-subsec-graphrag">5.5.2　GraphRAG 的索引与查询</a></li>
+  <li><a href="#c5-subsec-graph-cost" id="toc-c5-subsec-graph-cost" class="nav-link" data-scroll-target="#c5-subsec-graph-cost">5.5.3　代价与适用场景</a></li>
+  <li><a href="#c5-subsec-symbolic" id="toc-c5-subsec-symbolic" class="nav-link" data-scroll-target="#c5-subsec-symbolic">5.5.4　统计学习与符号表示</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-5.html">5.5　高级 RAG：把实习生练成老馆员</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch5/index.html">第 5 章　检索增强生成</a></li><li class="breadcrumb-item"><a href="../ch5/s5-5.html">5.5　GraphRAG：当答案藏在关系里</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">5.5　高级 RAG：把实习生练成老馆员</h1>
+<h1 class="title">5.5　GraphRAG：当答案藏在关系里</h1>
 </div>
 
 
@@ -718,98 +783,136 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>如果说基础 RAG 解决的是”有没有”，高级 RAG 解决的就是”准不准、全不全、吵不吵”。它的思路不是推翻重来，而是在”找”这个动作上做加法：找得更全，找得更准，最后只留下最该看的那几段。</p>
-<p>在展开之前，先看一张地图。过去几年，RAG 的形态大致经历了五代，每一代都是为了补上一代的短板。</p>
-<p><strong>表 5-2 RAG 的五代演进</strong></p>
+<div class="bookbox guide">
+<p>“我们最大的供应商的母公司，去年有没有被处罚？”“这 500 份用户访谈里，大家最不满意的三个环节是什么？”前者要沿着关系跳三次，后者的答案不在任何一段原文里，而在全部文本的归纳中。本节先介绍知识图谱如何用实体和关系表示知识，对比它与向量检索的分工；再讲解 GraphRAG 的索引与查询流程；最后讨论其代价，以及“图＋向量”的混合用法。结论是：向量检索找“像”，知识图谱找“连”，两者互补。</p>
+</div>
+<section id="c5-subsec-kg" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-kg">5.5.1　知识图谱：用实体和关系表示知识</h2>
+<p><strong>知识图谱</strong>（Knowledge Graph，KG）把知识表示为由节点和边构成的网络：节点是<strong>实体</strong>（人、公司、产品、法规条款），边是实体之间的<strong>关系</strong>（任职于、控股、引用、生效于）。每条事实是一个<strong>三元组</strong>（主体，关系，客体），例如（张三，任职于，A 公司）、（A 公司，子公司属于，B 集团）。检索时，系统先在问题中识别出实体，并把它链接到图谱中对应的节点（<strong>实体链接</strong>），再沿着边走若干步，把沿途的事实收集起来交给模型组织答案。沿多条边连续推理称为<strong>多跳推理</strong>（multi-hop reasoning）。以开头的供应商问题为例：先查“采购额最高的供应商”得到 A 公司，沿“子公司属于”边找到 B 集团，再沿“受到处罚”边查 B 集团去年的记录——三跳中的每一步都依赖上一步的结果，而向量检索只会在一个平面上找“最像问题的段落”。</p>
+<p>把知识图谱和向量嵌入结合起来，可以为检索带来七项能力（表 <a href="../ch5/s5-5.html#c5-tab-kg-gain">5-8</a>），它们分别对应第 <a href="../ch5/s5-3.html#c5-subsec-five-limits">5.3.1</a> 小节中向量检索的不足。</p>
+<div id="c5-tab-kg-gain" class="booktab">
+<div class="tabcap">
+<p>表 5-8　知识图谱为检索带来的七项能力</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 14%">
-<col style="width: 20%">
-<col style="width: 27%">
-<col style="width: 20%">
-<col style="width: 17%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>阶段</strong></th>
-<th><strong>核心能力</strong></th>
-<th><strong>代表技术</strong></th>
-<th><strong>典型场景</strong></th>
-<th><strong>主要局限</strong></th>
+<th style="text-align: left;">能力</th>
+<th style="text-align: left;">含义</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>基础 RAG</td>
-<td>单轮向量检索</td>
-<td>密集检索、固定切分、top-k</td>
-<td>知识库问答、简单文档检索</td>
-<td>上下文缺失、无法多跳</td>
+<td style="text-align: left;">显式事实</td>
+<td style="text-align: left;">事实直接存为节点和边，而不是压缩进不透明的向量，关键细节得以保留</td>
 </tr>
 <tr class="even">
-<td>高级 RAG</td>
-<td>检索质量优化</td>
-<td>混合检索、查询改写、重排、压缩</td>
-<td>复杂文档、垂直领域知识库</td>
-<td>流程仍需大量人工设计</td>
+<td style="text-align: left;">上下文详情</td>
+<td style="text-align: left;">实体带有描述、别名、元数据等属性，提供必要背景</td>
 </tr>
 <tr class="odd">
-<td>GraphRAG</td>
-<td>结构化关系推理</td>
-<td>实体抽取、知识图谱、社区摘要</td>
-<td>多跳问答、全局综述、合规审计</td>
-<td>构建成本高、更新困难</td>
+<td style="text-align: left;">网络结构</td>
+<td style="text-align: left;">关系刻画现实世界中的连接，可以表达规则、层级、时间线</td>
 </tr>
 <tr class="even">
-<td>推理 RAG</td>
-<td>边想边查</td>
-<td>Self-RAG、CRAG、迭代检索、ReAct</td>
-<td>医疗诊断、金融分析、代码调试</td>
-<td>延迟高、可能陷入循环</td>
+<td style="text-align: left;">多跳推理</td>
+<td style="text-align: left;">查询沿关系遍历，把来自不同来源的事实连接起来</td>
 </tr>
 <tr class="odd">
-<td>Agentic RAG</td>
-<td>自主规划与工具协作</td>
-<td>多智能体、MCP、深度研究</td>
-<td>个人助手、科研探索、复杂决策</td>
-<td>成本与可控性难平衡</td>
+<td style="text-align: left;">联合推理</td>
+<td style="text-align: left;"><strong>实体解析</strong>把指向同一现实对象的不同说法（“苹果公司”“Apple”）合并，从而可以集中分析</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">可解释的相关性</td>
+<td style="text-align: left;">图中的连接路径说明了某条事实为什么相关</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">个性化</td>
+<td style="text-align: left;">在图谱中记录用户属性、上下文和历史交互，为不同用户定制结果</td>
 </tr>
 </tbody>
 </table>
-<p>需要说明的是，这五代不是”后者淘汰前者”的关系。今天大量生产系统仍然停留在基础 RAG，因为它的成本最低、可控性最好；而一个成熟的系统，往往是几代技术的混合体。</p>
-<section id="混合检索让语义和字面各司其职" class="level2">
-<h2 class="anchored" data-anchor-id="混合检索让语义和字面各司其职">5.5.1　混合检索：让”语义”和”字面”各司其职</h2>
-<p>向量检索擅长”意思像”，关键词检索擅长”字面像”。这两件事，正好互补。</p>
-<p>关键词检索的老牌算法叫 BM25。它不看语义，只看词：这个词在文档里出现得多不多、在整个语料里稀不稀有、文档本身长不长。它有两个向量检索比不了的优点：一是对专有名词、型号、编号极其敏感；二是可解释，你能清楚看到是哪个词命中了。</p>
-<p>Anthropic 举过一个很典型的例子：用户在技术支持库里搜”错误码 TS-999”。嵌入模型可能会找到一堆”关于错误码”的文档，却漏掉真正讲 TS-999 的那一篇；BM25 则能精确地把这个字符串捞出来。反过来，用户问”东西坏了怎么换”，文档写的是”退换货流程”，字面不重合，BM25 抓瞎，向量检索却能靠语义找到。</p>
-<p>所以成熟系统通常两路并行：向量召回一批，BM25 召回一批，再用融合算法合并。最常用的是倒数排名融合（Reciprocal Rank Fusion，RRF）：不看两边的原始分数（它们量纲不同，没法直接比），只看各自排第几，排名越靠前贡献越大，最后重新算一个综合分。简单、稳定、不需要调参，是工程上的默认选项。</p>
-<p>再进一步，还可以做”多路召回”：一路向量、一路关键词、一路按元数据过滤、一路从图数据库查关系。每路都有自己的盲区，合在一起才接近”老馆员”的水平。</p>
+</div>
+<p>图谱与嵌入也可以反过来结合：<strong>知识图谱嵌入</strong>把实体和关系也表示为向量，使“推理”变成向量运算。经典的 TransE 模型<sup><a href="../ch5/references.html#ref-19">[19]</a></sup>要求三元组满足“主体向量＋关系向量 <span class="math inline">\(\approx\)</span> 客体向量”，据此可以给缺失的三元组打分、推出新事实。<strong>图神经网络</strong>（Graph Neural Network，GNN）则通过在相邻节点之间反复传递和汇聚信息，为每个节点学到融合了邻居结构的表示。</p>
+<p>表 <a href="../ch5/s5-5.html#c5-tab-vec-kg">5-9</a> 对比了两种检索方式。</p>
+<div id="c5-tab-vec-kg" class="booktab">
+<div class="tabcap">
+<p>表 5-9　向量检索与知识图谱检索的对比</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">向量检索</th>
+<th style="text-align: left;">知识图谱检索</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">检索依据</td>
+<td style="text-align: left;">语义相似（“像不像”）</td>
+<td style="text-align: left;">关系路径（“连不连”）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">知识形式</td>
+<td style="text-align: left;">文本块的稠密向量</td>
+<td style="text-align: left;">实体—关系三元组</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">擅长</td>
+<td style="text-align: left;">模糊表达、同义改写、长尾问题</td>
+<td style="text-align: left;">多跳推理、精确事实、规则约束</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">可解释性</td>
+<td style="text-align: left;">只有相似度分数</td>
+<td style="text-align: left;">可给出推理路径</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">构建成本</td>
+<td style="text-align: left;">低，嵌入一遍即可</td>
+<td style="text-align: left;">高，需要抽取、消歧与维护</td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="查询改写先替用户把问题问清楚" class="level2">
-<h2 class="anchored" data-anchor-id="查询改写先替用户把问题问清楚">5.5.2　查询改写：先替用户把问题问清楚</h2>
-<p>很多 RAG 的失败，不是检索不行，是问题本身太糟。用户说”这个怎么弄”，系统不知道”这个”指什么；用户说”报销”，没说是差旅还是招待；用户把三个问题揉成一句，检索只能顾此失彼。</p>
-<p>查询改写（query rewriting）就是让模型先当一次”提问翻译”。常见的有四种手法。</p>
-<p><strong>· 指代消解与补全。</strong>把”这个怎么弄”结合对话历史，补成”上个月买的打印机如何申请保修”。</p>
-<p><strong>· 同义扩展。</strong>把”钱怎么退回来”扩展出”退款、退货、原路退回、到账时间”等词，跨过词汇鸿沟。</p>
-<p><strong>· 多查询并行。</strong>让模型把一个问题改写成三到五个不同角度，分别检索，再合并去重。代价是延迟和成本上升。</p>
-<p><strong>· 假设文档嵌入（HyDE）。</strong>先让模型”编”一份理想的答案文档，再用这份假答案去检索真文档。听起来反直觉，但很有效：答案和答案之间的语言风格更接近，比”问题找答案”更容易命中。</p>
-<p>HyDE 值得多说一句。用户问”RAG 的召回率怎么提升”，问题很短，信息量少；如果让模型先写一段”提升 RAG 召回率可以从混合检索、查询改写、重排、微调嵌入模型入手……“，这段文字虽然可能是模型编的，但它的用词、结构、上下文都和真实的技术文档高度相似。用它去检索，命中率往往比用原问题高。这不是让模型替答案，而是让模型替你去”描述你想要的文档长什么样”。</p>
-<p>还有一种思路叫”退一步提问”（step-back prompting）：先问一个更抽象的问题，比如”RAG 检索有哪些常见优化方向”，拿到宏观框架后，再回到具体问题。它适合那些”问得太细，反而找不到”的场景。</p>
+<section id="c5-subsec-graphrag" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-graphrag">5.5.2　GraphRAG 的索引与查询</h2>
+<p>2024 年，微软研究院提出并开源了 GraphRAG<sup><a href="../ch5/references.html#ref-20">[20]</a></sup>，把“用大模型自动建图、再基于图回答”的思路工程化。它针对的是基础 RAG 很难回答的<strong>全局性问题</strong>，例如“这批文档的主要主题是什么”——答案分散在整个语料中，取前 20 个片段拼起来也只能看到局部。其流程分为两个阶段（图 <a href="../ch5/s5-5.html#c5-fig-graphrag">5-4</a>）。</p>
+<p><strong>索引阶段</strong>　 输入是切分好的文本块，输出是知识图谱与分层社区摘要。</p>
+<ol type="1">
+<li><p><strong>抽取</strong>：用大模型逐块抽取实体、关系及其描述，合并同名实体，建成一张图；</p></li>
+<li><p><strong>社区发现</strong>：用 Leiden 算法<sup><a href="../ch5/references.html#ref-21">[21]</a></sup>把图划分成若干<strong>社区</strong>——内部连接紧密、与外部连接稀疏的实体簇，并逐层细分，形成从粗到细的层级；</p></li>
+<li><p><strong>社区摘要</strong>：让大模型为每个社区写一份摘要，概括其中的主要实体、关系与事件。</p></li>
+</ol>
+<p><strong>查询阶段</strong>　 根据问题类型选择两种搜索方式。<strong>全局搜索</strong>面向综述型问题：先让模型分别依据每份社区摘要给出部分答案（映射），再把部分答案汇总成最终回答（归约），这种做法称为<strong>映射—归约</strong>（map-reduce）。<strong>局部搜索</strong>面向具体实体的问题：从问题中的实体出发，取出它在图中的邻居子图、相关社区摘要和原始文本块，作为上下文交给模型。</p>
+<div id="c5-fig-graphrag" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch5-graphrag.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:99.2%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 5-4　GraphRAG 的索引与查询。索引阶段用大模型从文本块中抽取实体与关系建成知识图谱，再分层聚成社区并为每个社区写摘要；查询阶段按问题类型走全局搜索或局部搜索</p>
+</div>
+</div>
 </section>
-<section id="重排把最该看的放在最前面" class="level2">
-<h2 class="anchored" data-anchor-id="重排把最该看的放在最前面">5.5.3　重排：把最该看的放在最前面</h2>
-<p>粗召回追求的是”别漏”，所以会捞回一大堆候选；重排（reranking）追求的是”别错”，从这一大堆里挑出最相关的几个。</p>
-<p>向量检索用的是双塔结构：问题和文档分别编码，最后算一个距离。它快，但问题和文档在编码时没见过对方，细粒度的匹配会丢。重排模型用的是交叉编码器（cross-encoder）：把问题和文档拼在一起送进模型，让它逐字逐句地比对。它慢，但准得多。</p>
-<p>所以工程上的标准做法是”两阶段”：第一阶段用向量或混合检索，快速召回 100 到 150 个候选；第二阶段用重排模型，精挑 10 到 20 个送给生成器。Anthropic 的实验里，重排把前 20 个块的检索失败率从 2.9% 进一步压到 1.9%，累计降幅 67%。代价是每次查询多几十到几百毫秒的延迟。</p>
-<p>重排模型的选择也很多：开源的 bge-reranker 系列，商业的 Cohere Rerank、Voyage Rerank，以及各家云厂商的托管服务。它们通常比嵌入模型小，但专门训练过”判断相关性”这件事。对于垂直领域，用自己标注的数据微调一个重排模型，性价比往往高于微调生成模型。</p>
+<section id="c5-subsec-graph-cost" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-graph-cost">5.5.3　代价与适用场景</h2>
+<p>GraphRAG 的代价很实在：</p>
+<ul>
+<li><p><strong>建图开销大</strong>：每个文本块都要调用大模型抽取，社区摘要还要再调用一轮，索引成本与语料规模成正比，远高于只做嵌入；</p></li>
+<li><p><strong>实体消歧难</strong>：“苹果”是水果还是公司，“张总”是张建国还是张建华，抽取模型常常判断错；</p></li>
+<li><p><strong>更新困难</strong>：文档一变，相关子图和社区摘要可能都要重建；</p></li>
+<li><p><strong>错误会传播</strong>：抽取错了的一条边，会沿着多跳推理影响后续每一步。</p></li>
+</ul>
+<p>因此，它适合关系密集、问题多跳、对可解释性要求高的场景，如供应链分析、反欺诈、医疗与科研文献、合规审计，以及需要融合结构化与非结构化数据、降低幻觉的垂直领域；对简单的客服问答则得不偿失。</p>
+<p>一个务实的做法是<strong>图与向量混合</strong>：先用向量检索找到问题相关的入口实体，再在图中扩展其邻居，最后把子图和原文一起交给模型。这样既保留了语义召回的广度，又补上了关系推理的深度。图谱也可以在使用中持续改进：分析用户与系统的交互，发现缺失或错误的边并修正。</p>
 </section>
-<section id="压缩摘要与该不该查" class="level2">
-<h2 class="anchored" data-anchor-id="压缩摘要与该不该查">5.5.4　压缩、摘要与”该不该查”</h2>
-<p>候选集筛到 10 到 20 个块之后，还有一个问题：它们加起来可能仍然太长，而且互相重复。上下文压缩（context compression）就是在这个时候登场：把每个块里与问题无关的句子删掉，只保留证据句；或者把多个块摘要成一段紧凑的综述。</p>
-<p>压缩有两种做法。一种是抽取式：用一个小模型判断每句话与问题的相关性，只保留高分句，原文不动，可追溯。另一种是生成式：让模型把多段材料改写成一段摘要，短了，但引入了”二次加工”的风险，引用可能对不上原文。严肃场景更偏爱前者。</p>
-<p>最后是”自适应检索”：不是所有问题都值得查。用户说”你好”“谢谢”，或者问”1 加 1 等于几”，走检索纯属浪费。系统可以先用一个轻量分类器判断：这是寒暄、常识、还是需要外部知识？需要查的，再决定查哪个库、查多少。这个看似简单的分流，能省下大量成本和延迟。</p>
-<p>此外还有两条常被写进”优化清单”的思路。一条是语义哈希：把文档编码成紧凑的二进制向量，用少量精度换检索速度，适合高并发、低延迟的场景。另一条是反馈回路：把用户的点击、采纳、纠正收集起来，定期回流到评估集和检索策略里。前者省算力，后者省”拍脑袋”——很多检索规则，最后都是靠真实反馈调出来的。</p>
-<p>把 5.5 节的技术串起来，就是一条”高级流水线”：查询改写 → 多路召回（向量 + BM25 + 元数据）→ 融合去重 → 重排 → 压缩 → 生成。每一步只提升几个百分点，叠起来就是体验上的代差。RAG 的功力，往往不在某一个”大招”，而在这条流水线上几十个小决定的累加。</p>
+<section id="c5-subsec-symbolic" class="level2">
+<h2 class="anchored" data-anchor-id="c5-subsec-symbolic">5.5.4　统计学习与符号表示</h2>
+<p>GraphRAG 背后还有一个更一般的问题。深度学习的主流是<strong>连接主义</strong>：知识分布在大量参数中，靠统计规律泛化；以 Hinton 为代表的研究者长期认为，智能应当从数据中学习得来，而不必依赖人工设计的符号规则。<strong>符号主义</strong>则认为，智能需要显式的符号、规则和结构。RAG 尤其是 GraphRAG 的实践给出了一种折中：大模型（统计学习）负责理解和生成语言，知识图谱（符号表示）负责记住事实、约束关系、提供可解释的推理路径。二者单独都不足以支撑可靠的语言智能，结合起来则可以互相弥补弱点。</p>
 
 
 </section>
@@ -1293,18 +1396,18 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch5/s5-4.html" class="pagination-link" aria-label="5.4　基础 RAG 的天花板">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.4　基础 RAG 的天花板</span>
+      <a href="../ch5/s5-4.html" class="pagination-link" aria-label="5.4　高级 RAG：优化检索的各个环节">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.4　高级 RAG：优化检索的各个环节</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch5/s5-6.html" class="pagination-link" aria-label="5.6　GraphRAG：当答案藏在关系里">
-        <span class="nav-page-text">5.6　GraphRAG：当答案藏在关系里</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch5/s5-6.html" class="pagination-link" aria-label="5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么">
+        <span class="nav-page-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

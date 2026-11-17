@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6.2 核心组件 – 大语言模型原理与技术</title>
+<title>6.2 智能体的组成 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-2.html">6.2　核心组件</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-2.html">6.2　智能体的组成</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +135,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +159,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +171,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +200,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +265,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +283,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +431,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +514,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +550,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +585,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +609,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +633,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +680,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +698,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,19 +725,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#感知决策执行环境与通信" id="toc-感知决策执行环境与通信" class="nav-link active" data-scroll-target="#感知决策执行环境与通信">6.2.1　感知、决策、执行、环境与通信</a></li>
-  <li><a href="#决策系统以-llm-为认知内核" id="toc-决策系统以-llm-为认知内核" class="nav-link" data-scroll-target="#决策系统以-llm-为认知内核">6.2.2　决策系统：以 LLM 为认知内核</a></li>
-  <li><a href="#执行器工具代码与物理动作" id="toc-执行器工具代码与物理动作" class="nav-link" data-scroll-target="#执行器工具代码与物理动作">6.2.3　执行器：工具、代码与物理动作</a></li>
-  <li><a href="#环境与通信从单智能体到多智能体" id="toc-环境与通信从单智能体到多智能体" class="nav-link" data-scroll-target="#环境与通信从单智能体到多智能体">6.2.4　环境与通信：从单智能体到多智能体</a></li>
+  <li><a href="#c6-subsec-parts" id="toc-c6-subsec-parts" class="nav-link active" data-scroll-target="#c6-subsec-parts">6.2.1　五个组成部分</a></li>
+  <li><a href="#c6-subsec-brain" id="toc-c6-subsec-brain" class="nav-link" data-scroll-target="#c6-subsec-brain">6.2.2　决策系统：以 LLM 为认知内核</a></li>
+  <li><a href="#c6-subsec-actuator" id="toc-c6-subsec-actuator" class="nav-link" data-scroll-target="#c6-subsec-actuator">6.2.3　执行器：工具的四种类型</a></li>
+  <li><a href="#c6-subsec-env" id="toc-c6-subsec-env" class="nav-link" data-scroll-target="#c6-subsec-env">6.2.4　环境与通信</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-2.html">6.2　核心组件</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-2.html">6.2　智能体的组成</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">6.2　核心组件</h1>
+<h1 class="title">6.2　智能体的组成</h1>
 </div>
 
 
@@ -718,84 +754,98 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="感知决策执行环境与通信" class="level2">
-<h2 class="anchored" data-anchor-id="感知决策执行环境与通信">6.2.1　感知、决策、执行、环境与通信</h2>
-<p>把一个智能体拆开来看，它由五个部分构成：感知器、决策系统、执行器、环境与通信模块。前四者构成单个智能体的闭环，通信模块则用于多个智能体之间、或智能体与用户之间的信息交换。</p>
-<p>感知器（perceptor） 负责采集环境中的信息，并把异构输入规范化为决策系统可以消费的形式。对软件智能体而言，感知的输入主要有四类：用户输入的自然语言、结构化的 API 响应、文档与网页内容、以及系统内部的状态变化（如定时器触发、审批状态翻转）。感知器的工程难点不在”获取”，而在”规范化”：同样的语义，可能以 JSON 字段、表格单元格、PDF 段落或聊天消息的形式出现，需要统一成带来源标注的文本片段，才能进入上下文。</p>
-<p>决策系统（decision system） 是智能体的”大脑”，负责处理感知输入并做出相应决策。在 LLM 智能体中，它通常由三部分协作完成：语言模型负责语义理解与推理，上下文管理器负责决定”此刻应该让模型看到什么”，规划器负责把目标拆成可执行的步骤。三者不是并列的模块，而是一个嵌套关系——规划通过提示词驱动模型完成，模型的输入又由上下文管理器组装。</p>
-<p>执行器（actuator） <strong>负责实施决策系统的指令，对环境进行物理或虚拟的操作。软件智能体的执行器是工具（tool）与接口（API）：搜索、计算、读写文件、发送邮件、调用业务系统。具身智能体的执行器是电机、机械臂、扬声器。执行器的设计原则是</strong>窄接口、强校验、可回滚：每个工具只做一件事，参数经过 schema 校验，副作用可以撤销。原因很直接——模型会犯错，而执行器是错误真正落地的地方。</p>
-<p>环境（environment） 是智能体所感知和行动的对象。环境的性质决定了智能体的设计约束。表 6-4 给出了常见的环境维度及其工程含义，可以看到，“部分可观测”与”动态”这两个维度对系统复杂度的影响最大：前者要求记忆与状态估计，后者要求重规划与并发控制。</p>
-<p>通信模块（communication module） 在多智能体系统中承担消息传递、任务分派、结果汇总与冲突消解。它也可以是智能体与用户之间的界面层，负责把内部轨迹翻译成用户能理解的过程说明。通信模块的设计直接决定了多智能体系统是”协作”还是”互相干扰”。</p>
-<p>表 6-4 环境维度及其对智能体设计的含义</p>
+<div class="bookbox guide">
+<p>定义说智能体要能感知、决策、行动，那么落到工程上，一个智能体到底由哪些部分组成，每部分负责什么？本节把它拆成五个部分：感知器把环境信息整理成模型能读的输入，决策系统（以 LLM 为核心）决定下一步，执行器把决定变成对环境的操作，环境是感知和行动的对象，通信模块负责智能体与用户、与其他智能体之间的信息交换。结论是：LLM 处在中心，但它与外界的一切交换都要经过“上下文”这一条通道，而执行器是模型的错误真正落地的地方。</p>
+</div>
+<section id="c6-subsec-parts" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-parts">6.2.1　五个组成部分</h2>
+<p>一个智能体由五个部分组成<sup><a href="../ch6/references.html#ref-4">[4]</a>,<a href="../ch6/references.html#ref-5">[5]</a></sup>：感知器、决策系统、执行器、环境和通信模块。前四者构成单个智能体的闭环，通信模块用于智能体与用户、智能体与智能体之间的信息交换。下面先说清数据怎么流动：环境的信息经感知器整理，与指令、记忆、工具说明一起<strong>组装成上下文</strong>交给 LLM；LLM 输出下一步的决定，经校验后交给执行器；执行器作用于环境，环境的变化又被感知器捕获（图 <a href="../ch6/s6-2.html#c6-fig-arch">6-3</a>）。</p>
+<div id="c6-fig-arch" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-arch.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:92.4%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-3　以 LLM 为决策核心的智能体结构。环境信息经感知器整理、与指令和记忆一起组装成上下文后才进入 LLM；LLM 的决定经校验后由执行器作用于环境。下方四个模块为决策系统提供角色、历史、计划和行动接口</p>
+</div>
+</div>
+<p><strong>感知器（perceptor）</strong>　 负责采集环境信息，并把各种来源的输入整理成决策系统能使用的形式。软件智能体的输入主要有四类：用户的自然语言（文字或语音转写）、API 返回的结构化数据、文档与网页内容，以及系统内部的状态变化（定时器触发、审批状态改变）。难点不在“拿到”，而在“整理”：同一条信息可能以 JSON 字段、表格单元格、PDF 段落或聊天消息的形式出现，需要统一成带来源标注的文本片段，才能放进上下文。</p>
+<p><strong>决策系统（decision system）</strong>　 是智能体的“大脑”，负责处理感知输入并做出决策。在 LLM 智能体中，它由三部分配合完成：语言模型负责理解与推理；<strong>上下文管理</strong>决定“此刻让模型看到什么”；规划部分把目标拆成可执行的步骤。三者不是并列的模块，而是嵌套关系：规划是通过提示驱动模型完成的，而模型的输入又由上下文管理负责组装。第 <a href="../ch6/s6-2.html#c6-subsec-brain">6.2.2</a> 小节详细讨论。</p>
+<p><strong>执行器（actuator）</strong>　 负责实施决策系统的指令，对环境进行物理或虚拟的操作。软件智能体的执行器是<strong>工具</strong>（tool）：搜索、计算、读写文件、发邮件、调用业务系统；机器人的执行器是电机、机械臂。第 <a href="../ch6/s6-2.html#c6-subsec-actuator">6.2.3</a> 小节讨论它的设计原则。</p>
+<p><strong>环境（environment）</strong>　 是智能体感知和行动的对象，它的性质决定了设计约束，见第 <a href="../ch6/s6-2.html#c6-subsec-env">6.2.4</a> 小节。</p>
+<p><strong>通信模块（communication module）</strong>　 在多智能体系统中负责消息传递、任务分派、结果汇总和冲突消解；面对用户时，它负责把内部的执行过程翻译成用户能看懂的说明，并接收用户的确认或修改。</p>
+<p>图 <a href="../ch6/s6-2.html#c6-fig-arch">6-3</a> 下方的四个模块来自 Wang 等人的综述<sup><a href="../ch6/references.html#ref-4">[4]</a></sup>对 LLM 智能体的归纳：<strong>画像模块</strong>（profile）规定智能体的角色、目标与约束；<strong>记忆模块</strong>保存短期上下文和长期经验；<strong>规划模块</strong>负责任务分解与重新规划；<strong>行动模块</strong>把决定转成工具调用并读取结果。它们不是与五个部分并列的另一套划分，而是从“决策系统需要什么支持”的角度对决策系统的细化：画像和规划属于决策系统本身，记忆为决策系统提供历史，行动模块是决策系统与执行器之间的接口；感知器、环境和通信模块不在其中。四个模块都要把内容写进上下文才能影响模型，而上下文窗口的长度是有限的，第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节的上下文工程正是围绕这一瓶颈展开的。</p>
+</section>
+<section id="c6-subsec-brain" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-brain">6.2.2　决策系统：以 LLM 为认知内核</h2>
+<p>决策系统是不同智能体能力差异的主要来源。LLM 在其中承担五项职责：</p>
+<ol type="1">
+<li><p><strong>理解用户意图与指令</strong>：解析自然语言输入，抽取目标、约束与隐含前提。“下周三去上海开一天会，预算三千”至少包含时间、地点、时长、预算四个约束，以及“从常驻地出发”“当天往返或住一晚”两个隐含前提，需要抽取成结构化的任务描述。</p></li>
+<li><p><strong>知识检索与应用</strong>：模型内部知识可以回答常识问题，但企业制度、实时价格、私有数据靠不住。决策系统需要判断什么时候该查、查什么、查到之后怎么用。检索过早浪费成本，过晚则会在错误前提上做规划。</p></li>
+<li><p><strong>规划与推理</strong>：把复杂任务分解为子任务、确定顺序、比较路径（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。LLM 输出的计划是步骤的<strong>文字描述</strong>，还需要框架把它对应到具体的工具调用。</p></li>
+<li><p><strong>决策支持</strong>：评估各个行动方案的可能结果，按目标选出最佳行动。实践中常让模型先列出几个候选方案、说明理由再选择，这比直接给答案更可靠，因为隐含的权衡被写了出来。</p></li>
+<li><p><strong>生成行动指令或内容</strong>：生成调用工具所需的参数，或者直接生成给用户的回复。参数生成是错误高发区，字段名、类型、单位、枚举值都可能出错，必须有格式校验和失败重试。</p></li>
+</ol>
+<p>这五项职责通常不由一次模型调用完成。常见做法是<strong>分角色调用</strong>：一次调用解析意图，一次做规划，若干次生成工具调用，必要时再加一次调用检查结果（这属于第 <a href="../ch6/s6-3.html#c6-subsec-stop">6.3.4</a> 小节的校验，不在上述五项之内）；每次调用使用不同的提示词、可用工具和上下文。“一个模型、多种角色”是当前智能体系统的主流形态。</p>
+</section>
+<section id="c6-subsec-actuator" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-actuator">6.2.3　执行器：工具的四种类型</h2>
+<p>执行器是智能体与世界的接触面，按作用对象可分为四类：</p>
+<ul>
+<li><p><strong>信息类</strong>：搜索、网页抓取、数据库查询、文档检索。不改变外部状态，只把信息带进上下文。风险是来源不可靠和<strong>提示注入</strong>（prompt injection）：网页里可能藏着“忽略之前的指令”之类的文字，被模型当成指令执行。</p></li>
+<li><p><strong>计算类</strong>：代码解释器、计算器、符号求解器。把需要精确计算的部分从模型转给确定性程序。模型逐个 token 生成数字，没有可靠的进位与精确运算机制，多位数乘法容易出错；但它擅长把问题写成表达式，交给计算器或代码解释器执行。</p></li>
+<li><p><strong>事务类</strong>：下单、支付、改签、发邮件、写数据库。有副作用，且往往不可撤销，因此要求“先预览、后执行”的两段式确认；同时为每次操作分配<strong>幂等键</strong>（同一键的重复请求只生效一次），并记录操作日志，以便失败重试和事后审计。</p></li>
+<li><p><strong>物理类</strong>：机械臂、移动底盘、无人机。对实时性和安全性要求最高，需要独立的安全控制器兜底，不能把安全交给语言模型判断。</p></li>
+</ul>
+<p>工具不是越多越好：工具说明本身占用上下文，功能重叠的工具会让模型难以选择。设计工具的经验法则是<strong>单一职责、名称自解释、参数强类型、错误信息可读</strong>。如果一个工具返回的错误信息足以让模型自己改正参数，这个工具的设计就是合格的。</p>
+</section>
+<section id="c6-subsec-env" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-env">6.2.4　环境与通信</h2>
+<p>第 <a href="../ch6/s6-1.html#c6-subsec-def">6.1.1</a> 小节提到的几组环境性质，各自对应一类设计要求（表 <a href="../ch6/s6-2.html#c6-tab-env">6-5</a>）。其中“部分可观测”和“动态”对系统复杂度影响最大：前者要求记忆与状态估计，后者要求能中断和重新规划。</p>
+<div id="c6-tab-env" class="booktab">
+<div class="tabcap">
+<p>表 6-5　环境性质及其对智能体设计的要求</p>
+</div>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 36%">
-<col style="width: 43%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><strong>维度</strong></th>
-<th><strong>取值</strong></th>
-<th><strong>对设计的含义</strong></th>
+<th style="text-align: left;">性质</th>
+<th style="text-align: left;">取值</th>
+<th style="text-align: left;">对设计的要求</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>可观测性</td>
-<td>完全 / 部分</td>
-<td>部分可观测时需要维护内部状态与记忆，并显式处理不确定性</td>
+<td style="text-align: left;">可观测性</td>
+<td style="text-align: left;">完全 / 部分</td>
+<td style="text-align: left;">部分可观测时需维护内部状态与记忆，显式处理不确定性</td>
 </tr>
 <tr class="even">
-<td>确定性</td>
-<td>确定 / 随机</td>
-<td>随机环境下同一动作可能产生不同结果，需重试、校验与概率化决策</td>
+<td style="text-align: left;">确定性</td>
+<td style="text-align: left;">确定 / 随机</td>
+<td style="text-align: left;">随机环境中同一动作结果可能不同，需要重试与校验</td>
 </tr>
 <tr class="odd">
-<td>静态性</td>
-<td>静态 / 动态</td>
-<td>动态环境下计划会失效，需支持中断、重规划与并发冲突处理</td>
+<td style="text-align: left;">静态性</td>
+<td style="text-align: left;">静态 / 动态</td>
+<td style="text-align: left;">动态环境中计划会过时，需要支持中断与重新规划</td>
 </tr>
 <tr class="even">
-<td>离散性</td>
-<td>离散 / 连续</td>
-<td>连续动作空间难以用语言精确表达，常需专门的控制器承接</td>
+<td style="text-align: left;">离散性</td>
+<td style="text-align: left;">离散 / 连续</td>
+<td style="text-align: left;">连续动作难以用语言精确表达，常需专门的控制器</td>
 </tr>
 <tr class="odd">
-<td>主体数量</td>
-<td>单 / 多</td>
-<td>多主体时需要协议、角色分工与共享状态，收益与开销同时放大</td>
+<td style="text-align: left;">主体数量</td>
+<td style="text-align: left;">单个 / 多个</td>
+<td style="text-align: left;">多主体时需要协议、角色分工和共享状态</td>
 </tr>
 </tbody>
 </table>
-<p><img src="media/media/image1.png" style="width:4.72441in;height:2.09474in"></p>
-<p>图 6-2 以 LLM 为认知内核的智能体统一架构</p>
-<p>说明：图中四个模块（画像、记忆、规划、行动）由 LLM 驱动，又反过来为 LLM 提供结构化输入；上下文组装是把外部信息送入模型的唯一通道。</p>
-<p>图 6-2 给出了这一架构的整体形态。可以看到，LLM 处于中心，但它并不是孤立地工作：上方是输入规范化与上下文组装，下方是四个能力模块，右侧是输出与校验。这一”中心辐射”结构的关键在于，所有模块之间的信息交换都必须经过上下文窗口，而上下文窗口是稀缺资源。后文讨论的上下文工程，正是围绕这一瓶颈展开的。</p>
-</section>
-<section id="决策系统以-llm-为认知内核" class="level2">
-<h2 class="anchored" data-anchor-id="决策系统以-llm-为认知内核">6.2.2　决策系统：以 LLM 为认知内核</h2>
-<p>决策系统是智能体能力差异的主要来源，值得单独展开。在 LLM 智能体中，它承担五项职责，这五项职责大致对应模型在系统中被调用的五种”角色”。</p>
-<p>第一，理解用户意图与指令。 解析复杂的自然语言输入，理解用户的目标、约束与隐含前提。“下周三去上海开一天会，预算三千”这句话里，至少包含四个约束（时间、地点、时长、预算）和两个隐含前提（从常驻地出发、当天往返或住一晚）。模型需要把这些抽取成结构化的任务描述，才能进入规划。</p>
-<p>第二，知识检索与应用。 模型内部的知识可以回答大量常识性问题，但涉及企业制度、实时价格、专有数据时并不可靠。因此决策系统需要知道”什么时候该查、查什么、查到之后怎么用”。这一判断本身就是一项能力：过早检索会浪费预算，过晚检索会基于错误前提规划。</p>
-<p>第三，规划与推理。 把复杂任务分解为子任务，确定执行顺序，评估不同路径的优劣。第 6.4.2 节会详细讨论规划技术。此处只需强调一点：LLM 的规划是”语言空间中的规划”，它输出的是步骤描述而非可执行代码，因此需要框架层把描述翻译成调用序列，并在执行中校验前提是否成立。</p>
-<p>第四，决策支持。 评估不同行动方案的潜在结果，并根据目标选择最佳行动。这一步在数学上对应效用最大化，在实践中往往表现为”让模型比较几个候选方案并说明理由”。比较—选择的模式比”直接给答案”更可靠，因为它把隐式的权衡显式化了。</p>
-<p>第五，生成行动指令或内容。 生成与外部工具交互的指令（如 API 调用参数），或者直接生成面向用户的自然语言回复。工具调用的参数生成是错误高发区：字段名、类型、单位、枚举值都可能出错，因此必须有 schema 校验与失败重试。</p>
-<p>这五项职责并不总能由一次模型调用完成。工程上的常见做法是<strong>分工调用</strong>：用一次调用做意图解析，用一次做规划，用若干次做执行，用一次做结果校验。每次调用的提示词、可用工具与上下文都不同。这种”一个模型、多种角色”的模式，是当前智能体系统的主流形态，也是第 6.5.6 节讨论上下文工程的动因。</p>
-</section>
-<section id="执行器工具代码与物理动作" class="level2">
-<h2 class="anchored" data-anchor-id="执行器工具代码与物理动作">6.2.3　执行器：工具、代码与物理动作</h2>
-<p>执行器是智能体与世界的接触面。按作用对象，可以把它分为四类。</p>
-<p>信息类工具：搜索、网页抓取、数据库查询、文档检索。它们不改变世界状态，只把外部信息带入上下文。风险在于信息来源不可靠与提示注入——网页中可能嵌有”忽略之前的指令”之类的文本，被模型误当作指令执行。</p>
-<p>计算类工具：代码解释器、计算器、符号求解器、数据分析库。它们把”需要精确计算”的部分从模型转移到确定性程序。这是提升可靠性的最有效手段之一：模型不擅长多位数乘法，但擅长把问题写成乘法表达式。</p>
-<p>事务类工具：下单、支付、改签、发邮件、写数据库。它们有副作用，且往往不可逆。对这类工具，工程上要求”两段式确认”——先生成待执行的计划并展示给用户，确认后才落地；同时要求幂等键与操作日志，以便失败重试与事后审计。</p>
-<p>物理类工具：机械臂、移动底盘、无人机。它们把数字决策转化为物理动作，对实时性与安全性要求最高，通常需要独立的安全控制器兜底，不能把安全完全托付给语言模型。</p>
-<p>工具的数量不是越多越好。工具清单会占用上下文，工具之间的语义重叠会让模型选择困难。经验法则是：<strong>单一职责、命名自解释、参数强类型、错误信息可读</strong>。当一个工具的错误信息能让模型自己纠正参数时，这个工具的设计就是合格的。</p>
-</section>
-<section id="环境与通信从单智能体到多智能体" class="level2">
-<h2 class="anchored" data-anchor-id="环境与通信从单智能体到多智能体">6.2.4　环境与通信：从单智能体到多智能体</h2>
-<p>环境不只是背景，它主动塑造智能体的行为。一个重要的区分是<strong>可逆环境</strong>与<strong>不可逆环境</strong>。在沙箱、代码仓库、文档草稿中试错的成本很低，智能体可以大胆探索；而在支付、生产部署、医疗建议中，一次错误就可能造成不可挽回的后果。因此，成熟的系统会把任务切分为”可逆区”与”不可逆区”：在可逆区让智能体自主迭代，在不可逆区强制人工确认。这一设计思想被称为”沙箱优先”（sandbox first），是第 6.6 节治理讨论的基础。</p>
-<p>通信模块的引入，使系统从单智能体走向多智能体。通信的内容通常包括三类：任务分派（谁做什么）、状态同步（做到哪一步了）、结果汇总（做出了什么）。通信的代价是显著的：消息本身消耗 token，消息的语义可能在传递中失真，多个智能体并发修改共享状态还可能产生冲突。因此，多智能体并非”越多越好”，只有当任务可以被清晰切分、且子任务之间耦合较低时，多智能体才带来净收益。第 6.6.1 节会进一步讨论编排模式。</p>
+</div>
+<p>另一个对工程影响很大的区分是<strong>可逆</strong>与<strong>不可逆</strong>。在沙箱、代码仓库、文档草稿里试错成本很低，可以让智能体大胆尝试；支付、生产部署、医疗建议中，一次错误就可能无法挽回。因此成熟的系统会把任务划分为“可逆区”和“不可逆区”：可逆区内让智能体自主迭代，不可逆区强制人工确认。这一做法常被称为<strong>沙箱优先</strong>，是第 <a href="../ch6/s6-6.html#c6-subsec-risk">6.6.5</a> 小节治理措施的基础。</p>
+<p>通信模块的引入使系统从单智能体走向多智能体。通信内容通常有三类：任务分派（谁做什么）、状态同步（做到哪一步）、结果汇总（做出了什么）。通信是有代价的：消息本身消耗 token，语义可能在传递中失真，多个智能体并发修改共享状态还会冲突。只有当任务能被清楚切分、子任务之间耦合较低时，多智能体才有净收益，第 <a href="../ch6/s6-6.html">6.6</a> 节会给出估算。</p>
 
 
 </section>
@@ -1279,18 +1329,18 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch6/s6-1.html" class="pagination-link" aria-label="6.1　概述">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.1　概述</span>
+      <a href="../ch6/s6-1.html" class="pagination-link" aria-label="6.1　智能体是什么">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.1　智能体是什么</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch6/s6-3.html" class="pagination-link" aria-label="6.3　工作原理">
-        <span class="nav-page-text">6.3　工作原理</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch6/s6-3.html" class="pagination-link" aria-label="6.3　智能体如何运行">
+        <span class="nav-page-text">6.3　智能体如何运行</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 

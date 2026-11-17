@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6.3 工作原理 – 大语言模型原理与技术</title>
+<title>6.3 智能体如何运行 – 大语言模型原理与技术</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -89,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-3.html">6.3　工作原理</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-3.html">6.3　智能体如何运行</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -135,19 +164,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1　从人工智能到大语言模型</span></a>
+ <span class="menu-text">1.1　什么是大语言模型：从人工智能说起</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2　大语言模型的历史脉络</span></a>
+ <span class="menu-text">1.2　大语言模型如何工作</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.3　大语言模型如何工作</span></a>
+ <span class="menu-text">1.3　大语言模型的由来</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -159,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.5　应用现状与典型模式</span></a>
+ <span class="menu-text">1.5　应用现状</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -171,25 +200,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch1/s1-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.7　发展趋势与学习框架</span></a>
+ <span class="menu-text">1.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+  <a href="../ch1/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考与练��</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch1/s1-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch1/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -206,43 +229,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.1　底层逻辑</span></a>
+ <span class="menu-text">2.1　神经网络：从一个神经元到深度网络</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.2　重要概念</span></a>
+ <span class="menu-text">2.2　语言模型的演进：从数词频到大模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.3　模型分类</span></a>
+ <span class="menu-text">2.3　一次推理的完整过程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.4　模型构建</span></a>
+ <span class="menu-text">2.4　规模、能力与局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章小结</span></a>
+ <span class="menu-text">2.5　三类架构：同一套 Transformer 的三种用法</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
+ <span class="menu-text">2.6　模型构建全景：从基础模型到对话模型</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch2/s2-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text">2.7　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch2/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -259,13 +294,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.1　大语言模型的训练与使用生命周期</span></a>
+ <span class="menu-text">3.1　从随机参数到可用服务：大语言模型的生命周期</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.2　大语言模型预训练基础</span></a>
+ <span class="menu-text">3.2　预训练基础：目标与规模</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -277,61 +312,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.4　预训练算法与大规模训练</span></a>
+ <span class="menu-text">3.4　预训练算法：一个训练步里发生了什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.5　大语言模型微调与领域适配</span></a>
+ <span class="menu-text">3.5　算力、显存与分布式训练</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.6　参数高效微调技术</span></a>
+ <span class="menu-text">3.6　微调：让基础模型学会按指令做事</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.7　大语言模型对齐技术</span></a>
+ <span class="menu-text">3.7　参数高效微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.8　大语言模型推理原理</span></a>
+ <span class="menu-text">3.8　对齐：让回答符合人的期望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.9　推理性能与优化技术</span></a>
+ <span class="menu-text">3.9　推理原理：模型怎样逐个生成 token</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.10　推理引擎、平台与模型部署</span></a>
+ <span class="menu-text">3.10　推理加速：围绕带宽与显存做文章</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.11　综合案例：一个 7B 课程问答模型的诞生</span></a>
+ <span class="menu-text">3.11　推理引擎、模型文件与部署</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.12　本章小结与习题</span></a>
+ <span class="menu-text">3.12　综合案例：一个 7B 课程问答模型的诞生</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch3/s3-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考文献</span></a>
+ <span class="menu-text">3.13　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch3/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -413,79 +460,73 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.1　一本正经的胡说，是从哪里来的</span></a>
+ <span class="menu-text">5.1　为什么需要检索增强生成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.2　开卷考试：RAG 到底在做什么</span></a>
+ <span class="menu-text">5.2　基础 RAG 流水线</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.3　一条流水线的诞生</span></a>
+ <span class="menu-text">5.3　基础 RAG 的局限</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.4　基础 RAG 的天花板</span></a>
+ <span class="menu-text">5.4　高级 RAG：优化检索的各个环节</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.5　高级 RAG：把实习生练成老馆员</span></a>
+ <span class="menu-text">5.5　GraphRAG：当答案藏在关系里</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.6　GraphRAG：当答案藏在关系里</span></a>
+ <span class="menu-text">5.6　推理 RAG 与 Agentic RAG：让系统自己决定查什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.7　推理 RAG 与 Agentic RAG：让它自己决定查什么</span></a>
+ <span class="menu-text">5.7　RAG 评估：怎么知道它靠不靠谱</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.8　怎么知道它靠不靠谱</span></a>
+ <span class="menu-text">5.8　工程中的关键问题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.9　工程里的十个坑</span></a>
+ <span class="menu-text">5.9　RAG、长上下文与微调</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch5/s5-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.10　RAG、长上下文与微调：三者不是替代关系</span></a>
+ <span class="menu-text">5.10　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.11　未来：从”检索”到”研究”</span></a>
+  <a href="../ch5/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">思考题</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ch5/s5-13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">延伸阅读</span></a>
+  <a href="../ch5/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -502,31 +543,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.1　概述</span></a>
+ <span class="menu-text">6.1　智能体是什么</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.2　核心组件</span></a>
+ <span class="menu-text">6.2　智能体的组成</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-3.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">6.3　工作原理</span></a>
+ <span class="menu-text">6.3　智能体如何运行</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.4　关键能力</span></a>
+ <span class="menu-text">6.4　智能体的关键能力</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.5　相关技术</span></a>
+ <span class="menu-text">6.5　支撑智能体的技术与工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -538,19 +579,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch6/s6-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.7　本章小结</span></a>
+ <span class="menu-text">6.7　本章小结与展望</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6.8　习题</span></a>
+  <a href="../ch6/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ch6/s6-9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+  <a href="../ch6/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -573,13 +614,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.2　现有 Agent 产品背后的系统架构</span></a>
+ <span class="menu-text">7.2　Coding Agent 的系统架构</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.3　Prompt Engineering：把需求写成可以执行和验收的任务</span></a>
+ <span class="menu-text">7.3　Prompt Engineering：把需求写成任务合同</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -597,19 +638,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.6　工具与智能体互操作：MCP、A2A</span></a>
+ <span class="menu-text">7.6　工具与智能体互操作：MCP 与 A2A</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.7　Loop Engineering：让执行结果改变下一步</span></a>
+ <span class="menu-text">7.7　Loop Engineering：让执行结果决定下一步</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.8　RSI：从任务内纠错到系统自身改进</span></a>
+ <span class="menu-text">7.8　RSI：从任务内纠错到系统自我改进</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -621,19 +662,31 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.10　综合案例：用”今日工作助手”串联四类工程技术</span></a>
+ <span class="menu-text">7.10　综合案例：用今日工作助手串联四类工程</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.11　前沿专题：边缘计算与 Agent 的边云协同</span></a>
+ <span class="menu-text">7.11　前沿专题：端边云协同的 Agent 工作流</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch7/s7-12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7.12　本章小结、术语表与思考题</span></a>
+ <span class="menu-text">7.12　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch7/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -656,7 +709,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8.2　当前记忆系统</span></a>
+ <span class="menu-text">8.2　代表性记忆系统</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -674,7 +727,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ch8/s8-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本章参考资料</span></a>
+ <span class="menu-text">8.5　本章小结与展望</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">习题</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ch8/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">术语与参考文献</span></a>
   </div>
 </li>
       </ul>
@@ -689,19 +754,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">本页目录</h2>
    
   <ul class="collapse">
-  <li><a href="#感知决策行动闭环" id="toc-感知决策行动闭环" class="nav-link active" data-scroll-target="#感知决策行动闭环">6.3.1　感知—决策—行动闭环</a></li>
-  <li><a href="#react-轨迹把推理与行动交织起来" id="toc-react-轨迹把推理与行动交织起来" class="nav-link" data-scroll-target="#react-轨迹把推理与行动交织起来">6.3.2　ReAct 轨迹：把推理与行动交织起来</a></li>
-  <li><a href="#规划执行与反思llm-与框架的分工" id="toc-规划执行与反思llm-与框架的分工" class="nav-link" data-scroll-target="#规划执行与反思llm-与框架的分工">6.3.3　规划、执行与反思：LLM 与框架的分工</a></li>
-  <li><a href="#终止校验与人机协同" id="toc-终止校验与人机协同" class="nav-link" data-scroll-target="#终止校验与人机协同">6.3.4　终止、校验与人机协同</a></li>
+  <li><a href="#c6-subsec-closedloop" id="toc-c6-subsec-closedloop" class="nav-link active" data-scroll-target="#c6-subsec-closedloop">6.3.1　感知—决策—行动闭环</a></li>
+  <li><a href="#c6-subsec-react" id="toc-c6-subsec-react" class="nav-link" data-scroll-target="#c6-subsec-react">6.3.2　ReAct：把推理与行动交织起来</a></li>
+  <li><a href="#c6-subsec-division" id="toc-c6-subsec-division" class="nav-link" data-scroll-target="#c6-subsec-division">6.3.3　LLM 与 Agent 框架的分工</a></li>
+  <li><a href="#c6-subsec-stop" id="toc-c6-subsec-stop" class="nav-link" data-scroll-target="#c6-subsec-stop">6.3.4　终止、校验与人机协同</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-3.html">6.3　工作原理</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="路径"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ch6/index.html">第 6 章　智能体</a></li><li class="breadcrumb-item"><a href="../ch6/s6-3.html">6.3　智能体如何运行</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">6.3　工作原理</h1>
+<h1 class="title">6.3　智能体如何运行</h1>
 </div>
 
 
@@ -718,97 +783,266 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="感知决策行动闭环" class="level2">
-<h2 class="anchored" data-anchor-id="感知决策行动闭环">6.3.1　感知—决策—行动闭环</h2>
-<p>智能体的运行可以抽象为一个循环。在时刻 t，智能体获得观测 oₜ，据此更新内部状态，依策略选择动作 aₜ，动作作用于环境，环境转移到新状态并给出奖励 rₜ，同时产生新的观测 oₜ₊₁。这个过程可以写成：</p>
-<p><em>ŝₜ = Update(ŝₜ−₁, oₜ), aₜ ~ π(· | ŝₜ), (sₜ+₁, rₜ) ~ P(· | sₜ, aₜ)</em> (6-1)</p>
-<p>其中 ŝₜ 是智能体对环境状态的估计（顶部加帽表示”估计值”，因为真实状态 sₜ 往往不可直接观测），π 是策略，P 是环境的状态转移概率。式 (6-1) 是部分可观测马尔可夫决策过程（POMDP）的标准表述，也是理解一切智能体系统的共同语言。</p>
-<p><img src="media/media/image2.png" style="width:4.72441in;height:1.77478in"></p>
-<p>图 6-1 智能体与环境的”感知—决策—行动”闭环</p>
-<p>说明：每一轮循环包含观测更新、策略选择、动作执行与环境反馈四个环节；记忆模块跨轮次保存状态，使闭环具备连续性。</p>
-<p>闭环的意义在于<strong>纠错</strong>。开环系统（如一次 LLM 调用）无法知道自己错在哪里，因为它的输出不再回到输入端。闭环系统则可以在每一轮用真实观测检验上一步的预期：如果预期”这个 API 会返回订单列表”，实际却返回 403，智能体就能发现前提不成立并调整。这种”预期—观测—修正”的机制，是所有可靠智能体的共同特征。</p>
-<p>但在工程实现中，纯粹的闭环并不够。还需要三样东西把它变成可用的系统。</p>
-<p>一是终止条件。 循环必须有明确的退出判据：任务完成、达到最大轮数、预算耗尽、或检测到无法恢复的错误。缺少终止条件的智能体会陷入”无限反思”——不断发现新问题、不断修改，却永远不收敛。实践中通常设置三重上限：轮数上限、token 预算上限、时间上限，任一触发即停止并输出当前最佳结果与未完成事项。</p>
-<p>二是状态管理。 闭环的每一轮都会产生新的信息，这些信息必须有选择地保存。全部保存会撑爆上下文，全部丢弃会失去连续性。第 6.4.4 节讨论的记忆分层，正是对这一问题的回答。</p>
-<p>三是异常处理。 环境不会总按预期响应：接口超时、返回格式变化、权限不足、数据缺失。智能体需要区分”可重试的瞬时错误”与”需要改变策略的持久错误”，前者重试，后者上报或改道。这一判断如果完全交给模型，容易反复重试同一个失败动作；因此工程上通常由框架层先做分类，再把分类结果告诉模型。</p>
-<p>对语言模型驱动的智能体，闭环中的”感知”通常是用户的文本、语音输入，或来自其他系统 API 的结构化/非结构化数据；“决策”是需要规划的推理过程，现代智能体越来越多地依赖 LLM 进行复杂推理，例如思维链（Chain of Thought，CoT）或思维树（Tree of Thoughts，ToT）；“行动”则可以是生成文本回复、进行 API 调用、更新数据库，也可以是机器人在物理空间中的移动。闭环的形态相同，承载它的介质不同。</p>
+<div class="bookbox guide">
+<p>组件有了，它们怎样配合起来完成一个任务？本节先把智能体的运行抽象成“感知—决策—行动”闭环，说明闭环为什么能纠错；再看决策这一步具体怎么做——ReAct 让模型交替写出“思考”和“行动”，用工具返回的“观察”修正下一步思考，并用差旅任务走一遍完整轨迹；然后说明 LLM 与 Agent 框架如何分工；最后讨论什么时候该停、怎样校验、人在哪里介入。结论是：闭环带来了纠错能力，也带来了调用次数、token 消耗和错误累积的代价，这些代价都可以估算。</p>
+</div>
+<section id="c6-subsec-closedloop" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-closedloop">6.3.1　感知—决策—行动闭环</h2>
+<p>智能体的运行是一个循环（图 <a href="../ch6/s6-3.html#c6-fig-loop">6-4</a>）：在第 <span class="math inline">\(t\)</span> 轮，智能体获得<strong>观测</strong> <span class="math inline">\(o_t\)</span>，据此更新它对环境状态的估计；按<strong>策略</strong>选择动作 <span class="math inline">\(a_t\)</span>；动作作用于环境，环境转移到新状态，并给出下一轮的观测。写成公式为 <span class="math display">\[\begin{gathered}
+  \hat{s}_t = \mathrm{Update}(\hat{s}_{t-1},\, o_t),\qquad
+  a_t \sim \pi(\,\cdot\mid \hat{s}_t),\\
+  s_{t+1} \sim \mathcal{T}(\,\cdot\mid s_t, a_t),\qquad
+  o_{t+1} \sim \mathcal{O}(\,\cdot\mid s_{t+1}),
+\end{gathered}
+\tag{6-1}\]</span> 其中 <span class="math inline">\(s_t\)</span> 是环境的真实状态，智能体往往看不到它，只能维护一个估计 <span class="math inline">\(\hat{s}_t\)</span>（加帽表示估计值）；<span class="math inline">\(\pi\)</span> 是策略，即“在什么状态下采取什么动作”的规则；<span class="math inline">\(\mathcal{T}\)</span> 是环境的状态转移概率；<span class="math inline">\(\mathcal{O}\)</span> 是观测概率，描述在某个状态下会看到什么。式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 正是<strong>部分可观测马尔可夫决策过程</strong>（POMDP）的结构<sup><a href="../ch6/references.html#ref-1">[1]</a></sup>。在 LLM 智能体中，<span class="math inline">\(\hat{s}_t\)</span> 就是上下文和记忆里记下的任务进度，<span class="math inline">\(\pi\)</span> 由“LLM + 提示词”实现，<span class="math inline">\(\mathrm{Update}\)</span> 由框架把新观测写入上下文来完成。</p>
+<div id="c6-fig-loop" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-loop.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:86.8%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-4　智能体与环境的“感知—决策—行动”闭环。环境把观测送给智能体，智能体决策后把动作作用于环境，环境状态改变后产生新的观测；记忆跨轮次保存状态估计，使闭环具有连续性</p>
+</div>
+</div>
+<p>对 LLM 驱动的智能体，闭环的三步各有具体形态：</p>
+<ul>
+<li><p><strong>感知/输入</strong>：用户的文字或语音，以及其他系统 API 返回的结构化或非结构化数据；</p></li>
+<li><p><strong>决策/推理</strong>：把目标分解为可执行的子任务，并选出下一步。模型常借助<strong>思维链</strong>（Chain of Thought，CoT）或<strong>思维树</strong>（Tree of Thoughts，ToT）完成多步推理（第 <a href="../ch6/s6-4.html#c6-subsec-reason">6.4.3</a> 小节）；</p></li>
+<li><p><strong>行动</strong>：生成文本回复、调用 API、更新数据库、给出建议或对数据分类；对机器人而言则是在物理空间中移动。</p></li>
+</ul>
+<p>行动之后，智能体继续感知环境变化，并据此调整后续决策，形成反馈循环。</p>
+<p>闭环的价值在于<strong>纠错</strong>。一次 LLM 调用是开环的：输出不会回到输入端，它无从知道自己错在哪里。闭环系统在每一轮都能用真实观测检验上一步的预期：预期“这个接口返回车次列表”，实际却返回“无权限”，智能体就能发现前提不成立并调整。</p>
 </section>
-<section id="react-轨迹把推理与行动交织起来" class="level2">
-<h2 class="anchored" data-anchor-id="react-轨迹把推理与行动交织起来">6.3.2　ReAct 轨迹：把推理与行动交织起来</h2>
-<p>闭环给出了抽象框架，但没有说明”决策”这一步具体怎么做。2022 年提出的 ReAct（Reasoning and Acting）给出了一个影响深远的答案：<strong>让模型在每一步同时生成”想法”和”动作”，用动作获取外部信息，用观测修正想法。</strong></p>
-<p>ReAct 的一轮包含三个交替出现的成分：思考（Thought）、行动（Action）、观察（Observation）。思考是模型对当前情形的判断与下一步计划；行动是对工具的调用；观察是工具返回的结果。三者串成一条轨迹：</p>
-<table class="table">
-<colgroup>
-<col style="width: 100%">
-</colgroup>
+<section id="c6-subsec-react" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-react">6.3.2　ReAct：把推理与行动交织起来</h2>
+<p>闭环说明了“循环”，但没有说明“决策”这一步怎么做。2022 年提出的 <strong>ReAct</strong>（Reasoning and Acting）<sup><a href="../ch6/references.html#ref-2">[2]</a></sup>给出了影响很大的做法：<strong>让模型在每一步先写出一段“思考”，再给出一个“行动”；框架执行行动，把结果作为“观察”追加到上下文里，模型据此写下一段思考</strong>。三种成分交替出现：</p>
+<ul>
+<li><p><strong>思考</strong>（Thought）：模型对当前情况的判断和下一步打算，只写进上下文，不作用于环境；</p></li>
+<li><p><strong>行动</strong>（Action）：一次工具调用，写成“工具名（参数）”的形式，由框架解析并执行；</p></li>
+<li><p><strong>观察</strong>（Observation）：工具返回的结果，由框架写回上下文。</p></li>
+</ul>
+<p>下面是差旅智能体处理“下周三去上海开一天会，预算三千”的一条完整轨迹。设今天是周四（11 月 12 日），用户常驻北京，会议在浦东，上午 9 点开始，下午 5 点结束；可用工具有 <code>get_policy</code>（查报销制度）、<code>search_trains</code>、<code>search_flights</code>、<code>search_hotels</code>、<code>calc</code>（计算）、<code>ask_user</code>（请用户确认）和 <code>book</code>（提交预订）。</p>
+<div class="center">
+<div class="tabular">
+<p>ll<br>
+思考 1 &amp; 会议 9 点开始，当天早上出发赶不上，需要前一晚到达并住一晚。先查报销上限，避免方案不能报销。<br>
+行动 1 &amp; <code>get_policy(city="上海", level="员工")</code><br>
+观察 1 &amp; 住宿每晚上限 600 元；交通限高铁二等座或经济舱。<br>
+思考 2 &amp; 京沪高铁约 4.5 小时，门到门时间与飞机相近且更准点，先查高铁：17 日晚去，18 日会后返。会场到虹桥站约 1 小时，返程应在 18:30 以后。<br>
+行动 2 &amp; <code>search_trains(from="北京", to="上海", go="11-17 17:00后", back="11-18 18:30后")</code><br>
+观察 2 &amp; 去程：车次 A，17 日 19:00 开、23:28 到上海虹桥，二等座 662 元。返程：车次 B，18 日 19:30 开，二等座 662 元。<br>
+思考 3 &amp; 往返高铁共 1324 元。还需会场附近、每晚不超过 600 元的酒店。用户记忆里有“不住无窗房”。<br>
+行动 3 &amp; <code>search_hotels(near="浦东会场", date="11-17", max_price=600, window=true)</code><br>
+观察 3 &amp; 甲酒店 548 元/晚，有窗，距会场 1.2 公里；乙酒店 420 元/晚，无窗。<br>
+思考 4 &amp; 乙酒店无窗，排除。核算总价：车票 1324 元 + 住宿 548 元 + 市内交通预估 200 元。<br>
+行动 4 &amp; <code>calc("1324 + 548 + 200")</code><br>
+观察 4 &amp; 2072<br>
+思考 5 &amp; 总价 2072 元，低于 3000 元预算；住宿 548 元/晚、高铁二等座都符合报销制度。订票会产生费用，属于不可撤销的操作，先请用户确认。<br>
+行动 5 &amp; <code>ask_user("方案：17 日乘车次 A 去、18 日乘车次 B 回，住甲酒店一晚，合计约 2072 元。是否预订？")</code><br>
+观察 5 &amp; 用户：可以，订吧。<br>
+思考 6 &amp; 用户已确认，提交预订。<br>
+行动 6 &amp; <code>book(trains=["A","B"], hotel="甲酒店", nights=1)</code><br>
+观察 6 &amp; 预订成功，返回两张车票和一间客房的订单号。<br>
+回复 &amp; 已为您订好：17 日车次 A 去上海，住甲酒店一晚；18 日车次 B 返京。合计约 2072 元，订单号如下……<br>
+</p>
+</div>
+</div>
+<p>这条轨迹体现了闭环的几个要点：思考 1 根据会议时间推出“需要前一晚到达”这个隐含约束；思考 2 说明了为什么先查高铁，并把会场到车站的时间算进返程条件；思考 3 从记忆中取出用户偏好并写进查询条件；行动 4 把算术交给计算工具；思考 5 在不可撤销的操作之前停下来请用户确认。车次、票价、酒店都是演示用的假设数据，实际系统中由工具实时返回。图 <a href="../ch6/s6-3.html#c6-fig-react">6-5</a> 给出这一循环的结构。</p>
+<div id="c6-fig-react" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-react.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-5　ReAct 的“思考—行动—观察”循环（左）及其在差旅任务中的轨迹（右，每轮只列出行动与观察，完整的思考见正文；6 轮之后模型再调用一次写出最终回复）。思考决定行动，框架执行行动得到观察，观察修正下一轮思考</p>
+</div>
+</div>
+<p>用概率的语言，ReAct 把“一次生成整个答案”拆成了交替的条件生成。记任务上下文为 <span class="math inline">\(c\)</span>，第 <span class="math inline">\(k\)</span> 轮的思考、行动、观察为 <span class="math inline">\(z_k, a_k, o_k\)</span>，此前的轨迹为 <span class="math inline">\(\tau_{&lt;k}\)</span>，则一条 <span class="math inline">\(K\)</span> 轮轨迹的概率为 <span class="math display">\[p(\tau) = \prod_{k=1}^{K}\ \underbrace{\pi_\theta(z_k, a_k \mid c, \tau_{&lt;k})}_{\text{模型生成思考与行动}}\ \cdot\ \underbrace{p_{\mathrm{env}}(o_k \mid a_k)}_{\text{环境返回观察}}.
+\tag{6-2}\]</span> 式中第一项由参数为 <span class="math inline">\(\theta\)</span> 的模型决定，第二项由工具和环境决定，与模型无关。由此可见，<strong>轨迹的质量不只取决于模型，也取决于观察的质量</strong>：工具返回模糊、错误或过长的信息，会直接拖累后面所有步骤。这就是第 <a href="../ch6/s6-2.html#c6-subsec-actuator">6.2.3</a> 小节强调“错误信息可读”的原因。</p>
+<p>与只推理的思维链和只调用工具的做法相比，ReAct 的好处可以概括为：<strong>只推理容易编造，只行动容易盲目</strong>。只有推理，模型会在没有外部依据的情况下自信地编造事实；只有行动，模型会在没有整体计划的情况下机械地试错。ReAct 的论文在问答、事实核查和交互式决策任务上，都报告了交织方式优于只推理或只行动的基线<sup><a href="../ch6/references.html#ref-2">[2]</a></sup>。</p>
+<p><strong>代价：调用次数与 token 消耗</strong>　 ReAct 每一轮至少调用一次模型，而且每一轮的思考、行动、观察都要追加到上下文，下一次调用时连同前面的全部内容<strong>再次输入</strong>模型。设第一次调用的输入为 <span class="math inline">\(P_0\)</span> 个 token（系统提示、工具说明与用户请求），每轮追加 <span class="math inline">\(\Delta\)</span> 个 token，共调用 <span class="math inline">\(K\)</span> 次，则第 <span class="math inline">\(k\)</span> 次调用的输入为 <span class="math inline">\(P_0+(k-1)\Delta\)</span>，累计输入 <span class="math display">\[T_{\mathrm{in}} = \sum_{k=1}^{K}\bigl(P_0+(k-1)\Delta\bigr) = K P_0 + \frac{K(K-1)}{2}\,\Delta,
+\tag{6-3}\]</span> 第二项随轮数 <span class="math inline">\(K\)</span> <strong>按平方增长</strong>，轮数一多就成为主导项。</p>
+<div id="c6-ex-tokens" class="bookbox example">
+<div class="boxtitle">
+<p>例 6-1　ReAct 轨迹的 token 账</p>
+</div>
+<p>上面的差旅轨迹共调用模型 7 次：前 6 次各写出一段思考与一个行动，第 7 次写最终回复。设 <span class="math inline">\(P_0=2100\)</span>，每轮模型输出思考与行动约 100 个 token、工具返回观察约 400 个 token，最终回复 300 个 token。价格按假设的每百万输入 token 2 元、每百万输出 token 8 元计；对照组是“不用工具、一次调用直接回答”。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td>
-<p>
-<strong>Thought 1:</strong> 要回答“某城市人口密度”，需要人口与面积两个数值。
-</p>
-<p>
-<strong>Action 1:</strong> search(“某城市 面积 人口”)
-</p>
-<p>
-<strong>Observation 1:</strong> 返回两条来源，人口数字不一致。
-</p>
-<p>
-<strong>Thought 2:</strong> 数据冲突，需改用权威来源交叉验证。
-</p>
-<p>
-<strong>Action 2:</strong> fetch(统计年鉴中的该城市条目)
-</p>
-<p>
-<strong>Observation 2:</strong> 得到面积与人口。
-</p>
-<p>
-<strong>Thought 3:</strong> 两者相除得到密度，注意单位换算。
-</p>
-<p>
-<strong>Action 3:</strong> calculate(人口 / 面积)
-</p>
-<p>
-<strong>Observation 3:</strong> 结果为 3921 人/平方公里。
-</p>
-<p>
-<strong>Thought 4:</strong> 已获得答案，可以作答。
-</p>
-</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">每轮追加量 <span class="math inline">\(\Delta\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(100+400\)</span></td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;">思考与行动 100，观察 400</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">累计输入</td>
+<td style="text-align: left;"><span class="math inline">\(7\times2100+(7\times6\div2)\times500\)</span></td>
+<td style="text-align: left;">25 200</td>
+<td style="text-align: left;">式 <a href="../ch6/s6-3.html#c6-eq-react-tokens">（6-3）</a>，<span class="math inline">\(K=7\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">累计输出</td>
+<td style="text-align: left;"><span class="math inline">\(6\times100+300\)</span></td>
+<td style="text-align: left;">900</td>
+<td style="text-align: left;">6 段思考与行动 + 最终回复</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">费用</td>
+<td style="text-align: left;"><span class="math inline">\((25\,200\times2)\div10^{6}+(900\times8)\div10^{6}\)</span></td>
+<td style="text-align: left;">0.0576 元</td>
+<td style="text-align: left;">假设单价</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">对照组费用</td>
+<td style="text-align: left;"><span class="math inline">\((2100\times2)\div10^{6}+(300\times8)\div10^{6}\)</span></td>
+<td style="text-align: left;">0.0066 元</td>
+<td style="text-align: left;">输入 <span class="math inline">\(P_0\)</span>，只输出一次回复</td>
 </tr>
 </tbody>
 </table>
-<p><img src="media/media/image3.png" style="width:4.72441in;height:2.06724in"></p>
-<p>图 6-4 ReAct 式”思考—行动—观察”循环</p>
-<p>说明：左侧为循环结构，右侧为一次真实轨迹的示例。思考产生行动，行动带回观测，观测改写下一步思考。</p>
-<p>用概率的语言，ReAct 把一次联合生成拆成了交替的条件生成。设轨迹由思考、行动、观察序列组成，则其似然可以写成：</p>
-<p><em>p(τ) = ∏ₖ=₁K p(aₖ | c, hₖ−₁) · p(oₖ | aₖ) · p(hₖ | c, hₖ−₁, aₖ, oₖ)</em> (6-2)</p>
-<p>其中 c 是任务上下文，h_{k−1} 是此前的思考与观测历史，p(o_k | a_k) 由环境（工具）决定而非模型决定。式 (6-2) 揭示了一个重要事实：<strong>轨迹的质量不只取决于模型，也取决于环境返回的观测质量。</strong> 工具返回模糊、错误或过长的信息，会直接劣化后续推理。这解释了为什么工具设计的”错误信息可读性”如此重要。</p>
-<p>ReAct 相对于纯推理（只有思维链）与纯行动（只有工具调用）的优势，可以用一句话概括：<strong>纯推理容易幻觉，纯行动容易盲目。</strong> 只有推理，模型会在没有外部依据的情况下自信地编造；只有行动，模型会在没有全局计划的情况下机械地试错。交织二者，才能既保持方向感，又保持与现实的接触。</p>
-<p>ReAct 的代价也很明确。第一，调用次数增加：每轮至少一次模型调用，长任务可能几十轮，时延与成本线性上升。第二，轨迹会迅速膨胀：每轮的思考与观测都要写回上下文，很快触及窗口上限。第三，错误会沿轨迹传播：第 3 步的一个错误观测，可能导致第 4 至 10 步全部偏离。针对这三点，后续研究分别提出了动作缓存与并行化、轨迹压缩与分层摘要、以及基于反思的回溯机制。</p>
-<p>值得注意的是，ReAct 并非唯一形态。Plan-and-Execute 先把计划整体生成再逐步执行，适合步骤清晰的任務；Reflexion 在执行失败后生成”教训”并写入记忆，适合可重复尝试的任务；Tree-of-Thoughts 在思考层面做树搜索，适合需要探索的解谜类任务。它们的共同点都是”把隐式的内部推理外化为可检查的中间结构”，差别在于外化的粒度与时机。</p>
+<p><strong>数据流向</strong>：每轮的输出与观察 → 追加进上下文 → 成为下一次调用的输入 → 累计输入按平方增长（图 <a href="../ch6/s6-3.html#c6-fig-tokens">6-6</a>）。完成同一请求，ReAct 的费用约为一次调用的 <span class="math inline">\(0.0576\div0.0066\approx8.7\)</span> 倍，其中输入占 <span class="math inline">\(0.0504\div0.0576=87.5\%\)</span>。</p>
+</div>
+<div id="c6-fig-tokens" class="bookfig">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figs/ch6-tokens.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.6%"></p>
+</figure>
+</div>
+<div class="figcap">
+<p>图 6-6　例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 中每次模型调用的输入 token 数。柱高为该次调用读入的全部上下文（数字为 token 数）；已有轨迹逐轮累积，使累计输入随轮数按平方增长</p>
+</div>
+</div>
+<p>例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 说明，智能体的主要开销在<strong>反复输入的上下文</strong>，而不是模型写出的文字。这与推理系统的工作方式直接相关：每次调用都要先对输入做预填充，再逐 token 解码（第 4 章第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节），7 次串行调用的时延是 7 段“预填充 + 解码”之和。每次调用的输入都以上一次的全部输入为开头、只在末尾追加新内容，因此推理服务可以复用这段公共前缀的 KV 缓存（第 4 章第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节），只对新增部分做预填充；部分模型服务也对命中缓存的输入按较低价格计费。降低成本的另外两条路是压缩轨迹（第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节）和减少轮数（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。</p>
+<p><strong>ReAct 之外的形态</strong>　 ReAct 不是唯一的组织方式。<strong>计划—执行</strong>（Plan-and-Execute）先让模型一次写出完整计划，再逐步执行，必要时才重新规划<sup><a href="../ch6/references.html#ref-9">[9]</a></sup>，适合步骤清楚的任务，调用次数也更少；<strong>Reflexion</strong><sup><a href="../ch6/references.html#ref-3">[3]</a></sup>在一次尝试失败后让模型用文字总结教训并写入记忆，下次尝试时参考，适合可以反复尝试的任务；<strong>思维树</strong><sup><a href="../ch6/references.html#ref-10">[10]</a></sup>在思考层面展开多个候选并评估、回溯，适合需要探索的解谜类任务。它们的共同点是把隐含的推理写成可检查的中间结构，区别在于写出的粒度和时机。</p>
 </section>
-<section id="规划执行与反思llm-与框架的分工" class="level2">
-<h2 class="anchored" data-anchor-id="规划执行与反思llm-与框架的分工">6.3.3　规划、执行与反思：LLM 与框架的分工</h2>
-<p>一个常见的误解是：既然模型足够强，把所有事情交给它就行。工程实践反复证明这一想法行不通。原因在于，语言模型擅长的是<strong>语义层面的判断</strong>，不擅长的是<strong>状态层面的保证</strong>。前者如”这句话是否表达了退款意图”，后者如”这个订单是否已经支付过”。把后者交给模型，等于用概率系统承担确定性职责。</p>
-<p>因此，成熟的智能体系统会在 LLM 与框架之间划一条分工线：</p>
-<blockquote class="blockquote">
-<p>· <strong>LLM 负责</strong>：理解意图、抽取约束、生成计划草案、选择工具、解释结果、在异常时提出假设、撰写面向用户的说明。</p>
-<p>· <strong>框架负责</strong>：维护状态机、校验参数、执行重试与超时、管理上下文预算、记录轨迹、实施权限与配额、判定终止条件。</p>
-</blockquote>
-<p>这条分工线的判据是<strong>可验证性</strong>：凡是能用确定性代码验证的，就不该交给模型判断。例如，“工具返回的 JSON 是否符合 schema”可以用代码校验，就不应让模型”看看对不对”；“这次调用是否超过了用户设定的预算”可以精确计算，就不应让模型估计。</p>
-<p>分工确定之后，一个任务的执行通常经历三个阶段。</p>
-<p>规划阶段。 模型根据目标与约束生成步骤列表，每一步标注所需的工具、输入与预期输出。计划不必完美，但必须可执行——每一步都要能映射到具体的工具调用。差的计划往往不是”想错了”，而是”想得太粗”：只说”查询航班”，没说查哪天的、从哪到哪、接受几次中转。</p>
-<p>执行阶段。 <strong>框架逐步执行计划，把每步的观测写回上下文，并检查是否偏离预期。偏离超过阈值时触发重规划。此处有一个重要的工程权衡：</strong>重规划的粒度。整盘重来成本高但一致性好，局部调整成本低但可能破坏全局约束。常见做法是”局部优先、全局兜底”：先尝试替换失败的那一步，若连续两次失败再整体重规划。</p>
-<p>反思阶段。 任务结束后（无论成功或失败），让模型审视轨迹，回答三个问题：哪一步是关键？错在哪里？下次如何避免？反思的产物不是一段散文，而是结构化的条目，写入长期记忆，供后续同类任务检索。Reflexion 的实验表明，这种”语言化的经验”能在后续尝试中显著提升成功率，其效果类似于人类从失败中总结出的检查清单。</p>
-<p>反思也有风险。如果模型对失败的归因本身是错的，写入记忆的”教训”会污染后续决策，形成”越反思越错”的负反馈。因此，反思条目应当与具体的失败证据绑定（哪一步、什么报错、期望与实际分别是什么），并在后续使用时允许被新证据推翻，而不是作为不可质疑的教条。</p>
+<section id="c6-subsec-division" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-division">6.3.3　LLM 与 Agent 框架的分工</h2>
+<p>既然模型足够强，能不能把所有事都交给它？实践表明不行。语言模型擅长<strong>语义上的判断</strong>，例如“这句话是不是在要求退款”；不擅长<strong>状态上的保证</strong>，例如“这个订单是否已经付过款”。把后者交给模型，等于让一个概率系统承担确定性的职责。</p>
+<p>因此智能体由两部分组成：LLM 负责理解、分析和推理；<strong>Agent 框架</strong>提供让“思考结果”变成实际行动的脚手架——工具接口、执行循环和状态管理。具体而言，框架还承担三件 LLM 自身做不到的事：<strong>记忆管理</strong>，通过外接向量数据库、知识图谱等记忆模块，弥补上下文窗口有限、无法长期记忆的不足；<strong>工具使用编排</strong>，定义可供模型选择的工具集并管理调用过程；<strong>多轮交互与任务持续</strong>，在长时间、多步骤的任务中维护任务状态，协调模型在不同阶段的参与，保证任务连贯并最终完成。表 <a href="../ch6/s6-3.html#c6-tab-division">6-6</a> 列出了分工。</p>
+<div id="c6-tab-division" class="booktab">
+<div class="tabcap">
+<p>表 6-6　LLM 与 Agent 框架的分工</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">LLM 负责（语义层面的判断）</th>
+<th style="text-align: left;">框架负责（可以用代码保证的事）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">理解意图、抽取约束</td>
+<td style="text-align: left;">解析模型输出，按格式规范校验工具参数</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">生成计划草案、选择工具</td>
+<td style="text-align: left;">执行工具调用，处理超时与重试</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">解释工具结果、在异常时提出假设</td>
+<td style="text-align: left;">维护任务状态，记录完整轨迹</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">撰写给用户的说明</td>
+<td style="text-align: left;">组装上下文，控制 token 预算</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">反思失败原因</td>
+<td style="text-align: left;">实施权限与配额，判定终止条件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>划分的标准是<strong>可验证性</strong>：凡是能用确定性代码检查的，就不交给模型判断。“工具返回的 JSON 是否符合格式”可以用代码校验，就不该让模型“看看对不对”；“这次花费是否超出预算”可以精确计算，就不该让模型估计。</p>
+<p>分工确定后，一个任务通常经历三个阶段：</p>
+<ul>
+<li><p><strong>规划</strong>：模型根据目标和约束列出步骤，每步写明所需工具、输入和预期输出。计划不必完美，但必须能执行。差的计划常常不是“想错了”，而是“想得太粗”：只写“查询航班”，没写哪天、从哪到哪、能否中转。</p></li>
+<li><p><strong>执行</strong>：框架逐步执行，把每步的观察写回上下文，检查是否偏离预期，偏离过大时触发<strong>重新规划</strong>。整体重来一致性好但成本高，只替换失败的那一步成本低但可能破坏全局约束；一种常见策略是先局部修补，连续失败若干次（例如两次）后再整体重新规划。</p></li>
+<li><p><strong>反思</strong>：任务结束后让模型审视轨迹：哪一步是关键？错在哪里？下次怎样避免？产物是带证据的结构化条目（哪一步、什么报错、预期与实际各是什么），写入长期记忆。Reflexion 在其测试的编程、决策和问答任务上报告，这种“语言化的经验”提高了后续尝试的成功率<sup><a href="../ch6/references.html#ref-3">[3]</a></sup>。但如果模型对失败的归因本身是错的，错误的“教训”会污染以后的决策，所以反思条目必须与证据绑定，并允许被新证据推翻。</p></li>
+</ul>
 </section>
-<section id="终止校验与人机协同" class="level2">
-<h2 class="anchored" data-anchor-id="终止校验与人机协同">6.3.4　终止、校验与人机协同</h2>
-<p>智能体的可靠性，很大程度上取决于它”知不知道该停”。一个不会停的智能体比一个会犯错的智能体更危险，因为它会持续消耗资源、持续产生副作用。</p>
-<p>终止条件应当在设计阶段就明确，而不是留给模型临场判断。常见的四类判据是：<strong>目标达成</strong>（验收标准全部满足）、<strong>预算耗尽</strong>（轮数、token、金额、时间任一超限）、<strong>不可恢复错误</strong>（权限缺失、依赖服务下线）、<strong>需要人类决策</strong>（涉及不可逆操作或价值判断）。第四类最容易被忽略：很多系统在遇到”要不要给用户退款”这类问题时，会选择继续尝试各种办法，而不是停下来问人。</p>
-<p>校验是终止的前置条件。没有校验，“目标达成”只是模型的自述。校验分三层：<strong>格式校验</strong>（输出是否符合 schema）、<strong>事实校验</strong>（关键数字是否与工具返回一致）、<strong>逻辑校验</strong>（结论是否与前提矛盾）。三层校验中，格式校验最容易自动化，事实校验次之，逻辑校验最难，往往需要引入独立的评审模型或规则引擎。</p>
-<p>人机协同的设计，核心是<strong>把人的注意力放在最需要的地方</strong>。人的注意力是稀缺资源，如果系统事无巨细都请求确认，用户会迅速失去耐心并习惯性点击”同意”，反而降低了安全性。合理的做法是按风险分级：低风险操作自动执行并事后告知，中风险操作执行前预览，高风险操作逐项确认并要求说明理由。这一分级与第 6.2.4 节讨论的”可逆区/不可逆区”是同一思想的不同表述。</p>
+<section id="c6-subsec-stop" class="level2">
+<h2 class="anchored" data-anchor-id="c6-subsec-stop">6.3.4　终止、校验与人机协同</h2>
+<p>一个不会停的智能体比一个会犯错的智能体更危险：它会持续消耗资源、持续产生副作用。终止条件应在设计阶段写进框架，而不是留给模型临场判断。常见的判据有四类：<strong>目标达成</strong>（验收标准全部满足）；<strong>预算耗尽</strong>（轮数、token、金额、时间任一超限）；<strong>不可恢复的错误</strong>（权限缺失、依赖服务下线）；<strong>需要人来决定</strong>（涉及不可逆操作或价值判断）。第四类最容易被忽略：如果没有显式设计，系统遇到“要不要给用户退款”这类问题时，可能会不停尝试各种办法，而不是停下来问人。没有终止条件的系统会陷入“无限反思”：不断发现新问题、不断修改，永不收敛。</p>
+<p>环境也不会总按预期响应：接口超时、返回格式变了、权限不足、数据缺失。智能体要区分<strong>可重试的瞬时错误</strong>和<strong>需要改变策略的持久错误</strong>，前者重试，后者换路或上报。这一判断若完全交给模型，它容易反复重试同一个失败动作，因此通常由框架先对错误分类，再把分类结果告诉模型。</p>
+<p><strong>校验</strong>是终止的前提：没有校验，“目标达成”只是模型的自述。校验分三层：<strong>格式校验</strong>（输出是否符合约定格式）、<strong>事实校验</strong>（关键数字是否与工具返回一致）、<strong>逻辑校验</strong>（结论与前提是否矛盾）。格式校验最容易自动化，逻辑校验最难，常需要另一个独立的评审模型或规则引擎。校验为什么值得做？下面用一个算例回答。</p>
+<p>步骤越多，出错的机会越多。若各步是否成功相互独立，第 <span class="math inline">\(i\)</span> 步的成功率为 <span class="math inline">\(q_i\)</span>，则 <span class="math inline">\(n\)</span> 步任务全部成功的概率为 <span class="math display">\[\Pr(\text{任务成功}) = \prod_{i=1}^{n} q_i .
+\tag{6-4}\]</span></p>
+<div id="c6-ex-reliability" class="bookbox example">
+<div class="boxtitle">
+<p>例 6-2　多步任务的可靠性</p>
+</div>
+<p>一个 10 步的任务，每步成功率 0.95。比较三种情况：原样执行；把单步成功率提高到 0.99；单步仍为 0.95，但每步都有校验，发现失败就重试一次（假设失败都能被发现，重试与首次相互独立）。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">算什么</th>
+<th style="text-align: left;">算式</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">这个数从哪来</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">原样执行的成功率</td>
+<td style="text-align: left;"><span class="math inline">\(0.95^{10}\)</span></td>
+<td style="text-align: left;">0.599</td>
+<td style="text-align: left;">式 <a href="../ch6/s6-3.html#c6-eq-reliability">（6-4）</a>，10 步各 0.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">提高单步可靠性</td>
+<td style="text-align: left;"><span class="math inline">\(0.99^{10}\)</span></td>
+<td style="text-align: left;">0.904</td>
+<td style="text-align: left;">单步 0.99</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">校验加一次重试后的单步成功率</td>
+<td style="text-align: left;"><span class="math inline">\(1-(1-0.95)^{2}\)</span></td>
+<td style="text-align: left;">0.9975</td>
+<td style="text-align: left;">两次都失败的概率为 <span class="math inline">\(0.05^2\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">校验加重试后的任务成功率</td>
+<td style="text-align: left;"><span class="math inline">\(0.9975^{10}\)</span></td>
+<td style="text-align: left;">0.975</td>
+<td style="text-align: left;">第 3 步的结果代入式 <a href="../ch6/s6-3.html#c6-eq-reliability">（6-4）</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">每步平均调用次数</td>
+<td style="text-align: left;"><span class="math inline">\(1+0.05\)</span></td>
+<td style="text-align: left;">1.05</td>
+<td style="text-align: left;">只有首次失败（概率 0.05）才重试</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据流向</strong>：单步成功率 → 连乘得到任务成功率；校验把“看不见的失败”变成“可重试的失败”，以约 5% 的额外调用把成功率从约 60% 提高到约 97.5%。</p>
+</div>
+<p>例 <a href="../ch6/s6-3.html#c6-ex-reliability">6-2</a> 说明了长任务难做的原因，也指出了两条并行的改进方向：<strong>减少步数</strong>（更好的规划、合并工具）和<strong>提高单步可靠性</strong>（校验、重试、更专一的工具）。它依赖“失败能被发现”这一前提：校验不到位时，重试就无从谈起。</p>
+<p><strong>人机协同</strong>　 人的注意力是稀缺资源。如果系统事无巨细都请求确认，用户很快会习惯性地点“同意”，安全性反而下降。合理的做法是按风险分级：低风险操作自动执行、事后告知；中风险操作执行前给出预览；高风险操作逐项确认，并说明理由。这与第 <a href="../ch6/s6-2.html#c6-subsec-env">6.2.4</a> 小节的“可逆区/不可逆区”是同一思路——上面轨迹中的思考 5 就是一次高风险确认。</p>
 
 
 </section>
@@ -1292,18 +1526,18 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation" aria-label="页面">
   <div class="nav-page nav-page-previous">
-      <a href="../ch6/s6-2.html" class="pagination-link" aria-label="6.2　核心组件">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.2　核心组件</span>
+      <a href="../ch6/s6-2.html" class="pagination-link" aria-label="6.2　智能体的组成">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">6.2　智能体的组成</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ch6/s6-4.html" class="pagination-link" aria-label="6.4　关键能力">
-        <span class="nav-page-text">6.4　关键能力</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ch6/s6-4.html" class="pagination-link" aria-label="6.4　智能体的关键能力">
+        <span class="nav-page-text">6.4　智能体的关键能力</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script src="toc.js"></script><script src="widgets.js"></script>
+
 <script src="../toc.js"></script><script src="../widgets.js"></script>
 
 
