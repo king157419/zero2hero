@@ -819,8 +819,8 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">GPT-3（2020）^[[4]](ref</td>
-<td style="text-align: left;">erences.qmd#ref-4</td>
+<td style="text-align: left;">GPT-3（2020）^[[3]](ref</td>
+<td style="text-align: left;">erences.qmd#ref-3</td>
 <td style="text-align: left;">)^ 175B</td>
 <td style="text-align: left;">300B 过滤后的 Common Crawl 60%、WebText2 22%、Books1 8%、Books2 8%、维基百科 3%</td>
 </tr>
@@ -831,8 +831,8 @@ window.Quarto = {
 <td style="text-align: left;">780B 社交媒体对话 50%、过滤后的网页 27%、书籍 13%、GitHub 代码 5%、多语言维基百科 4%、新闻 1%</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">LLaMA（2023）^[[5]](ref</td>
-<td style="text-align: left;">erences.qmd#ref-5</td>
+<td style="text-align: left;">LLaMA（2023）^[[4]](ref</td>
+<td style="text-align: left;">erences.qmd#ref-4</td>
 <td style="text-align: left;">)^ 7B/13B/33B/65B</td>
 <td style="text-align: left;">1.0T/1.0T/1.4T/1.4T Common Crawl 67%、C4 15%、GitHub 4.5%、维基百科 4.5%、书籍 4.5%、arXiv 2.5%、StackExchange 2%</td>
 </tr>
@@ -924,9 +924,9 @@ window.Quarto = {
 <p><strong>⑤ 分层采样与数据配比</strong>　 不同来源的价值不同，不能按原始数量简单混合。<strong>数据配比</strong>（data mixture）规定训练时从每个来源采样的比例。例如 LLaMA 中维基百科、书籍的原始体量远小于网页，却被重复采样两遍以上（<strong>上采样</strong>），在训练中获得更高权重；低质量网页则被<strong>下采样</strong>。配比通常要靠小规模实验反复调整，以均衡通用知识、代码、学术和长文本。不少模型还会在预训练的最后阶段提高高质量数据的比例，称为<strong>退火</strong>阶段。</p>
 <p><strong>⑥ 分词</strong>　 最后，分词器把清洗好的文本切成 token 并转换为整数编号，作为模型的输入。下一小节单独讨论。</p>
 <p>上面六步之外，构造训练数据时还有两件事要专门处理：防止评测题混进训练集，以及把长短不一的文档装进固定长度的训练序列。</p>
-<p><strong>测试集去污染</strong>　 去重只处理训练集内部的重复。还有一类重合危害更大：训练文档里恰好含有评测题目或答案。这称为<strong>数据污染</strong>（data contamination）。模型若见过评测题，成绩只反映它记住了多少，不反映真实能力，评测结果会偏高。常用的检测方法是 <span class="math inline">\(n\)</span>-gram 重叠：把每道评测题切成连续的 <span class="math inline">\(n\)</span> 个词（中文可按字）组成的片段，在训练语料里查找是否出现相同片段；命中的文档被视为受污染，需要删除或截去。例如取 <span class="math inline">\(n=8\)</span> 个字，评测题“光合作用发生在叶绿体的哪一个部位”与某个训练网页共享片段“光合作用发生在”，该网页就被标记。<span class="math inline">\(n\)</span> 太小，常见短语也会误报；<span class="math inline">\(n\)</span> 太大，稍作改写的题目就漏检。</p>
-<p>GPT-3 的做法常被引用<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>（论文附录 C）：对所有评测集的题目检索 13-gram 重合，这里的“词”指小写、无标点、按空白切分的单词；命中的 13-gram 连同前后各 200 个字符一并删去，原文档被切成若干片段，短于 200 个字符的片段丢弃，被切成超过 10 段的文档整篇删除；同一个 13-gram 若出现在超过 10 篇训练文档里，多半是常用语或法律套话，不算污染。论文同时坦承，因为程序错误，这一步只清除了部分重合，而重新训练代价太高，所以事后又对各评测集按“题目长度的第 5 百分位”取 <span class="math inline">\(n\)</span>（下限 8、上限 13）做重合分析，分别报告在干净子集上的成绩。可见去污染要在数据准备阶段做，而且事后仍要核对。本章案例中把往年试题排除在训练语料之外，做的也是同一件事。</p>
-<p><strong>序列打包</strong>　 文档分词以后，长度从几十个 token 到几万个 token 不等，而训练按固定的上下文长度 <span class="math inline">\(T\)</span>（如 4096）成批处理。把每篇文档单独补零（padding）到长度 <span class="math inline">\(T\)</span>，补的位置白白占用算力；Krell 等人统计，常见文本数据集中最多约一半的 token 是补零<sup><a href="../ch3/references.html#ref-55">[55]</a></sup>。<strong>序列打包</strong>（packing）把多篇文档的 token 依次拼接，每篇之后加一个<strong>序列结束符</strong>（End of Sequence，EOS）作分隔，再按 <span class="math inline">\(T\)</span> 切成等长的块，不留补零。</p>
+<p><strong>测试集去污染</strong>　 去重只处理训练集内部的重复。还有一类重合危害更大：训练文档里恰好含有评测题目或答案。这称为<strong>数据污染</strong>（data contamination）。模型若见过评测题，成绩只反映它记住了多少，不反映真实能力，评测结果会偏高。常用的检测方法是 <span class="math inline">\(n\)</span>-gram 重叠：把每道评测题切成连续的 <span class="math inline">\(n\)</span> 个词（中文可按字）组成的片段，在训练语料里查找是否出现相同片段；命中的文档被视为受污染，需要删除或截去。例如取 <span class="math inline">\(n=8\)</span> 个字，评测题“光合作用发生在叶绿体的哪一个部位”与某个训练网页共享片段“光合作用发生在叶绿体”（10 个字，含 8 字重合），该网页就被标记。<span class="math inline">\(n\)</span> 太小，常见短语也会误报；<span class="math inline">\(n\)</span> 太大，稍作改写的题目就漏检。</p>
+<p>GPT-3 的做法常被引用<sup><a href="../ch3/references.html#ref-3">[3]</a></sup>（论文附录 C）：对所有评测集的题目检索 13-gram 重合，这里的“词”指小写、无标点、按空白切分的单词；命中的 13-gram 连同前后各 200 个字符一并删去，原文档被切成若干片段，短于 200 个字符的片段丢弃，被切成超过 10 段的文档整篇删除；同一个 13-gram 若出现在超过 10 篇训练文档里，多半是常用语或法律套话，不算污染。论文同时坦承，因为程序错误，这一步只清除了部分重合，而重新训练代价太高，所以事后又对各评测集按“题目长度的第 5 百分位”取 <span class="math inline">\(n\)</span>（下限 8、上限 13）做重合分析，分别报告在干净子集上的成绩。可见去污染要在数据准备阶段做，而且事后仍要核对。本章案例中把往年试题排除在训练语料之外，做的也是同一件事。</p>
+<p><strong>序列打包</strong>　 文档分词以后，长度从几十个 token 到几万个 token 不等，而训练按固定的上下文长度 <span class="math inline">\(T\)</span>（如 4096）成批处理。把每篇文档单独补零（padding）到长度 <span class="math inline">\(T\)</span>，补的位置白白占用算力；Krell 等人统计，常见文本数据集中最多约一半的 token 是补零<sup><a href="../ch3/references.html#ref-15">[15]</a></sup>。<strong>序列打包</strong>（packing）把多篇文档的 token 依次拼接，每篇之后加一个<strong>序列结束符</strong>（End of Sequence，EOS）作分隔，再按 <span class="math inline">\(T\)</span> 切成等长的块，不留补零。</p>
 <div id="c3-ex-packing" class="bookbox example">
 <div class="boxtitle">
 <p>例 3-1　序列打包的利用率</p>
@@ -942,12 +942,12 @@ window.Quarto = {
 </div>
 <p>数据流向文档按顺序拼接 → 每篇后加 EOS → 按 <span class="math inline">\(T\)</span> 切块 → 块的边界允许落在文档中间。</p>
 </div>
-<p>拼进同一块的文档本来互不相关，注意力要不要跨过文档边界，有两种做法。一种是<strong>不加限制</strong>：整块只用普通的因果掩码，后面的文档能看到前面的文档，靠 EOS 让模型学会“结束符之后是新内容”；实现最简单，缺点是引入了不相关的上下文。另一种是<strong>文档掩码</strong>：注意力只在同一篇文档内进行，并且让每篇文档的位置编号从头开始，这样打包不改变单篇文档的计算结果<sup><a href="../ch3/references.html#ref-55">[55]</a></sup>。Llama 3 的预训练采用后一种，报告称在常规预训练中影响有限，但在超长序列上继续预训练时很重要<sup><a href="../ch3/references.html#ref-56">[56]</a></sup>。文档掩码要求注意力实现支持按文档分段的掩码。</p>
+<p>拼进同一块的文档本来互不相关，注意力要不要跨过文档边界，有两种做法。一种是<strong>不加限制</strong>：整块只用普通的因果掩码，后面的文档能看到前面的文档，靠 EOS 让模型学会“结束符之后是新内容”；实现最简单，缺点是引入了不相关的上下文。另一种是<strong>文档掩码</strong>：注意力只在同一篇文档内进行，并且让每篇文档的位置编号从头开始，这样打包不改变单篇文档的计算结果<sup><a href="../ch3/references.html#ref-15">[15]</a></sup>。Llama 3 的预训练采用后一种，报告称在常规预训练中影响有限，但在超长序列上继续预训练时很重要<sup><a href="../ch3/references.html#ref-16">[16]</a></sup>。文档掩码要求注意力实现支持按文档分段的掩码。</p>
 </section>
 <section id="token-与分词器" class="level2">
 <h2 class="anchored" data-anchor-id="token-与分词器">3.3.4　token 与分词器</h2>
 <p><strong>什么是 token</strong>　 <strong>token</strong>（词元）是模型处理文本的基本单位。模型并不直接“看到”文字，而是看到一串整数，每个整数对应分词器<strong>词表</strong>（vocabulary）中的一个 token。token 既不等于一个汉字，也不等于一个英文单词：以字符为单位，序列太长、每个字符承载的语义太少；以整词为单位，词表极其庞大，而且无法处理训练时没见过的新词（<strong>未登录词</strong>问题）。现代大模型普遍采用折中的<strong>子词</strong>（subword）方案：常见词整体保留，罕见词拆成更小的片段，例如“unhappiness”可能切成“un”“happi”“ness”。</p>
-<p><strong>BPE 算法</strong>　 <strong>字节对编码</strong>（Byte Pair Encoding，BPE）<sup><a href="../ch3/references.html#ref-15">[15]</a></sup>是最常用的子词算法：从单个字符出发，反复把语料中<strong>出现频率最高的相邻符号对</strong>合并成一个新符号，直到词表达到预定大小。以一个只有四个词的小语料为例：low 出现 5 次、lower 2 次、newest 6 次、widest 3 次。初始时每个词拆成单个字母，合并过程见表 <a href="../ch3/s3-3.html#c3-tab-bpe">3-4</a>。</p>
+<p><strong>BPE 算法</strong>　 <strong>字节对编码</strong>（Byte Pair Encoding，BPE）<sup><a href="../ch3/references.html#ref-17">[17]</a></sup>是最常用的子词算法：从单个字符出发，反复把语料中<strong>出现频率最高的相邻符号对</strong>合并成一个新符号，直到词表达到预定大小。以一个只有四个词的小语料为例：low 出现 5 次、lower 2 次、newest 6 次、widest 3 次。初始时每个词拆成单个字母，合并过程见表 <a href="../ch3/s3-3.html#c3-tab-bpe">3-4</a>。</p>
 <div id="c3-tab-bpe" class="booktab">
 <div class="tabcap">
 <p>表 3-4　BPE 合并过程示例</p>
@@ -1002,7 +1002,7 @@ window.Quarto = {
 </table>
 </div>
 <p>第 1 步时 (e,s) 在 newest 中出现 6 次、在 widest 中出现 3 次，共 9 次；(s,t) 也是 9 次，二者并列最高，这里按出现顺序先合并 (e,s)。第 3 步时 (l,o) 与 (o,w) 同为 7 次，同样先取前者。四次合并后词表新增了 es、est、lo、low。此后遇到语料里没有的词“lowest”，分词器也能切成“low”和“est”两个已知子词，从而避免了未登录词。GPT-2 以后的许多模型使用<strong>字节级 BPE</strong>：以 UTF-8 字节而非字符作为初始符号，保证任何文本都能被编码，不会出现“无法识别的字符”。此外还有 BERT 使用的 WordPiece 和 Unigram 语言模型分词；SentencePiece 是把这些算法封装起来、可直接处理原始文本（包括空格）的工具库。</p>
-<p><strong>词表大小的权衡</strong>　 词表越大，同一段文本切出的 token 越少，处理效率越高；但嵌入层和输出层的参数越多，罕见 token 也越难训练充分。早期 LLaMA 的词表只有 32 000 个 token，以英文为主，许多汉字被拆成多个字节 token，中文编码效率很低。面向中文和多语言的模型因此会扩充词表：Qwen 系列约 15 万个，LLaMA 3 扩大到约 12.8 万个。</p>
+<p><strong>词表大小的权衡</strong>　 词表越大，同一段文本切出的 token 越少，处理效率越高；但嵌入层和输出层的参数越多，罕见 token 也越难训练充分。早期 LLaMA 的词表只有 32 000 个 token，以英文为主，许多汉字被拆成多个字节 token，中文编码效率很低。面向中文和多语言的模型因此会扩充词表：Qwen 系列约 15 万个，Llama 3 扩大到约 12.8 万个。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>token 是大模型的计量单位：上下文长度、训练数据量、推理速度和 API 计费都以 token 计。同一段内容在不同模型的分词器下对应的 token 数可能相差很多，跨模型比较“支持多长上下文”“每秒多少 token”时，要先确认分词器是否相同。</p>

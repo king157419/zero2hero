@@ -790,12 +790,12 @@ window.Quarto = {
 </div>
 <section id="c6-subsec-agentic-def" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-agentic-def">6.6.1　什么是 Agentic AI</h2>
-<p>“Agentic”意为“具有能动性的”。2024 年前后，Agentic AI 逐渐成为业界讨论的焦点。它不是“更聪明的智能体”的同义词，而是一种系统级的组织方式：<strong>由多个专门化的智能体组成，在更大的工作流中协调、通信，并动态分配子任务</strong><sup><a href="../ch6/references.html#ref-31">[31]</a></sup>。它的核心特征有四点：<strong>多智能体协作</strong>、<strong>动态任务分解</strong>、<strong>持久化记忆</strong>和<strong>高度自主</strong>。与单个智能体相比，它更侧重决策过程本身，而不仅是生成内容；它不完全依赖人类提示，也减少了对人持续监督的依赖（高风险环节仍需人工确认，见第 <a href="../ch6/s6-6.html#c6-subsec-risk">6.6.5</a> 小节）。</p>
+<p>“Agentic”意为“具有能动性的”。2024 年前后，Agentic AI 逐渐成为业界讨论的焦点。它不是“更聪明的智能体”的同义词，而是一种系统级的组织方式：<strong>由多个专门化的智能体组成，在更大的工作流中协调、通信，并动态分配子任务</strong><sup><a href="../ch6/references.html#ref-30">[30]</a></sup>。它的核心特征有四点：<strong>多智能体协作</strong>、<strong>动态任务分解</strong>、<strong>持久化记忆</strong>和<strong>高度自主</strong>。与单个智能体相比，它更侧重决策过程本身，而不仅是生成内容；它不完全依赖人类提示，也减少了对人持续监督的依赖（高风险环节仍需人工确认，见第 <a href="../ch6/s6-6.html#c6-subsec-risk">6.6.5</a> 小节）。</p>
 <p>这种组织方式有明确的技术动因。任务规模超过一个上下文窗口的承载能力时，把它拆给多个各有独立窗口的智能体，是最直接的扩展办法；任务需要检索、编程、审校等多种不同能力时，让一个提示词驱动的模型“什么都会”，不如让几个专门的智能体各司其职；任务需要在多个方向上同时探索时，串行执行的单智能体时延太长。换句话说，在本节采用的含义下，Agentic AI 是<strong>把“一个大上下文里的推理”改造成“多个小上下文之间的协作”</strong>，收益是上下文隔离、角色专精和并行，代价是通信、一致性和调试复杂度。</p>
 </section>
 <section id="c6-subsec-three" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-three">6.6.2　生成式 AI、智能体与 Agentic AI</h2>
-<p>三者常被混为一谈，但在功能、运行机制和自主性上是逐级递进的（表 <a href="../ch6/s6-6.html#c6-tab-three">6-12</a>，据 Sapkota 等人的对照<sup><a href="../ch6/references.html#ref-31">[31]</a></sup>整理）。</p>
+<p>三者常被混为一谈，但在功能、运行机制和自主性上是逐级递进的（表 <a href="../ch6/s6-6.html#c6-tab-three">6-12</a>，据 Sapkota 等人的对照<sup><a href="../ch6/references.html#ref-30">[30]</a></sup>整理）。</p>
 <div id="c6-tab-three" class="booktab">
 <div class="tabcap">
 <p>表 6-12　生成式 AI、智能体与 Agentic AI 的对照</p>
@@ -825,7 +825,7 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">运行机制</td>
 <td style="text-align: left;">提示 → LLM → 输出</td>
-<td style="text-align: left;">提示 → 工具调用 → LLM → 输出</td>
+<td style="text-align: left;">提示 → LLM <span class="math inline">\(\leftrightarrow\)</span> 工具调用 → 输出</td>
 <td style="text-align: left;">目标 → 多智能体编排 → 输出</td>
 </tr>
 <tr class="even">
@@ -907,12 +907,12 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 6-10　多智能体的两种典型编排。(a) 中主管与每个执行者之间往返一次消息；(b) 中各智能体互相发送意见，并通过共享黑板同步状态，若每个成员都把意见发给其余所有成员，消息数随智能体个数按平方增长</p>
+<p>图 6-10　多智能体的两种典型编排。(a) 中主管与每个执行者之间往返一次消息；(b) 中各智能体地位平等、两两互相发送意见，若每个成员都把意见发给其余所有成员，消息数随智能体个数按平方增长</p>
 </div>
 </div>
 <p><strong>主管—执行者（层级式）</strong>　 一个主管智能体（也称规划者）负责分解任务、分派子任务、汇总结果，若干执行者各自完成专门的工作，评审者检查执行结果。控制流清晰、便于审计、职责明确，适合能预先分解的任务，例如“检索—分析—撰写—审校”的文档生产。缺点是主管容易成为瓶颈：所有信息都要经过它，它的上下文迅速膨胀；它的一个错误判断会影响全部子任务。</p>
 <p><strong>对等协作（辩论/评审式）</strong>　 多个地位平等的智能体就同一问题各自提出方案，通过相互批评、投票或仲裁达成结论。可以并行探索，单个成员的错误不容易主导结论，适合答案不唯一、需要多角度审视的任务（方案评估、事实核查）。缺点是通信量大、需要额外的仲裁机制，并且存在<strong>群体极化</strong>风险：几个智能体可能相互强化同一个偏见。</p>
-<p>此外还有几种常见模式：<strong>流水线式</strong>，每个智能体负责一个阶段，前一个的输出是后一个的输入，MetaGPT 按软件公司的标准作业流程把需求分析、设计、编码、测试交给不同角色就是一例<sup><a href="../ch6/references.html#ref-30">[30]</a></sup>；<strong>黑板式</strong>，所有智能体读写同一块共享状态（黑板）；<strong>市场式</strong>，发布方给出子任务、预算和验收标准，各智能体按自身能力和成本报价，发布方择优分配。选择时看三点：子任务之间<strong>耦合越强</strong>，越需要集中协调；<strong>错误代价越高</strong>，越需要多重校验，辩论式或“执行者—评审者”结对更合适；<strong>时延要求越紧</strong>，越要减少串行环节和通信轮次。</p>
+<p>此外还有几种常见模式：<strong>流水线式</strong>，每个智能体负责一个阶段，前一个的输出是后一个的输入，MetaGPT 按软件公司的标准作业流程把需求分析、设计、编码、测试交给不同角色就是一例<sup><a href="../ch6/references.html#ref-31">[31]</a></sup>；<strong>黑板式</strong>，所有智能体读写同一块共享状态（黑板）；<strong>市场式</strong>，发布方给出子任务、预算和验收标准，各智能体按自身能力和成本报价，发布方择优分配。选择时看三点：子任务之间<strong>耦合越强</strong>，越需要集中协调；<strong>错误代价越高</strong>，越需要多重校验，辩论式或“执行者—评审者”结对更合适；<strong>时延要求越紧</strong>，越要减少串行环节和通信轮次。</p>
 <p>通信开销可以估算。在对等协作中，如果每个智能体每轮都把自己的意见发给所有其他成员，<span class="math inline">\(n\)</span> 个智能体每轮产生 <span class="math inline">\(n(n-1)\)</span> 条消息，随 <span class="math inline">\(n\)</span> 按平方增长；在主管—执行者结构中（这里 <span class="math inline">\(n\)</span> 指执行者个数，不含主管），主管向 <span class="math inline">\(n\)</span> 个执行者各派一次任务、各收一次结果，每轮只有 <span class="math inline">\(2n\)</span> 条消息。</p>
 <div id="c6-ex-comm" class="bookbox example">
 <div class="boxtitle">
@@ -969,7 +969,7 @@ window.Quarto = {
 </table>
 <p><strong>数据流向</strong>：智能体个数与轮数 → 消息条数 → 乘以每条长度得到需要读入的 token。这里只计消息本身；每个智能体还要读入自己负责的报告片段，并且如例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 那样，上下文会随轮数累积，实际开销更大。辩论式多花的这些 token 换来的是交叉审视，只有当错误代价高到值得时才划算。</p>
 </div>
-<p>必须强调，<strong>多智能体并不自动优于单智能体</strong>。一个被反复验证的经验是：单智能体能达到同等效果时，不要引入多智能体<sup><a href="../ch6/references.html#ref-8">[8]</a>,<a href="../ch6/references.html#ref-23">[23]</a></sup>。每增加一个智能体，就多一份上下文组装成本、一份通信成本、一份失败的可能，调试难度也明显上升。多智能体的正当理由主要有三条：<strong>上下文必须隔离</strong>、<strong>能力必须专精</strong>、<strong>时延必须靠并行压缩</strong>。智能体之间的通信需要协议支撑，这正是第 <a href="../ch6/s6-4.html#c6-subsec-tools">6.4.5</a> 小节介绍的 A2A 的用途：它定义智能体如何描述自身能力、发起任务、回传结果，使不同团队、不同厂商的智能体能够互操作。</p>
+<p>必须强调，<strong>多智能体并不自动优于单智能体</strong>。一个被反复验证的经验是：单智能体能达到同等效果时，不要引入多智能体<sup><a href="../ch6/references.html#ref-7">[7]</a>,<a href="../ch6/references.html#ref-22">[22]</a></sup>。每增加一个智能体，就多一份上下文组装成本、一份通信成本、一份失败的可能，调试难度也明显上升。多智能体的正当理由主要有三条：<strong>上下文必须隔离</strong>、<strong>能力必须专精</strong>、<strong>时延必须靠并行压缩</strong>。智能体之间的通信需要协议支撑，这正是第 <a href="../ch6/s6-4.html#c6-subsec-tools">6.4.5</a> 小节介绍的 A2A 的用途：它定义智能体如何描述自身能力、发起任务、回传结果，使不同团队、不同厂商的智能体能够互操作。</p>
 </section>
 <section id="c6-subsec-apps" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-apps">6.6.4　应用举例</h2>

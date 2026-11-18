@@ -791,7 +791,7 @@ window.Quarto = {
 <section id="c7-subsec-fc" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-fc">7.6.1　工具调用：模型怎样使用外部能力</h2>
 <p><strong>工具调用</strong>（tool use）指模型借助 API 等接口使用搜索引擎、数据库、计算器、代码执行环境等外部能力，以弥补自身知识和能力的局限：获取实时数据、执行精确计算、操作外部系统。一次调用分三步：模型<strong>理解需求</strong>、<strong>选择工具并给出参数</strong>，应用执行后模型再<strong>处理返回结果</strong>。例如回答“上海明天会下雨吗”，模型不靠记忆猜，而是调用天气 API，再把返回的数据组织成回答。</p>
-<p>这种能力的标准形式是 <strong>Function Calling</strong>（函数调用）。OpenAI 于 2023 年 6 月 13 日随 gpt-3.5-turbo-0613 和 gpt-4-0613 模型在其 API 中推出这一功能：开发者用 JSON Schema（一种描述 JSON 数据结构的格式）声明一组函数的名称、用途和参数，模型在需要时输出一段符合该结构的 JSON，指明要调用哪个函数、参数是什么；<strong>真正执行函数的是应用程序</strong>，执行结果再作为一条消息送回模型<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。此后主流模型 API 都提供了类似机制，第 <a href="../ch6/s6-3.html#c6-subsec-react">6.3.2</a> 小节介绍的 ReAct 闭环中的“行动”一步，通常就是靠它实现的。</p>
+<p>这种能力的标准形式是 <strong>Function Calling</strong>（函数调用）。OpenAI 于 2023 年 6 月 13 日随 gpt-3.5-turbo-0613 和 gpt-4-0613 模型在其 API 中推出这一功能：开发者用 JSON Schema（一种描述 JSON 数据结构的格式）声明一组函数的名称、用途和参数，模型在需要时输出一段符合该结构的 JSON，指明要调用哪个函数、参数是什么；<strong>真正执行函数的是应用程序</strong>，执行结果再作为一条消息送回模型<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>。此后主流模型 API 都提供了类似机制，第 <a href="../ch6/s6-3.html#c6-subsec-react">6.3.2</a> 小节介绍的 ReAct 闭环中的“行动”一步，通常就是靠它实现的。</p>
 <p>模型调用工具，与传统软件之间的接口集成看起来相似，其实差别很大（表 <a href="../ch7/s7-6.html#c7-tab-fc-vs-sw">7-10</a>）。</p>
 <div id="c7-tab-fc-vs-sw" class="booktab">
 <div class="tabcap">
@@ -894,12 +894,12 @@ window.Quarto = {
 </section>
 <section id="c7-subsec-mcp" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-mcp">7.6.2　MCP：统一的工具接入协议</h2>
-<p><strong>MCP</strong>（Model Context Protocol，模型上下文协议）是 Anthropic 于 2024 年 11 月发布的开放协议，用来规范 AI 应用与外部数据源、工具之间怎样交换上下文和调用能力；2025 年 12 月，Anthropic 把它捐给 Linux 基金会新成立的 Agentic AI Foundation（AAIF）管理<sup><a href="../ch7/references.html#ref-15">[15]</a>,<a href="../ch7/references.html#ref-16">[16]</a></sup>。截至 2026 年 11 月，最新的稳定规范版本是 2026-07-28。</p>
+<p><strong>MCP</strong>（Model Context Protocol，模型上下文协议）是 Anthropic 于 2024 年 11 月发布的开放协议，用来规范 AI 应用与外部数据源、工具之间怎样交换上下文和调用能力；2025 年 12 月，Anthropic 把它捐给 Linux 基金会新成立的 Agentic AI Foundation（AAIF）管理<sup><a href="../ch7/references.html#ref-16">[16]</a>,<a href="../ch7/references.html#ref-17">[17]</a></sup>。截至 2026 年 11 月，最新的稳定规范版本是 2026-07-28。</p>
 <p><strong>三个角色</strong>　 MCP 采用客户端—服务器架构，有三个角色：</p>
 <ul>
 <li><p><strong>Host</strong>（宿主）：用户正在使用的 AI 应用，内置大模型，例如一个 Coding Agent 或桌面聊天应用；</p></li>
 <li><p><strong>Client</strong>（客户端）：Host 内部负责与<strong>某一个</strong> Server 通信的组件，通常 Host 为每个 Server 建立一个 Client，二者一一对应；</p></li>
-<li><p><strong>Server</strong>（服务器）：把某个软件或数据源的能力按 MCP 格式暴露出来。它可以是<strong>本地</strong>进程，通过标准输入输出（stdio）通信；也可以是<strong>远程</strong>服务，通过 Streamable HTTP 通信（每条消息是一次 HTTP POST，回复为一段 JSON 或一段服务器推送事件流）。</p></li>
+<li><p><strong>Server</strong>（服务器）：把某个软件或数据源的能力按 MCP 格式暴露出来。它可以是<strong>本地</strong>进程，通过标准输入输出（stdio）通信；也可以是<strong>远程</strong>服务，通过 Streamable HTTP 通信（每条消息是一次 HTTP POST，回复为一段 JSON 或一段服务器推送事件流，即 Server-Sent Events，SSE）。</p></li>
 </ul>
 <p>消息格式是 <strong>JSON-RPC</strong> 2.0：一种用 JSON 表示“调用哪个方法、带什么参数、返回什么结果或错误”的远程调用约定。Server 不直接“进入模型”：它返回的是能力描述和数据，由 Host 决定哪些能力对模型可见、哪些结果进入本轮上下文。</p>
 <p><strong>Server 提供的三类能力</strong>　 三类能力的区别在于“由谁决定使用”（表 <a href="../ch7/s7-6.html#c7-tab-mcp-cap">7-11</a>）。</p>
@@ -939,7 +939,7 @@ window.Quarto = {
 </table>
 </div>
 <p>Tool 和 Resource 都可能返回文本，但语义不同：读一份版本化的接口文档更像 Resource，触发一次查询或改变外部状态则是 Tool。把所有数据都包成一个能执行任意请求的 Tool，权限就难以细分；把写操作伪装成 Resource，用户就看不到它的副作用。</p>
-<p><strong>2026-07-28 版的主要变化</strong>　 协议还在快速演进，实现时应固定协议和 SDK 版本。2026-07-28 版有几项影响工程实现的改动<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>：</p>
+<p><strong>2026-07-28 版的主要变化</strong>　 协议还在快速演进，实现时应固定协议和 SDK 版本。2026-07-28 版有几项影响工程实现的改动<sup><a href="../ch7/references.html#ref-16">[16]</a></sup>：</p>
 <ul>
 <li><p><strong>无状态化</strong>：取消了 <code>initialize</code> 握手和会话编号，每个请求都在元数据里自带协议版本和客户端能力；服务器必须实现 <code>server/discover</code>，客户端可以先调用它，查询服务器支持的版本、能力和身份，再发业务请求；这样即使请求本身不再建立会话，也能在发送前选定双方都支持的协议版本。</p></li>
 <li><p><strong>多轮往返请求</strong>（Multi Round-Trip Requests，MRTR）：服务器处理请求时如果还需要用户补充信息，不再反过来向客户端发请求，而是返回一个 <code>input_required</code> 的中间结果，客户端补齐信息后<strong>重发原请求</strong>。原先由服务器主动发起的 Roots（让服务器知道可访问的目录）、Sampling（服务器借用宿主的模型生成文本）和 Logging 三项功能被标为弃用。</p></li>
@@ -960,12 +960,12 @@ window.Quarto = {
 <p>图 7-7　一次 MCP 工具调用的时序。①Host 经 Client 发现工具；②③模型在上下文中看到工具描述后提出调用；④Host（高亮）校验参数与权限，模型的提议在这一步才可能变成动作；⑤⑥Client 发出 tools/call，Server 调用外部 CI 服务并返回结构化结果；⑦Host 记录结果并交回模型</p>
 </div>
 </div>
-<p>宿主还要区分三种结果。<strong>成功</strong>；<strong>工具执行错误</strong>——调用本身完成了，但业务或参数出错，以普通结果加 <code>isError: true</code> 返回，模型能看到并据此调整；<strong>协议错误</strong>——未知工具、请求格式不对等，以 JSON-RPC 错误返回，由宿主处理，不一定交给模型<sup><a href="../ch7/references.html#ref-15">[15]</a></sup>。宿主只判断“有没有收到文本”是不够的。</p>
+<p>宿主还要区分三种结果：<strong>成功</strong>；<strong>工具执行错误</strong>——调用本身完成了，但业务或参数出错，以普通结果加 <code>isError: true</code> 返回，模型能看到并据此调整；<strong>协议错误</strong>——未知工具、请求格式不对等，以 JSON-RPC 错误返回，由宿主处理，不一定交给模型<sup><a href="../ch7/references.html#ref-16">[16]</a></sup>。宿主只判断“有没有收到文本”是不够的。</p>
 <p>工程上，工具结果至少还应带上：请求编号、来源服务、查询时刻、目标代码版本、状态或数据、失败类别。CI 结果属于旧的提交，就证明不了当前修改已经通过；Server 返回一段“要求 Agent 忽略用户规则”的文本，它仍然只是低信任的外部数据。MCP 统一的是通信格式，授权、记录和内容边界仍由 Host 实施。</p>
 </section>
 <section id="c7-subsec-a2a" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-a2a">7.6.4　A2A：把任务交给独立的 Agent</h2>
-<p>MCP 的对面是一个工具：给定输入，返回输出，步骤由调用方组织。有时需要的却是另一个<strong>有自主性、有自己执行环境</strong>的 Agent——例如请专门的安全审查 Agent 检查新增依赖，它要自己检索、运行检查、必要时追问。<strong>A2A</strong>（Agent2Agent，智能体间协议）就是为这种<strong>任务委托</strong>设计的。它由 Google 于 2025 年 4 月发布，同年 6 月捐给 Linux 基金会，2026 年 3 月发布 1.0 版<sup><a href="../ch7/references.html#ref-17">[17]</a></sup>。</p>
+<p>MCP 的对面是一个工具：给定输入，返回输出，步骤由调用方组织。有时需要的却是另一个<strong>有自主性、有自己执行环境</strong>的 Agent——例如请专门的安全审查 Agent 检查新增依赖，它要自己检索、运行检查、必要时追问。<strong>A2A</strong>（Agent2Agent，智能体间协议）就是为这种<strong>任务委托</strong>设计的。它由 Google 于 2025 年 4 月发布，同年 6 月捐给 Linux 基金会，2026 年 3 月发布 1.0 版<sup><a href="../ch7/references.html#ref-18">[18]</a></sup>。</p>
 <p><strong>参与者</strong>　 A2A 有三方：<strong>用户</strong>（使用 Agent 系统完成任务的人或服务）；<strong>A2A 客户端</strong>（代表用户向远端 Agent 请求操作的一方，通常本身也是一个 Agent）；<strong>A2A 服务器</strong>（远端 Agent）。远端 Agent 对客户端是<strong>不透明</strong>的：客户端看不到它内部用什么模型、什么工具、怎样推理，只看到它声明的能力和交付的结果。</p>
 <p><strong>核心对象</strong>　 协议围绕五个对象展开（表 <a href="../ch7/s7-6.html#c7-tab-a2a-obj">7-12</a>）。</p>
 <div id="c7-tab-a2a-obj" class="booktab">
@@ -1018,7 +1018,7 @@ window.Quarto = {
 </section>
 <section id="c7-subsec-compare" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-compare">7.6.5　Function Calling、MCP、A2A 与 Skill</h2>
-<p>还有一个常与上述三者混淆的概念：<strong>Skill</strong>（技能）。Anthropic 于 2025 年推出 Agent Skills，同年 12 月把它作为开放标准发布<sup><a href="../ch7/references.html#ref-18">[18]</a></sup>。一个 Skill 是一个文件夹，核心是一份 <code>SKILL.md</code>，写明“遇到某类任务怎样做”，可附带脚本和参考资料。Agent 平时只加载每个 Skill 的名称和一句话简介，任务需要时才读入完整内容，这叫<strong>渐进式加载</strong>。截至 2026 年 11 月，Codex、Gemini CLI、GitHub Copilot、Cursor 等工具都已支持这一格式。</p>
+<p>还有一个常与上述三者混淆的概念：<strong>Skill</strong>（技能）。Anthropic 于 2025 年推出 Agent Skills，同年 12 月把它作为开放标准发布<sup><a href="../ch7/references.html#ref-19">[19]</a></sup>。一个 Skill 是一个文件夹，核心是一份 <code>SKILL.md</code>，写明“遇到某类任务怎样做”，可附带脚本和参考资料。Agent 平时只加载每个 Skill 的名称和一句话简介，任务需要时才读入完整内容，这叫<strong>渐进式加载</strong>。截至 2026 年 11 月，Codex、Gemini CLI、GitHub Copilot、Cursor 等工具都已支持这一格式。</p>
 <p>四者不在同一层次，彼此有调用关系（表 <a href="../ch7/s7-6.html#c7-tab-protocols">7-13</a>）：Function Calling 是<strong>模型层</strong>的机制，模型借它表达“我要调用什么”；MCP 规定 <strong>Host 与工具服务器</strong>之间怎样发现和调用工具，Host 拿到工具描述后，仍然通过 Function Calling 交给模型；A2A 规定 <strong>Agent 与 Agent</strong> 之间怎样委托任务；Skill 则是<strong>打包给模型看的操作知识</strong>：名称和简介常驻上下文，正文和脚本在需要时才读入，其中的步骤可能再调用 MCP 工具或本地脚本。简单地说：MCP 解决“怎样接入和调用工具”，A2A 解决“怎样把任务交给另一个 Agent”，Skill 解决“操作知识怎样打包、按需加载”。</p>
 <div id="c7-tab-protocols" class="booktab">
 <div class="tabcap">

@@ -753,7 +753,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p>用参数量、计算量和数据搬运量三个基本量，估算一个模型在训练或推理时对硬件的要求；</p></li>
 <li><p>用算术强度和 Roofline 模型判断一项计算受算力限制还是受访存限制；</p></li>
 <li><p>说明 CPU、GPU、NPU/ASIC 的分工，以及 HBM、NVLink、InfiniBand 分别作用于哪一段数据通路；</p></li>
-<li><p>区分 CUDA 等计算软件栈、PyTorch 等深度学习框架与 vLLM、Ollama 等推理服务组件所处的层次；</p></li>
+<li><p>区分 CUDA 等驱动与计算软件栈、PyTorch 与 vLLM 等训练与推理框架，以及 LangChain、Dify、Ollama 等应用系统工具所处的层次；</p></li>
 <li><p>估算训练显存与 KV 缓存，并据此选择分布式训练或推理优化手段；</p></li>
 <li><p>综合考虑延迟、吞吐、显存、成本和工程复杂度，为一个具体应用设计合适的系统方案。</p></li>
 </ol>

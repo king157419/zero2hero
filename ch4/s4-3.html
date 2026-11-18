@@ -885,7 +885,7 @@ window.Quarto = {
 <section id="subsec-train-mem" class="level2">
 <h2 class="anchored" data-anchor-id="subsec-train-mem">4.3.3　训练显存：一张卡要装下什么</h2>
 <p>在决定是否需要分布式训练之前，先要回答一个更基本的问题：一张卡到底要装下什么？答案不只是权重，还包括梯度、优化器状态和激活值。</p>
-<p>把它们逐项相加即可。设模型有 <span class="math inline">\(N\)</span> 个参数，每个参数的权重、梯度、优化器状态和主权重副本分别占 <span class="math inline">\(b_w\)</span>、<span class="math inline">\(b_g\)</span>、<span class="math inline">\(b_o\)</span>、<span class="math inline">\(b_m\)</span> 字节，则全参数训练的显存近似为 <span class="math display">\[M_{\mathrm{train}} \approx N\,(b_w+b_g+b_o+b_m) + M_{\mathrm{act}} + M_{\mathrm{workspace}},
+<p>把它们逐项相加即可。设模型有 <span class="math inline">\(N\)</span> 个参数，每个参数的权重、梯度、优化器状态和主权重副本分别占 <span class="math inline">\(b_w\)</span>、<span class="math inline">\(b_g\)</span>、<span class="math inline">\(b_o\)</span>、<span class="math inline">\(b_m\)</span> 字节（带下标的 <span class="math inline">\(b\)</span> 以字节计，与式 <a href="../ch4/s4-1.html#eq-weight-mem">（4-1）</a> 中以位计的 <span class="math inline">\(b\)</span> 不同），则全参数训练的显存近似为 <span class="math display">\[M_{\mathrm{train}} \approx N\,(b_w+b_g+b_o+b_m) + M_{\mathrm{act}} + M_{\mathrm{workspace}},
 \tag{4-6}\]</span> 其中 <span class="math inline">\(M_{\mathrm{act}}\)</span> 为激活值占用，与批大小和序列长度成正比；<span class="math inline">\(M_{\mathrm{workspace}}\)</span> 为临时缓冲区。</p>
 <div id="ex-trainmem" class="bookbox example">
 <div class="boxtitle">

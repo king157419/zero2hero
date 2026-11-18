@@ -788,13 +788,13 @@ window.Quarto = {
 </div>
 <section id="c6-subsec-closedloop" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-closedloop">6.3.1　感知—决策—行动闭环</h2>
-<p>智能体的运行是一个循环（图 <a href="../ch6/s6-3.html#c6-fig-loop">6-4</a>）：在第 <span class="math inline">\(t\)</span> 轮，智能体获得<strong>观测</strong> <span class="math inline">\(o_t\)</span>，据此更新它对环境状态的估计；按<strong>策略</strong>选择动作 <span class="math inline">\(a_t\)</span>；动作作用于环境，环境转移到新状态，并给出下一轮的观测。写成公式为 <span class="math display">\[\begin{gathered}
-  \hat{s}_t = \mathrm{Update}(\hat{s}_{t-1},\, o_t),\qquad
+<p>智能体的运行是一个循环（图 <a href="../ch6/s6-3.html#c6-fig-loop">6-4</a>）：在第 <span class="math inline">\(t\)</span> 轮，智能体获得<strong>观测</strong> <span class="math inline">\(o_t\)</span>，结合上一轮的动作 <span class="math inline">\(a_{t-1}\)</span> 更新它对环境状态的估计；按<strong>策略</strong>选择动作 <span class="math inline">\(a_t\)</span>；动作作用于环境，环境转移到新状态，并给出下一轮的观测。写成公式为 <span class="math display">\[\begin{gathered}
+  \hat{s}_t = \mathrm{Update}(\hat{s}_{t-1},\, a_{t-1},\, o_t),\qquad
   a_t \sim \pi(\,\cdot\mid \hat{s}_t),\\
   s_{t+1} \sim \mathcal{T}(\,\cdot\mid s_t, a_t),\qquad
   o_{t+1} \sim \mathcal{O}(\,\cdot\mid s_{t+1}),
 \end{gathered}
-\tag{6-1}\]</span> 其中 <span class="math inline">\(s_t\)</span> 是环境的真实状态，智能体往往看不到它，只能维护一个估计 <span class="math inline">\(\hat{s}_t\)</span>（加帽表示估计值）；<span class="math inline">\(\pi\)</span> 是策略，即“在什么状态下采取什么动作”的规则；<span class="math inline">\(\mathcal{T}\)</span> 是环境的状态转移概率；<span class="math inline">\(\mathcal{O}\)</span> 是观测概率，描述在某个状态下会看到什么。式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 正是<strong>部分可观测马尔可夫决策过程</strong>（POMDP）的结构<sup><a href="../ch6/references.html#ref-1">[1]</a></sup>。在 LLM 智能体中，<span class="math inline">\(\hat{s}_t\)</span> 就是上下文和记忆里记下的任务进度，<span class="math inline">\(\pi\)</span> 由“LLM + 提示词”实现，<span class="math inline">\(\mathrm{Update}\)</span> 由框架把新观测写入上下文来完成。</p>
+\tag{6-1}\]</span> 其中 <span class="math inline">\(s_t\)</span> 是环境的真实状态，智能体往往看不到它，只能维护一个估计 <span class="math inline">\(\hat{s}_t\)</span>（加帽表示估计值）；<span class="math inline">\(\pi\)</span> 是策略，即“在什么状态下采取什么动作”的规则；<span class="math inline">\(\mathcal{T}\)</span> 是环境的状态转移概率；<span class="math inline">\(\mathcal{O}\)</span> 是观测概率，描述在某个状态下会看到什么。式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 正是<strong>部分可观测马尔可夫决策过程</strong>（POMDP）的结构<sup><a href="../ch6/references.html#ref-1">[1]</a></sup>。在 LLM 智能体中，<span class="math inline">\(\hat{s}_t\)</span> 就是上下文和记忆里记下的任务进度，<span class="math inline">\(\pi\)</span> 由“LLM + 提示词”实现，<span class="math inline">\(\mathrm{Update}\)</span> 由框架把上一轮的行动和新观测写入上下文来完成。</p>
 <div id="c6-fig-loop" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -857,11 +857,11 @@ window.Quarto = {
 <p>图 6-5　ReAct 的“思考—行动—观察”循环（左）及其在差旅任务中的轨迹（右，每轮只列出行动与观察，完整的思考见正文；6 轮之后模型再调用一次写出最终回复）。思考决定行动，框架执行行动得到观察，观察修正下一轮思考</p>
 </div>
 </div>
-<p>用概率的语言，ReAct 把“一次生成整个答案”拆成了交替的条件生成。记任务上下文为 <span class="math inline">\(c\)</span>，第 <span class="math inline">\(k\)</span> 轮的思考、行动、观察为 <span class="math inline">\(z_k, a_k, o_k\)</span>，此前的轨迹为 <span class="math inline">\(\tau_{&lt;k}\)</span>，则一条 <span class="math inline">\(K\)</span> 轮轨迹的概率为 <span class="math display">\[p(\tau) = \prod_{k=1}^{K}\ \underbrace{\pi_\theta(z_k, a_k \mid c, \tau_{&lt;k})}_{\text{模型生成思考与行动}}\ \cdot\ \underbrace{p_{\mathrm{env}}(o_k \mid a_k)}_{\text{环境返回观察}}.
-\tag{6-2}\]</span> 式中第一项由参数为 <span class="math inline">\(\theta\)</span> 的模型决定，第二项由工具和环境决定，与模型无关。由此可见，<strong>轨迹的质量不只取决于模型，也取决于观察的质量</strong>：工具返回模糊、错误或过长的信息，会直接拖累后面所有步骤。这就是第 <a href="../ch6/s6-2.html#c6-subsec-actuator">6.2.3</a> 小节强调“错误信息可读”的原因。</p>
+<p>用概率的语言，ReAct 把“一次生成整个答案”拆成了交替的条件生成。记任务上下文为 <span class="math inline">\(c\)</span>，第 <span class="math inline">\(k\)</span> 轮的思考、行动、观察为 <span class="math inline">\(z_k, a_k, o_k\)</span>，此前的轨迹为 <span class="math inline">\(\tau_{&lt;k}\)</span>，则一条 <span class="math inline">\(K\)</span> 轮轨迹的概率为 <span class="math display">\[p(\tau) = \prod_{k=1}^{K}\ \underbrace{\pi_\theta(z_k, a_k \mid c, \tau_{&lt;k})}_{\text{模型生成思考与行动}}\ \cdot\ \underbrace{p_{\mathrm{env}}(o_k \mid \tau_{&lt;k}, a_k)}_{\text{环境返回观察}}.
+\tag{6-2}\]</span> 式中第一项由参数为 <span class="math inline">\(\theta\)</span> 的模型决定，第二项由工具和环境决定，与模型无关；环境有状态时（如预订、改签），观察还取决于此前的交互历史，所以条件中带有 <span class="math inline">\(\tau_{&lt;k}\)</span>。由此可见，<strong>轨迹的质量不只取决于模型，也取决于观察的质量</strong>：工具返回模糊、错误或过长的信息，会直接拖累后面所有步骤。这就是第 <a href="../ch6/s6-2.html#c6-subsec-actuator">6.2.3</a> 小节强调“错误信息可读”的原因。</p>
 <p>与只推理的思维链和只调用工具的做法相比，ReAct 的好处可以概括为：<strong>只推理容易编造，只行动容易盲目</strong>。只有推理，模型会在没有外部依据的情况下自信地编造事实；只有行动，模型会在没有整体计划的情况下机械地试错。ReAct 的论文在问答、事实核查和交互式决策任务上，都报告了交织方式优于只推理或只行动的基线<sup><a href="../ch6/references.html#ref-2">[2]</a></sup>。</p>
-<p><strong>代价：调用次数与 token 消耗</strong>　 ReAct 每一轮至少调用一次模型，而且每一轮的思考、行动、观察都要追加到上下文，下一次调用时连同前面的全部内容<strong>再次输入</strong>模型。设第一次调用的输入为 <span class="math inline">\(P_0\)</span> 个 token（系统提示、工具说明与用户请求），每轮追加 <span class="math inline">\(\Delta\)</span> 个 token，共调用 <span class="math inline">\(K\)</span> 次，则第 <span class="math inline">\(k\)</span> 次调用的输入为 <span class="math inline">\(P_0+(k-1)\Delta\)</span>，累计输入 <span class="math display">\[T_{\mathrm{in}} = \sum_{k=1}^{K}\bigl(P_0+(k-1)\Delta\bigr) = K P_0 + \frac{K(K-1)}{2}\,\Delta,
-\tag{6-3}\]</span> 第二项随轮数 <span class="math inline">\(K\)</span> <strong>按平方增长</strong>，轮数一多就成为主导项。</p>
+<p><strong>代价：调用次数与 token 消耗</strong>　 ReAct 每一轮至少调用一次模型，而且每一轮的思考、行动、观察都要追加到上下文，下一次调用时连同前面的全部内容<strong>再次输入</strong>模型。设第一次调用的输入为 <span class="math inline">\(P_0\)</span> 个 token（系统提示、工具说明与用户请求），每轮追加 <span class="math inline">\(\Delta\)</span> 个 token，共调用 <span class="math inline">\(M\)</span> 次（若有 <span class="math inline">\(K\)</span> 轮工具交互，最后还要再调用一次写出回复，则 <span class="math inline">\(M=K+1\)</span>），则第 <span class="math inline">\(k\)</span> 次调用的输入为 <span class="math inline">\(P_0+(k-1)\Delta\)</span>，累计输入 <span class="math display">\[T_{\mathrm{in}} = \sum_{k=1}^{M}\bigl(P_0+(k-1)\Delta\bigr) = M P_0 + \frac{M(M-1)}{2}\,\Delta,
+\tag{6-3}\]</span> 第二项随调用次数 <span class="math inline">\(M\)</span> <strong>按平方增长</strong>，调用一多就成为主导项。</p>
 <div id="c6-ex-tokens" class="bookbox example">
 <div class="boxtitle">
 <p>例 6-1　ReAct 轨迹的 token 账</p>
@@ -890,7 +890,7 @@ window.Quarto = {
 <td style="text-align: left;">累计输入</td>
 <td style="text-align: left;"><span class="math inline">\(7\times2100+(7\times6\div2)\times500\)</span></td>
 <td style="text-align: left;">25 200</td>
-<td style="text-align: left;">式 <a href="../ch6/s6-3.html#c6-eq-react-tokens">（6-3）</a>，<span class="math inline">\(K=7\)</span></td>
+<td style="text-align: left;">式 <a href="../ch6/s6-3.html#c6-eq-react-tokens">（6-3）</a>，<span class="math inline">\(M=7\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">3</td>
@@ -924,12 +924,12 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 6-6　例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 中每次模型调用的输入 token 数。柱高为该次调用读入的全部上下文（数字为 token 数）；已有轨迹逐轮累积，使累计输入随轮数按平方增长</p>
+<p>图 6-6　例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 中每次模型调用的输入 token 数。柱高为该次调用读入的全部上下文（数字为 token 数）；已有轨迹逐轮累积，使累计输入随调用次数按平方增长</p>
 </div>
 </div>
 <div class="widget" data-widget="c6tokens"></div>
-<p>例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 说明，智能体的主要开销在<strong>反复输入的上下文</strong>，而不是模型写出的文字。这与推理系统的工作方式直接相关：每次调用都要先对输入做预填充（即一次性处理全部输入 token），再逐 token 解码（第 4 章第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节），7 次串行调用的时延是 7 段“预填充 + 解码”之和。每次调用的输入都以上一次的全部输入为开头、只在末尾追加新内容，因此推理服务可以复用这段公共前缀的 KV 缓存（Key-Value cache，键值缓存；第 4 章第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节），只对新增部分做预填充；部分模型服务也对命中缓存的输入按较低价格计费。降低成本的另外两条路是压缩轨迹（第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节）和减少轮数（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。</p>
-<p><strong>ReAct 之外的形态</strong>　 ReAct 不是唯一的组织方式。<strong>计划—执行</strong>（Plan-and-Execute）先让模型一次写出完整计划，再逐步执行，必要时才重新规划<sup><a href="../ch6/references.html#ref-9">[9]</a></sup>，适合步骤清楚的任务，调用次数也更少；<strong>Reflexion</strong><sup><a href="../ch6/references.html#ref-3">[3]</a></sup>在一次尝试失败后让模型用文字总结教训并写入记忆，下次尝试时参考，适合可以反复尝试的任务；<strong>思维树</strong><sup><a href="../ch6/references.html#ref-10">[10]</a></sup>在思考层面展开多个候选并评估、回溯，适合需要探索的解谜类任务。它们的共同点是把隐含的推理写成可检查的中间结构，区别在于写出的粒度和时机。</p>
+<p>例 <a href="../ch6/s6-3.html#c6-ex-tokens">6-1</a> 说明，智能体的主要开销在<strong>反复输入的上下文</strong>，而不是模型写出的文字。这与推理系统的工作方式直接相关：每次调用都要先对输入做预填充（即一次性处理全部输入 token），再逐 token 解码（第 <a href="../ch4/s4-4.html#subsec-prefill-decode">4.4.1</a> 小节），7 次串行调用的时延是 7 段“预填充 + 解码”之和。每次调用的输入都以上一次的全部输入为开头、只在末尾追加新内容，因此推理服务可以复用这段公共前缀的 KV 缓存（Key-Value cache，键值缓存；第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节），只对新增部分做预填充；部分模型服务也对命中缓存的输入按较低价格计费。降低成本的另外两条路是压缩轨迹（第 <a href="../ch6/s6-5.html#c6-subsec-context">6.5.6</a> 小节）和减少轮数（第 <a href="../ch6/s6-4.html#c6-subsec-plan">6.4.2</a> 小节）。</p>
+<p><strong>ReAct 之外的形态</strong>　 ReAct 不是唯一的组织方式。<strong>计划—执行</strong>（Plan-and-Execute）借鉴了“先规划、后求解”的提示方法<sup><a href="../ch6/references.html#ref-9">[9]</a></sup>：先让模型一次写出完整计划，再由框架逐步执行，偏离预期时才重新规划，适合步骤清楚的任务，调用次数也更少；<strong>Reflexion</strong><sup><a href="../ch6/references.html#ref-3">[3]</a></sup>在一次尝试失败后让模型用文字总结教训并写入记忆，下次尝试时参考，适合可以反复尝试的任务；<strong>思维树</strong><sup><a href="../ch6/references.html#ref-10">[10]</a></sup>在思考层面展开多个候选并评估、回溯，适合需要探索的解谜类任务。它们的共同点是把隐含的推理写成可检查的中间结构，区别在于写出的粒度和时机。</p>
 </section>
 <section id="c6-subsec-division" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-division">6.3.3　LLM 与 Agent 框架的分工</h2>

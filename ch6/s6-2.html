@@ -759,7 +759,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <section id="c6-subsec-parts" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-parts">6.2.1　五个组成部分</h2>
-<p>一个智能体由五个部分组成<sup><a href="../ch6/references.html#ref-4">[4]</a>,<a href="../ch6/references.html#ref-5">[5]</a></sup>：感知器、决策系统、执行器、环境和通信模块。前四者构成单个智能体的闭环，通信模块用于智能体与用户、智能体与智能体之间的信息交换。下面先说清数据怎么流动：环境的信息经感知器整理，与指令、记忆、工具说明一起<strong>组装成上下文</strong>交给 LLM；LLM 输出下一步的决定，经校验后交给执行器；执行器作用于环境，环境的变化又被感知器捕获（图 <a href="../ch6/s6-2.html#c6-fig-arch">6-3</a>）。</p>
+<p>一个智能体由五个部分组成<sup><a href="../ch6/references.html#ref-4">[4]</a>,<a href="../ch6/references.html#ref-8">[8]</a></sup>：感知器、决策系统、执行器、环境和通信模块。前四者构成单个智能体的闭环，通信模块用于智能体与用户、智能体与智能体之间的信息交换。下面先说清数据怎么流动：环境的信息经感知器整理，与指令、记忆、工具说明一起<strong>组装成上下文</strong>交给 LLM；LLM 输出下一步的决定，经校验后交给执行器；执行器作用于环境，环境的变化又被感知器捕获（图 <a href="../ch6/s6-2.html#c6-fig-arch">6-3</a>）。</p>
 <div id="c6-fig-arch" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -767,7 +767,7 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <div class="figcap">
-<p>图 6-3　以 LLM 为决策核心的智能体结构。环境信息经感知器整理、与指令和记忆一起组装成上下文后才进入 LLM；LLM 的决定经校验后由执行器作用于环境。下方四个模块为决策系统提供角色、历史、计划和行动接口</p>
+<p>图 6-3　以 LLM 为决策核心的智能体结构。环境信息经感知器整理、与指令和记忆一起组装成上下文后才进入 LLM；LLM 的决定经校验后由执行器作用于环境；通信模块收到的消息同样先进入上下文组装，对外回复也经输出校验后发出。下方四个模块为决策系统提供角色、历史、计划和行动接口</p>
 </div>
 </div>
 <p><strong>感知器（perceptor）</strong>　 负责采集环境信息，并把各种来源的输入整理成决策系统能使用的形式。软件智能体的输入主要有四类：用户的自然语言（文字或语音转写）、API 返回的结构化数据、文档与网页内容，以及系统内部的状态变化（定时器触发、审批状态改变）。难点不在“拿到”，而在“整理”：同一条信息可能以 JSON 字段、表格单元格、PDF 段落或聊天消息的形式出现，需要统一成带来源标注的文本片段，才能放进上下文。</p>

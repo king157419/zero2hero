@@ -789,7 +789,7 @@ window.Quarto = {
 </div>
 <section id="c7-subsec-ctx-src" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-ctx-src">7.4.1　信息从哪里来</h2>
-<p><strong>上下文</strong>（context）指一次模型调用实际送进模型的全部输入：系统提示、工具描述、检索到的材料、历史摘要、最新的工具结果等。它只是“模型看过的一切”中被选进本轮的那一部分。<strong>上下文工程</strong>（Context Engineering）管理的是信息怎样<strong>进入</strong>、<strong>使用</strong>、<strong>退出</strong>和<strong>保存</strong>，而不是单纯扩大窗口<sup><a href="../ch7/references.html#ref-13">[13]</a></sup>。在 Coding Agent 里，模型输入混合了几类性质很不相同的材料（表 <a href="../ch7/s7-4.html#c7-tab-ctx-src">7-8</a>）；如果统统叫“上下文”，就容易忽略它们的来源和可信度。</p>
+<p><strong>上下文</strong>（context）指一次模型调用实际送进模型的全部输入：系统提示、工具描述、检索到的材料、历史摘要、最新的工具结果等。它只是“模型看过的一切”中被选进本轮的那一部分。<strong>上下文工程</strong>（Context Engineering）管理的是信息怎样<strong>进入</strong>、<strong>使用</strong>、<strong>退出</strong>和<strong>保存</strong>，而不是单纯扩大窗口<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。在 Coding Agent 里，模型输入混合了几类性质很不相同的材料（表 <a href="../ch7/s7-4.html#c7-tab-ctx-src">7-8</a>）；如果统统叫“上下文”，就容易忽略它们的来源和可信度。</p>
 <div id="c7-tab-ctx-src" class="booktab">
 <div class="tabcap">
 <p>表 7-8　Coding Agent 上下文中的六类信息</p>
@@ -848,7 +848,7 @@ window.Quarto = {
 </section>
 <section id="c7-subsec-filter" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-filter">7.4.2　窗口是注意力预算：四道筛选器</h2>
-<p>“上下文越多越好”是常见误解。Anthropic 的工程文章把这种现象称为<strong>上下文腐化</strong>（context rot）：包括“大海捞针”在内的长上下文测试显示，随着窗口中 token 增多，模型准确找回和利用其中某条信息的能力往往下降；长会话里的旧假设、重复输出和无关片段会与关键约束争夺模型的注意力<sup><a href="../ch7/references.html#ref-13">[13]</a></sup>。即使窗口还没填满，关键约束也可能被淹没。因此上下文窗口更像一份<strong>注意力预算</strong>，目标是用最少的高信号 token 支撑这一步的判断。</p>
+<p>“上下文越多越好”是常见误解。Anthropic 的工程文章把这种现象称为<strong>上下文腐化</strong>（context rot）：包括“大海捞针”在内的长上下文测试显示，随着窗口中 token 增多，模型准确找回和利用其中某条信息的能力往往下降；长会话里的旧假设、重复输出和无关片段会与关键约束争夺模型的注意力<sup><a href="../ch7/references.html#ref-14">[14]</a></sup>。即使窗口还没填满，关键约束也可能被淹没。因此上下文窗口更像一份<strong>注意力预算</strong>，目标是用最少的高信号 token 支撑这一步的判断。</p>
 <p>假设 Agent 正在修复“会议开始前十分钟提醒”的时区错误。此刻需要的是时间类型、转换函数、相关测试和失败输出；三十天前的邮件正文、整个界面样式目录，即使真实存在，也不会帮助决定下一步。筛选可以连问四个问题：</p>
 <ol type="1">
 <li><p><strong>相关性</strong>：删掉这段信息，下一步会改变吗？不会，就只保留它的路径或索引，需要时再读。</p></li>
@@ -939,7 +939,7 @@ window.Quarto = {
 </tbody>
 </table>
 <p><strong>数据流向</strong>：邮件、日历、待办、旧对话 → 四道筛选器 → 只留今日、高优先级、未完成、与当前问题相关的部分 → 组装成约 <span class="math inline">\(10^{4}\)</span> token 的工作集。</p>
-<p><strong>结论</strong>：全部加载用掉约八成窗口，留给代码和测试输出的空间只剩约 <span class="math inline">\(4.1\times10^{4}\)</span> token，而且无关邮件与关键规则争夺注意力；最小工作集只占 5%，30 轮的累计输入量相差约 16 倍（<span class="math inline">\(4.77\times10^{6}\div3.0\times10^{5}\)</span>）。按 token 计费时，成本也大致按这个比例变化。前缀缓存（复用相同开头的 KV 缓存）可以降低重复部分的计算（见第 <a href="../ch7/s7-11.html">7.11</a> 节），但不能解决注意力被稀释的问题。</p>
+<p><strong>结论</strong>：全部加载用掉约八成窗口，留给代码和测试输出的空间只剩约 <span class="math inline">\(4.1\times10^{4}\)</span> token，而且无关邮件与关键规则争夺注意力；最小工作集只占 5%，30 轮的累计输入量相差约 16 倍（<span class="math inline">\(4.77\times10^{6}\div(3.0\times10^{5})\approx16\)</span>）。按 token 计费时，成本也大致按这个比例变化。前缀缓存（复用相同开头的 KV 缓存）可以降低重复部分的计算（见第 <a href="../ch7/s7-11.html">7.11</a> 节），但不能解决注意力被稀释的问题。</p>
 </div>
 <div class="widget" data-widget="c7budget"></div>
 </section>
@@ -973,7 +973,7 @@ window.Quarto = {
 <p>保存记忆时还要防止把不可信的内容“洗成”长期规则。邮件、网页、仓库里的第三方文件可能写着诱导 Agent 改变目标或泄露信息的文字。它们可以作为数据被读取，但不能因为出现在工具结果里就覆盖用户指令；从这些来源提炼的经验要保留原始出处并经过验证。记忆系统的完整设计见第 <a href="../ch8/s8-2.html">8.2</a> 节。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p><strong>上下文窗口、外部记忆、KV 缓存</strong>是三回事。<strong>上下文窗口</strong>是模型单次调用能接收的输入长度上限，逻辑上每次调用都要重新提供全部输入，上一次填了什么不会自动保留（推理引擎可以复用相同开头的中间结果，但这不改变窗口容量，也不替你记住内容）。<strong>外部记忆</strong>是存在磁盘或数据库里、跨调用保存、按需取回的内容，进入窗口前仍要检索、筛选和授权。<strong>KV 缓存</strong>（Key-Value Cache，键值缓存）是推理引擎在每一层注意力中为已处理的 token 保存的键（Key）和值（Value）向量，生成后续 token 时不必重算它们（第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节）；它减少相同前缀的重复预填充计算和首 token 延迟，却不减少对全部上下文做注意力计算的开销，也不会判断旧事实是否可靠，也代替不了任务状态和长期记忆。第 <a href="../ch7/s7-11.html">7.11</a> 节还会从部署角度比较这几种缓存。</p>
+<p><strong>上下文窗口、外部记忆、KV 缓存</strong>是三回事。<strong>上下文窗口</strong>是模型单次调用能接收的输入长度上限，逻辑上每次调用都要重新提供全部输入，上一次填了什么不会自动保留（推理引擎可以复用相同开头的中间结果，但这不改变窗口容量，也不替你记住内容）。<strong>外部记忆</strong>是存在磁盘或数据库里、跨调用保存、按需取回的内容，进入窗口前仍要检索、筛选和授权。<strong>KV 缓存</strong>（Key-Value Cache，键值缓存）是推理引擎在每一层注意力中为已处理的 token 保存的键（Key）和值（Value）向量，生成后续 token 时不必重算它们（第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节）；跨调用复用相同开头的 KV 缓存（即前缀缓存）还能省去重复前缀的预填充计算、降低首 token 延迟，但新增输入和后续生成的每个 token 仍要对全部上下文做注意力计算，它也不会判断旧事实是否可靠，更代替不了任务状态和长期记忆。第 <a href="../ch7/s7-11.html">7.11</a> 节还会从部署角度比较这几种缓存。</p>
 </div>
 </section>
 <section id="c7-subsec-ctx-pack" class="level2">

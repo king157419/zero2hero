@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -765,7 +794,7 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-1　本章知识地图。上排是各阶段的输入，中排是阶段及所在节，下排是产物；每个阶段的产物是下一阶段的起点。最下方的综合案例把四个阶段串成一条主线。图中缩写：PEFT 为参数高效微调，LoRA 为低秩适配，PPO 为近端策略优化，DPO 为直接偏好优化，KV 缓存为推理时保存的注意力键值中间结果；N 为参数量，D 为训练 token 数</p>
+<p>图 3-1　本章知识地图。上排是各阶段的输入，中排是阶段及所在节，下排是产物；每个阶段的产物是下一阶段的起点。最下方的综合案例把四个阶段串成一条主线。图中缩写：PEFT 为参数高效微调，LoRA 为低秩适配，PPO 为近端策略优化，DPO 为直接偏好优化，KV 缓存为推理时保存的注意力键值中间结果；<span class="math inline">\(N\)</span> 为参数量，<span class="math inline">\(D\)</span> 为训练 token 数</p>
 </div>
 </div>
 <p><strong>预训练：让模型“有能力”</strong>　 研发者从网页、书籍、代码、论文等来源收集数以万亿计的 token，经过清洗、去重和分词，让模型反复做一件事：根据前文预测下一个 token。为了把这件事做好，模型必须在参数中逐渐编码语法、事实知识、代码模式乃至一定的推理规律。预训练的产物称为<strong>基础模型</strong>（base model）。这一阶段消耗的数据和算力最多，通常占模型研发总计算量的绝大部分。</p>

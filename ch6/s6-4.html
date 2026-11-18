@@ -793,7 +793,7 @@ window.Quarto = {
 <section id="c6-subsec-autonomy" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-autonomy">6.4.1　自主性：从逐步指令到目标委托</h2>
 <p><strong>自主性</strong>（autonomy）指在没有持续人工干预的情况下，根据自身目标和对环境的感知，独立做出决策并执行行动的能力。它是其他能力发挥作用的前提：一个需要用户逐步指挥的系统，单步能力再强，也无法接受“把这件事办了”式的委托。</p>
-<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-7</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
+<p>自主性不是“有或无”，而是一个连续的谱。Feng 等人在 2025 年的论文《Levels of Autonomy for AI Agents》中按<strong>用户扮演的角色</strong>把智能体的自主性分为五级<sup><a href="../ch6/references.html#ref-11">[11]</a></sup>（表 <a href="../ch6/s6-4.html#c6-tab-autonomy">6-7</a>）：等级越高，用户介入越少。注意名称指的是<strong>用户</strong>的角色，例如 L3“顾问”是说用户被智能体征询意见，而不是智能体当顾问。他们强调，自主性是一项<strong>设计选择</strong>，与能力相互独立：能力很强的智能体也可以被设计成低自主性。等级越高并不越好，应由任务的容错程度、可逆性和监管要求决定。资金划转、医疗诊断这类场景，即使技术上可行，也应停留在 L4（用户作为批准者）及以下，高风险操作必须由人确认。</p>
 <div id="c6-tab-autonomy" class="booktab">
 <div class="tabcap">
 <p>表 6-7　智能体自主性的五个等级（据 Feng 等人的划分）</p>
@@ -844,7 +844,7 @@ window.Quarto = {
 <p>两种规划各有长短。经典规划精确、可验证，在模型描述正确、搜索算法完备，且 A* 这类启发式搜索使用可采纳的启发函数（图搜索时还需满足一致性）时，还能给出最优性保证，但要求先把世界形式化，开放领域难以做到；LLM 规划灵活，能处理常识和模糊约束，却可能写出动作集合之外的动作（例如调用一个并不存在的工具）、漏掉前置条件，或在长任务中忘记目标。于是出现了三种结合方式：</p>
 <ul>
 <li><p><strong>LLM 作规划器</strong>：直接让模型输出步骤列表，框架逐步执行。实现简单，适合步骤少、容错高的任务。</p></li>
-<li><p><strong>LLM 作翻译器</strong>：模型把自然语言任务翻译成形式化描述，例如 <strong>PDDL</strong>（规划领域定义语言），交给经典规划器求解，再把结果翻译回自然语言。这样兼得模型的理解能力和规划器的正确性保证，LLM+P<sup><a href="../ch6/references.html#ref-13">[13]</a></sup>是这一思路的代表。</p></li>
+<li><p><strong>LLM 作翻译器</strong>：模型把自然语言任务翻译成形式化描述，例如 <strong>PDDL</strong>（规划领域定义语言），交给经典规划器求解，再把结果翻译回自然语言。这样兼得模型的理解能力和规划器的正确性保证，LLM+P<sup><a href="../ch6/references.html#ref-12">[12]</a></sup>是这一思路的代表。</p></li>
 <li><p><strong>LLM 作启发函数</strong>：在搜索过程中，用模型评估“哪个状态离目标更近”，为搜索提供方向，既保留搜索的系统性，又免去人工设计启发函数。</p></li>
 </ul>
 <p>计划的好坏可用四个指标衡量：<strong>可行性</strong>（能否真正执行）、<strong>完备性</strong>（是否覆盖所有必要步骤）、<strong>最优性</strong>（在可行方案中是否足够好）、<strong>稳健性</strong>（局部失败时是否容易修补）。可行性与完备性决定计划能否正确完成，最优性与稳健性决定完成的质量和抗故障能力；工程上先保证可行，再追求最优。</p>
@@ -859,11 +859,11 @@ window.Quarto = {
 <li><p><strong>溯因推理</strong>：从结果反推最可能的原因。“预订失败且提示余额相关错误，最可能是公司账户额度不足。”这是故障诊断和自我修复的基础。</p></li>
 </ul>
 <p>LLM 的推理能力来自预训练中习得的模式，在语义理解和常识推理上相对擅长（但也会出错），严格的形式推理则明显不可靠：多步算术、逻辑蕴含、约束满足都可能出错。因此有一条工程原则：<strong>能算的不要推，能查的不要猜</strong>。把计算交给代码解释器，把事实查证交给检索，把约束求解交给求解器，模型只负责把问题“翻译”成合适的形式并解释结果。</p>
-<p><strong>思维链</strong>（CoT）<sup><a href="../ch6/references.html#ref-11">[11]</a></sup>让模型在给出答案之前先写出中间步骤。可以这样理解它的作用：生成每个 token 时，信息只穿过固定层数的网络，一步之内能完成的推理有限；先写出中间步骤，后面的 token 就能读取这些中间结果继续算，相当于给了模型“草稿纸”和更多计算步骤。<strong>思维树</strong>（ToT）<sup><a href="../ch6/references.html#ref-10">[10]</a></sup>把一条链扩展成一棵树：每一步生成几个候选，由模型评估后选择展开或回溯，适合需要探索的任务。二者都增加了调用成本，应按任务难度选用。还要注意，推理链“看起来合理”不等于“实际正确”：它可能逻辑连贯却前提错误，也可能结论对了理由却是编的。关键结论应要求可核验的证据，这正是第 <a href="../ch6/s6-3.html#c6-subsec-stop">6.3.4</a> 小节三层校验的用途。</p>
+<p><strong>思维链</strong>（CoT）<sup><a href="../ch6/references.html#ref-13">[13]</a></sup>让模型在给出答案之前先写出中间步骤。可以这样理解它的作用：生成每个 token 时，信息只穿过固定层数的网络，一步之内能完成的推理有限；先写出中间步骤，后面的 token 就能读取这些中间结果继续算，相当于给了模型“草稿纸”和更多计算步骤。<strong>思维树</strong>（ToT）<sup><a href="../ch6/references.html#ref-10">[10]</a></sup>把一条链扩展成一棵树：每一步生成几个候选，由模型评估后选择展开或回溯，适合需要探索的任务。二者都增加了调用成本，应按任务难度选用。还要注意，推理链“看起来合理”不等于“实际正确”：它可能逻辑连贯却前提错误，也可能结论对了理由却是编的。关键结论应要求可核验的证据，这正是第 <a href="../ch6/s6-3.html#c6-subsec-stop">6.3.4</a> 小节三层校验的用途。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p><strong>规划与推理。</strong>二者都由 LLM 完成，常被混为一谈，但产物不同。推理回答“什么是真的”，产物是<strong>结论</strong>（这家酒店不能报销）；规划回答“该做什么”，产物是作用于环境的<strong>动作序列</strong>（先查制度、再查车次、再订酒店）。规划离不开推理——判断哪一步可行就要推理——但推理不一定产生行动。评价方式也不同：推理看结论是否正确，规划看计划能否执行、是否达成目标。</p>
-<p><strong>“推理”的两种意思。</strong>本节的“推理”是 reasoning，指得出结论的思维过程；第 4 章第 <a href="../ch4/s4-4.html">4.4</a> 节的“推理”是 inference，指训练好的模型根据输入计算输出的运行过程（与“训练”相对）。“推理模型”“推理成本”这类说法要看上下文：说模型“推理能力强”指前者，说“推理服务的显存”指后者。</p>
+<p><strong>“推理”的两种意思。</strong>本节的“推理”是 reasoning，指得出结论的思维过程；第 <a href="../ch4/s4-4.html">4.4</a> 节的“推理”是 inference，指训练好的模型根据输入计算输出的运行过程（与“训练”相对）。“推理模型”“推理成本”这类说法要看上下文：说模型“推理能力强”指前者，说“推理服务的显存”指后者。</p>
 </div>
 </section>
 <section id="c6-subsec-memory" class="level2">
@@ -882,7 +882,7 @@ window.Quarto = {
 </div>
 </div>
 <p><strong>四种操作</strong>　 一个完整的记忆系统包含四种操作：<strong>写入</strong>把原始交互转成可存储的形式，通常是抽取事实再加摘要，而不是原文照存；<strong>检索</strong>在需要时召回相关片段，常用向量相似度初筛，再按时效与重要性排序（向量检索的原理见第 <a href="../ch5/s5-2.html#c5-subsec-embed">5.2.2</a> 小节）；<strong>压缩</strong>在记忆膨胀时摘要、去重、裁剪；<strong>遗忘</strong>按价值与时间淘汰低价值记忆，既控制成本，也避免过时信息干扰判断。</p>
-<p>检索时怎样给记忆排序？Park 等人在“生成式智能体”中把相关性、新近性、重要性三项等权相加<sup><a href="../ch6/references.html#ref-6">[6]</a></sup>（新近性按每过一小时乘以 0.995 衰减）。把它写成带权重、按指数衰减的一般形式为 <span class="math display">\[\mathrm{score}(q,m) = \alpha\,\mathrm{sim}(q,m) + \beta\,\mathrm{rec}(m) + \gamma\,\mathrm{imp}(m),
+<p>检索时怎样给记忆排序？Park 等人在“生成式智能体”中把相关性、新近性、重要性三项等权相加<sup><a href="../ch6/references.html#ref-5">[5]</a></sup>（新近性按每过一小时乘以 0.995 衰减）。把它写成带权重、按指数衰减的一般形式为 <span class="math display">\[\mathrm{score}(q,m) = \alpha\,\mathrm{sim}(q,m) + \beta\,\mathrm{rec}(m) + \gamma\,\mathrm{imp}(m),
   \qquad \mathrm{rec}(m) = e^{-\lambda\,\Delta t},
 \tag{6-5}\]</span> 其中 <span class="math inline">\(q\)</span> 是当前查询，<span class="math inline">\(m\)</span> 是一条记忆；<span class="math inline">\(\mathrm{sim}\)</span> 是二者的语义相似度（“像不像”）；<span class="math inline">\(\mathrm{rec}\)</span> 是新近性，随距今时间 <span class="math inline">\(\Delta t\)</span> 指数衰减，<span class="math inline">\(\lambda\)</span> 为衰减速率（“新不新”）；<span class="math inline">\(\mathrm{imp}\)</span> 是写入时由模型或规则打出的重要性（“重不重要”）；<span class="math inline">\(\alpha,\beta,\gamma\)</span> 为权重。三项各有用处：只看相似度，会反复召回早已过时的信息；只看新近性，会丢掉关键的长期偏好；只看重要性，会忽略眼前的具体情境。</p>
 <div id="c6-ex-memscore" class="bookbox example">
@@ -932,7 +932,7 @@ window.Quarto = {
 <p><strong>数据流向</strong>：查询 → 与每条记忆算三项分数 → 加权求和 → 取前 <span class="math inline">\(k\)</span> 条写进上下文。</p>
 </div>
 <div class="widget" data-widget="c6mem"></div>
-<p><strong>挑战与趋势</strong>　 实现高效、可扩展的长期记忆有五个难点：<strong>记忆表示</strong>——怎样组织海量历史，既能被 LLM 理解又能高效检索（纯文本易读但检索粒度粗，结构化条目精确却丢失语境）；<strong>记忆检索</strong>——怎样从庞大的记忆库中快速准确地找到相关片段（语义相似不等于对任务有用）；<strong>更新与管理</strong>——怎样增删改记忆、保持一致、处理冲突（用户上周说“喜欢靠窗”，这周说“无所谓”，以哪条为准）；<strong>计算效率</strong>——记忆带来的计算和存储开销；<strong>幻觉与一致性</strong>——怎样保证检索到的记忆准确，避免模型基于错误记忆编造，记忆一旦被污染会长期影响行为且难以察觉，因为检索只按相似度、新近性等排序，错误记忆与正确记忆会被一同召回。针对这些难点的发展方向包括：把文本、图像、音频纳入统一表示的<strong>多模态记忆</strong>；从对话中抽取实体、关系、事件，以知识图谱形式存储的<strong>结构化记忆</strong>；更智能的更新与遗忘机制，按任务和时间调整记忆优先级与粒度的<strong>动态管理</strong>；支持大规模、长时间、实时交互的<strong>效率与可扩展性</strong>；以及让开发者能理解、控制智能体如何使用记忆的<strong>可解释性与可控性</strong>。这些方向在第 <a href="../ch8/s8-2.html">8.2</a> 节和第 <a href="../ch8/s8-2.html#c8-subsec-frontier">8.2.10</a> 小节展开。</p>
+<p><strong>挑战与趋势</strong>　 实现高效、可扩展的长期记忆有五个难点：<strong>记忆表示</strong>——怎样组织海量历史，既能被 LLM 理解又能高效检索（纯文本易读但检索粒度粗，结构化条目精确却丢失语境）；<strong>记忆检索</strong>——怎样从庞大的记忆库中快速准确地找到相关片段（语义相似不等于对任务有用）；<strong>更新与管理</strong>——怎样增删改记忆、保持一致、处理冲突（用户上周说“喜欢靠窗”，这周说“无所谓”，以哪条为准）；<strong>计算效率</strong>——记忆带来的计算和存储开销；<strong>幻觉与一致性</strong>——怎样保证检索到的记忆准确，避免模型基于错误记忆编造，记忆一旦被污染会长期影响行为且难以察觉，因为检索只按相似度、新近性等排序，错误记忆与正确记忆会被一同召回。针对这些难点的发展方向包括：把文本、图像、音频纳入统一表示的<strong>多模态记忆</strong>；从对话中抽取实体、关系、事件，以知识图谱形式存储的<strong>结构化记忆</strong>；更智能的更新与遗忘机制，按任务和时间调整记忆优先级与粒度的<strong>动态管理</strong>；支持大规模、长时间、实时交互的<strong>效率与可扩展性</strong>；以及让开发者能理解、控制智能体如何使用记忆的<strong>可解释性与可控性</strong>。这些方向的具体做法见第 <a href="../ch8/s8-2.html">8.2</a> 节，前沿方向与未解问题见第 <a href="../ch8/s8-2.html#c8-subsec-frontier">8.2.10</a> 小节。</p>
 </section>
 <section id="c6-subsec-tools" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-tools">6.4.5　工具使用：把语言能力接到外部世界</h2>

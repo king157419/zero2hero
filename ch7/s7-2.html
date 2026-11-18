@@ -849,7 +849,7 @@ while state.status == RUNNING:                                 # 编排
 </section>
 <section id="c7-subsec-products" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-products">7.2.3　主流产品把各层放在哪里</h2>
-<p>现有产品的界面和定位各不相同，但都要处理任务状态、上下文、工具调用、权限和反馈这几件事。表 <a href="../ch7/s7-2.html#c7-tab-products">7-3</a> 按本章的分层，列出几种代表性系统的做法（信息截至 2026 年 11 月，来自各产品官方文档和发布说明<sup><a href="../ch7/references.html#ref-2">[2]</a>,<a href="../ch7/references.html#ref-3">[3]</a>,<a href="../ch7/references.html#ref-5">[5]</a>,<a href="../ch7/references.html#ref-6">[6]</a>,<a href="../ch7/references.html#ref-7">[7]</a>,<a href="../ch7/references.html#ref-8">[8]</a></sup>）。表中产品只是工程机制的实例，版本迭代很快，做实验时应写明所用版本。</p>
+<p>现有产品的界面和定位各不相同，但都要处理任务状态、上下文、工具调用、权限和反馈这几件事。表 <a href="../ch7/s7-2.html#c7-tab-products">7-3</a> 按本章的分层，列出几种代表性系统的做法（信息截至 2026 年 11 月，来自各产品官方文档和发布说明<sup><a href="../ch7/references.html#ref-2">[2]</a>,<a href="../ch7/references.html#ref-3">[3]</a>,<a href="../ch7/references.html#ref-4">[4]</a>,<a href="../ch7/references.html#ref-5">[5]</a>,<a href="../ch7/references.html#ref-6">[6]</a>,<a href="../ch7/references.html#ref-7">[7]</a>,<a href="../ch7/references.html#ref-8">[8]</a></sup>）。表中产品只是工程机制的实例，版本迭代很快，做实验时应写明所用版本。</p>
 <div id="c7-tab-products" class="booktab">
 <div class="tabcap">
 <p>表 7-3　代表性 Coding Agent 的实现选择（截至 2026 年 11 月）</p>
@@ -909,7 +909,7 @@ while state.status == RUNNING:                                 # 编排
 <ul>
 <li><p><strong>长期运行</strong>：开源的 OpenClaw（2025 年 11 月首发，曾名 Clawdbot、Moltbot）以一个长驻的网关（Gateway）进程连接多个聊天渠道，把消息路由给 Agent，并带有持久记忆和定时触发。任务从任何渠道进入后，仍要关联到具体工作区和权限配置，不能因为来自已连接的渠道就默认获得仓库写权限。</p></li>
 <li><p><strong>经验积累</strong>：Nous Research 开源的 Hermes Agent 区分“已知什么”（事实性记忆）和“遇到某类任务怎样做”（技能），能从执行经验中生成并修订技能。技能文件变了，不等于系统变好了；要判断是否真有改进，见第 <a href="../ch7/s7-8.html">7.8</a> 节。</p></li>
-<li><p><strong>办公与个人事务</strong>：腾讯 WorkBuddy（2026 年 3 月上线，据 IT之家转述腾讯云官方公众号消息<sup><a href="../ch7/references.html#ref-26">[26]</a></sup>）处理授权目录中的办公文件，Meta 的个人 Agent Muse（2026 年 9 月发布，与上文的 Muse Code 同属 Meta 的 Muse 品牌，但是不同的产品）在独立虚拟机里运行并对敏感动作要求审批。与代码仓库不同，发邮件、下单这类业务动作有外部副作用，无法用代码差异和版本控制撤销，风险边界也就不同。</p></li>
+<li><p><strong>办公与个人事务</strong>：腾讯 WorkBuddy（2026 年 3 月上线，据 IT之家转述腾讯云官方公众号消息<sup><a href="../ch7/references.html#ref-12">[12]</a></sup>）处理授权目录中的办公文件，Meta 的个人 Agent Muse（2026 年 9 月发布，与上文的 Muse Code 同属 Meta 的 Muse 品牌，但是不同的产品）在独立虚拟机里运行并对敏感动作要求审批。与代码仓库不同，发邮件、下单这类业务动作有外部副作用，无法用代码差异和版本控制撤销，风险边界也就不同。</p></li>
 </ul>
 </section>
 <section id="c7-subsec-stack" class="level2">

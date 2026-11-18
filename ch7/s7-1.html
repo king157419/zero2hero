@@ -818,12 +818,12 @@ window.Quarto = {
 </section>
 <section id="c7-subsec-four" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-four">7.1.3　四类工程技术：各管循环的一段</h2>
-<p>把模型放进仓库以后，常见的失败并不都来自模型“不够聪明”：项目没写明正确的启动命令；测试依赖一个没配置的服务；终端能读到与任务无关的密钥；长任务中断后没有检查点；测试失败时 Agent 仍报告“已完成”。只要求模型“再仔细一些”，不能稳定消除这些问题。OpenAI 的一个内部团队在 2026 年 2 月公开的实践提供了佐证（以下数字均为该团队自己报告的）：约五个月里，起初 3 名、后来 7 名工程师驱动 Codex 生成了约 100 万行代码、合并约 1500 个 PR，团队约定人类不手写代码；工程师的工作重心转到整理仓库知识、建立可执行的约束、提供工具和设计反馈回路上<sup><a href="../ch7/references.html#ref-1">[1]</a></sup>。可以把这一观察粗略写成 <span class="math display">\[\text{可靠交付} = \text{模型能力} \times \text{工程系统},\]</span> 乘号表示二者缺一不可：工程系统再完善，模型推理不了也无济于事；模型再强，没有工具、约束和反馈，也落不到真实仓库上。</p>
+<p>把模型放进仓库以后，常见的失败并不都来自模型“不够聪明”：项目没写明正确的启动命令；测试依赖一个没配置的服务；终端能读到与任务无关的密钥；长任务中断后没有检查点；测试失败时 Agent 仍报告“已完成”。只要求模型“再仔细一些”，不能稳定消除这些问题。OpenAI 的一个内部团队在 2026 年 2 月公开的实践提供了佐证（以下数字均为该团队自己报告的）：约五个月里，起初 3 名、后来 7 名工程师驱动 Codex 生成了约 100 万行代码、合并约 1500 个 PR（Pull Request，合并请求），团队约定人类不手写代码；工程师的工作重心转到整理仓库知识、建立可执行的约束、提供工具和设计反馈回路上<sup><a href="../ch7/references.html#ref-1">[1]</a></sup>。可以把这一观察粗略写成 <span class="math display">\[\text{可靠交付} = \text{模型能力} \times \text{工程系统},\]</span> 乘号表示二者缺一不可：工程系统再完善，模型推理不了也无济于事；模型再强，没有工具、约束和反馈，也落不到真实仓库上。</p>
 <p>本章把“工程系统”拆成四类工程技术。拆分的依据是它们<strong>作用于运行循环的哪一段</strong>（图 <a href="../ch7/s7-1.html#c7-fig-four">7-2</a>）：</p>
 <ul>
 <li><p><strong>Prompt Engineering</strong>（提示工程）作用于循环开始之前：把人的意图写成<strong>任务合同</strong>，写清目标、事实来源、边界、完成证据和交付格式。</p></li>
 <li><p><strong>Context Engineering</strong>（上下文工程）作用于每次模型调用之前：从任务合同、仓库、工具结果和记忆中挑出本轮需要的信息，组装成有限的工作集。</p></li>
-<li><p><strong>Harness 工程</strong>（Harness Engineering）作用于模型提出动作之后：<strong>Harness</strong> 是模型周围的运行系统，负责校验参数、检查权限、在隔离环境里执行、记录结果，并把观察返回。英文 harness 原指马具，这里取“让能力朝指定方向使出来”的意思。</p></li>
+<li><p><strong>Harness Engineering</strong>（Harness 工程）作用于模型提出动作之后：<strong>Harness</strong> 是模型周围的运行系统，负责校验参数、检查权限、在隔离环境里执行、记录结果，并把观察返回。英文 harness 原指马具，这里取“让能力朝指定方向使出来”的意思。</p></li>
 <li><p><strong>Loop Engineering</strong>（循环工程）作用于观察返回之后：更新任务状态，判断继续、换方案、等待人工还是结束。Anthropic、OpenAI 等厂商的文档一般称这个过程为 <strong>Agent Loop</strong>（智能体循环），“Loop Engineering”是本书的归纳，强调循环的状态、反馈、停止和恢复都需要专门设计。</p></li>
 </ul>
 <div id="c7-fig-four" class="bookfig">
@@ -871,7 +871,7 @@ window.Quarto = {
 <td style="text-align: left;">Harness</td>
 <td style="text-align: left;">模型提出动作后</td>
 <td style="text-align: left;">能做什么？边界由谁强制？</td>
-<td style="text-align: left;">独立工作区、Mock 服务、文件与终端工具、权限规则、Hook 与 CI</td>
+<td style="text-align: left;">独立工作区、Mock 服务、文件与终端工具、权限规则、Hook 与 CI（Continuous Integration，持续集成）</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Loop</td>

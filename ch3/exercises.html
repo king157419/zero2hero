@@ -801,7 +801,7 @@ window.Quarto = {
 <li><p>（辨析）DPO 为什么不需要单独训练奖励模型？与基于 PPO 的 RLHF 相比，它有哪些优缺点？RLHF 为什么要加 KL 惩罚？</p></li>
 <li><p>（概念）什么情况下应该优先选择提示词工程、检索增强生成或微调？各举一个例子。</p></li>
 <li><p>（概念）推理模型通过生成更长的思维链提高准确率。从本章推理性能的角度看，这会带来哪些新的挑战？</p></li>
-<li><p>（计算）奖励模型对两组回答的打分为：甲组 <span class="math inline">\((r_w,r_l)=(1.2,\,0.2)\)</span>，乙组 <span class="math inline">\((0.1,\,0.9)\)</span>。分别求 <span class="math inline">\(\sigma(\Delta)\)</span>、损失和对 <span class="math inline">\(r_w\)</span> 的梯度；说明哪一组的梯度更大，为什么。</p></li>
+<li><p>（计算）奖励模型对两组回答的打分为：甲组 <span class="math inline">\((r_w,r_l)=(1.2,\,0.2)\)</span>，乙组 <span class="math inline">\((0.1,\,0.9)\)</span>。分别求 <span class="math inline">\(\sigma(\Delta)\)</span>、损失和对 <span class="math inline">\(r_w\)</span> 的梯度；说明哪一组的梯度绝对值（更新幅度）更大，为什么。</p></li>
 <li><p>（设计）参照第 <a href="../ch3/s3-12.html">3.12</a> 节，为你所在专业设计一个问答模型的完整方案，估算所需的数据、算力和部署显存，并指出最可能成为瓶颈的环节。</p></li>
 </ol>
 <section id="部分习题提示" class="level2 unnumbered">
@@ -826,7 +826,7 @@ window.Quarto = {
 </dd>
 <dt>3.8</dt>
 <dd>
-<p>两句都不准确。混合精度不减少模型状态（多存一份 FP32 主权重），节省的是计算时间和激活值；“三倍”只在把 FP32 主权重计入优化器状态时成立，全 FP32 训练时 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 是两倍。</p>
+<p>两句都不准确。混合精度不减少模型状态（多存一份 FP32 主权重），节省的是计算时间和激活值；“三倍”只在混合精度训练中把 FP32 主权重计入优化器状态、且以 FP32 模型大小（每参数 4 字节）为基准时成立，全 FP32 训练时 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 是两倍。</p>
 </dd>
 <dt>3.9</dt>
 <dd>
@@ -850,7 +850,7 @@ window.Quarto = {
 </dd>
 <dt>3.14</dt>
 <dd>
-<p>每步读取 <span class="math inline">\(14+24\times1.07\approx39.8\,\text{GB}\)</span>；耗时 <span class="math inline">\(39.8\div2000\approx19.9\,\text{ms}\)</span>；吞吐 <span class="math inline">\(24\div0.0199\approx1206\)</span> token/s；每用户约 50 token/s。</p>
+<p>每步读取 <span class="math inline">\(14+24\times1.074\approx39.8\,\text{GB}\)</span>（每请求 KV 缓存取例 <a href="../ch3/s3-10.html#c3-ex-batch">3-10</a> 未四舍五入的 1.074 GB）；耗时 <span class="math inline">\(39.8\div2000\approx19.9\,\text{ms}\)</span>；吞吐 <span class="math inline">\(24\div0.0199\approx1206\)</span> token/s；每用户约 50 token/s。</p>
 </dd>
 <dt>3.15</dt>
 <dd>
@@ -866,7 +866,7 @@ window.Quarto = {
 </dd>
 <dt>3.21</dt>
 <dd>
-甲组：<span class="math inline">\(\Delta=1.2-0.2=1.0\)</span>，<span class="math inline">\(\sigma(1.0)=1/(1+e^{-1})\approx0.731\)</span>，损失 <span class="math inline">\(-\ln0.731\approx0.313\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.731)=-0.269\)</span>。乙组：<span class="math inline">\(\Delta=0.1-0.9=-0.8\)</span>，<span class="math inline">\(\sigma(-0.8)\approx0.310\)</span>，损失 <span class="math inline">\(-\ln0.310\approx1.171\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.310)=-0.690\)</span>。乙组梯度更大：乙组把较好的回答排在了较差的回答之后（<span class="math inline">\(\Delta&lt;0\)</span>），错判概率 <span class="math inline">\(1-\sigma(\Delta)\)</span> 高，更新力度大；甲组已分对，力度小。
+甲组：<span class="math inline">\(\Delta=1.2-0.2=1.0\)</span>，<span class="math inline">\(\sigma(1.0)=1/(1+e^{-1})\approx0.731\)</span>，损失 <span class="math inline">\(-\ln0.731\approx0.313\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.731)=-0.269\)</span>。乙组：<span class="math inline">\(\Delta=0.1-0.9=-0.8\)</span>，<span class="math inline">\(\sigma(-0.8)\approx0.310\)</span>，损失 <span class="math inline">\(-\ln0.310\approx1.171\)</span>，对 <span class="math inline">\(r_w\)</span> 的梯度 <span class="math inline">\(-(1-0.310)=-0.690\)</span>。乙组梯度绝对值更大：乙组把较好的回答排在了较差的回答之后（<span class="math inline">\(\Delta&lt;0\)</span>），错判概率 <span class="math inline">\(1-\sigma(\Delta)\)</span> 高，更新力度大；甲组已分对，力度小。
 </dd>
 </dl>
 </div>

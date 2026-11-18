@@ -835,7 +835,7 @@ window.Quarto = {
 <p><strong>计算单元</strong>　 算力用每秒浮点运算次数（FLOPS）或每秒运算次数（OPS）衡量：1 TFLOPS <span class="math inline">\(=10^{12}\)</span> FLOP/s，1 PFLOPS <span class="math inline">\(=10^{15}\)</span> FLOP/s，1 EFLOPS <span class="math inline">\(=10^{18}\)</span> FLOP/s；1 TOPS <span class="math inline">\(=10^{12}\)</span> OP/s。<strong>FLOPS</strong>（Floating-point Operations Per Second）专指浮点运算，用于 FP32、FP16、BF16、FP8 等格式；<strong>OPS</strong>（Operations Per Second）定义更宽泛，通常用于描述 INT8、INT4 等整数或低精度计算。厂商标称的数值是<strong>指定精度下的理论峰值</strong>，必须确认是哪种精度、是否为稀疏计算下的数值；同一块卡在不同精度下的峰值可能相差数倍乃至数十倍。</p>
 <p><strong>显存容量</strong>　 运行模型时显存中要同时容纳：模型权重、KV 缓存、推理框架自身的开销、临时计算张量和显存碎片，以及桌面显示或其他 GPU 程序的占用。显存不足时，框架可能把部分层放到系统内存，由 CPU 计算或经 PCIe 传输，称为 <strong>CPU 卸载</strong>（CPU offload），速度会大幅下降（第 <a href="../ch3/s3-10.html#c3-subsec-other">3.10.5</a> 小节）。</p>
 <p><strong>内存带宽</strong>　 解码时单请求并行度低，计算单元容易等数据，单用户的生成速度往往与<strong>有效</strong>内存带宽密切相关（式 <a href="../ch3/s3-9.html#c3-eq-decode-speed">（3-35）</a>）。规格表给出的是理论峰值，实际有效带宽还受内存类型、频率、位宽和通道配置，推理框架与量化内核的访存方式，KV 缓存大小和上下文长度，操作系统和其他程序的内存竞争，以及功耗、温度和持续运行频率的影响。</p>
-<p><strong>框架和驱动</strong>　 两张理论参数相近的显卡，实际速度也可能明显不同：是否支持模型使用的量化格式，模型各层能否完整放到 GPU 上，是否有针对当前架构优化的计算内核，是否支持高效的 KV 缓存管理、批处理和注意力优化，驱动、框架与操作系统是否兼容。这些软件分为几层：<strong>GPU 驱动</strong>（如 NVIDIA Driver、AMD Driver）识别硬件并提供底层接口；<strong>计算后端</strong>（CUDA、ROCm、Vulkan、Metal）向框架提供 GPU 计算能力；<strong>推理框架</strong>（llama.cpp、Ollama、vLLM、TensorRT-LLM）加载模型并组织推理流程；<strong>计算内核</strong>（CUDA Kernel、ROCm Kernel、FlashAttention）执行矩阵、量化和注意力运算。各层的关系见第 <a href="../ch4/s4-2.html#subsec-stack">4.2.4</a> 小节。</p>
+<p><strong>框架和驱动</strong>　 两张理论参数相近的显卡，实际速度也可能明显不同：是否支持模型使用的量化格式，模型各层能否完整放到 GPU 上，是否有针对当前架构优化的计算内核，是否支持高效的 KV 缓存管理、批处理和注意力优化，驱动、框架与操作系统是否兼容。这些软件分为几层：<strong>GPU 驱动</strong>（如 NVIDIA Driver、AMD Driver）识别硬件并提供底层接口；<strong>计算后端</strong>（CUDA、ROCm、Vulkan、Metal）向框架提供 GPU 计算能力；<strong>推理引擎</strong>（llama.cpp、vLLM、SGLang、TensorRT-LLM）加载模型并组织推理流程；<strong>计算内核</strong>（CUDA Kernel、ROCm Kernel、FlashAttention）执行矩阵、量化和注意力运算。各层的关系见第 <a href="../ch4/s4-2.html#subsec-stack">4.2.4</a> 小节。</p>
 </section>
 <section id="批处理让一次读取服务多个请求" class="level2">
 <h2 class="anchored" data-anchor-id="批处理让一次读取服务多个请求">3.10.2　批处理：让一次读取服务多个请求</h2>
@@ -905,7 +905,7 @@ window.Quarto = {
 <section id="量化减少要读取的字节数" class="level2">
 <h2 class="anchored" data-anchor-id="量化减少要读取的字节数">3.10.3　量化：减少要读取的字节数</h2>
 <p><strong>基本原理</strong>　 <strong>量化</strong>（quantization）把数值从高精度（如 FP16）转换为更低位宽或更紧凑的表示（如 INT8、INT4）。量化后模型文件变小，显存占用和每步要读取的数据量随之下降：一是原本放不下的模型有了运行的可能；二是按式 <a href="../ch3/s3-9.html#c3-eq-decode-speed">（3-35）</a>，访存受限的解码阶段读得少了，速度随之提高（前提是内核与硬件对该格式支持良好）。代价是可能出现不同程度的精度损失，能否运行也取决于推理引擎是否支持该量化方式。</p>
-<p>以最常见的<strong>对称线性量化</strong>为例，把一组浮点数 <span class="math inline">\(\boldsymbol{w}\)</span> 量化为 <span class="math inline">\(k\)</span> 位整数时，先算缩放因子 <span class="math inline">\(s\)</span>，再把每个数除以 <span class="math inline">\(s\)</span> 并四舍五入： <span class="math display">\[s=\frac{\max_i\lvert w_i\rvert}{2^{k-1}-1},\qquad q_i=\mathrm{round}\Bigl(\frac{w_i}{s}\Bigr),\qquad \hat{w}_i=s\cdot q_i,
+<p>以最常见的<strong>对称线性量化</strong>为例，把一组浮点数 <span class="math inline">\(\boldsymbol{w}\)</span> 量化为 <span class="math inline">\(b\)</span> 位整数时，先算缩放因子 <span class="math inline">\(s\)</span>，再把每个数除以 <span class="math inline">\(s\)</span> 并四舍五入： <span class="math display">\[s=\frac{\max_i\lvert w_i\rvert}{2^{b-1}-1},\qquad q_i=\mathrm{round}\Bigl(\frac{w_i}{s}\Bigr),\qquad \hat{w}_i=s\cdot q_i,
 \tag{3-41}\]</span> <span class="math inline">\(q_i\)</span> 是存储的整数，<span class="math inline">\(\hat{w}_i\)</span> 是计算时反量化得到的近似值。</p>
 <div id="c3-ex-quant" class="bookbox example">
 <div class="boxtitle">
@@ -913,7 +913,7 @@ window.Quarto = {
 </div>
 <p>把权重 <span class="math inline">\(\boldsymbol{w}=(0.42,\,-1.27,\,0.08,\,0.91)\)</span> 量化为 INT4（取值 <span class="math inline">\(-7\sim7\)</span>），求量化结果和误差。</p>
 <div class="cthreecalc">
-<p>1 &amp; 缩放因子 &amp; <span class="math inline">\(1.27\div(2^{3}-1)=1.27\div7\)</span> &amp; 0.181 &amp; 式 <a href="../ch3/s3-10.html#c3-eq-quant">（3-41）</a>；1.27 是绝对值最大者，<span class="math inline">\(k=4\)</span><br>
+<p>1 &amp; 缩放因子 &amp; <span class="math inline">\(1.27\div(2^{3}-1)=1.27\div7\)</span> &amp; 0.181 &amp; 式 <a href="../ch3/s3-10.html#c3-eq-quant">（3-41）</a>；1.27 是绝对值最大者，<span class="math inline">\(b=4\)</span><br>
 2 &amp; 除以 <span class="math inline">\(s\)</span> &amp; <span class="math inline">\(0.42\div0.181\)</span> 等 &amp; 2.32，−7，0.44，5.02 &amp; 每个权重除以步骤 1 的 <span class="math inline">\(s\)</span><br>
 3 &amp; 四舍五入 &amp; round(·) &amp; 2，−7，0，5 &amp; 存储的 4 位整数<br>
 4 &amp; 反量化 &amp; <span class="math inline">\((1.27\div7)\times q_i\)</span> &amp; 0.363，−1.270，0，0.907 &amp; 用未四舍五入的 <span class="math inline">\(s=1.27\div7\approx0.1814\)</span> 计算<br>
@@ -990,8 +990,8 @@ window.Quarto = {
 <p>批处理提高的是<strong>系统吞吐</strong>，却无助于降低<strong>单个用户</strong>的延迟。能否让一个请求的解码也“并行”起来？<strong>投机解码</strong>（speculative decoding）<sup><a href="../ch3/references.html#ref-51">[51]</a></sup>的出发点有两个：解码受带宽限制，大模型一次前向处理 1 个 token 和处理 5 个 token 的耗时相差无几；很多 token 是“容易猜”的，小模型也能猜对。如图 <a href="../ch3/s3-10.html#c3-fig-spec">3-23</a>，每一轮包括三步：</p>
 <ol type="1">
 <li><p>用小而快的<strong>草稿模型</strong>（draft model）连续生成 <span class="math inline">\(k\)</span> 个候选 token；</p></li>
-<li><p>把这 <span class="math inline">\(k\)</span> 个 token 一次性交给大的<strong>目标模型</strong>，在<strong>一次前向计算</strong>中并行算出每个位置上目标模型的分布，逐个判断是否接受；</p></li>
-<li><p>从第一个被拒绝的位置起，丢弃其后所有候选，在该位置按下面的修正分布重新采样一个 token。</p></li>
+<li><p>把已有序列连同这 <span class="math inline">\(k\)</span> 个候选 token 一次性交给大的<strong>目标模型</strong>，在<strong>一次前向计算</strong>中并行算出这 <span class="math inline">\(k\)</span> 个候选位置以及末尾下一个位置（共 <span class="math inline">\(k+1\)</span> 个位置）上目标模型的分布，逐个判断候选是否接受；</p></li>
+<li><p>若出现拒绝，从第一个被拒绝的位置起丢弃其后所有候选，在该位置按下面的修正分布重新采样一个 token；若 <span class="math inline">\(k\)</span> 个候选全部被接受，则直接从目标模型在第 <span class="math inline">\(k+1\)</span> 个位置给出的分布中再采样一个 token。</p></li>
 </ol>
 <div id="c3-fig-spec" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
@@ -1004,13 +1004,13 @@ window.Quarto = {
 </div>
 </div>
 <p>设草稿模型给某个 token <span class="math inline">\(x\)</span> 的概率为 <span class="math inline">\(q(x)\)</span>，目标模型给的概率为 <span class="math inline">\(p(x)\)</span>。投机采样以概率 <span class="math inline">\(\min\bigl(1,p(x)/q(x)\bigr)\)</span> 接受该 token；若拒绝，就从按 <span class="math inline">\(\max\bigl(0,p(x)-q(x)\bigr)\)</span> 归一化的分布中重新采样。可以证明，<strong>这样得到的输出分布与目标模型单独生成时完全相同</strong>：投机解码只加速，不改变结果。若每个候选被接受的概率约为 <span class="math inline">\(\alpha\)</span>，一轮提出 <span class="math inline">\(k\)</span> 个候选，则目标模型每做一次前向，平均产出的 token 数为 <span class="math display">\[\mathbb{E}[\text{每轮产出的 token 数}]=\frac{1-\alpha^{k+1}}{1-\alpha}.
-\tag{3-42}\]</span> 例如 <span class="math inline">\(\alpha=0.8\)</span>、<span class="math inline">\(k=4\)</span> 时，<span class="math inline">\((1-0.8^{5})\div(1-0.8)=(1-0.328)\div0.2\approx3.36\)</span> 个。扣除草稿模型的开销后，在单请求或低并发下，实际加速常见约 2～3 倍；批越大，目标模型本来就更接近算力受限，投机带来的收益越小。除独立的小模型外，还可以在大模型上增加几个额外的预测头（如 Medusa、EAGLE），或利用训练时自带的多 token 预测模块（如 DeepSeek-V3 的 MTP<sup><a href="../ch3/references.html#ref-18">[18]</a></sup>）生成候选。</p>
+\tag{3-42}\]</span> 例如 <span class="math inline">\(\alpha=0.8\)</span>、<span class="math inline">\(k=4\)</span> 时，<span class="math inline">\((1-0.8^{5})\div(1-0.8)=(1-0.328)\div0.2\approx3.36\)</span> 个。扣除草稿模型的开销后，在单请求或低并发下，实际加速常见约 2～3 倍；批越大，目标模型本来就更接近算力受限，投机带来的收益越小。除独立的小模型外，还可以在大模型上增加几个额外的预测头（如 Medusa、EAGLE），或利用训练时自带的多 token 预测模块（如 DeepSeek-V3 的 MTP<sup><a href="../ch3/references.html#ref-20">[20]</a></sup>）生成候选。</p>
 </section>
 <section id="c3-subsec-other" class="level2">
 <h2 class="anchored" data-anchor-id="c3-subsec-other">3.10.5　其他手段与系统层优化</h2>
 <p><strong>CPU 卸载</strong>　 显存放不下整个模型时，框架可以只把一部分层放在 GPU 上，其余留在系统内存，由 CPU 计算或在需要时经 PCIe 传到 GPU；例如 llama.cpp 允许指定放到 GPU 上的层数。模型因此“能跑起来”，但速度大幅下降：PCIe 4.0 x16 的单向带宽约 32 GB/s，系统内存带宽通常也只有每秒几十到一百多 GB，都比显存带宽低一个数量级以上。</p>
 <p><strong>模型压缩</strong>　 除量化外，还可以从根本上减小模型：<strong>剪枝</strong>（pruning）去除不重要的权重（非结构化剪枝）或整个注意力头、通道、层（结构化剪枝），后者更容易在硬件上获得实际加速；<strong>知识蒸馏</strong>（knowledge distillation）<sup><a href="../ch3/references.html#ref-52">[52]</a></sup>用大模型（教师）的输出分布或生成的数据训练小模型（学生），许多开源小模型借此获得了远超同规模模型的效果；<strong>低秩近似</strong>用低秩矩阵近似原权重矩阵，<strong>权重共享</strong>让不同层共用一组参数，都能减少参数量。</p>
-<p><strong>系统层优化（概述）</strong>　 推理引擎还在系统层面做了大量优化，第 <a href="../ch4/s4-4.html">4.4</a> 节有详细讨论，这里只列出它们解决的问题：连续批处理减少请求空等；PagedAttention 减少 KV 缓存的显存浪费，并让相同前缀的请求共享缓存块，在此基础上的<strong>前缀缓存</strong>（如 SGLang 的 RadixAttention，用基数树记录各请求共享的前缀）直接复用已算过的前缀，跳过这部分预填充、降低 TTFT；FlashAttention<sup><a href="../ch3/references.html#ref-46">[46]</a></sup> 分块计算注意力，避免把完整的注意力矩阵写回显存，是精确计算而非近似；<strong>分块预填充</strong>（chunked prefill）把长提示切成小块，与其他请求的解码步交错执行，避免长提示“卡住”别人的解码；<strong>预填充与解码分离</strong>（PD 分离）<sup><a href="../ch3/references.html#ref-53">[53]</a></sup>用不同的 GPU 集群分别负责两个阶段，预填充完成后把 KV 缓存传给解码集群，两个阶段可以各自选择硬件和并行策略。</p>
+<p><strong>系统层优化（概述）</strong>　 推理引擎还在系统层面做了大量优化，第 <a href="../ch4/s4-4.html">4.4</a> 节有详细讨论，这里只列出它们解决的问题：连续批处理减少请求空等；PagedAttention 减少 KV 缓存的显存浪费，并让相同前缀的请求共享缓存块，在此基础上的<strong>前缀缓存</strong>（如 SGLang 的 RadixAttention，用基数树记录各请求共享的前缀）直接复用已算过的前缀，跳过这部分预填充、降低 TTFT；FlashAttention<sup><a href="../ch3/references.html#ref-53">[53]</a></sup> 分块计算注意力，避免把完整的注意力矩阵写回显存，是精确计算而非近似；<strong>分块预填充</strong>（chunked prefill）把长提示切成小块，与其他请求的解码步交错执行，避免长提示“卡住”别人的解码；<strong>预填充与解码分离</strong>（PD 分离）<sup><a href="../ch3/references.html#ref-54">[54]</a></sup>用不同的 GPU 集群分别负责两个阶段，预填充完成后把 KV 缓存传给解码集群，两个阶段可以各自选择硬件和并行策略。</p>
 <p>表 <a href="../ch3/s3-10.html#c3-tab-bottleneck">3-17</a> 把本节和第 4 章第 <a href="../ch4/s4-4.html">4.4</a> 节的各种方法与它们针对的瓶颈对应起来。</p>
 <div id="c3-tab-bottleneck" class="booktab">
 <div class="tabcap">

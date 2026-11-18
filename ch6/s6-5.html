@@ -809,8 +809,8 @@ window.Quarto = {
 <p>智能体的“学习”能力由机器学习提供。三类学习范式在智能体中各有落点。</p>
 <p><strong>监督学习</strong>（supervised learning）用带标签的数据训练，学习输入到输出的映射。在智能体中主要用于感知（意图分类、实体抽取、图像识别）和工具选择（给定上下文，预测该调用哪个工具、填什么参数）。它稳定、便于评估，但需要标注数据，难以覆盖少见情形。</p>
 <p><strong>无监督学习</strong>（unsupervised learning）从未标注数据中发现隐藏的模式或结构。它在智能体中最典型的应用是<strong>表示学习</strong>：把文本、记忆片段、工具说明编码成向量，使语义相似度可以计算。向量检索、聚类去重、异常检测都建立在这一基础上。</p>
-<p><strong>强化学习</strong>（Reinforcement Learning，RL）通过与环境交互来学习：智能体采取行动，环境给出奖励或惩罚，智能体学习一个策略 <span class="math inline">\(\pi\)</span>（在什么状态下采取什么行动），以最大化累积奖励。形式上，优化目标是 <span class="math display">\[J(\pi) = \mathbb{E}_{\tau\sim\pi}\Bigl[\,\sum_{t=0}^{T_{\mathrm{ep}}} \gamma^{t} R_t\Bigr],
-\tag{6-6}\]</span> 其中 <span class="math inline">\(\tau\)</span> 是按策略 <span class="math inline">\(\pi\)</span> 与环境交互得到的一条轨迹，<span class="math inline">\(R_t\)</span> 是第 <span class="math inline">\(t\)</span> 步的奖励，<span class="math inline">\(T_{\mathrm{ep}}\)</span> 是一个回合的步数，<span class="math inline">\(\gamma\in(0,1]\)</span> 是<strong>折扣因子</strong>，决定了智能体有多看重远期收益。强化学习与智能体共享同一个问题结构——<strong>序贯决策</strong>，也就是式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 中的闭环（标准强化学习多假设状态完全可观测，用 MDP 表述，闭环结构相同）。</p>
+<p><strong>强化学习</strong>（Reinforcement Learning，RL）通过与环境交互来学习：智能体采取行动，环境给出奖励或惩罚，智能体学习一个策略 <span class="math inline">\(\pi\)</span>（在什么状态下采取什么行动），以最大化累积奖励。形式上，优化目标是 <span class="math display">\[J(\pi) = \mathbb{E}_{\tau\sim\pi}\Bigl[\,\sum_{t=1}^{T_{\mathrm{ep}}} \gamma^{t-1} R_t\Bigr],
+\tag{6-6}\]</span> 其中 <span class="math inline">\(\tau\)</span> 是按策略 <span class="math inline">\(\pi\)</span> 与环境交互得到的一条轨迹，<span class="math inline">\(R_t\)</span> 是第 <span class="math inline">\(t\)</span> 步的奖励，<span class="math inline">\(T_{\mathrm{ep}}\)</span> 是一个回合的步数，<span class="math inline">\(\gamma\in[0,1]\)</span> 是<strong>折扣因子</strong>，决定了智能体有多看重远期收益。强化学习与智能体共享同一个问题结构——<strong>序贯决策</strong>，也就是式 <a href="../ch6/s6-3.html#c6-eq-pomdp">（6-1）</a> 中的闭环（标准强化学习多假设状态完全可观测，用 MDP 表述，闭环结构相同）。</p>
 <p>把 RL 直接用于训练 LLM 智能体有三个困难：<strong>奖励稀疏</strong>——长任务往往只有最终成败一个信号，难以判断中间哪一步做得好；<strong>试错昂贵</strong>——真实环境中的错误可能无法承受；<strong>环境在变</strong>——模型、工具、用户偏好都在变化，学到的策略可能很快过时。因此实践中多用两种较“轻”的方式：用人类反馈做偏好对齐，即基于人类反馈的强化学习（Reinforcement Learning from Human Feedback，RLHF），以及在结果可以自动判定的任务上（例如单元测试是否通过）用可验证奖励做强化学习（二者见第 <a href="../ch3/s3-8.html">3.8</a> 节）。智能体在上线运行中的“学习”，目前主要发生在提示和记忆层面；参数层面的学习多在离线开发阶段进行。</p>
 </section>
 <section id="c6-subsec-planalg" class="level2">
@@ -825,7 +825,7 @@ window.Quarto = {
 <p><strong>知识图谱</strong>（Knowledge Graph，KG）以“实体—关系—实体”的三元组为基本单元，把知识组织成可查询、可推理的网络，例如（甲酒店，位于，浦东新区）。它在智能体中承担五项职能：</p>
 <ul>
 <li><p><strong>提供上下文与背景知识</strong>：查询特定实体或概念的详细信息，帮助理解用户请求。用户说“还是老地方”，系统查到该用户常住的酒店，从而弄清指代。</p></li>
-<li><p><strong>支持结构化推理</strong>：图中的显式关系可用于逻辑推断，补充 LLM 在常识推理上的不足。“A 是 B 的子公司，B 在供应商黑名单上”这类多跳关系，用图查询可以精确得到。</p></li>
+<li><p><strong>支持结构化推理</strong>：图中的显式关系可用于确定性的逻辑推断，补充 LLM 在精确多跳推理和形式推理上的不足。“A 是 B 的子公司，B 在供应商黑名单上”这类多跳关系，用图查询可以精确得到。</p></li>
 <li><p><strong>增强记忆</strong>：作为长期记忆的一部分，存储结构化的事实和经验。与纯文本相比，它在精确召回和关系推理上更有优势。</p></li>
 <li><p><strong>处理歧义与不完整信息</strong>：编码的语义信息帮助区分多种解释（“苹果”指公司还是水果），并能通过推理填补数据中的空白。</p></li>
 <li><p><strong>作为多智能体的共享记忆</strong>：充当通信媒介和共享知识库，使所有智能体对同一领域有一致的理解，避免各自维护一份“事实”而产生冲突。</p></li>
@@ -904,7 +904,7 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-context" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-context">6.5.6　上下文工程</h2>
-<p>模型在每一步能依据的，只有这一刻上下文窗口里的内容。<strong>上下文工程</strong>（context engineering）就是围绕“<strong>在上下文窗口中为下一步操作填充恰好适量的信息</strong>”这一目标形成的一套方法<sup><a href="../ch6/references.html#ref-21">[21]</a>,<a href="../ch6/references.html#ref-22">[22]</a></sup>。有从业者把它称为构建 AI 智能体的工程师的首要任务<sup><a href="../ch6/references.html#ref-23">[23]</a></sup>：模型能力既定时，上下文的质量往往比提示词的措辞更决定成败。本小节介绍它的基本框架，作为编程智能体四类工程之一的系统论述见第 <a href="../ch7/s7-4.html">7.4</a> 节。</p>
+<p>模型在每一步能依据的，只有这一刻上下文窗口里的内容。<strong>上下文工程</strong>（context engineering）就是围绕“<strong>在上下文窗口中为下一步操作填充恰好适量的信息</strong>”这一目标形成的一套方法<sup><a href="../ch6/references.html#ref-20">[20]</a>,<a href="../ch6/references.html#ref-21">[21]</a></sup>。有从业者把它称为构建 AI 智能体的工程师的首要任务<sup><a href="../ch6/references.html#ref-22">[22]</a></sup>：模型能力既定时，上下文的质量往往比提示词的措辞更决定成败。本小节介绍它的基本框架，作为编程智能体四类工程之一的系统论述见第 <a href="../ch7/s7-4.html">7.4</a> 节。</p>
 <p><strong>三类上下文</strong>　 进入窗口的信息可分为三类：<strong>指令</strong>，包括系统提示词、少样本示例、工具说明和从记忆中取出的规则；<strong>知识</strong>，包括事实、检索到的文档和记忆片段；<strong>工具反馈</strong>，即工具调用后返回的结果。三类信息的管理方式不同：指令相对稳定，可以缓存复用；知识随任务变化，按需检索；工具反馈不可预测，常需压缩和结构化。图 <a href="../ch6/s6-5.html#c6-fig-context">6-8</a> 左侧是一个典型窗口的构成。</p>
 <div id="c6-fig-context" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
@@ -916,14 +916,14 @@ window.Quarto = {
 <p>图 6-8　上下文窗口的典型构成（左，框高示意各部分的相对占用，右侧小字为所属类型）与四种调控策略（右）。四类失效——污染、干扰、混淆、冲突——都发生在窗口内部，四种策略分别从窗口外存储、进入窗口、窗口内精简和窗口之间分隔四个方向加以控制</p>
 </div>
 </div>
-<p><strong>四类失效</strong>　 上下文不是越多越好。Breunig 总结了长上下文导致性能下降的四种方式<sup><a href="../ch6/references.html#ref-24">[24]</a></sup>：</p>
+<p><strong>四类失效</strong>　 上下文不是越多越好。Breunig 总结了长上下文导致性能下降的四种方式<sup><a href="../ch6/references.html#ref-23">[23]</a></sup>：</p>
 <ul>
 <li><p><strong>上下文污染</strong>（context poisoning）：幻觉信息混入上下文后，被后续步骤当作事实反复引用。模型看到自己先前的错误陈述，更倾向于认为它是对的。</p></li>
 <li><p><strong>上下文干扰</strong>（context distraction）：信息过多，超出模型训练时能有效利用的范围，关键信息被淹没；窗口装得下，不等于模型用得上。</p></li>
 <li><p><strong>上下文混淆</strong>（context confusion）：冗余或无关的信息（例如几十个用不上的工具说明）干扰决策，模型抓错重点。</p></li>
 <li><p><strong>上下文冲突</strong>（context clash）：上下文中的内容相互矛盾（例如先后两轮给出的不同条件），模型的选择不可预测。</p></li>
 </ul>
-<p><strong>四种策略</strong>　 针对这些问题，实践中常用四种调控策略<sup><a href="../ch6/references.html#ref-25">[25]</a></sup>（图 <a href="../ch6/s6-5.html#c6-fig-context">6-8</a> 右侧）：</p>
+<p><strong>四种策略</strong>　 针对这些问题，实践中常用四种调控策略<sup><a href="../ch6/references.html#ref-24">[24]</a></sup>（图 <a href="../ch6/s6-5.html#c6-fig-context">6-8</a> 右侧）：</p>
 <ol type="1">
 <li><p><strong>保存</strong>（write）：把信息存到窗口之外（文件、记忆库、任务状态），供以后使用。</p></li>
 <li><p><strong>筛选</strong>（select）：只把与当前步骤相关的信息拉进窗口，例如按相似度检索文档、按任务挑选工具。</p></li>
@@ -931,7 +931,7 @@ window.Quarto = {
 <li><p><strong>隔离</strong>（isolate）：用多个智能体、沙箱或状态字段把上下文分开，让子任务在各自的窗口中工作，互不污染。这是多智能体架构在工程上的重要收益之一。</p></li>
 </ol>
 <p><strong>核心组件</strong>　 一个完整的上下文工程体系通常包含四个部分：<strong>智能信息检索</strong>（以 RAG 为主要手段，从外部知识源召回相关内容，见第 <a href="../ch5/s5-2.html">5.2</a> 节）；<strong>动态上下文组装</strong>（按任务阶段和 token 预算，把指令、知识、工具反馈拼成窗口）；<strong>智能记忆管理</strong>（跨轮次、跨会话地保存与召回）；<strong>多模态信息处理</strong>（把图像、表格、音频转成模型可用的形式）。</p>
-<p><strong>从 token 限制到记忆架构</strong>　 长任务中，当前大模型面临两个具体困境：<strong>token 限制</strong>，窗口有上限且成本随长度上升；<strong>状态丢失</strong>，会话中断或上下文被裁剪后，之前的工作状态无法恢复。一类常见做法是借助 MCP，把记忆和会话状态做成外部服务：智能体通过 MCP 服务器提供的工具读写记忆（MCP 官方的参考实现中就有一个基于知识图谱的记忆服务器<sup><a href="../ch6/references.html#ref-20">[20]</a></sup>），从而实现三件事——按稳定性和重要性<strong>分层管理</strong>上下文，稳定部分缓存复用、易变部分按需加载；显式地保存与恢复会话，使任务能<strong>跨会话延续</strong>；在接近上限时自动摘要、裁剪、外置，<strong>压缩</strong>上下文而不丢关键信息。需要注意，MCP 本身只是连接协议，并不负责压缩或分层，这些功能由接在协议另一端的记忆服务实现。与之配套的正是第 <a href="../ch6/s6-4.html#c6-subsec-memory">6.4.4</a> 小节的三层记忆，它带来四点好处：<strong>连续性</strong>（跨会话保持工作状态和决策记录）、<strong>智能化</strong>（自动评估和管理信息的重要性）、<strong>可扩展性</strong>（支持企业级的大规模部署）和<strong>安全性</strong>（按层级控制敏感信息与个人隐私的存取）。</p>
+<p><strong>从 token 限制到记忆架构</strong>　 长任务中，当前大模型面临两个具体困境：<strong>token 限制</strong>，窗口有上限且成本随长度上升；<strong>状态丢失</strong>，会话中断或上下文被裁剪后，之前的工作状态无法恢复。一类常见做法是借助 MCP，把记忆和会话状态做成外部服务：智能体通过 MCP 服务器提供的工具读写记忆（MCP 官方的参考实现中就有一个基于知识图谱的记忆服务器<sup><a href="../ch6/references.html#ref-25">[25]</a></sup>），从而实现三件事——按稳定性和重要性<strong>分层管理</strong>上下文，稳定部分缓存复用、易变部分按需加载；显式地保存与恢复会话，使任务能<strong>跨会话延续</strong>；在接近上限时自动摘要、裁剪、外置，<strong>压缩</strong>上下文而不丢关键信息。需要注意，MCP 本身只是连接协议，并不负责压缩或分层，这些功能由接在协议另一端的记忆服务实现。与之配套的正是第 <a href="../ch6/s6-4.html#c6-subsec-memory">6.4.4</a> 小节的三层记忆，它带来四点好处：<strong>连续性</strong>（跨会话保持工作状态和决策记录）、<strong>智能化</strong>（自动评估和管理信息的重要性）、<strong>可扩展性</strong>（支持企业级的大规模部署）和<strong>安全性</strong>（按层级控制敏感信息与个人隐私的存取）。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>上下文工程不是“提示词工程的升级版”。提示词工程关心“如何把一段指令写清楚”；上下文工程关心“在每一步，让模型看到哪些信息、以什么顺序、占多少预算”，涉及检索、记忆、压缩、隔离和安全边界，是一个系统设计问题。提示词只是上下文中“指令”那一部分。</p>
@@ -939,10 +939,10 @@ window.Quarto = {
 </section>
 <section id="c6-subsec-frameworks" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-frameworks">6.5.7　开发框架</h2>
-<p>循环、工具调用、记忆、多智能体协作等常用模式，在 2023—2025 年间沉淀为一批开发框架。框架把重复的“脚手架”固化下来，让开发者专注于任务逻辑；风险在于<strong>抽象泄漏</strong>——当框架的默认行为不符合需求时，开发者不得不深入框架内部修改。表 <a href="../ch6/s6-5.html#c6-tab-frameworks">6-11</a> 对照了五个常用框架，其中除“特性”“典型场景”外都是可以查证的事实。框架迭代很快，表中状态截至 2026 年 11 月，选型时应以官方文档和实际测试为准。</p>
+<p>循环、工具调用、记忆、多智能体协作等常用模式，在 2023—2025 年间沉淀为一批开发框架。框架把重复的“脚手架”固化下来，让开发者专注于任务逻辑；风险在于<strong>抽象泄漏</strong>——当框架的默认行为不符合需求时，开发者不得不深入框架内部修改。表 <a href="../ch6/s6-5.html#c6-tab-frameworks">6-11</a> 对照了五个常用框架。框架迭代很快，表中状态截至 2026 年 11 月，选型时应以官方文档和实际测试为准。</p>
 <div id="c6-tab-frameworks" class="booktab">
 <div class="tabcap">
-<p>表 6-11　常用智能体开发框架对照（事实列，状态截至 2026 年 11 月）</p>
+<p>表 6-11　常用智能体开发框架对照（状态截至 2026 年 11 月）</p>
 </div>
 <table class="caption-top table">
 <thead>
@@ -999,7 +999,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>表中五个框架的源代码都以 MIT 许可证开源，AutoGen 的文档另按 CC-BY-4.0 授权。“主要语言”和“仓库创建”两列取自各项目 GitHub 仓库的公开信息<sup><a href="../ch6/references.html#ref-28">[28]</a></sup>，“状态”一列取自各项目的官方博客与仓库说明<sup><a href="../ch6/references.html#ref-26">[26]</a>,<a href="../ch6/references.html#ref-29">[29]</a></sup>。AutoGen 的设计见其论文<sup><a href="../ch6/references.html#ref-27">[27]</a></sup>。保留五个框架分列，是因为它们的设计思路不同；AutoGen 与 Semantic Kernel 的后续开发已汇入同一个 Microsoft Agent Framework。像“模块化程度高低”“上手难易”这类评级没有统一的度量，也没有可核查的出处，所以表中不列；“特性”和“典型场景”两列是对各项目文档的概括，属于定性描述。此外，主要模型厂商也推出了自己的智能体开发工具包，例如 OpenAI Agents SDK、Google 的 Agent Development Kit 和 Anthropic 的 Claude Agent SDK，它们与各自的模型服务结合更紧密。</p>
+<p>表中五个框架的源代码都以 MIT 许可证开源，AutoGen 的文档另按 CC-BY-4.0 授权。“主要语言”和“仓库创建”两列取自各项目 GitHub 仓库的公开信息<sup><a href="../ch6/references.html#ref-26">[26]</a></sup>，“状态”一列取自各项目的官方博客与仓库说明<sup><a href="../ch6/references.html#ref-27">[27]</a>,<a href="../ch6/references.html#ref-28">[28]</a></sup>。AutoGen 的设计见其论文<sup><a href="../ch6/references.html#ref-29">[29]</a></sup>。保留五个框架分列，是因为它们的设计思路不同；AutoGen 与 Semantic Kernel 的后续开发已汇入同一个 Microsoft Agent Framework。此外，主要模型厂商也推出了自己的智能体开发工具包，例如 OpenAI Agents SDK、Google 的 Agent Development Kit 和 Anthropic 的 Claude Agent SDK，它们与各自的模型服务结合更紧密。</p>
 <p>选型时可以先问三个问题。<strong>第一，控制流有多复杂？</strong>流程线性、步骤固定，轻量框架就够；包含循环、分支、并行与人工介入，就需要图式编排。<strong>第二，对可观测性要求多高？</strong>生产系统必须能回放每次运行的完整轨迹，包括每次模型调用和工具调用的输入输出；框架若不内建追踪，需要额外埋点。<strong>第三，团队已有什么技术栈？</strong>企业环境往往要求与既有的身份认证、权限和监控体系集成，这比功能多少更重要。还要记住，<strong>框架不能替你定义任务</strong>：许多项目失败，不是框架选错，而是任务边界、成功标准和异常处理没有想清楚。</p>
 </section>
 <section id="c6-subsec-lifecycle" class="level2">

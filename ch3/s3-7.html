@@ -817,8 +817,8 @@ window.Quarto = {
 </section>
 <section id="bitfit-与-adapter-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="bitfit-与-adapter-tuning">3.7.3　BitFit 与 Adapter Tuning</h2>
-<p><strong>BitFit</strong>　 最简单的 PEFT：冻结所有权重矩阵，<strong>只训练偏置</strong>（bias）<sup><a href="../ch3/references.html#ref-29">[29]</a></sup>。BERT 的偏置参数不到总参数的 0.1%，但在许多中小规模任务上，BitFit 的效果已接近全量微调。局限是许多现代大模型（如 LLaMA）的线性层根本没有偏置项，BitFit 无从下手。</p>
-<p><strong>Adapter Tuning</strong>　 在预训练模型的每一层插入专门用于下游任务的小模块（Adapter），微调时冻结主体，只训练这些模块<sup><a href="../ch3/references.html#ref-28">[28]</a></sup>。如图 <a href="../ch3/s3-7.html#c3-fig-adapter">3-13</a>，每个 Transformer 层在注意力之后和前馈网络之后各加一个 Adapter，训练时只更新 Adapter 和层归一化参数。每个 Adapter 是一个瓶颈结构：降维投影把 <span class="math inline">\(d\)</span> 维输入压到 <span class="math inline">\(m\)</span> 维，经非线性激活后，升维投影再映射回 <span class="math inline">\(d\)</span> 维，并通过残差连接与输入相加： <span class="math display">\[\mathrm{Adapter}(\boldsymbol{h})=\boldsymbol{h}+W_{\mathrm{up}}\,f(W_{\mathrm{down}}\boldsymbol{h}),\qquad
+<p><strong>BitFit</strong>　 最简单的 PEFT：冻结所有权重矩阵，<strong>只训练偏置</strong>（bias）<sup><a href="../ch3/references.html#ref-30">[30]</a></sup>。BERT 的偏置参数不到总参数的 0.1%，但在许多中小规模任务上，BitFit 的效果已接近全量微调。局限是许多现代大模型（如 LLaMA）的线性层根本没有偏置项，BitFit 无从下手。</p>
+<p><strong>Adapter Tuning</strong>　 在预训练模型的每一层插入专门用于下游任务的小模块（Adapter），微调时冻结主体，只训练这些模块<sup><a href="../ch3/references.html#ref-31">[31]</a></sup>。如图 <a href="../ch3/s3-7.html#c3-fig-adapter">3-13</a>，每个 Transformer 层在注意力之后和前馈网络之后各加一个 Adapter，训练时只更新 Adapter 和层归一化参数。每个 Adapter 是一个瓶颈结构：降维投影把 <span class="math inline">\(d\)</span> 维输入压到 <span class="math inline">\(m\)</span> 维，经非线性激活后，升维投影再映射回 <span class="math inline">\(d\)</span> 维，并通过残差连接与输入相加： <span class="math display">\[\mathrm{Adapter}(\boldsymbol{h})=\boldsymbol{h}+W_{\mathrm{up}}\,f(W_{\mathrm{down}}\boldsymbol{h}),\qquad
   W_{\mathrm{down}}\in\mathbb{R}^{m\times d},\ W_{\mathrm{up}}\in\mathbb{R}^{d\times m}.
 \tag{3-23}\]</span> 通常 <span class="math inline">\(m\ll d\)</span>，调节 <span class="math inline">\(m\)</span> 就能控制参数量，每个 Adapter 约 <span class="math inline">\(2md\)</span> 个参数。残差连接保证：只要把 <span class="math inline">\(W_{\mathrm{up}}\)</span> 初始化为接近零，Adapter 一开始就近似恒等变换，不会破坏原模型。一般引入 0.5%～5% 的参数，就能达到与全量微调相差不到 1% 的性能；在 BERT 上只训练约 3.6% 的参数，GLUE 得分与全量微调相差约 0.4 个百分点以内。Adapter 的主要缺点是<strong>增加推理时延</strong>：新增模块串行插在网络中，推理时省不掉，逐 token 生成时这一开销会被放大。</p>
 <div id="c3-fig-adapter" class="bookfig">
@@ -828,7 +828,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-13　Adapter Tuning 的结构<sup><a href="../ch3/references.html#ref-28">[28]</a></sup>。每个 Transformer 层在注意力和前馈网络之后各插入一个 Adapter；Adapter 先把 d 维输入压到 m 维（m 远小于 d），经非线性激活后再升回 d 维，并与输入相加</p>
+<p>图 3-13　Adapter Tuning 的结构<sup><a href="../ch3/references.html#ref-31">[31]</a></sup>。每个 Transformer 层在注意力和前馈网络之后各插入一个 Adapter；Adapter 先把 <span class="math inline">\(d\)</span> 维输入压到 <span class="math inline">\(m\)</span> 维（<span class="math inline">\(m\)</span> 远小于 <span class="math inline">\(d\)</span>），经非线性激活后再升回 <span class="math inline">\(d\)</span> 维，并与输入相加</p>
 </div>
 </div>
 </section>
@@ -836,15 +836,15 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="软提示方法">3.7.4　软提示方法</h2>
 <p>第 <a href="../ch3/s3-6.html">3.6</a> 节的提示词是人能读懂的离散文本，称为<strong>硬提示</strong>（hard prompt）。软提示方法把提示变成可训练的<strong>连续向量</strong>，称为<strong>软提示</strong>（soft prompt）。</p>
 <ul>
-<li><p><strong>Prompt Tuning</strong><sup><a href="../ch3/references.html#ref-30">[30]</a></sup>：基础模型参数不变，为每个任务训练一小段（如 20 个）“虚拟 token”的嵌入向量，拼在输入最前面，执行该任务时按需加载。软提示长 <span class="math inline">\(l\)</span>、隐藏维度 <span class="math inline">\(d\)</span> 时，可训练参数只有 <span class="math inline">\(l\times d\)</span> 个。模型增大到百亿参数以上时，它的效果逐渐接近全量微调；在较小的模型上差距明显。</p></li>
-<li><p><strong>Prefix Tuning</strong><sup><a href="../ch3/references.html#ref-31">[31]</a></sup>：在<strong>每一层</strong>注意力的 Key 和 Value 前面都加一段可训练的前缀向量，相当于在不改变大模型的前提下为每一层的上下文添加合适的“条件”。直接优化前缀容易不稳定，通常先用一个小型多层感知机生成前缀，训练完再丢弃这个网络、只保留前缀。</p></li>
-<li><p><strong>P-Tuning</strong>：用一个小型提示编码器（如 LSTM 或 MLP）生成连续提示，使各虚拟 token 相互关联；P-Tuning v2<sup><a href="../ch3/references.html#ref-32">[32]</a></sup> 借鉴 Prefix Tuning，在每一层都加入提示，在不同规模的模型和更多任务上接近全量微调。</p></li>
+<li><p><strong>Prompt Tuning</strong><sup><a href="../ch3/references.html#ref-32">[32]</a></sup>：基础模型参数不变，为每个任务训练一小段（如 20 个）“虚拟 token”的嵌入向量，拼在输入最前面，执行该任务时按需加载。软提示长 <span class="math inline">\(l\)</span>、隐藏维度 <span class="math inline">\(d\)</span> 时，可训练参数只有 <span class="math inline">\(l\times d\)</span> 个。模型增大到百亿参数以上时，它的效果逐渐接近全量微调；在较小的模型上差距明显。</p></li>
+<li><p><strong>Prefix Tuning</strong><sup><a href="../ch3/references.html#ref-33">[33]</a></sup>：在<strong>每一层</strong>注意力的 Key 和 Value 前面都加一段可训练的前缀向量，相当于在不改变大模型的前提下为每一层的上下文添加合适的“条件”。直接优化前缀容易不稳定，通常先用一个小型多层感知机生成前缀，训练完再丢弃这个网络、只保留前缀。</p></li>
+<li><p><strong>P-Tuning</strong>：用一个小型提示编码器（如 LSTM 或 MLP）生成连续提示，使各虚拟 token 相互关联；P-Tuning v2<sup><a href="../ch3/references.html#ref-34">[34]</a></sup> 借鉴 Prefix Tuning，在每一层都加入提示，在不同规模的模型和更多任务上接近全量微调。</p></li>
 </ul>
 <p>软提示参数量极小、不改模型结构，缺点是占用一部分上下文长度，训练也不如其他方法稳定。</p>
 </section>
 <section id="lora-与-adalora" class="level2">
 <h2 class="anchored" data-anchor-id="lora-与-adalora">3.7.5　LoRA 与 AdaLoRA</h2>
-<p><strong>基本思想</strong>　 <strong>LoRA</strong>（Low-Rank Adaptation，低秩适配）由 Hu 等人于 2021 年提出<sup><a href="../ch3/references.html#ref-33">[33]</a></sup>，是目前应用最广的 PEFT 方法。它的出发点是：神经网络里有大量用矩阵乘法实现的全连接层，模型适配到具体任务时，权重的<strong>变化量</strong>不需要满秩，而是具有很低的<strong>本征秩</strong>（intrinsic rank）。换言之，参数虽多，针对一个任务真正需要调整的“方向”只有少数几个。因此 LoRA 不直接更新 <span class="math inline">\(W_0\)</span>，而用两个小矩阵的乘积表示变化量： <span class="math display">\[W=W_0+\Delta W=W_0+BA,\qquad B\in\mathbb{R}^{d\times r},\ A\in\mathbb{R}^{r\times k},\ r\ll\min(d,k).
+<p><strong>基本思想</strong>　 <strong>LoRA</strong>（Low-Rank Adaptation，低秩适配）由 Hu 等人于 2021 年提出<sup><a href="../ch3/references.html#ref-35">[35]</a></sup>，是目前应用最广的 PEFT 方法。它的出发点是：神经网络里有大量用矩阵乘法实现的全连接层，模型适配到具体任务时，权重的<strong>变化量</strong>不需要满秩，而是具有很低的<strong>本征秩</strong>（intrinsic rank）。换言之，参数虽多，针对一个任务真正需要调整的“方向”只有少数几个。因此 LoRA 不直接更新 <span class="math inline">\(W_0\)</span>，而用两个小矩阵的乘积表示变化量： <span class="math display">\[W=W_0+\Delta W=W_0+BA,\qquad B\in\mathbb{R}^{d\times r},\ A\in\mathbb{R}^{r\times k},\ r\ll\min(d,k).
 \tag{3-24}\]</span> 如图 <a href="../ch3/s3-7.html#c3-fig-lora">3-14</a>，LoRA 在原权重旁加一条旁路：<span class="math inline">\(A\)</span> 负责<strong>降维</strong>，把输入从 <span class="math inline">\(k\)</span> 维压到 <span class="math inline">\(r\)</span> 维；<span class="math inline">\(B\)</span> 负责<strong>升维</strong>，再映射回 <span class="math inline">\(d\)</span> 维；中间维度 <span class="math inline">\(r\)</span> 就是“秩”，用来模拟本征秩。前向计算变为 <span class="math display">\[\boldsymbol{h}=W_0\boldsymbol{x}+\frac{\alpha}{r}BA\boldsymbol{x},
 \tag{3-25}\]</span> <span class="math inline">\(\alpha\)</span> 是缩放系数，用来在改变 <span class="math inline">\(r\)</span> 时保持更新幅度大致稳定。训练时 <span class="math inline">\(W_0\)</span> 冻结，只有 <span class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span> 接收梯度。<span class="math inline">\(A\)</span> 用随机高斯分布初始化、<span class="math inline">\(B\)</span> 初始化为零，于是训练开始时 <span class="math inline">\(BA=0\)</span>，输出与原模型完全一致，微调从“不破坏原模型”的起点平稳开始。</p>
 <div id="c3-fig-lora" class="bookfig">
@@ -854,7 +854,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-14　LoRA 的结构<sup><a href="../ch3/references.html#ref-33">[33]</a></sup>。冻结的预训练权重旁边增加一条低秩旁路：A 把输入从 k 维压到 r 维，B 再升回 d 维；训练开始时 B = 0，输出与原模型完全相同。训练结束后可把 (α/r)·BA 加回 W<sub>0</sub>，推理时没有额外开销</p>
+<p>图 3-14　LoRA 的结构<sup><a href="../ch3/references.html#ref-35">[35]</a></sup>。冻结的预训练权重旁边增加一条低秩旁路：<span class="math inline">\(A\)</span> 把输入从 <span class="math inline">\(k\)</span> 维压到 <span class="math inline">\(r\)</span> 维，<span class="math inline">\(B\)</span> 再升回 <span class="math inline">\(d\)</span> 维；训练开始时 <span class="math inline">\(B=0\)</span>，输出与原模型完全相同。训练结束后可把 <span class="math inline">\((\alpha/r)BA\)</span> 加回 <span class="math inline">\(W_0\)</span>，推理时没有额外开销</p>
 </div>
 </div>
 <p><strong>参数量</strong>　 原权重有 <span class="math inline">\(d\times k\)</span> 个参数，LoRA 只训练 <span class="math inline">\(r(d+k)\)</span> 个。<span class="math inline">\(d=k=4096\)</span>、<span class="math inline">\(r=8\)</span> 时，比例为 <span class="math inline">\(\bigl(8\times(4096+4096)\bigr)\div(4096\times4096)=65\,536\div16\,777\,216\approx0.39\%\)</span>。</p>
@@ -877,13 +877,13 @@ window.Quarto = {
 </div>
 <p>数据流向每个矩阵的形状 <span class="math inline">\((d,k)\)</span> 与秩 <span class="math inline">\(r\)</span> → 每矩阵 <span class="math inline">\(r(d+k)\)</span> → 乘每层矩阵数 → 乘层数 → 除以总参数量。 若把秩提高到 <span class="math inline">\(r=16\)</span>，参数量翻倍，设置 (2) 约为 4000 万个，这是后面显存对比所用的配置。</p>
 </div>
-<p><strong>AdaLoRA</strong>　 LoRA 给所有被适配的矩阵设定相同的秩 <span class="math inline">\(r\)</span>，但不同层、不同矩阵对任务的重要性不同。<strong>AdaLoRA</strong>（Adaptive LoRA）据此<strong>动态分配秩</strong><sup><a href="../ch3/references.html#ref-34">[34]</a></sup>：给关键的增量矩阵分配较高的秩，以捕捉更精细、更具任务特性的信息；降低次要矩阵的秩，以防过拟合、节省预算。具体做法是以<strong>奇异值分解</strong>（Singular Value Decomposition，SVD）的形式参数化增量： <span class="math display">\[\Delta W=P\Lambda Q,\qquad P\in\mathbb{R}^{d\times r},\ \Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_r),\ Q\in\mathbb{R}^{r\times k},
+<p><strong>AdaLoRA</strong>　 LoRA 给所有被适配的矩阵设定相同的秩 <span class="math inline">\(r\)</span>，但不同层、不同矩阵对任务的重要性不同。<strong>AdaLoRA</strong>（Adaptive LoRA）据此<strong>动态分配秩</strong><sup><a href="../ch3/references.html#ref-36">[36]</a></sup>：给关键的增量矩阵分配较高的秩，以捕捉更精细、更具任务特性的信息；降低次要矩阵的秩，以防过拟合、节省预算。具体做法是以<strong>奇异值分解</strong>（Singular Value Decomposition，SVD）的形式参数化增量： <span class="math display">\[\Delta W=P\Lambda Q,\qquad P\in\mathbb{R}^{d\times r},\ \Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_r),\ Q\in\mathbb{R}^{r\times k},
 \tag{3-26}\]</span> 训练中按重要性指标把不重要的奇异值 <span class="math inline">\(\lambda_i\)</span> 置零，但保留对应的奇异向量，以便以后需要时恢复。对大矩阵做精确 SVD 代价很高，AdaLoRA 并不真正分解，而是在损失中加一个正则项约束 <span class="math inline">\(P\)</span>、<span class="math inline">\(Q\)</span> 近似正交： <span class="math display">\[R(P,Q)=\lVert P^{\top}P-I\rVert_F^{2}+\lVert QQ^{\top}-I\rVert_F^{2},
 \tag{3-27}\]</span> 既省去了大量 SVD 计算，又稳定了训练。</p>
 </section>
 <section id="qlora把冻结的底座量化到-4-位" class="level2">
 <h2 class="anchored" data-anchor-id="qlora把冻结的底座量化到-4-位">3.7.6　QLoRA：把冻结的底座量化到 4 位</h2>
-<p>LoRA 大幅减少了梯度和优化器状态，但冻结的底座仍以 16 位加载：7B 模型约 14 GB，65B 模型约 130 GB。<strong>QLoRA</strong>（Quantized LoRA）<sup><a href="../ch3/references.html#ref-35">[35]</a></sup>的核心是：<strong>把冻结的底座量化到 4 位存储，在其上训练 16 位的 LoRA 模块</strong>。前向和反向时，4 位权重被临时反量化为 BF16 参与运算，梯度只流向 LoRA 参数。它引入了三项技术（量化的一般原理见第 <a href="../ch3/s3-10.html">3.10</a> 节）。</p>
+<p>LoRA 大幅减少了梯度和优化器状态，但冻结的底座仍以 16 位加载：7B 模型约 14 GB，65B 模型约 130 GB。<strong>QLoRA</strong>（Quantized LoRA）<sup><a href="../ch3/references.html#ref-37">[37]</a></sup>的核心是：<strong>把冻结的底座量化到 4 位存储，在其上训练 16 位的 LoRA 模块</strong>。前向和反向时，4 位权重被临时反量化为 BF16 参与运算，梯度只流向 LoRA 参数。它引入了三项技术（量化的一般原理见第 <a href="../ch3/s3-10.html">3.10</a> 节）。</p>
 <p><strong>4 位 NormalFloat（NF4）</strong>　 预训练权重近似服从均值为零的正态分布。普通 4 位整数（INT4）把量化等级均匀分布在取值区间上，而 NF4 按<strong>标准正态分布的分位数</strong>设置 16 个等级，并保证 0 能被精确表示，使每个等级覆盖的权重数大致相同（图 <a href="../ch3/s3-7.html#c3-fig-nf4">3-15</a>）。对正态分布的权重，这是信息论意义上最优的 4 位数据类型，实测效果优于 INT4 和 4 位浮点（FP4）。量化时权重按 64 个一块处理：先用块内绝对值最大值 <span class="math inline">\(c\)</span> 把权重缩放到 <span class="math inline">\([-1,1]\)</span>，再映射到最近的 NF4 等级 <span class="math inline">\(q_j\)</span>，只存 4 位编号；反量化时 <span class="math inline">\(\hat{w}=c\cdot q_j\)</span>。</p>
 <div id="c3-fig-nf4" class="bookfig">
 <div class="quarto-figure quarto-figure-center">

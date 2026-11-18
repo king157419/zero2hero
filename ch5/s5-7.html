@@ -894,7 +894,7 @@ window.Quarto = {
 <section id="c5-subsec-eval-gen" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-eval-gen">5.7.2　生成层：答得有没有根据</h2>
 <p>生成层最核心的指标是<strong>忠实度</strong>（faithfulness）：回答中的每个论断能否在检索到的上下文中找到依据。计算时先把回答拆成若干条独立论断，记全部论断数为 <span class="math inline">\(\lvert S\rvert\)</span>，其中能被上下文支持的条数为 <span class="math inline">\(\lvert S_{\mathrm{sup}}\rvert\)</span>，则忠实度为 <span class="math inline">\(\lvert S_{\mathrm{sup}}\rvert/\lvert S\rvert\)</span>。论断的拆分和“是否被支持”的判断通常都交给一个裁判大模型完成，而不是确定性的算法。注意，它衡量的不是“对不对”，而是“有没有超出材料”：一个事实上正确但材料里没有的论断，在 RAG 的语境里仍算不忠实，因为用户无法核对。第二个指标是<strong>答案相关性</strong>（answer relevance）：回答是否正面回应了问题。用户问“能不能退”，回答却讲了一通退换货政策的沿革，相关性就低。</p>
-<p><strong>RAGAs</strong>（Retrieval Augmented Generation Assessment）<sup><a href="../ch5/references.html#ref-25">[25]</a></sup>是这一层最常用的开源评估框架。它倡导<strong>指标驱动开发</strong>（Metrics-Driven Development，MDD）：持续监控一组关键指标，用数字而不是感觉判断每次改动是否带来提升。框架有三个基本组件：<strong>提示对象</strong>定义交给裁判模型的提示词结构与内容；<strong>评估样本</strong>是一条独立的数据，包含用户问题、系统回答、检索上下文以及参考答案；<strong>评估数据集</strong>是一组评估样本，用来系统地计算各项指标。常用指标见表 <a href="../ch5/s5-7.html#c5-tab-ragas">5-11</a>。</p>
+<p><strong>RAGAs</strong>（Retrieval Augmented Generation Assessment）<sup><a href="../ch5/references.html#ref-25">[25]</a></sup>是常用的开源评估框架，除评估生成层的忠实度与答案相关性外，还用大模型裁判评估检索到的上下文质量（无须人工逐块标注相关文档），其中上下文精确率与上下文召回率属于检索层指标。它倡导<strong>指标驱动开发</strong>（Metrics-Driven Development，MDD）：持续监控一组关键指标，用数字而不是感觉判断每次改动是否带来提升。框架有三个基本组件：<strong>提示对象</strong>定义交给裁判模型的提示词结构与内容；<strong>评估样本</strong>是一条独立的数据，包含用户问题、系统回答、检索上下文以及参考答案；<strong>评估数据集</strong>是一组评估样本，用来系统地计算各项指标。常用指标见表 <a href="../ch5/s5-7.html#c5-tab-ragas">5-11</a>。</p>
 <div id="c5-tab-ragas" class="booktab">
 <div class="tabcap">
 <p>表 5-11　RAGAs 的常用指标</p>
@@ -952,13 +952,13 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">检索层</td>
-<td style="text-align: left;">Recall@<span class="math inline">\(k\)</span>、Precision@<span class="math inline">\(k\)</span>、MRR、nDCG</td>
+<td style="text-align: left;">Recall@<span class="math inline">\(k\)</span>、Precision@<span class="math inline">\(k\)</span>、MRR、nDCG（或上下文精确率/召回率）</td>
 <td style="text-align: left;">该找的找到了吗？排序好不好？</td>
-<td style="text-align: left;">人工标注相关文档，离线计算</td>
+<td style="text-align: left;">人工标注相关文档，离线计算；或由大模型裁判对照参考答案</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">生成层</td>
-<td style="text-align: left;">忠实度、答案相关性、上下文精确率/召回率</td>
+<td style="text-align: left;">忠实度、答案相关性</td>
 <td style="text-align: left;">答得有没有根据？有没有跑题？</td>
 <td style="text-align: left;">RAGAs 等框架，大模型当裁判</td>
 </tr>

@@ -805,7 +805,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 2-10　标准 Transformer 结构（据文献 <sup><a href="../ch2/references.html#ref-15">[15]</a></sup>重绘）。信息自下而上流动；虚线为残差连接，把子层的输入直接加到输出上；青绿箭头表示编码器输出作为解码器交叉注意力的键和值</p>
+<p>图 2-10　标准 Transformer 结构（据文献 <sup><a href="../ch2/references.html#ref-15">[15]</a></sup>重绘）。信息自下而上流动；虚线为残差连接，把子层的输入直接加到输出上；蓝色箭头表示编码器输出作为解码器交叉注意力的键和值</p>
 </div>
 </div>
 <p><strong>正弦位置编码</strong>　 原论文给第 <span class="math inline">\(pos\)</span> 个位置的第 <span class="math inline">\(2i\)</span> 和 <span class="math inline">\(2i+1\)</span> 维分别加上 <span class="math display">\[\mathrm{PE}_{(pos,\,2i)} = \sin\Bigl(\frac{pos}{10000^{2i/d}}\Bigr),\qquad
@@ -867,7 +867,7 @@ window.Quarto = {
 <td style="text-align: left;">Med-PaLM</td>
 <td style="text-align: left;">医疗</td>
 <td style="text-align: left;">Google，2022</td>
-<td style="text-align: left;">在 Flan-PaLM 上做指令提示微调，MedQA 准确率 67.6%，首次超过及格线<sup><a href="../ch2/references.html#ref-46">[46]</a></sup></td>
+<td style="text-align: left;">基座 Flan-PaLM 在 MedQA 上达 67.6%（首次超过及格线），再经指令提示微调对齐临床问答<sup><a href="../ch2/references.html#ref-46">[46]</a></sup></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Med-PaLM 2</td>
@@ -878,7 +878,7 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">ClinicalGPT</td>
 <td style="text-align: left;">临床医疗</td>
-<td style="text-align: left;">2023</td>
+<td style="text-align: left;">北航等，2023</td>
 <td style="text-align: left;">用病历、医患对话等临床数据训练的中文医疗模型</td>
 </tr>
 <tr class="even">

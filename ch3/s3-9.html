@@ -815,7 +815,7 @@ window.Quarto = {
 <section id="c3-subsec-kv" class="level2">
 <h2 class="anchored" data-anchor-id="c3-subsec-kv">3.9.3　KV 缓存与分组查询注意力</h2>
 <p>生成新 token 时，模型要用当前位置的查询向量 <span class="math inline">\(\boldsymbol{q}_t\)</span> 与所有历史位置的键向量计算相关性，再按相关性读取对应的值向量。由于因果掩码，历史 token 的 <span class="math inline">\(\boldsymbol{k}_i\)</span>、<span class="math inline">\(\boldsymbol{v}_i\)</span> 一旦算出就不再改变；若每步都从头重算，生成 <span class="math inline">\(n\)</span> 个 token 要处理约 <span class="math inline">\(n^2/2\)</span> 个 token。推理框架因此把每层历史 token 的 K、V 保存在显存里，称为 <strong>KV 缓存</strong>（Key-Value Cache）：预填充时一次性建立，解码时读取并为每个新 token 追加一项。它保存的是注意力计算中可复用的<strong>中间结果</strong>，不是现成的答案。KV 缓存的机制、显存管理（如 PagedAttention：像操作系统分页那样按固定大小的块分配 KV 缓存，减少显存碎片）与并发分析由第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a> 小节详细讨论，大小按第 4 章式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 计算： <span class="math display">\[M_{\mathrm{KV}}\approx2\times L\times H_{\mathrm{KV}}\times d_{\mathrm{head}}\times T\times B\times b_{\mathrm{KV}},\]</span> 系数 2 对应 K 和 V，<span class="math inline">\(H_{\mathrm{KV}}\)</span> 为 KV 头数，<span class="math inline">\(T\)</span> 为序列长度（输入加输出），<span class="math inline">\(B\)</span> 为同时驻留的请求数，<span class="math inline">\(b_{\mathrm{KV}}\)</span> 为每个数值的字节数。例如某 27B 级模型有 64 层、8 个 KV 头、每头 128 维，以 BF16 缓存，一个 2000 token 的请求需要 <span class="math inline">\(2\times64\times8\times128\times2000\times2\approx5.24\times10^{8}\)</span> 字节，约 0.52 GB。KV 缓存的大小不能只看 token 数，还取决于层数、KV 头数、每头维度、缓存精度和同时驻留的请求数。</p>
-<p>公式里的 <span class="math inline">\(H_{\mathrm{KV}}\)</span> 由模型的注意力结构决定（图 <a href="../ch3/s3-9.html#c3-fig-gqa">3-20</a>）。标准的<strong>多头注意力</strong>（Multi-Head Attention，MHA）中，每个查询头都有自己的一组 K、V，KV 头数等于注意力头数。为了缩小 KV 缓存，可以让多个查询头<strong>共享</strong>同一组 K、V：所有查询头共享一组，称为<strong>多查询注意力</strong>（Multi-Query Attention，MQA）；查询头分成若干组、每组共享一组，称为<strong>分组查询注意力</strong>（Grouped-Query Attention，GQA）<sup><a href="../ch3/references.html#ref-43">[43]</a></sup>。例如 8 个查询头分成 2 组、每组 4 个共享一组 K、V，KV 头数就是 2，缓存缩小到 MHA 的 1/4。GQA 在效果与缓存大小之间取得了较好的平衡，LLaMA 2-70B、LLaMA 3、Qwen2 及以后的 Qwen 系列等主流模型都采用它。</p>
+<p>公式里的 <span class="math inline">\(H_{\mathrm{KV}}\)</span> 由模型的注意力结构决定（图 <a href="../ch3/s3-9.html#c3-fig-gqa">3-20</a>）。标准的<strong>多头注意力</strong>（Multi-Head Attention，MHA）中，每个查询头都有自己的一组 K、V，KV 头数等于注意力头数。为了缩小 KV 缓存，可以让多个查询头<strong>共享</strong>同一组 K、V：所有查询头共享一组，称为<strong>多查询注意力</strong>（Multi-Query Attention，MQA）；查询头分成若干组、每组共享一组，称为<strong>分组查询注意力</strong>（Grouped-Query Attention，GQA）<sup><a href="../ch3/references.html#ref-45">[45]</a></sup>。例如 8 个查询头分成 2 组、每组 4 个共享一组 K、V，KV 头数就是 2，缓存缩小到 MHA 的 1/4。GQA 在效果与缓存大小之间取得了较好的平衡，Llama 2-70B、Llama 3、Qwen2 及以后的 Qwen 系列等主流模型都采用它。</p>
 <div id="c3-fig-gqa" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -845,7 +845,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 3-9　70B 模型的推理显存</p>
 </div>
-<p>LLaMA 2-70B 有 80 层、64 个注意力头、每头 128 维（隐藏维度 <span class="math inline">\(d=8192\)</span>），采用 GQA，共 8 个 KV 头。以 FP16 推理，同时服务 10 个用户，每人支持 32K 上下文，开销按前两项之和的 10% 计。分别按“不用 GQA”（把隐藏维度 8192 全部当作 KV 维度）和“实际的 GQA”估算推理显存。</p>
+<p>Llama 2-70B 有 80 层、64 个注意力头、每头 128 维（隐藏维度 <span class="math inline">\(d=8192\)</span>），采用 GQA，共 8 个 KV 头。以 FP16 推理，同时服务 10 个用户，每人支持 32K 上下文，开销按前两项之和的 10% 计。分别按“不用 GQA”（把隐藏维度 8192 全部当作 KV 维度）和“实际的 GQA”估算推理显存。</p>
 <div class="cthreecalc">
 <p>1 &amp; 权重 &amp; <span class="math inline">\(70\times10^{9}\times2\)</span> &amp; 140 GB &amp; FP16 每参数 2 字节<br>
 2a &amp; 每 token KV（不用 GQA） &amp; <span class="math inline">\(2\times80\times8192\times2\)</span> &amp; 2 621 440 B &amp; K、V 两份 × 80 层 × 64 头 × 128 维 × 2 字节<br>
@@ -857,7 +857,7 @@ window.Quarto = {
 5b &amp; 合计（GQA） &amp; <span class="math inline">\((140+107)\times1.1\)</span> &amp; 约 272 GB &amp; 需要 4 张 80 GB 显卡<br>
 </p>
 </div>
-<p>数据流向配置文件给出层数、KV 头数、每头维度 → 每 token 的 KV → 乘上下文长度与用户数 → 加权重 → 乘 1.1 加开销。 这道题按不同口径会得到三个答案。(a) 把“32K”取为 <span class="math inline">\(32\,000\)</span>：KV 为 <span class="math inline">\(2\,621\,440\times32\,000\times10\approx839\,\text{GB}\)</span>，合计 <span class="math inline">\((140+839)\times1.1\approx1077\,\text{GB}\)</span>。(b) 取 <span class="math inline">\(32\,768\)</span>：如上表约 1099 GB。(c) 另一种常见结果“KV 约 800 GB、合计约 1034 GB”：<span class="math inline">\(2\,621\,440\times32\,768\times10\)</span> 字节恰好是 800 GiB（除以 <span class="math inline">\(1024^{3}\)</span>），却与以 <span class="math inline">\(10^{9}\)</span> 计的 140 GB 权重直接相加，单位混用，所以偏小。本书 GB 一律按 <span class="math inline">\(10^{9}\)</span> 字节计，因此取 (b)；若事先约定 32K = 32 000，取 (a)。更重要的是，真实的 LLaMA 2-70B 用 GQA，按 MHA 计算会把 KV 缓存高估 8 倍：此时 KV 缓存（859 GB）远超权重本身，而 GQA 下只有 107 GB。</p>
+<p>数据流向配置文件给出层数、KV 头数、每头维度 → 每 token 的 KV → 乘上下文长度与用户数 → 加权重 → 乘 1.1 加开销。 这道题按不同口径会得到三个答案。(a) 把“32K”取为 <span class="math inline">\(32\,000\)</span>：KV 为 <span class="math inline">\(2\,621\,440\times32\,000\times10\approx839\,\text{GB}\)</span>，合计 <span class="math inline">\((140+839)\times1.1\approx1077\,\text{GB}\)</span>。(b) 取 <span class="math inline">\(32\,768\)</span>：如上表约 1099 GB。(c) 另一种常见结果“KV 约 800 GB、合计约 1034 GB”：<span class="math inline">\(2\,621\,440\times32\,768\times10\)</span> 字节恰好是 800 GiB（除以 <span class="math inline">\(1024^{3}\)</span>），却与以 <span class="math inline">\(10^{9}\)</span> 计的 140 GB 权重直接相加，单位混用，所以偏小。本书 GB 一律按 <span class="math inline">\(10^{9}\)</span> 字节计，因此取 (b)；若事先约定 32K = 32 000，取 (a)。更重要的是，真实的 Llama 2-70B 用 GQA，按 MHA 计算会把 KV 缓存高估 8 倍：此时 KV 缓存（859 GB）远超权重本身，而 GQA 下只有 107 GB。</p>
 </div>
 <div class="widget" data-widget="c3infer"></div>
 <div class="bookbox pitfall">
@@ -878,11 +878,11 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-22　温度对下一个 token 分布的影响，以及 Top-P 截断（“今天天气很”的候选，示意数据）。τ = 1 时为模型原始分布；τ 越低分布越尖、保留的候选越少，τ 越高分布越平、保留的候选越多</p>
+<p>图 3-22　温度对下一个 token 分布的影响，以及 Top-P 截断（“今天天气很”的候选，示意数据）。<span class="math inline">\(\tau=1\)</span> 时为模型原始分布；<span class="math inline">\(\tau\)</span> 越低分布越尖、保留的候选越少，<span class="math inline">\(\tau\)</span> 越高分布越平、保留的候选越多</p>
 </div>
 </div>
 <div class="widget" data-widget="c3decode"></div>
-<p><strong>Top-K 与 Top-P 采样</strong>　 纯随机采样可能抽到概率极低、明显不合理的 token，因此通常先截断候选范围，再在剩余候选中重新归一化后采样。<strong>Top-K 采样</strong>只保留概率最高的 <span class="math inline">\(k\)</span> 个 token。<strong>Top-P 采样</strong>（也称<strong>核采样</strong>，nucleus sampling）<sup><a href="../ch3/references.html#ref-44">[44]</a></sup>把 token 按概率从高到低排序，保留累积概率刚好达到阈值 <span class="math inline">\(p\)</span> 的最小集合： <span class="math display">\[\mathcal{V}^{(p)}=\arg\min_{\mathcal{V}'}\lvert\mathcal{V}'\rvert\quad\text{满足}\ \sum_{y\in\mathcal{V}'}P(y\mid\boldsymbol{x},y_{&lt;t})\ge p.
+<p><strong>Top-K 与 Top-P 采样</strong>　 纯随机采样可能抽到概率极低、明显不合理的 token，因此通常先截断候选范围，再在剩余候选中重新归一化后采样。<strong>Top-K 采样</strong>只保留概率最高的 <span class="math inline">\(k\)</span> 个 token。<strong>Top-P 采样</strong>（也称<strong>核采样</strong>，nucleus sampling）<sup><a href="../ch3/references.html#ref-46">[46]</a></sup>把 token 按概率从高到低排序，保留累积概率刚好达到阈值 <span class="math inline">\(p\)</span> 的最小集合： <span class="math display">\[\mathcal{V}^{(p)}=\arg\min_{\mathcal{V}'}\lvert\mathcal{V}'\rvert\quad\text{满足}\ \sum_{y\in\mathcal{V}'}P(y\mid\boldsymbol{x},y_{&lt;t})\ge p.
 \tag{3-39}\]</span> 在图 <a href="../ch3/s3-9.html#c3-fig-temp">3-22</a> 中，<span class="math inline">\(p=0.9\)</span> 时，<span class="math inline">\(\tau=0.5\)</span> 只保留 2 个候选（<span class="math inline">\(0.78+0.15=0.93\ge0.9\)</span>），<span class="math inline">\(\tau=1.0\)</span> 保留 4 个，<span class="math inline">\(\tau=2.0\)</span> 保留 6 个。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>

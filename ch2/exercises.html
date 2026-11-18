@@ -787,7 +787,7 @@ window.Quarto = {
 <li><p>（计算）语料中 hug 出现 10 次，pug 5 次，pun 12 次，bun 4 次，hugs 5 次（本题不加词尾标记）。按 BPE 写出前三次合并的符号对及其出现次数。</p></li>
 <li><p>（辨析）词元与汉字、单词是什么关系？为什么模型数不清“strawberry”里有几个 r？</p></li>
 <li><p>（计算）在例 <a href="../ch2/s2-3.html#c2-ex-attn">2-4</a> 中，若不除以 <span class="math inline">\(\sqrt{d_{\mathrm{head}}}\)</span>，第 3 行的注意力权重变为多少？加因果掩码后第 2 行的权重变为多少？结合维度更高的情形，说明缩放因子的作用。</p></li>
-<li><p>（计算）对例 <a href="../ch2/s2-3.html#c2-ex-temp">2-6</a> 的五个候选词元，取 <span class="math inline">\(\tau=1\)</span>、<span class="math inline">\(p=0.75\)</span>，Top-P 采样会保留哪些词元？重新归一化后的概率各是多少？当 <span class="math inline">\(\tau\to0\)</span> 和 <span class="math inline">\(\tau\to\infty\)</span> 时，输出各会变成什么样？</p></li>
+<li><p>（计算）对例 <a href="../ch2/s2-3.html#c2-ex-temp">2-6</a> 的五个候选词元，取 <span class="math inline">\(\tau=1\)</span>、<span class="math inline">\(p=0.75\)</span>，Top-P 采样会保留哪些词元？重新归一化后的概率各是多少？若不做截断（只用温度采样），当 <span class="math inline">\(\tau\to0\)</span> 和 <span class="math inline">\(\tau\to\infty\)</span> 时，输出各会变成什么样？</p></li>
 <li><p>（计算）LLaMA-7B 有 <span class="math inline">\(L=32\)</span> 层，<span class="math inline">\(d=4096\)</span>，FFN 采用 SwiGLU（三个矩阵，形状分别为 <span class="math inline">\(d\times d_{\mathrm{ff}}\)</span>、<span class="math inline">\(d\times d_{\mathrm{ff}}\)</span>、<span class="math inline">\(d_{\mathrm{ff}}\times d\)</span>，<span class="math inline">\(d_{\mathrm{ff}}=11\,008\)</span>），词表 <span class="math inline">\(\lvert\mathcal{V}\rvert =32\,000\)</span>，输入嵌入与输出矩阵不共享。估算它的参数量，并与 <span class="math inline">\(12Ld^2\)</span> 比较。</p></li>
 <li><p>（计算）你有 1000 张 A100，训练时间 60 天，MFU 为 40%。按 Chinchilla 配比，最优的参数量和训练词元数各是多少？如果这个模型要部署在手机上，你会怎样调整方案？</p></li>
 <li><p>（计算）用式 <a href="../ch2/s2-4.html#c2-eq-chinchilla">（2-21）</a> 分别计算 Chinchilla（700 亿参数，1.4 万亿词元）与 Gopher（2800 亿参数，3000 亿词元）的损失，并比较两者的训练计算量。结果说明了什么？</p></li>
@@ -795,7 +795,7 @@ window.Quarto = {
 <li><p>（设计）如果评测对“我不知道”给 0 分、对错误答案也给 0 分，模型会学到什么策略？请设计一种能减少幻觉的评分规则，并说明它针对第 <a href="../ch2/s2-4.html#c2-subsec-hallucination">2.4.7</a> 小节的哪一个成因。</p></li>
 <li><p>（计算）LLaMA-65B（<span class="math inline">\(6.52\times10^{10}\)</span> 参数）用 1.4 万亿词元训练，使用 2048 块 A100，论文报告每块 GPU 每秒处理约 380 个词元。求训练天数，以及相对 312 TFLOP/s 峰值的 MFU。</p></li>
 <li><p>（辨析）BERT 对被选中的词元，为什么按 80% 替换为 [MASK]、10% 替换为随机词元、10% 保持不变来处理，而不是全部替换为 [MASK]？为什么今天的主流大模型多是解码器架构？</p></li>
-<li><p>（辨析）比较 SFT 与 RLHF 的学习信号。RLHF 的目标中为什么要加入 KL 惩罚？请举一个奖励破解的例子。</p></li>
+<li><p>（辨析）比较 SFT 与 RLHF 的学习信号。RLHF 的目标中为什么要加入 KL 惩罚？请举一个奖励作弊的例子。</p></li>
 <li><p>（概念）休谟认为“因果”只是习惯性联想。如果大模型只学到了统计共现，它能否完成因果推理？请结合“语言模型即压缩”的观点谈谈你的看法。</p></li>
 </ol>
 <section id="部分习题提示" class="level2 unnumbered">
@@ -808,7 +808,7 @@ window.Quarto = {
 </dd>
 <dt>2.2</dt>
 <dd>
-<p>初始 <span class="math inline">\(y=0.6225\)</span>，<span class="math inline">\(\mathcal{L}=\tfrac12\times(0.6225-0.7)^2=0.0030\)</span>；<span class="math inline">\(\partial\mathcal{L}/\partial w=(0.6225-0.7)\times0.2350\times1=-0.0182\)</span>。<span class="math inline">\(\eta=1\)</span>：<span class="math inline">\(w=0.5-1\times(-0.0182)=0.5182\)</span>，<span class="math inline">\(y=\sigma(0.5182)=0.6267\)</span>，<span class="math inline">\(\mathcal{L}=0.0027\)</span>，下降。<span class="math inline">\(\eta=100\)</span>：<span class="math inline">\(w=0.5+100\times0.0182=2.322\)</span>，<span class="math inline">\(y=\sigma(2.322)=0.9107\)</span>，<span class="math inline">\(\mathcal{L}=\tfrac12\times(0.9107-0.7)^2=0.0222\)</span>，反而增大到原来的 7 倍多：步子太大，越过了最优点 <span class="math inline">\(y=0.7\)</span>。</p>
+<p>初始 <span class="math inline">\(y=0.6225\)</span>，<span class="math inline">\(\mathcal{L}=\tfrac12\times(0.6225-0.7)^2=0.0030\)</span>；<span class="math inline">\(\partial\mathcal{L}/\partial w=(0.6225-0.7)\times0.2350\times1=-0.0182\)</span>。<span class="math inline">\(\eta=1\)</span>：<span class="math inline">\(w=0.5-1\times(-0.0182)=0.5182\)</span>，<span class="math inline">\(y=\sigma(0.5182)=0.6267\)</span>，<span class="math inline">\(\mathcal{L}=0.0027\)</span>，下降。<span class="math inline">\(\eta=100\)</span>：<span class="math inline">\(w=0.5+100\times0.01822=2.322\)</span>，<span class="math inline">\(y=\sigma(2.322)=0.9107\)</span>，<span class="math inline">\(\mathcal{L}=\tfrac12\times(0.9107-0.7)^2=0.0222\)</span>，反而增大到原来的 7 倍多：步子太大，越过了最优点 <span class="math inline">\(y=0.7\)</span>。</p>
 </dd>
 <dt>2.3</dt>
 <dd>
@@ -824,11 +824,11 @@ window.Quarto = {
 </dd>
 <dt>2.7</dt>
 <dd>
-<p>累计概率 <span class="math inline">\(0.525\)</span>、<span class="math inline">\(0.761\)</span>，第 2 个时首次 <span class="math inline">\(\ge0.75\)</span>，保留“好、热”，概率 <span class="math inline">\(0.525\div0.761=0.690\)</span>、<span class="math inline">\(0.236\div0.761=0.310\)</span>。<span class="math inline">\(\tau\to0\)</span> 时退化为贪心，总输出“好”；<span class="math inline">\(\tau\to\infty\)</span> 时趋于均匀分布，每个候选概率趋于 <span class="math inline">\(1/5\)</span>。</p>
+<p>累计概率 <span class="math inline">\(0.525\)</span>、<span class="math inline">\(0.761\)</span>，第 2 个时首次 <span class="math inline">\(\ge0.75\)</span>，保留“好、热”，概率 <span class="math inline">\(0.525\div0.761=0.690\)</span>、<span class="math inline">\(0.236\div0.761=0.310\)</span>。不做截断时，<span class="math inline">\(\tau\to0\)</span> 退化为贪心，总输出“好”；<span class="math inline">\(\tau\to\infty\)</span> 趋于均匀分布，每个候选概率趋于 <span class="math inline">\(1/5\)</span>（若仍保留 <span class="math inline">\(p=0.75\)</span>，则前四个词元各趋于 <span class="math inline">\(1/4\)</span>，“蓝”始终被剔除）。</p>
 </dd>
 <dt>2.8</dt>
 <dd>
-<p>每层注意力 <span class="math inline">\(4\times4096^2=6.71\times10^{7}\)</span>，FFN <span class="math inline">\(3\times4096\times11\,008=1.353\times10^{8}\)</span>，每层 <span class="math inline">\(2.024\times10^{8}\)</span>，32 层共 <span class="math inline">\(6.476\times10^{9}\)</span>；嵌入与输出 <span class="math inline">\(2\times32\,000\times4096=2.62\times10^{8}\)</span>；合计 <span class="math inline">\(6.74\times10^{9}\)</span>，即约 67 亿。<span class="math inline">\(12Ld^2=12\times32\times4096^2=6.44\times10^{9}\)</span>（不含嵌入），与不含嵌入的 <span class="math inline">\(6.476\times10^{9}\)</span> 只差约 0.6</p>
+<p>每层注意力 <span class="math inline">\(4\times4096^2=6.71\times10^{7}\)</span>，FFN <span class="math inline">\(3\times4096\times11\,008=1.353\times10^{8}\)</span>，每层 <span class="math inline">\(2.024\times10^{8}\)</span>，32 层共 <span class="math inline">\(6.476\times10^{9}\)</span>；嵌入与输出 <span class="math inline">\(2\times32\,000\times4096=2.62\times10^{8}\)</span>；合计 <span class="math inline">\(6.74\times10^{9}\)</span>，即约 67 亿。<span class="math inline">\(12Ld^2=12\times32\times4096^2=6.44\times10^{9}\)</span>（不含嵌入），与不含嵌入的 <span class="math inline">\(6.476\times10^{9}\)</span> 只差约 0.6%，两者接近：SwiGLU 用三个矩阵，但把 <span class="math inline">\(d_{\mathrm{ff}}\)</span> 从 <span class="math inline">\(4d\)</span> 缩到约 <span class="math inline">\(\tfrac{8}{3}d\)</span>，参数量与 <span class="math inline">\(8d^2\)</span> 相当。</p>
 </dd>
 <dt>2.9</dt>
 <dd>

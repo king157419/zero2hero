@@ -879,7 +879,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 7-3　重试什么时候有用</p>
 </div>
-<p>设重试上限为 2 次，即每个步骤最多尝试 <span class="math inline">\(m=3\)</span> 次；记单次尝试的失败概率为 <span class="math inline">\(q\)</span>。分三种情况计算成功概率：步骤 1 取 <span class="math inline">\(q=0.2\)</span> 的单个步骤，步骤 3～6 是另一组例子，取 <span class="math inline">\(q=0.05\)</span> 的 10 步链路。</p>
+<p>设重试上限为 2 次，即每个步骤最多尝试 <span class="math inline">\(m=3\)</span> 次；记单次尝试的失败概率为 <span class="math inline">\(q\)</span>。分三种情况计算成功概率：步骤 1 取暂时故障 <span class="math inline">\(q=0.2\)</span> 的单个步骤；步骤 2 是确定性错误（每次必败，相当于 <span class="math inline">\(q=1\)</span>）的单个步骤；步骤 3～6 是另一组例子，取每步暂时故障 <span class="math inline">\(q=0.05\)</span> 的 10 步链路。</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1010,9 +1010,9 @@ window.Quarto = {
     if environment_blocked(obs): state = BLOCKED;          break
     if same_failure_without_new_evidence &gt;= 2:   # 换方案信号
         change_hypothesis_or_handoff(); continue
-    if local_check_failed(obs):
+    if check_failed(obs):
         choose_smallest_diagnostic_action(); state = WORKING;   continue
-    if local_check_passed(obs) and broader_checks_missing():
+    if check_passed(obs) and broader_checks_missing():   # 依次覆盖完整测试、构建、差异审查
         run_next_broader_check();            state = VERIFYING; continue
     if all_done_when_have_current_evidence() and final_diff_reviewed():
         state = COMPLETED; break</code></pre>

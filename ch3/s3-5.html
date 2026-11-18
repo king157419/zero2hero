@@ -790,14 +790,14 @@ window.Quarto = {
 <section id="训练要算多久" class="level2">
 <h2 class="anchored" data-anchor-id="训练要算多久">3.5.1　训练要算多久</h2>
 <p><strong>计算量</strong>　 训练总浮点运算次数（FLOPs）可以用一个简洁的公式估算（与第 <a href="../ch4/s4-1.html#subsec-three-quantities">4.1.2</a> 小节的式 <a href="../ch4/s4-1.html#eq-train-flops">（4-2）</a> 相同）： <span class="math display">\[C\approx6ND,
-\tag{3-16}\]</span> <span class="math inline">\(N\)</span> 为参数量，<span class="math inline">\(D\)</span> 为训练 token 数。系数 6 的来源是：前向传播时每个参数对每个 token 约做一次乘法和一次加法，共 <span class="math inline">\(2N\)</span> 次运算；反向传播要分别算出对激活值和对参数的梯度，计算量约为前向的 2 倍，即 <span class="math inline">\(4N\)</span>；合计每个 token 约 <span class="math inline">\(6N\)</span>。公式忽略了注意力中与序列长度相关的部分，在序列长度不超过模型维度的若干倍时误差不大。以 GPT-3 为例，<span class="math inline">\(N=1.75\times10^{11}\)</span>，<span class="math inline">\(D=3\times10^{11}\)</span>，则 <span class="math inline">\(C\approx6\times(1.75\times10^{11})\times(3\times10^{11})\approx3.15\times10^{23}\)</span> FLOPs，与 OpenAI 公布的约 <span class="math inline">\(3.14\times10^{23}\)</span> 基本一致<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>。</p>
+\tag{3-16}\]</span> <span class="math inline">\(N\)</span> 为参数量，<span class="math inline">\(D\)</span> 为训练 token 数。系数 6 的来源是：前向传播时每个参数对每个 token 约做一次乘法和一次加法，共 <span class="math inline">\(2N\)</span> 次运算；反向传播要分别算出对激活值和对参数的梯度，计算量约为前向的 2 倍，即 <span class="math inline">\(4N\)</span>；合计每个 token 约 <span class="math inline">\(6N\)</span>。公式忽略了注意力中与序列长度相关的部分，在序列长度不超过模型维度的若干倍时误差不大。以 GPT-3 为例，<span class="math inline">\(N=1.75\times10^{11}\)</span>，<span class="math inline">\(D=3\times10^{11}\)</span>，则 <span class="math inline">\(C\approx6\times(1.75\times10^{11})\times(3\times10^{11})\approx3.15\times10^{23}\)</span> FLOPs，与 OpenAI 公布的约 <span class="math inline">\(3.14\times10^{23}\)</span> 基本一致<sup><a href="../ch3/references.html#ref-3">[3]</a></sup>。</p>
 <p><strong>训练时间</strong>　 已知计算量，训练时间为 <span class="math display">\[t_{\mathrm{train}}\approx\frac{C}{n_{\mathrm{GPU}}\times P_{\mathrm{peak}}\times\mathrm{MFU}},
 \tag{3-17}\]</span> <span class="math inline">\(n_{\mathrm{GPU}}\)</span> 为 GPU 数量，<span class="math inline">\(P_{\mathrm{peak}}\)</span> 为单卡在所用精度下的理论峰值算力（FLOP/s），<strong>模型算力利用率</strong>（Model FLOPs Utilization，MFU）是实际有效算力占峰值的比例。由于通信、访存和调度开销，大规模训练的 MFU 通常只有 30%～60%。</p>
 <div id="c3-ex-flops" class="bookbox example">
 <div class="boxtitle">
 <p>例 3-3　从论文数据反推 MFU</p>
 </div>
-<p>LLaMA-7B 的参数量约 <span class="math inline">\(6.7\times10^{9}\)</span>，训练 <span class="math inline">\(1.0\times10^{12}\)</span> 个 token，使用 NVIDIA A100-80GB（BF16 稠密峰值 312 TFLOP/s），论文报告消耗 82 432 GPU 小时<sup><a href="../ch3/references.html#ref-5">[5]</a></sup>。估算训练期间的 MFU。</p>
+<p>LLaMA-7B 的参数量约 <span class="math inline">\(6.7\times10^{9}\)</span>，训练 <span class="math inline">\(1.0\times10^{12}\)</span> 个 token，使用 NVIDIA A100-80GB（BF16 稠密峰值 312 TFLOP/s），论文报告消耗 82 432 GPU 小时<sup><a href="../ch3/references.html#ref-4">[4]</a></sup>。估算训练期间的 MFU。</p>
 <div class="cthreecalc">
 <p>1 &amp; 训练计算量 &amp; <span class="math inline">\(6\times(6.7\times10^{9})\times(1.0\times10^{12})\)</span> &amp; <span class="math inline">\(4.0\times10^{22}\)</span> FLOPs &amp; 式 <a href="../ch3/s3-5.html#c3-eq-6nd">（3-16）</a>；<span class="math inline">\(N\)</span> 见例 <a href="../ch3/s3-4.html#c3-ex-params">3-2</a>，<span class="math inline">\(D\)</span> 来自论文<br>
 2 &amp; GPU 秒数 &amp; <span class="math inline">\(82\,432\times3600\)</span> &amp; <span class="math inline">\(2.97\times10^{8}\)</span> s &amp; 论文报告的 GPU 小时 × 每小时 3600 秒<br>
@@ -807,7 +807,7 @@ window.Quarto = {
 </div>
 <p>数据流向参数量、token 数 → 总计算量；GPU 小时 → GPU 秒；二者相除得有效算力；再除以峰值得 MFU。 同样的方法可以验证 LLaMA-65B：<span class="math inline">\(6\times(6.5\times10^{10})\times(1.4\times10^{12})\approx5.5\times10^{23}\)</span> FLOPs，论文报告约 102 万 GPU 小时，在 2048 张 A100 上约需 <span class="math inline">\((1.02\times10^{6})\div2048\approx500\)</span> 小时，即约 21 天，与论文所述一致。</p>
 </div>
-<p>这个例子让预训练的规模变得具体：<span class="math inline">\(2.97\times10^{8}\)</span> 秒约为 9.4 年，即用单张 A100 训练 LLaMA-7B 要 9 年多；650 亿参数的模型动用 2048 张 A100 也要连续训练三周。其他公开记录也是如此：1760 亿参数的 BLOOM 用了 48 个节点、每节点 8 张 A100-80GB，训练约 3.5 个月；1750 亿参数的 OPT-175B 用了 992 张 A100-80GB，训练近 2 个月<sup><a href="../ch3/references.html#ref-19">[19]</a></sup>。<strong>单个计算设备完全不足以支撑大模型训练，必须采用分布式训练。</strong></p>
+<p>这个例子让预训练的规模变得具体：<span class="math inline">\(2.97\times10^{8}\)</span> 秒约为 9.4 年，即用单张 A100 训练 LLaMA-7B 要 9 年多；650 亿参数的模型动用 2048 张 A100 也要连续训练三周。其他公开记录也是如此：1760 亿参数的 BLOOM 用了 48 个节点、每节点 8 张 A100-80GB，训练约 3.5 个月；1750 亿参数的 OPT-175B 用了 992 张 A100-80GB，训练近 2 个月<sup><a href="../ch3/references.html#ref-21">[21]</a></sup>。<strong>单个计算设备完全不足以支撑大模型训练，必须采用分布式训练。</strong></p>
 </section>
 <section id="算力从哪里来" class="level2">
 <h2 class="anchored" data-anchor-id="算力从哪里来">3.5.2　算力从哪里来</h2>
@@ -929,8 +929,8 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>在最常用的“混合精度 + AdamW”配置下，<strong>每个参数约 16 字节模型状态，其中优化器状态占四分之三</strong>。由此得到一个实用的经验法则：混合精度 + AdamW 全量训练时，模型状态约为“参数量（以 B 计）<span class="math inline">\(\times16\)</span>”GB。另一种常见写法是先算“模型大小”：<span class="math inline">\(Q\)</span> 位精度下，<span class="math inline">\(N\)</span> 个参数的权重占 <span class="math display">\[M_{\mathrm{weight}}=\frac{N\times4}{32/Q}\ \text{字节}=\frac{N\,Q}{8}\ \text{字节},
-\tag{3-19}\]</span> 即 FP32（<span class="math inline">\(Q=32\)</span>）每参数 4 字节、16 位每参数 2 字节，与第 4 章式 <a href="../ch4/s4-1.html#eq-weight-mem">（4-1）</a> 一致；梯度与权重同样大；优化器状态则按“几倍模型大小”计算。</p>
+<p>在最常用的“混合精度 + AdamW”配置下，<strong>每个参数约 16 字节模型状态，其中优化器状态占四分之三</strong>。由此得到一个实用的经验法则：混合精度 + AdamW 全量训练时，模型状态约为“参数量（以 B 计）<span class="math inline">\(\times16\)</span>”GB。另一种常见写法是先算“模型大小”：<span class="math inline">\(b\)</span> 位精度下，<span class="math inline">\(N\)</span> 个参数的权重占 <span class="math display">\[M_{\mathrm{weight}}=\frac{N\times4}{32/b}\ \text{字节}=\frac{N\,b}{8}\ \text{字节},
+\tag{3-19}\]</span> 即 FP32（<span class="math inline">\(b=32\)</span>）每参数 4 字节、16 位每参数 2 字节，与第 4 章式 <a href="../ch4/s4-1.html#eq-weight-mem">（4-1）</a> 一致；梯度与权重同样大；优化器状态则按“几倍模型大小”计算。</p>
 <div id="c3-ex-trainmem" class="bookbox example">
 <div class="boxtitle">
 <p>例 3-4　7B 模型全精度训练要多少显存</p>
@@ -952,7 +952,7 @@ window.Quarto = {
 <p><span class="boxtitle">辨析</span></p>
 <p>AdamW 的优化器状态究竟是模型大小的“两倍”还是“三倍”？两种说法都出现过，差别在于是否把 FP32 主权重算进优化器状态。全 FP32 训练时，优化器只存 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span>，是<strong>两倍</strong>（8 字节/参数）；混合精度训练时，还要存一份 FP32 主权重，三者合计是 FP32 模型大小的<strong>三倍</strong>（12 字节/参数）。两种口径下模型状态的总和都是 16 字节/参数。此外，“计算图（激活值）显存可以忽略”只在短序列、小批量时成立，见下文。</p>
 </div>
-<p><strong>激活值</strong>　 前向传播的中间结果要保存下来，供反向传播计算梯度。根据 Korthikanti 等人的分析<sup><a href="../ch3/references.html#ref-20">[20]</a></sup>，16 位精度、不做并行切分时，一个 Transformer 层要保存的激活值约为 <span class="math display">\[M_{\mathrm{act}}^{\text{每层}}\approx T\,B\,d\,\Bigl(34+\frac{5\,H\,T}{d}\Bigr)\ \text{字节},
+<p><strong>激活值</strong>　 前向传播的中间结果要保存下来，供反向传播计算梯度。根据 Korthikanti 等人的分析<sup><a href="../ch3/references.html#ref-22">[22]</a></sup>，16 位精度、不做并行切分时，一个 Transformer 层要保存的激活值约为 <span class="math display">\[M_{\mathrm{act}}^{\text{每层}}\approx T\,B\,d\,\Bigl(34+\frac{5\,H\,T}{d}\Bigr)\ \text{字节},
 \tag{3-20}\]</span> <span class="math inline">\(T\)</span> 为序列长度，<span class="math inline">\(B\)</span> 为批大小，<span class="math inline">\(H\)</span> 为注意力头数。括号中第二项来自注意力分数矩阵，随序列长度平方增长。</p>
 <div id="c3-ex-act" class="bookbox example">
 <div class="boxtitle">
@@ -1012,8 +1012,8 @@ window.Quarto = {
 <td style="text-align: left;">每步 All-Reduce 梯度；不减少单卡模型状态</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">ZeRO / FSDP^[[21]](ref</td>
-<td style="text-align: left;">erences.qmd#ref-21</td>
+<td style="text-align: left;">ZeRO / FSDP^[[23]](ref</td>
+<td style="text-align: left;">erences.qmd#ref-23</td>
 <td style="text-align: left;">)^ 数据 + 模型状态 零冗余优化器（ZeRO）与全分片数据并行（FSDP）：在数据并行基础上把优化器状态、梯度</td>
 <td style="text-align: left;">、参数依次切分到各卡 ZeRO-3 计算前要收集参数，通信量约增加 50%</td>
 </tr>
@@ -1024,8 +1024,8 @@ window.Quarto = {
 <td style="text-align: left;">相邻阶段传递激活值，通信小；有气泡</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">张量并行^[[22]](refere</td>
-<td style="text-align: left;">nces.qmd#ref-22)^</td>
+<td style="text-align: left;">张量并行^[[24]](refere</td>
+<td style="text-align: left;">nces.qmd#ref-24)^</td>
 <td style="text-align: left;">层内的权重矩阵 把一个大矩阵按行或列切开，各卡算一部分再合并</td>
 <td style="text-align: left;">每层都要 All-Reduce，通常只在机内使用</td>
 </tr>
@@ -1048,10 +1048,10 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-9　流水线并行的执行过程与气泡（GPipe 调度<sup><a href="../ch3/references.html#ref-23">[23]</a></sup>，<span class="math inline">\(p=4\)</span> 个阶段，<span class="math inline">\(m=4\)</span> 个微批次）。每行是一张 GPU 负责的连续若干层；空白格是设备空等的时间，占比为 <span class="math inline">\((p-1)/(m+p-1)=3/7\)</span></p>
+<p>图 3-9　流水线并行的执行过程与气泡（GPipe 调度<sup><a href="../ch3/references.html#ref-25">[25]</a></sup>，<span class="math inline">\(p=4\)</span> 个阶段，<span class="math inline">\(m=4\)</span> 个微批次）。每行是一张 GPU 负责的连续若干层；空白格是设备空等的时间，占比为 <span class="math inline">\((p-1)/(m+p-1)=3/7\)</span></p>
 </div>
 </div>
-<p><strong>混合并行的 GPU 数</strong>　 数据并行度为 <span class="math inline">\(n_d\)</span>、张量并行度为 <span class="math inline">\(n_t\)</span>、流水线并行度为 <span class="math inline">\(n_p\)</span> 时，所需 GPU 总数为 <span class="math inline">\(n_{\mathrm{GPU}}=n_d\times n_t\times n_p\)</span>。例如 5300 亿参数的 Megatron-Turing NLG 用了 8 路张量并行、35 路流水线并行和 8 路数据并行，共 <span class="math inline">\(8\times35\times8=2240\)</span> 张 A100<sup><a href="../ch3/references.html#ref-24">[24]</a></sup>。此外，长序列训练还有沿序列维度切分的<strong>序列并行</strong>与<strong>上下文并行</strong>，混合专家模型还有<strong>专家并行</strong>。</p>
+<p><strong>混合并行的 GPU 数</strong>　 数据并行度为 <span class="math inline">\(n_d\)</span>、张量并行度为 <span class="math inline">\(n_t\)</span>、流水线并行度为 <span class="math inline">\(n_p\)</span> 时，所需 GPU 总数为 <span class="math inline">\(n_{\mathrm{GPU}}=n_d\times n_t\times n_p\)</span>。例如 5300 亿参数的 Megatron-Turing NLG 用了 8 路张量并行、35 路流水线并行和 8 路数据并行，共 <span class="math inline">\(8\times35\times8=2240\)</span> 张 A100<sup><a href="../ch3/references.html#ref-26">[26]</a></sup>。此外，长序列训练还有沿序列维度切分的<strong>序列并行</strong>与<strong>上下文并行</strong>，混合专家模型还有<strong>专家并行</strong>。</p>
 <p><strong>集群拓扑</strong>　 训练集群由大量带加速设备的服务器组成。每台服务器通常装 2～16 个（最常见 8 个）加速设备，机内用 NVLink 等高速总线互联；多台服务器放在一个<strong>机柜</strong>（rack）里，经<strong>架顶交换机</strong>（Top of Rack Switch，ToR）接入网络；架顶交换机端口用满后，再用<strong>骨干交换机</strong>（spine switch）连接更多机柜，形成<strong>多层树</strong>（multi-level tree）拓扑。机内带宽远高于机间，所以通信最频繁的张量并行放在机内，流水线并行和数据并行跨机。</p>
 <p><strong>两种系统架构</strong>　 早期系统多用<strong>参数服务器</strong>（parameter server）架构（图 <a href="../ch3/s3-5.html#c3-fig-ps">3-10</a>(a)）：<strong>训练服务器</strong>负责前向和反向计算，需要大量算力；<strong>参数服务器</strong>保存全局参数、聚合梯度并更新参数，需要充足的内存和通信资源。按更新时机分两种模式：<strong>同步训练</strong>等收齐所有训练服务器的梯度再统一更新，结果与单机等价，但速度受最慢的服务器拖累；<strong>异步训练</strong>每收到一份梯度就立即更新，速度快，但部分服务器会基于过时的参数计算梯度（梯度陈旧），可能影响收敛。参数服务器的主要问题是中心节点容易成为通信瓶颈。当前大模型训练主要采用<strong>去中心化架构</strong>（图 <a href="../ch3/s3-5.html#c3-fig-ps">3-10</a>(b)）：没有中心节点，节点之间直接通信，训练与通信可以并行，通信负载均匀分摊，从而缓解通信墙。节点之间用<strong>集合通信</strong>（collective communication）周期性地交换参数和梯度，常用原语见表 <a href="../ch3/s3-5.html#c3-tab-collective">3-9</a>。</p>
 <div id="c3-fig-ps" class="bookfig">
@@ -1125,7 +1125,7 @@ window.Quarto = {
 </section>
 <section id="训练的稳定性与容错" class="level2">
 <h2 class="anchored" data-anchor-id="训练的稳定性与容错">3.5.5　训练的稳定性与容错</h2>
-<p>在数千张卡上连续训练数周，“能否顺利跑完”本身就是工程难题。<strong>损失尖峰与发散</strong>：损失突然飙升，有时自行恢复，有时导致训练发散，常用对策是梯度裁剪、降低学习率、跳过引发问题的数据批次，或从较早的检查点回退重训。<strong>硬件故障</strong>：卡越多，训练期间遇到 GPU、网络或节点故障的概率越高，因此要定期保存<strong>检查点</strong>（checkpoint），包括模型参数、优化器状态、学习率调度器状态和数据读取位置，故障后从最近的检查点恢复；Meta 公开的 OPT-175B 训练日志就记录了大量因硬件故障和损失发散而进行的人工重启<sup><a href="../ch3/references.html#ref-19">[19]</a></sup>。<strong>监控与评估</strong>：持续监控损失、梯度范数、学习率和吞吐量，定期在下游基准上评估检查点。</p>
+<p>在数千张卡上连续训练数周，“能否顺利跑完”本身就是工程难题。<strong>损失尖峰与发散</strong>：损失突然飙升，有时自行恢复，有时导致训练发散，常用对策是梯度裁剪、降低学习率、跳过引发问题的数据批次，或从较早的检查点回退重训。<strong>硬件故障</strong>：卡越多，训练期间遇到 GPU、网络或节点故障的概率越高，因此要定期保存<strong>检查点</strong>（checkpoint），包括模型参数、优化器状态、学习率调度器状态和数据读取位置，故障后从最近的检查点恢复；Meta 公开的 OPT-175B 训练日志就记录了大量因硬件故障和损失发散而进行的人工重启<sup><a href="../ch3/references.html#ref-21">[21]</a></sup>。<strong>监控与评估</strong>：持续监控损失、梯度范数、学习率和吞吐量，定期在下游基准上评估检查点。</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>

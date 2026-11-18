@@ -755,7 +755,7 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#c1-subsec-ai-ml-dl" id="toc-c1-subsec-ai-ml-dl" class="nav-link active" data-scroll-target="#c1-subsec-ai-ml-dl">1.1.1　人工智能、机器学习与深度学习</a></li>
-  <li><a href="#c1-subsec-genai" id="toc-c1-subsec-genai" class="nav-link" data-scroll-target="#c1-subsec-genai">1.1.2　生成式人工智能与决策式人工智能</a></li>
+  <li><a href="#c1-subsec-genai" id="toc-c1-subsec-genai" class="nav-link" data-scroll-target="#c1-subsec-genai">1.1.2　生成式、判别式与决策式人工智能</a></li>
   <li><a href="#c1-subsec-llm" id="toc-c1-subsec-llm" class="nav-link" data-scroll-target="#c1-subsec-llm">1.1.3　大语言模型、基础模型与多模态模型</a></li>
   <li><a href="#c1-subsec-world" id="toc-c1-subsec-world" class="nav-link" data-scroll-target="#c1-subsec-world">1.1.4　世界模型：另一条路线</a></li>
   </ul>
@@ -804,7 +804,7 @@ window.Quarto = {
 </div>
 </section>
 <section id="c1-subsec-genai" class="level2">
-<h2 class="anchored" data-anchor-id="c1-subsec-genai">1.1.2　生成式人工智能与决策式人工智能</h2>
+<h2 class="anchored" data-anchor-id="c1-subsec-genai">1.1.2　生成式、判别式与决策式人工智能</h2>
 <p>按照模型<strong>输出什么</strong>，可以把人工智能系统再分一次。</p>
 <p><strong>生成式人工智能</strong>（Generative AI）先从大量数据中学习这类数据“通常长什么样”，即学习数据的概率分布；使用时再按这个分布<strong>采样</strong>，产生训练集中没有出现过、但看起来属于同一类的新内容，例如文章、图像、语音、视频和代码。生成的内容也常被称为 <strong>AIGC</strong>（AI-Generated Content，人工智能生成内容）。学者李宏毅给过一个直观的说法：生成式人工智能让机器产生“复杂而有结构的物件”。“复杂”指可能的结果多到无法穷举——用 5000 个常用汉字写一段 100 字的话，可能的组合有 <span class="math inline">\(5000^{100}\)</span> 种，不可能把它们一一列成选项；“有结构”指结果必须符合语法、逻辑或画面规律，不能是随机拼凑。这就决定了生成式模型不能“从选项里挑一个”，只能一个部分接一个部分地构造出来。第 <a href="../ch1/s1-2.html">1.2</a> 节会看到，大语言模型正是一个词元接一个词元地构造回答。</p>
 <p>与之相对的是<strong>判别式</strong>和<strong>决策式人工智能</strong>。判别式模型对输入做判断，输出取自一个有限的集合，例如图像识别判断“图中是猫还是狗”，信用评分给出“通过/拒绝”；决策式模型在给定目标下选择动作，例如自动驾驶中的路径规划、围棋程序的落子选择。表 <a href="../ch1/s1-1.html#c1-tab-gen-vs-dec">1-1</a> 对比了这两类系统。</p>
@@ -870,7 +870,7 @@ window.Quarto = {
 <li><p><strong>预测推演</strong>：输入“当前状态 + 一个候选动作”，推演下一时刻的状态。例如“把桌边的杯子再推一下”，模型应预测出杯子滑落、摔碎；</p></li>
 <li><p><strong>规划决策</strong>：在内部这个“虚拟沙盘”里试验多种动作方案，比较预测结果，选出最好的一种再到真实世界中执行；执行后的新观测又回到第一步。</p></li>
 </ol>
-<p>一些通俗介绍把这三个部分分别称为渲染器（renderer）、模拟器（simulator）和规划器（planner）。</p>
+<p>这三个部分通常分别对应感知编码器（encoder）、模拟器（simulator）和规划器（planner）；如果还需要把预测出的内部状态还原成画面，则另配渲染器（renderer）。</p>
 <div id="c1-fig-world" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">

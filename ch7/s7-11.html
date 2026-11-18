@@ -790,8 +790,10 @@ window.Quarto = {
 <section id="c7-subsec-dag" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-dag">7.11.1　用工作流图描述 Agent 任务</h2>
 <p>把一次任务表示成<strong>有向无环图</strong>（Directed Acyclic Graph，DAG）<span class="math inline">\(G=(\mathcal{S},\mathcal{E})\)</span>：节点 <span class="math inline">\(v\in\mathcal{S}\)</span> 是一个步骤（检索、模型推理、工具调用、运行测试、人工审批），边 <span class="math inline">\((u,v)\in\mathcal{E}\)</span> 表示 <span class="math inline">\(v\)</span> 要用到 <span class="math inline">\(u\)</span> 的输出。真实的 Agent 会动态生成新步骤、重试旧步骤，所以 DAG 通常只描述<strong>当前已知的一段</strong>工作流，运行时还要随时更新图和剩余预算。每个节点记录：所需模型、输入输出大小、计算量、隐私等级、截止时间、失败后能否安全重试。</p>
-<p>调度器要为每个步骤 <span class="math inline">\(v\)</span> 在候选节点 <span class="math inline">\(n\)</span>（端、边或云）中选一个位置，并估计总时间 <span class="math inline">\(T(v,n)\)</span>——排队、模型装载、上下文传输、推理、工具执行、结果返回之和；还要估计显存、能耗、费用和失败概率。前驱步骤没完成，后继不能启动；需要特定凭据或本地硬件的工具，只能在获得授权的节点上运行。一个教学化的目标可以写成 <span class="math display">\[\min\; \Bigl(T_{\text{完成}} + \lambda\cdot\text{能耗} + \mu\cdot\text{费用}\Bigr)
-  \quad \text{s.t.}\ \text{时限、显存、节点能力、可靠性、数据驻留、授权},
+<p>调度器要为每个步骤 <span class="math inline">\(v\)</span> 在候选节点 <span class="math inline">\(n\)</span>（端、边或云）中选一个位置，并估计总时间 <span class="math inline">\(T(v,n)\)</span>——排队、模型装载、上下文传输、推理、工具执行、结果返回之和；还要估计显存、能耗、费用和失败概率。前驱步骤没完成，后继不能启动；需要特定凭据或本地硬件的工具，只能在获得授权的节点上运行。一个教学化的目标可以写成 <span class="math display">\[\begin{aligned}
+    \min\;\; &amp; T_{\text{完成}} + \lambda\cdot\text{能耗} + \mu\cdot\text{费用} \\
+    \text{受限于}\;\; &amp; \text{时限、显存、节点能力、可靠性、数据驻留、授权},
+  \end{aligned}
 \tag{7-2}\]</span> 其中权重 <span class="math inline">\(\lambda\)</span>、<span class="math inline">\(\mu\)</span> 表示业务上的取舍。截止时间和隐私若是硬约束，就不能用较低的成本去“抵消”违反它们。可靠性也不能只看节点的平均可用率：串行链路中任何一步失败都可能让整条工作流失败（例 <a href="../ch7/s7-7.html#c7-ex-retry">7-3</a>），并行备份（把同一步骤同时放到多个节点、取最先成功的结果）能提高完成概率，却增加成本；可重试的步骤还要为恢复预留时间。DARCS（Deadline- and Reliability-Constrained Scheduling，时限与可靠性约束的调度）研究的正是异构边缘服务器上的并发 Agent 工作流 DAG：在每条工作流的时限、硬件可靠性和 GPU 显存约束下，决定接纳哪些工作流、怎样调度<sup><a href="../ch7/references.html#ref-30">[30]</a></sup>。它给出的是特定模型和实验条件下的方法，不能直接当成所有 Agent 的通用调度器。</p>
 </section>
 <section id="c7-subsec-split" class="level2">

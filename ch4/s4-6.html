@@ -816,7 +816,7 @@ window.Quarto = {
 </section>
 <section id="第三步估算效果检查可行性" class="level2">
 <h2 class="anchored" data-anchor-id="第三步估算效果检查可行性">4.6.3　第三步：估算效果，检查可行性</h2>
-<p><strong>显存是否够用</strong>　 每个请求的上下文按 4096 个 token 计（问题、检索片段与回答之和），由例 <a href="../ch4/s4-4.html#ex-kv">4-3</a> 估算，每个请求的 KV 缓存约 0.5 GiB。扣除运行时开销（按约 2 GB 计）后：</p>
+<p><strong>显存是否够用</strong>　 每个请求的上下文按 4096 个 token 计（问题、检索片段与回答之和），由例 <a href="../ch4/s4-4.html#ex-kv">4-3</a> 估算，每个请求的 KV 缓存约 0.5 GiB（约 0.54 GB）。扣除运行时开销（按约 2 GB 计）后：</p>
 <ul>
 <li><p>BF16 权重：剩余约 6 GB，仅能容纳约 11 个请求，<strong>无法满足</strong> 30 路并发；</p></li>
 <li><p>4 位量化权重：剩余约 17 GB，可容纳约 31 个请求，<strong>基本满足</strong>需求，但余量很小。</p></li>

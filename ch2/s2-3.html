@@ -946,7 +946,7 @@ window.Quarto = {
 <td style="text-align: left;">加权求和</td>
 <td style="text-align: left;"><span class="math inline">\(0.248\times(1,0)+0.248\times(0,2)+0.503\times(3,1)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\((1.759,1.000)\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(V\)</span> 的三行</td>
+<td style="text-align: left;"><span class="math inline">\(V\)</span> 的三行（按未取整权重算）</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">6</td>
@@ -970,7 +970,7 @@ window.Quarto = {
 <p><strong>数据流向</strong>：<span class="math inline">\(Q,K\to S\to(+M)\to A\)</span>；<span class="math inline">\(A,V\to O\)</span>。“很”的查询 <span class="math inline">\((1,1)\)</span> 与自己的键最相似，约一半注意力（0.503）给了自己，其余平分给前两个词元；它的输出是三个值向量的加权平均，把整句的信息按相关程度“混合”进了当前位置。最后一个位置本来就能看到全部前文，所以加不加因果掩码，它的结果都一样。</p>
 </div>
 <div class="widget" data-widget="c2attn"></div>
-<p><strong>多头注意力</strong>　 一组 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span> 只能表达一种“关注方式”。<strong>多头注意力</strong>把隐藏维度 <span class="math inline">\(d\)</span> 切成 <span class="math inline">\(H\)</span> 份，每个头用自己的 <span class="math inline">\(W_i^Q\)</span>、<span class="math inline">\(W_i^K\)</span>、<span class="math inline">\(W_i^V\)</span> 在 <span class="math inline">\(d_{\mathrm{head}}=d/H\)</span> 维的子空间里独立计算注意力，再把各头的输出拼接，经输出矩阵 <span class="math inline">\(W^O\)</span> 映射回 <span class="math inline">\(d\)</span> 维： <span class="math display">\[\operatorname{MultiHead}(X) = \operatorname{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)\,W^O,\qquad
+<p><strong>多头注意力</strong>　 一组 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span> 只能表达一种“关注方式”。<strong>多头注意力</strong>把隐藏维度 <span class="math inline">\(d\)</span> 切成 <span class="math inline">\(H\)</span> 份，每个头用自己的 <span class="math inline">\(W_i^Q\)</span>、<span class="math inline">\(W_i^K\)</span>、<span class="math inline">\(W_i^V\)</span> 在 <span class="math inline">\(d_{\mathrm{head}}=d/H\)</span> 维的子空间里独立计算注意力，再把各头的输出拼接，经输出矩阵 <span class="math inline">\(W^O\)</span> 映射回 <span class="math inline">\(d\)</span> 维： <span class="math display">\[\operatorname{MultiHead}(X) = \operatorname{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)\,W^O,\quad
   \mathrm{head}_i = \operatorname{Attention}(XW_i^Q,\,XW_i^K,\,XW_i^V).
 \tag{2-12}\]</span> 不同的头可以学到不同类型的关系，例如有的头跟踪主谓搭配，有的头跟踪代词指代。原始 Transformer 取 <span class="math inline">\(d=512\)</span>、<span class="math inline">\(H=8\)</span>，每头 64 维。</p>
 <p><strong>代价随长度平方增长</strong>　 分数矩阵 <span class="math inline">\(S\)</span> 的形状是 <span class="math inline">\(T\times T\)</span>，注意力的计算量和中间结果都随序列长度的平方增长。上下文从 4K 扩展到 128K，<span class="math inline">\(T\)</span> 增大 32 倍，<span class="math inline">\(S\)</span> 增大约 1000 倍。这是长上下文模型的核心难题。FlashAttention 通过分块计算避免把完整的 <span class="math inline">\(S\)</span> 写入显存，缓解了显存和带宽压力（第 <a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节），但计算量的平方关系仍然存在。</p>
@@ -979,9 +979,9 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="c2-subsec-ffn">2.3.4　前馈网络、残差流与归一化</h2>
 <p>每层的第二个子层是<strong>前馈网络</strong>（Feed-Forward Network，FFN）。注意力负责在位置之间交换信息，FFN 则对每个位置单独做同样的非线性变换：先升维到 <span class="math inline">\(d_{\mathrm{ff}}\)</span>（通常为 <span class="math inline">\(4d\)</span>），经过激活函数（原论文用 ReLU，即 <span class="math inline">\(\max(0,x)\)</span>），再降回 <span class="math inline">\(d\)</span>： <span class="math display">\[\operatorname{FFN}(\boldsymbol{x}) = \max(0,\ \boldsymbol{x}W_1+\boldsymbol{b}_1)\,W_2+\boldsymbol{b}_2 .
 \tag{2-13}\]</span> 可解释性研究发现，模型的大量事实性“知识”与 FFN 的参数关系密切<sup><a href="../ch2/references.html#ref-27">[27]</a></sup>。</p>
-<p>两个子层都包在<strong>残差连接</strong>和<strong>归一化</strong>之中。现代大模型多采用<strong>前置归一化</strong>（Pre-LN）的写法： <span class="math display">\[\boldsymbol{x} \leftarrow \boldsymbol{x} + \operatorname{Attention}\bigl(\operatorname{Norm}(\boldsymbol{x})\bigr),\qquad
-  \boldsymbol{x} \leftarrow \boldsymbol{x} + \operatorname{FFN}\bigl(\operatorname{Norm}(\boldsymbol{x})\bigr).
-\tag{2-14}\]</span> 一个有用的理解方式是把 <span class="math inline">\(\boldsymbol{x}\)</span> 看成一条贯穿所有层的<strong>残差流</strong>（residual stream）：每个注意力子层从其他位置“读取”信息并“写回”残差流，每个 FFN 子层在当前位置上加工信息并写回。残差连接让梯度可以沿“<span class="math inline">\(+\boldsymbol{x}\)</span>”这条捷径直接穿过几十上百层，归一化让每层输入的数值范围保持稳定，二者是把网络堆深的前提。无论穿过多少层，形状始终是 <span class="math inline">\(T\times d\)</span>。可解释性研究还发现，浅层更多处理词法和局部句法，深层更多处理语义和与任务相关的信息。</p>
+<p>两个子层都包在<strong>残差连接</strong>和<strong>归一化</strong>之中。现代大模型多采用<strong>前置归一化</strong>（Pre-LN）的写法： <span class="math display">\[X \leftarrow X + \operatorname{Attention}\bigl(\operatorname{Norm}(X)\bigr),\qquad
+  X \leftarrow X + \operatorname{FFN}\bigl(\operatorname{Norm}(X)\bigr).
+\tag{2-14}\]</span> 一个有用的理解方式是把 <span class="math inline">\(X\)</span> 看成一条贯穿所有层的<strong>残差流</strong>（residual stream）：每个注意力子层从其他位置“读取”信息并“写回”残差流，每个 FFN 子层在当前位置上加工信息并写回。残差连接让梯度可以沿“<span class="math inline">\(+X\)</span>”这条捷径直接穿过几十上百层，归一化让每层输入的数值范围保持稳定，二者是把网络堆深的前提。无论穿过多少层，形状始终是 <span class="math inline">\(T\times d\)</span>。可解释性研究还发现，浅层更多处理词法和局部句法，深层更多处理语义和与任务相关的信息。</p>
 <p>有了每层的结构，就可以估算模型的参数量。注意力有 <span class="math inline">\(W^Q\)</span>、<span class="math inline">\(W^K\)</span>、<span class="math inline">\(W^V\)</span>、<span class="math inline">\(W^O\)</span> 四个 <span class="math inline">\(d\times d\)</span> 矩阵，共 <span class="math inline">\(4d^2\)</span> 个参数；FFN 有 <span class="math inline">\(d\times4d\)</span> 和 <span class="math inline">\(4d\times d\)</span> 两个矩阵，共 <span class="math inline">\(8d^2\)</span> 个参数；偏置和归一化参数很少，可以忽略。于是 <span class="math display">\[N \approx 12\,L\,d^{2}\ \ (\text{不含嵌入}),\qquad N_{\mathrm{emb}} = \lvert\mathcal{V}\rvert \, d .
 \tag{2-15}\]</span></p>
 <div id="c2-ex-params" class="bookbox example">
@@ -1096,7 +1096,7 @@ window.Quarto = {
 <tr class="even">
 <td style="text-align: center;">2</td>
 <td style="text-align: left;">归一化</td>
-<td style="text-align: left;">各数 <span class="math inline">\(\div(20.09+9.03+6.05+2.72+0.37)\)</span>，分母 <span class="math inline">\(=38.25\)</span></td>
+<td style="text-align: left;">各数 <span class="math inline">\(\div(20.09+9.03+6.05+2.72+0.37)\)</span>，分母 <span class="math inline">\(=38.26\)</span></td>
 <td style="text-align: left;">0.525，0.236，0.158，0.071，0.010</td>
 <td style="text-align: left;">式 <a href="../ch2/s2-3.html#c2-eq-temperature">（2-17）</a></td>
 </tr>
@@ -1145,7 +1145,7 @@ window.Quarto = {
 <section id="c2-subsec-autoregressive" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-autoregressive">2.3.7　自回归循环与 KV 缓存</h2>
 <p>选出“好”之后，把它追加到输入末尾，再把图 <a href="../ch2/s2-3.html#c2-fig-pipeline">2-4</a> 的链路走一遍，生成下一个词元；如此循环，直到生成结束符或达到长度上限。这种“每次生成一个、生成后接回输入”的方式称为<strong>自回归</strong>（auto-regressive）生成。</p>
-<p>如果每轮都从头计算，生成第 <span class="math inline">\(t\)</span> 个词元就要把前面 <span class="math inline">\(t-1\)</span> 个位置重算一遍。由于因果掩码保证前文位置的计算结果不受后文影响，每一层中前文的键和值算出后就不再改变，可以保存下来重复使用，这就是 <strong>KV 缓存</strong>（Key-Value cache）。于是一次请求分成两个阶段：先一次性并行处理整个输入并写入缓存（<strong>预填充</strong>），再每步只为一个新词元计算并追加缓存（<strong>解码阶段</strong>）。KV 缓存用显存换计算，它的大小随序列长度和并发数线性增长；估算公式及其与 GQA 的关系见第 <a href="../ch3/s3-9.html#c3-subsec-kv">3.9.3</a> 小节，缓存在推理系统中的管理与相关优化见第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a>～<a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节。</p>
+<p>如果每轮都从头计算，生成第 <span class="math inline">\(t\)</span> 个词元就要把前面 <span class="math inline">\(t-1\)</span> 个位置重算一遍。由于因果掩码保证前文位置的计算结果不受后文影响，每一层中前文的键和值算出后就不再改变，可以保存下来重复使用，这就是 <strong>KV 缓存</strong>（Key-Value cache）。于是一次请求分成两个阶段：先一次性并行处理整个输入并写入缓存（<strong>预填充</strong>），再每步只为一个新词元计算并追加缓存（<strong>解码阶段</strong>）。KV 缓存用显存换计算，它的大小随序列长度和并发数线性增长；估算公式及其与分组查询注意力（GQA，第 <a href="../ch2/s2-5.html#c2-subsec-transformer">2.5.1</a> 小节）的关系见第 <a href="../ch3/s3-9.html#c3-subsec-kv">3.9.3</a> 小节，缓存在推理系统中的管理与相关优化见第 <a href="../ch4/s4-4.html#subsec-kvcache">4.4.2</a>～<a href="../ch4/s4-4.html#subsec-infer-opt">4.4.3</a> 小节。</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>

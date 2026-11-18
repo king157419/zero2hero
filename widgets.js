@@ -61,7 +61,7 @@
       else { items.forEach((it) => { for (const k in it.x) { it.x[k] = it.tg[k].slice(); it.v[k].fill(0); } write(it); }); raf = 0; }
     }
     return function set(scene) {
-      const seen = new Set(), snap = first || REDUCE;
+      const seen = new Set(), snap = first || REDUCE || !!(window.BookW && window.BookW._snap);
       scene.forEach((s) => {
         seen.add(s.k);
         let it = items.get(s.k);
@@ -312,7 +312,7 @@
   }
 
   window.BookW = { C, NS, FS, HALO, textW, h, fmt, GB, GiB, REDUCE, L, R, T, animator, slider, select, frame,
-    mkSvg, logScale, linScale, REG: { roofline, train, infer } };
+    mkSvg, logScale, linScale, _snap: false, REG: { roofline, train, infer } };
 })();
 
 
@@ -1331,7 +1331,7 @@
     { key: "13B", name: "13B（LLaMA-13B 的形状）", N: 13e9, L: 40, d: 5120, ff: 13824, H: 40, kv: 40 },
     { key: "33B", name: "33B（LLaMA-33B 的形状）", N: 33e9, L: 60, d: 6656, ff: 17920, H: 52, kv: 52 },
     { key: "65B", name: "65B（LLaMA-65B 的形状）", N: 65e9, L: 80, d: 8192, ff: 22016, H: 64, kv: 64 },
-    { key: "70B", name: "70B（LLaMA 2-70B 的形状）", N: 70e9, L: 80, d: 8192, ff: 28672, H: 64, kv: 8 },
+    { key: "70B", name: "70B（Llama 2-70B 的形状）", N: 70e9, L: 80, d: 8192, ff: 28672, H: 64, kv: 8 },
   ];
   // 表 3-7：每参数字节数（权重、梯度、优化器状态）
   const TCFG = {
@@ -1569,7 +1569,7 @@
 
   REG.c3infer = function (root) {
     const grid = frame(root, "动手试一试：推理显存与并发上限",
-      "按式（3-37）估算：权重 N × b<sub>w</sub>，KV 缓存按第 4 章式（4-7）为 2 × 层数 × KV 头数 × 每头维度 × 序列长度 × 用户数 × 每数值字节数，再加前两项之和的 10%～20% 作为激活值与框架开销。默认是例 3-9（LLaMA 2-70B、GQA、10 个用户各 32K 上下文）。");
+      "按式（3-37）估算：权重 N × b<sub>w</sub>，KV 缓存按第 4 章式（4-7）为 2 × 层数 × KV 头数 × 每头维度 × 序列长度 × 用户数 × 每数值字节数，再加前两项之和的 10%～20% 作为激活值与框架开销。默认是例 3-9（Llama 2-70B、GQA、10 个用户各 32K 上下文）。");
     const preset = h(`<div class="w-tabs"><button class="on" data-p="e7">例 3-9：70B、10 人 × 32K</button><button data-p="e10">例 3-12：笔记本跑 7B</button><button data-p="c7">3.12.7 小节：24 GB 显卡</button></div>`);
     root.insertBefore(preset, grid);
     const nn = slider("参数量 N", 0, INS.length - 1, 1, 10, (v) => `${INS[v]}B`);
@@ -1938,7 +1938,7 @@
       ["例 5-3 固定开销", b8.fixed, 3200], ["例 5-3 材料预算", b8.budget, 4992],
       ["例 5-3 每块 token 数", b8.per, 390], ["例 5-3 最多块数", b8.max, 12], ["例 5-3 窗口 32K 时块数上限", b32.max, 75],
       ["例 5-4 D1 的 RRF 分数", sc.D1, 0.03252, 0.00001], ["例 5-4 D3 的 RRF 分数", sc.D3, 0.03226, 0.00001],
-      ["例 5-4 D2 的 RRF 分数", sc.D2, 0.03176, 0.00001], ["例 5-4 D5 的 RRF 分数", sc.D5, 0.01587, 0.00001],
+      ["例 5-4 D2 的 RRF 分数", sc.D2, 0.03175, 0.00001], ["例 5-4 D5 的 RRF 分数", sc.D5, 0.01587, 0.00001],
       ["例 5-4 D4 的 RRF 分数", sc.D4, 0.01563, 0.00001], ["例 5-4 融合后排序", rank(sc, docs).join("、"), "D1、D3、D2、D5、D4"],
       ["例 5-6 RAG 单次成本 / 美元", cs.rag, 0.01, 1e-9], ["例 5-6 长上下文单次成本 / 美元", cs.lc, 0.40, 1e-9],
       ["例 5-6 缓存命中时单次成本 / 美元", cs.lcc, 0.02, 1e-9],
@@ -2172,7 +2172,9 @@
     const usd = (v) => (v >= 1 ? money(v) : v >= 0.01 ? v.toFixed(2) : v.toPrecision(2));
 
     function axis(S, xs, xmax, x0, x1, y, lab, pre) {
-      const st = ticks(xmax);
+      let st = ticks(xmax);
+      const maxLabW = textW(tickLab(Math.floor(xmax / st) * st), 11);
+      while (xs(st) - xs(0) < maxLabW + 10) st *= 2;
       for (let v = 0; v <= xmax + 1e-9; v += st) {
         const x = xs(v), key = pre + Math.round(v * 1e6);
         if (x + textW(tickLab(v), 11) / 2 > W - 1) continue;
@@ -2314,8 +2316,8 @@
       ["例 6-1 对照组费用（元）", ex.base, 0.0066, 1e-9],
       ["例 6-1 费用倍数（约 8.7）", ex.ratio, 8.7, 0.05],
       ["例 6-1 输入费用占比", ex.inShare, 0.875, 1e-9],
-      ["习题 6.5 K=5 累计输入", e5.Tin, 21000],
-      ["习题 6.5 K=10 累计输入", e10.Tin, 57000],
+      ["习题 6.5 M=5 累计输入", e5.Tin, 21000],
+      ["习题 6.5 M=10 累计输入", e10.Tin, 57000],
       ["习题 6.5 倍数（约 2.7）", e10.Tin / e5.Tin, 2.7, 0.02],
       ["例 6-2 原样执行 0.95^10", r0.none, 0.599, 0.0005],
       ["例 6-2 单步提高到 0.99：0.99^10", r99.none, 0.904, 0.0005],
@@ -2357,7 +2359,7 @@
     const out = slider("每轮输出（思考与行动）", 50, 500, 10, 100, (v) => `${v} token`);
     const obs = slider("每轮观察（工具返回）", 0, 3000, 50, 400, (v) => `${fmt(v, 0)} token`);
     const fin = slider("最终回复", 50, 1000, 50, 300, (v) => `${v} token`);
-    const K = slider("调用次数 K", 1, 30, 1, 7, (v) => `${v} 次`);
+    const K = slider("调用次数 M", 1, 30, 1, 7, (v) => `${v} 次`);
     const pin = slider("输入单价", 0.5, 20, 0.5, 2, (v) => `${v} 元 / 百万 token`);
     const pout = slider("输出单价", 1, 60, 1, 8, (v) => `${v} 元 / 百万 token`);
     const disc = slider("命中缓存的输入减价", 0, 100, 5, 0, (v) => (v === 0 ? "0（不使用前缀缓存）" : `${v}%`));
@@ -2437,7 +2439,7 @@
         `<br>费用 = ${inPart} + ${f0(r.Tout)}×${p.pout}÷10<sup>6</sup> = <b>${money(r.cost)} 元</b>；` +
         `只调用一次（对照组）= ${f0(p.P0)}×${p.pin}÷10<sup>6</sup> + ${p.fin}×${p.pout}÷10<sup>6</sup> = ${money(r.base)} 元。` +
         `<br>ReAct 的费用约为一次调用的 <b>${r.ratio.toFixed(1)} 倍</b>，其中输入费用占 ${(r.inShare * 100).toFixed(1)}%。` +
-        (p.K >= 2 && r.Tin > 0 ? `累计输入里，反复读入的已有轨迹（K(K−1)/2·Δ）占 ${(((p.K * (p.K - 1)) / 2 * r.D) / r.Tin * 100).toFixed(0)}%。` : "");
+        (p.K >= 2 && r.Tin > 0 ? `累计输入里，反复读入的已有轨迹（M(M−1)/2·Δ）占 ${(((p.K * (p.K - 1)) / 2 * r.D) / r.Tin * 100).toFixed(0)}%。` : "");
     }
     ctl.forEach((c) => c.on(update));
     update();
@@ -2753,11 +2755,11 @@
       const W = getW(), Sc = [],xmax = Math.max(p.W, r.fullSum, r.miniSum) * 1.04, xs = linScale(0, xmax, m.l, W - m.r);
       const wx = xs(p.W), wl = `窗口 W = ${fmt(p.W, 0)}`, ww = textW(wl, 12.5);
       Sc.push(T("wl", wx + 6 + ww > W - 2 ? wx - 6 - ww : wx + 6, 16, wl, { "font-size": 12.5 }));
-      const bh = 32;
+      const bh = 32, titles = [];
       [["f", "全部加载", r.full, r.fullSum, r.fullPct, 52], ["m", "最小工作集", r.mini, r.miniSum, r.miniPct, 124]].forEach(([k, name, segs, sum, fr, y]) => {
         const over = sum > p.W;
         const tl = `${name}：${fmt(sum, 0)} token，占窗口 ${pct(fr)}%${over ? "（超出）" : ""}`;
-        Sc.push(T(k + "n", m.l, y - 8, tl, { "font-size": fitFs(tl, 13, W - m.l - m.r), fill: over ? C.warn : C.ink }));
+        titles.push(T(k + "n", m.l, y - 8, tl, Object.assign({ "font-size": fitFs(tl, 13, W - m.l - m.r), fill: over ? C.warn : C.ink }, HALO)));
         let x = m.l; const labs = [];
         segs.forEach(([cat, lab, v], j) => {
           const w = Math.max(0, xs(v) - m.l);
@@ -2775,6 +2777,7 @@
         Sc.push(...labs);
       });
       Sc.push(L("wline", { x1: wx, x2: wx, y1: 22, y2: H - 10, stroke: C.ink, "stroke-dasharray": "5 3", "stroke-width": 1.2 }));
+      Sc.push(...titles);
       return Sc;
     }
     function update() {
@@ -3120,7 +3123,7 @@
         S.push(T(key + "t", 2, y0 + 14, title, { "font-size": 12.5 }));
         if (key === "kv") {
           const ft = r.free > 0 ? `虚线：可用显存 ${sp(r.free / GB)} GB` : "权重已超过显存";
-          S.push(narrow ? T("kvf", m.l, y0 + 88, ft, { "font-size": 11.5, fill: C.warn })
+          S.push(narrow ? T("kvf", m.l, y0 + 88, ft, { "text-anchor": "start", "font-size": 11.5, fill: C.warn })
                         : T("kvf", W - m.r, y0 + 14, ft, { "text-anchor": "end", "font-size": 11.5, fill: C.warn }));
         }
         const vals = [];
@@ -3560,9 +3563,136 @@
 })();
 
 
-/* ===== 挂载 ===== */
-document.querySelectorAll(".widget[data-widget]").forEach((d) => {
-  const f = window.BookW.REG[d.dataset.widget];
-  if (!f) return;
-  try { f(d); } catch (e) { console.error("widget " + d.dataset.widget, e); d.textContent = "（交互组件加载失败）"; }
-});
+/* ===== 挂载与横竖屏防抖重排 ===== */
+(function () {
+  function snapState(root) {
+    const tabs = [...root.querySelectorAll(".w-tabs")].map((bar) =>
+      [...bar.querySelectorAll("button")].findIndex((b) => b.classList.contains("on"))
+    );
+    const addRow = root.querySelector('.w-tabs button[data-a="add"]');
+    const numRows = addRow ? root.querySelectorAll('input[type="number"]').length : null;
+    const addMem = root.querySelector('.w-tabs button[data-act="add"]');
+    const memOpts = addMem && root.querySelector("select") ? root.querySelector("select").options.length : null;
+    const selList = [...root.querySelectorAll("select")];
+    const inpList = [...root.querySelectorAll("input")];
+    const focusSel = selList.indexOf(document.activeElement);
+    const focusInp = inpList.indexOf(document.activeElement);
+    const selects = selList.map((s) => s.value);
+    const inputs = inpList.map((inp) =>
+      inp.type === "checkbox" || inp.type === "radio"
+        ? { type: inp.type, checked: inp.checked }
+        : { type: inp.type, value: inp.value }
+    );
+    return { tabs, numRows, memOpts, selects, inputs, focusSel, focusInp };
+  }
+
+  function restoreState(root, st) {
+    const bars = [...root.querySelectorAll(".w-tabs")];
+    st.tabs.forEach((onIdx, bi) => {
+      const bar = bars[bi];
+      if (!bar) return;
+      const btns = [...bar.querySelectorAll("button")];
+      const curIdx = btns.findIndex((b) => b.classList.contains("on"));
+      if (onIdx >= 0 && onIdx < btns.length && onIdx !== curIdx) btns[onIdx].click();
+    });
+    if (st.numRows !== null) {
+      const add = root.querySelector('.w-tabs button[data-a="add"]');
+      const del = root.querySelector('.w-tabs button[data-a="del"]');
+      for (let g = 0; g < 20; g++) {
+        const cur = root.querySelectorAll('input[type="number"]').length;
+        if (cur < st.numRows && add) add.click();
+        else if (cur > st.numRows && del) del.click();
+        else break;
+      }
+    }
+    if (st.memOpts !== null) {
+      const add = root.querySelector('.w-tabs button[data-act="add"]');
+      const sel = root.querySelector("select");
+      for (let g = 0; g < 10 && sel && sel.options.length < st.memOpts && add && !add.disabled; g++) add.click();
+    }
+    const selects = [...root.querySelectorAll("select")];
+    st.selects.forEach((val, i) => {
+      const s = selects[i];
+      if (s && s.value !== val) {
+        s.value = val;
+        s.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+    const inputs = [...root.querySelectorAll("input")];
+    st.inputs.forEach((item, i) => {
+      const inp = inputs[i];
+      if (!inp) return;
+      if (item.type === "checkbox" || item.type === "radio") {
+        if (inp.checked !== item.checked) {
+          inp.checked = item.checked;
+          inp.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      } else if (inp.value !== item.value) {
+        inp.value = item.value;
+        inp.dispatchEvent(new Event("input", { bubbles: true }));
+        inp.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+    const barsAfter = [...root.querySelectorAll(".w-tabs")];
+    st.tabs.forEach((onIdx, bi) => {
+      const bar = barsAfter[bi];
+      if (!bar) return;
+      [...bar.querySelectorAll("button")].forEach((b, idx) => b.classList.toggle("on", idx === onIdx));
+    });
+    if (st.focusSel >= 0 && selects[st.focusSel]) { try { selects[st.focusSel].focus({ preventScroll: true }); } catch (_) {} }
+    if (st.focusInp >= 0 && inputs[st.focusInp]) { try { inputs[st.focusInp].focus({ preventScroll: true }); } catch (_) {} }
+  }
+
+  const schedules = [];
+  document.querySelectorAll(".widget[data-widget]").forEach((d) => {
+    const name = d.dataset.widget, f = window.BookW.REG[name];
+    if (!f) return;
+    const mount = (st) => {
+      try {
+        if (st) window.BookW._snap = true;
+        f(d);
+        if (st) restoreState(d, st);
+        return true;
+      } catch (e) {
+        console.error("widget " + name, e);
+        d.textContent = "（交互组件加载失败）";
+        return false;
+      } finally {
+        window.BookW._snap = false;
+      }
+    };
+    if (!mount(null)) return;
+    const rec = { lastW: d.clientWidth, timer: 0, down: false, pending: false };
+    const reflow = () => {
+      rec.timer = 0;
+      if (rec.down) { rec.pending = true; return; }
+      const w = d.clientWidth;
+      if (w <= 0 || Math.abs(w - rec.lastW) <= 2) return;
+      rec.pending = false;
+      const st = snapState(d);
+      d.style.minHeight = d.offsetHeight + "px";
+      d.innerHTML = "";
+      mount(st);
+      d.style.minHeight = "";
+      rec.lastW = d.clientWidth;
+    };
+    const schedule = () => {
+      const w = d.clientWidth;
+      if (w <= 0 || Math.abs(w - rec.lastW) <= 2) return;
+      clearTimeout(rec.timer);
+      rec.timer = setTimeout(reflow, 150);
+    };
+    d.addEventListener("pointerdown", () => { rec.down = true; }, { passive: true });
+    const up = () => {
+      if (!rec.down) return;
+      rec.down = false;
+      if (rec.pending) { clearTimeout(rec.timer); rec.timer = setTimeout(reflow, 80); }
+    };
+    window.addEventListener("pointerup", up, { passive: true });
+    window.addEventListener("pointercancel", up, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(schedule).observe(d);
+    schedules.push(schedule);
+  });
+  window.addEventListener("resize", () => schedules.forEach((fn) => fn()), { passive: true });
+  window.addEventListener("orientationchange", () => schedules.forEach((fn) => fn()), { passive: true });
+})();

@@ -824,7 +824,7 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>基于模型</strong>　 只看当前输入，环境稍有变化就会失效。<strong>基于模型的反射型智能体</strong>（model-based reflex agent）在内部维护一个关于世界的模型，用它推断看不见的部分现在是什么状态，再据此行动。扫地机器人看不到沙发底下，但能根据地图和已清扫区域推断哪里还没扫。这一阶段的关键词是<strong>状态估计</strong>：智能体回应的不再是当前输入，而是“它相信的世界状态”。</p>
 <p><strong>目标与效用导向</strong>　 任务变复杂后，智能体需要知道“要去哪里”并比较“哪条路更好”。<strong>目标导向智能体</strong>（goal-based agent）以目标是否达成为准则，用搜索与规划算法找出动作序列；<strong>效用导向智能体</strong>（utility-based agent）再用一个<strong>效用函数</strong>给不同结果打分，在多个都能达成目标的方案之间权衡。差旅智能体属于后者：坐飞机和坐高铁都能到上海，但高铁准点、飞机快却有延误风险，没有效用函数就无法按用户偏好取舍。</p>
 <p><strong>学习型与 LLM 智能体</strong>　 <strong>学习型智能体</strong>（learning agent）在上述结构上增加“学习元件”和“评判元件”：评判元件对行为结果给出反馈，学习元件据此改进决策。2022 年 10 月以预印本发布、2023 年发表于 ICLR 的 ReAct<sup><a href="../ch6/references.html#ref-2">[2]</a></sup>把语言模型放进“思考—行动—观察”的循环；2023 年 3 月发布、同年发表于 NeurIPS 的 Reflexion<sup><a href="../ch6/references.html#ref-3">[3]</a></sup>让模型在失败后用文字总结教训、供下次参考，后者正是“评判—改进”结构的语言版本。与前几代相比，LLM 智能体的变化不在于多了某个部件，而在于<strong>具体情形下“该怎么做”的判断，第一次大量地由预训练模型给出</strong>。这带来了泛化能力，也降低了可验证性。</p>
-<p>在 LLM 之上，当前智能体还表现出几项新特征<sup><a href="../ch6/references.html#ref-4">[4]</a></sup>：借助<strong>视觉语言模型</strong>（Vision-Language Model，VLM）处理截图、图表等多模态信息；通过少量示例和<strong>上下文学习</strong>（在提示中给出示例、不改参数）快速适应新任务；调用外部工具扩展行动能力；用记忆与反思积累经验；以及模拟性格、情感，在多个智能体之间进行社交式互动<sup><a href="../ch6/references.html#ref-6">[6]</a></sup>。</p>
+<p>在 LLM 之上，当前智能体还表现出几项新特征<sup><a href="../ch6/references.html#ref-4">[4]</a></sup>：借助<strong>视觉语言模型</strong>（Vision-Language Model，VLM）处理截图、图表等多模态信息；通过少量示例和<strong>上下文学习</strong>（在提示中给出示例、不改参数）快速适应新任务；调用外部工具扩展行动能力；用记忆与反思积累经验；以及模拟性格、情感，在多个智能体之间进行社交式互动<sup><a href="../ch6/references.html#ref-5">[5]</a></sup>。</p>
 <div id="c6-tab-evolution" class="booktab">
 <div class="tabcap">
 <p>表 6-2　智能体演进的几个阶段</p>
@@ -875,7 +875,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="c6-subsec-bots" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-bots">6.1.3　智能体、AI 助手与聊天机器人</h2>
-<p>日常说法里，“智能体”“AI 助手”“聊天机器人”常被混用。三者确有交集，但在目标、自主性和交互方式上可以分开（表 <a href="../ch6/s6-1.html#c6-tab-bots">6-3</a>，据 Google Cloud 的划分<sup><a href="../ch6/references.html#ref-7">[7]</a></sup>整理）。</p>
+<p>日常说法里，“智能体”“AI 助手”“聊天机器人”常被混用。三者确有交集，但在目标、自主性和交互方式上可以分开（表 <a href="../ch6/s6-1.html#c6-tab-bots">6-3</a>，据 Google Cloud 的划分<sup><a href="../ch6/references.html#ref-6">[6]</a></sup>整理）。</p>
 <p><strong>聊天机器人</strong>（chatbot）的目标是自动化简单任务或对话：响应用户的触发，按预设流程或检索到的知识回复。用户问“怎么退货”，它返回退货政策；用户说“转人工”，它转接。<strong>AI 助手</strong>（AI assistant）协助用户完成任务：理解与生成能力更强，能起草文档、总结会议、推荐操作，但<strong>采纳与否由用户决定</strong>，编程助手给出的代码补全就是如此。<strong>智能体</strong>则自主、主动地执行任务：用户给出目标而不是步骤，它自己拆解、执行、检查，遇到障碍时调整策略。</p>
 <div id="c6-tab-bots" class="booktab">
 <div class="tabcap">
@@ -938,7 +938,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>表中最后一行是更本质的差别——<strong>责任边界</strong>。聊天机器人对“回复是否得体”负责，AI 助手对“建议是否有用”负责，智能体对“任务是否完成”负责。</p>
 <p><strong>从 RAG、Copilot 到 Agent</strong>　 2023 年前后，大模型应用大致经历了三种形态：检索增强生成（RAG，先检索资料再回答，见第 <a href="../ch5/s5-2.html">5.2</a> 节）、Copilot（把模型嵌进具体软件，在用户的操作上下文里生成补全或建议，由用户逐条采纳的“副驾驶”）和 Agent。这一过渡常被概括为从“以人为主、AI 辅助”到“以 AI 为主、人为辅助”。这句话容易被误读为“人退出流程”，更准确的说法是<strong>人的角色从操作者变成委托人</strong>：在 RAG 阶段，人决定问什么、怎么用检索结果；在 Copilot 阶段，人决定接受哪条建议；在 Agent 阶段，人设定目标、约束和验收标准，路径由系统决定，人只在关键节点确认或否决。用户只需用自然语言描述目标；系统内部由模型做出的判断，依据的是以提示形式组织起来的系统提示、工具说明和记忆片段（控制流与工具执行仍由代码承担）。因为模型侧的行为几乎全部由提示塑造，有人把智能体称为“提示词应用的巅峰”；这只是一种形象说法，智能体的可靠性同样依赖代码中的校验与控制（第 <a href="../ch6/s6-3.html#c6-subsec-division">6.3.3</a> 小节）。</p>
-<p>人不再逐步监督之后，系统必须自己回答三个问题：怎么知道做对了？做错了怎么发现？发现后怎么回退？它们分别对应第 <a href="../ch6/s6-3.html#c6-subsec-stop">6.3.4</a> 小节的校验与终止、第 <a href="../ch6/s6-5.html#c6-subsec-lifecycle">6.5.8</a> 小节的评估、第 <a href="../ch6/s6-6.html#c6-subsec-risk">6.6.5</a> 小节的治理。<strong>授予系统的自主权越大，工程上要补的东西越多。</strong></p>
+<p>人不再逐步监督之后，系统必须自己回答三个问题：怎么知道做对了？做错了怎么发现？发现后怎么回退？它们分别对应第 <a href="../ch6/s6-3.html#c6-subsec-stop">6.3.4</a> 小节的校验与终止、第 <a href="../ch6/s6-5.html#c6-subsec-lifecycle">6.5.8</a> 小节的测试与评估，以及第 <a href="../ch6/s6-2.html#c6-subsec-env">6.2.4</a> 小节的可逆区与第 <a href="../ch6/s6-6.html#c6-subsec-risk">6.6.5</a> 小节的治理。<strong>授予系统的自主权越大，工程上要补的东西越多。</strong></p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>“聊天机器人”“AI 助手”“智能体”是按<strong>自主性与责任</strong>划分的角色，不是按底层技术划分的。同一个大模型，接上固定问答流程就是聊天机器人，只给建议就是助手，被授权自行调用工具完成任务才是智能体。反过来，产品名里带 Agent 的，未必真的由模型决定下一步。</p>
@@ -946,7 +946,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="c6-subsec-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="c6-subsec-workflow">6.1.4　智能体与工作流</h2>
-<p>同样是“LLM + 工具”，系统可以有两种组织方式。Anthropic 在 2024 年的工程总结中给出了一个常被引用的区分<sup><a href="../ch6/references.html#ref-8">[8]</a></sup>：<strong>工作流</strong>（workflow）是<strong>由预先写好的代码路径</strong>编排 LLM 和工具的系统；<strong>智能体</strong>是<strong>由 LLM 动态决定</strong>自己的执行过程和工具使用的系统。区别在于控制流由谁掌握（图 <a href="../ch6/s6-1.html#c6-fig-workflow">6-1</a>）。</p>
+<p>同样是“LLM + 工具”，系统可以有两种组织方式。Anthropic 在 2024 年的工程总结中给出了一个常被引用的区分<sup><a href="../ch6/references.html#ref-7">[7]</a></sup>：<strong>工作流</strong>（workflow）是<strong>由预先写好的代码路径</strong>编排 LLM 和工具的系统；<strong>智能体</strong>是<strong>由 LLM 动态决定</strong>自己的执行过程和工具使用的系统。区别在于控制流由谁掌握（图 <a href="../ch6/s6-1.html#c6-fig-workflow">6-1</a>）。</p>
 <div id="c6-fig-workflow" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -954,10 +954,10 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <div class="figcap">
-<p>图 6-1　工作流与智能体的控制流。灰色框为模型或工具调用，虚线框为代码中的条件判断；(b) 中的循环次数事先不确定</p>
+<p>图 6-1　工作流与智能体的控制流。灰色框为模型或工具调用，虚线框为代码中的条件判断，(b) 中的强调色框为决定控制流的模型；(b) 中的循环次数事先不确定</p>
 </div>
 </div>
-<p>工作流里，模型只负责某个节点内的事，例如“把用户需求抽取成 JSON”或“写一段行程说明”；走哪条分支、调用几次、何时结束，都写在代码里。常见的工作流模式有五种<sup><a href="../ch6/references.html#ref-8">[8]</a></sup>：<strong>提示链</strong>（前一步的输出作为后一步的输入）、<strong>路由</strong>（先分类，再交给对应的处理流程）、<strong>并行化</strong>（把子任务同时交给多个调用，再汇总或投票）、<strong>编排者—执行者</strong>（一个模型临时拆分任务、分派给其他调用，这是工作流中最接近智能体的一种）和<strong>评估者—优化者</strong>（一个模型生成，另一个模型评价并要求修改）。智能体则把“下一步做什么”交给模型：模型看到工具返回的结果后决定继续查、换个工具，还是结束。</p>
+<p>工作流里，模型只负责某个节点内的事，例如“把用户需求抽取成 JSON”或“写一段行程说明”；走哪条分支、调用几次、何时结束，都写在代码里。常见的工作流模式有五种<sup><a href="../ch6/references.html#ref-7">[7]</a></sup>：<strong>提示链</strong>（前一步的输出作为后一步的输入）、<strong>路由</strong>（先分类，再交给对应的处理流程）、<strong>并行化</strong>（把子任务同时交给多个调用，再汇总或投票）、<strong>编排者—执行者</strong>（一个模型临时拆分任务、分派给其他调用，这是工作流中最接近智能体的一种）和<strong>评估者—优化者</strong>（一个模型生成，另一个模型评价并要求修改）。智能体则把“下一步做什么”交给模型：模型看到工具返回的结果后决定继续查、换个工具，还是结束。</p>
 <div id="c6-tab-workflow" class="booktab">
 <div class="tabcap">
 <p>表 6-4　工作流与智能体的对比</p>
@@ -999,7 +999,7 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </div>
-<p>两者的取舍（表 <a href="../ch6/s6-1.html#c6-tab-workflow">6-4</a>）可以归结为一条原则：<strong>能用工作流解决的，先用工作流</strong>；只有当路径确实无法预先写出、且错误可以被发现和纠正时，才把控制权交给模型。差旅规划中，“抽取需求—查报销制度”可以写成固定工作流；“车次售罄就换航班、超预算就换酒店、改期后重排”这类分支太多，适合交给智能体。实际系统常是二者的组合：外层是工作流，某些节点内部是一个小智能体。第 4 章第 <a href="../ch4/s4-5.html">4.5</a> 节在讨论应用编排时也给出了同样的建议。</p>
+<p>两者的取舍（表 <a href="../ch6/s6-1.html#c6-tab-workflow">6-4</a>）可以归结为一条原则：<strong>能用工作流解决的，先用工作流</strong>；只有当路径确实无法预先写出、且错误可以被发现和纠正时，才把控制权交给模型。差旅规划中，“抽取需求—查报销制度”可以写成固定工作流；“车次售罄就换航班、超预算就换酒店、改期后重排”这类分支太多，适合交给智能体。实际系统常是二者的组合：外层是工作流，某些节点内部是一个小智能体。第 <a href="../ch4/s4-5.html">4.5</a> 节在讨论应用编排时也给出了同样的建议。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>“智能体与工作流”讨论的是<strong>控制流由谁决定</strong>，与是否使用图形化编排工具无关。用 LangGraph 一类框架画出的“图”，如果每条边都由代码条件决定，就是工作流；如果某个节点让模型自己选择下一个节点，那一部分才是智能体。</p>

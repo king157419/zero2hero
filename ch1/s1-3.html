@@ -845,7 +845,7 @@ window.Quarto = {
 </section>
 <section id="c1-subsec-transformer" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-transformer">1.3.3　Transformer：并行处理长距离依赖</h2>
-<p>2017 年，谷歌的瓦斯瓦尼（Ashish Vaswani）等人提出 <strong>Transformer</strong><sup><a href="../ch1/references.html#ref-15">[15]</a></sup>，完全去掉了循环结构，只用注意力。在<strong>自注意力</strong>中，每个位置生成三个向量：查询 <span class="math inline">\(Q\)</span>（我在找什么）、键 <span class="math inline">\(K\)</span>（我能提供什么）和值 <span class="math inline">\(V\)</span>（我的内容）；用查询与所有位置的键计算匹配程度作为权重，再对值加权求和。任意两个位置之间都只隔“一步”，长距离依赖不再衰减；所有位置的计算可以同时进行，训练能充分利用 GPU 的并行能力。注意力、多头机制、位置编码和整层结构的细节见第 2 章。</p>
+<p>2017 年，谷歌的瓦斯瓦尼（Ashish Vaswani）等人提出 <strong>Transformer</strong><sup><a href="../ch1/references.html#ref-15">[15]</a></sup>，完全去掉了循环结构，只用注意力。在<strong>自注意力</strong>中，每个位置分别生成查询（我在找什么）、键（我能提供什么）和值（我的内容）三个向量（整段序列合起来排成查询、键、值矩阵 <span class="math inline">\(Q\)</span>、<span class="math inline">\(K\)</span>、<span class="math inline">\(V\)</span>）；用查询与所有位置的键计算匹配程度作为权重，再对值加权求和。任意两个位置之间都只隔“一步”，长距离依赖不再衰减；所有位置的计算可以同时进行，训练能充分利用 GPU 的并行能力。注意力、多头机制、位置编码和整层结构的细节见第 2 章。</p>
 <p>Transformer 有三种用法：只用编码器（如 BERT，同时看左右两侧上下文，适合理解类任务）、只用解码器（如 GPT 系列，只看左侧上文，适合生成）、编码器加解码器（如谷歌的 T5 模型，适合翻译等“输入一段、输出一段”的任务）。今天的主流大语言模型几乎都是<strong>只用解码器</strong>的结构，正好对应第 <a href="../ch1/s1-2.html#c1-subsec-autoregressive">1.2.2</a> 小节的自回归生成。</p>
 </section>
 <section id="c1-subsec-scale" class="level2">
@@ -853,7 +853,7 @@ window.Quarto = {
 <p>在此之前，自然语言处理的惯例是“一个任务一个模型”：做情感分类就标注一批情感数据训练一个模型，做命名实体识别再标注另一批。2018 年起，<strong>预训练</strong>范式改变了这一点：先在海量无标注文本上训练一个通用模型，再用少量标注数据<strong>微调</strong>，或者干脆只用提示，就能适配各种下游任务。</p>
 <ul>
 <li><p>2018 年 6 月，OpenAI 发布 GPT（Generative Pre-trained Transformer，生成式预训练 Transformer，约 1.17 亿参数），用从左到右的下一个词元预测做预训练<sup><a href="../ch1/references.html#ref-16">[16]</a></sup>；</p></li>
-<li><p>2018 年 10 月，谷歌发布 BERT（Bidirectional Encoder Representations from Transformers），用<strong>遮蔽语言建模</strong>（Masked Language Modeling，MLM，随机遮住一些词让模型根据两侧上下文猜回来）做预训练，刷新了 11 项理解类任务的纪录<sup><a href="../ch1/references.html#ref-17">[17]</a></sup>；</p></li>
+<li><p>2018 年 10 月，谷歌发布 BERT（Bidirectional Encoder Representations from Transformers），用<strong>掩码语言建模</strong>（Masked Language Modeling，MLM，随机遮住一些词让模型根据两侧上下文猜回来）做预训练，刷新了 11 项理解类任务的纪录<sup><a href="../ch1/references.html#ref-17">[17]</a></sup>；</p></li>
 <li><p>2019 年 2 月的 GPT-2（15 亿参数）显示，不经微调也能完成一些任务；</p></li>
 <li><p>2020 年 5 月的 GPT-3（1750 亿参数）显示，只要在输入中写明任务说明并给几个示例，不更新任何参数就能完成翻译、问答、两三位数的加减法等多种任务<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>。这种能力称为<strong>上下文学习</strong>（In-Context Learning，ICL）。</p></li>
 </ul>
@@ -862,7 +862,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 1-4　GPT-3 有多大、训练要算多少</p>
 </div>
-<p>GPT-3 有 <span class="math inline">\(N=1.75\times10^{11}\)</span> 个参数，训练用了 <span class="math inline">\(D=3\times10^{11}\)</span> 个词元<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>。(1) 若每个参数以 16 位（2 字节）浮点数存储，仅权重占多少存储（GB 按 <span class="math inline">\(10^{9}\)</span> 字节计）？(2) 用第 4 章式 <a href="../ch4/s4-1.html#eq-train-flops">（4-2）</a> <span class="math inline">\(C_{\mathrm{train}}\approx6ND\)</span> 估算训练计算量。(3) 若一张 GPU 的有效算力为 <span class="math inline">\(4\times10^{14}\)</span> FLOP/s（每秒浮点运算次数）（与第 4 章“训练需要多少张卡”一例的取值相同），单卡需要训练多久？1024 张卡理想并行呢？(4) 按 Chinchilla 的经验比例，这个参数量“应该”配多少训练词元？</p>
+<p>GPT-3 有 <span class="math inline">\(N=1.75\times10^{11}\)</span> 个参数，训练用了 <span class="math inline">\(D=3\times10^{11}\)</span> 个词元<sup><a href="../ch1/references.html#ref-3">[3]</a></sup>。(1) 若每个参数以 16 位（2 字节）浮点数存储，仅权重占多少存储（GB 按 <span class="math inline">\(10^{9}\)</span> 字节计）？(2) 用第 4 章式 <a href="../ch4/s4-1.html#eq-train-flops">（4-2）</a> <span class="math inline">\(C_{\mathrm{train}}\approx6ND\)</span> 估算训练计算量（总浮点运算次数，记作 FLOPs）。(3) 若一张 GPU 的有效算力为 <span class="math inline">\(4\times10^{14}\)</span> FLOP/s（每秒浮点运算次数）（与第 4 章“训练需要多少张卡”一例的取值相同），单卡需要训练多久？1024 张卡理想并行呢？(4) 按 Chinchilla 的经验比例，这个参数量“应该”配多少训练词元？</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -883,7 +883,7 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td style="text-align: center;">2</td>
-<td style="text-align: left;">训练计算量（FLOPs 即浮点运算次数）</td>
+<td style="text-align: left;">训练计算量（FLOPs）</td>
 <td style="text-align: left;"><span class="math inline">\(6\times(1.75\times10^{11})\times(3\times10^{11})\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(3.15\times10^{23}\)</span> FLOPs</td>
 <td style="text-align: left;">每个词元约 <span class="math inline">\(6N\)</span> 次运算（前向 <span class="math inline">\(2N\)</span>、反向 <span class="math inline">\(4N\)</span>），乘以词元数</td>
@@ -982,8 +982,8 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td style="text-align: left;">2022—2023 年</td>
-<td style="text-align: left;">InstructGPT、ChatGPT、GPT-4、开放权重模型</td>
-<td style="text-align: left;">按人的意图作答；自然语言成为通用接口；开始支持图像输入</td>
+<td style="text-align: left;">Chinchilla、InstructGPT、ChatGPT、GPT-4、开放权重模型</td>
+<td style="text-align: left;">修正参数与数据的配比；按人的意图作答；自然语言成为通用接口；开始支持图像输入</td>
 <td style="text-align: left;">幻觉；多步推理易错；调用工具、与外部世界交互尚不可靠</td>
 </tr>
 <tr class="odd">

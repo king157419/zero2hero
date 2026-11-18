@@ -811,7 +811,7 @@ ul.task-list li input[type="checkbox"] {
 <p>提示写得过短会留下歧义，写得过细会带来另一种问题：人预先指定的步骤可能与仓库事实不符。例如不了解现有数据层，就命令 Agent“新建一个邮件数据库表”，结果绕开了项目已有的 Mock Adapter。更稳妥的写法是规定<strong>可观察的行为</strong>和<strong>不能破坏的条件</strong>，让 Agent 读完项目后自己选择实现路径。</p>
 <p>对比两种写法。“优化一下订单接口”只给了方向；“将订单查询接口的 P95 延迟降到 300 ms 以下，保持现有 API 兼容；修改后运行基准测试和回归测试，列出改动文件、测试结果和仍存在的风险”则依次给出了五样东西：<strong>结果</strong>（降延迟）、<strong>参考</strong>（现有 API）、<strong>量化目标</strong>（300 ms）、<strong>验证方式</strong>（基准与回归测试）、<strong>输出格式</strong>（文件、结果、风险）。它没有规定改哪个函数、用不用缓存，这些留给 Agent 根据仓库决定。</p>
 <p>在今日工作助手里，“做一个功能完善的智能助手”是模糊的说法；可执行的目标是“在现有 Next.js + TypeScript 项目中，首页展示今日会议、三封高优先级邮件和逾期待办，标记时间重叠的会议，生成 150～200 字的今日安排”。它仍然没规定组件怎样拆、状态管理用什么库，却已经给出了可以检查的结果。</p>
-<p>任务较大时，可以把合同继续拆成一串<strong>工件</strong>：规格说明写行为，计划写拟改的模块，任务表列出可以独立检查的工作项，然后再改代码。GitHub 开源的 Spec Kit 采用这种流程：先为项目写一次“宪章”（constitution，项目级的原则），然后依次执行 Specify（写规格）→ Plan（写技术计划）→ Tasks（拆任务）→ Implement（实现）→ Converge（对照规格、计划和任务检查代码，发现缺口就追加任务，直到收敛），中间还可以插入澄清、分析等可选的质量检查步骤<sup><a href="../ch7/references.html#ref-12">[12]</a></sup>。值得借鉴的是在意图和实现之间留下<strong>可审阅的中间结果</strong>；小修复不必机械地套完整流程。</p>
+<p>任务较大时，可以把合同继续拆成一串<strong>工件</strong>：规格说明写行为，计划写拟改的模块，任务表列出可以独立检查的工作项，然后再改代码。GitHub 开源的 Spec Kit 采用这种流程：先为项目写一次“宪章”（constitution，项目级的原则），然后依次执行 Specify（写规格）→ Plan（写技术计划）→ Tasks（拆任务）→ Implement（实现）→ Converge（对照规格、计划和任务检查代码，发现缺口就追加任务，直到收敛），中间还可以插入澄清、分析等可选的质量检查步骤<sup><a href="../ch7/references.html#ref-13">[13]</a></sup>。值得借鉴的是在意图和实现之间留下<strong>可审阅的中间结果</strong>；小修复不必机械地套完整流程。</p>
 </section>
 <section id="c7-subsec-done" class="level2">
 <h2 class="anchored" data-anchor-id="c7-subsec-done">7.3.3　把“完成”写成可检查的条件</h2>

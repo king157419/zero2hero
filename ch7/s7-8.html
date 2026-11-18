@@ -885,7 +885,7 @@ window.Quarto = {
 <td style="text-align: left;">各自的方差项</td>
 <td style="text-align: left;"><span class="math inline">\(s_0(1-s_0)\div n\)</span>，<span class="math inline">\(s_1(1-s_1)\div n\)</span></td>
 <td style="text-align: left;">0.002436，0.002304</td>
-<td style="text-align: left;">二项分布方差 <span class="math inline">\(s(1-s)\)</span> 除以题数</td>
+<td style="text-align: left;">单题（伯努利分布）方差 <span class="math inline">\(s(1-s)\)</span> 除以题数 <span class="math inline">\(n\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">4</td>
@@ -943,9 +943,9 @@ else:
 <h2 class="anchored" data-anchor-id="c7-subsec-rsi-research">7.8.5　研究进展</h2>
 <p>截至 2026 年 11 月，RSI 研究已从“改一句提示词”走向对 Harness、数据和评估设施的系统研究，但要区分论文报告的结果与成熟的工程能力：</p>
 <ul>
-<li><p><strong>RRSI</strong>（Regularized Recursive Self-Improvement，正则化的递归自我改进）关注 Harness 演化中的过拟合：限制每轮的编辑预算，并筛掉明显依赖特定评测题的改动，以提高跨任务的泛化<sup><a href="../ch7/references.html#ref-19">[19]</a></sup>。论文报告的提升幅度在不同版本之间有修订，引用时应注明版本。</p></li>
+<li><p><strong>RRSI</strong>（Regularized Recursive Self-Improvement，正则化的递归自我改进）关注 Harness 演化中的过拟合：限制每轮的编辑预算，并筛掉明显依赖特定评测题的改动，以提高跨任务的泛化<sup><a href="../ch7/references.html#ref-21">[21]</a></sup>。论文报告的提升幅度在不同版本之间有修订，引用时应注明版本。</p></li>
 <li><p><strong>ModularRSI</strong> 把 Harness 拆成 Agent 循环、工具使用、观察管理、上下文管理、完成判定五个模块，用与评测集不相交的约 2000 个任务进行演化<sup><a href="../ch7/references.html#ref-20">[20]</a></sup>。这五个模块与表 <a href="../ch7/s7-8.html#c7-tab-rsi-mod">7-16</a> 的划分角度不同，但大致对应：Agent 循环和完成判定属于 Loop，观察管理和上下文管理属于 Context，工具使用属于工具。</p></li>
-<li><p><strong>RSIGym</strong>（Evolvent AI 开源）提供训练、推理、轨迹和评估的服务化环境，分为数据、Harness 和联合改进三条路径<sup><a href="../ch7/references.html#ref-21">[21]</a></sup>。</p></li>
+<li><p><strong>RSIGym</strong>（Evolvent AI 开源）提供训练、推理、轨迹和评估的服务化环境，分为数据、Harness 和联合改进三条路径<sup><a href="../ch7/references.html#ref-22">[22]</a></sup>。</p></li>
 </ul>
 <p>三者共同提示：<strong>改进的单位、评估的隔离和迁移能力</strong>，比“连续改了几轮”更重要。若要把方法移到本章的教学项目，建议先冻结一版 Agent 和工具权限，准备公开可复现的开发任务和独立的保留任务，只允许修改一个模块，记录每轮的差异、逐题结果、成本和失败原因。Hermes Agent 这类能沉淀技能的系统也可以作为观察对象，但“会生成技能”与“技能经保留集验证后提高了系统能力”是两回事。</p>
 <div class="bookbox keypoints">

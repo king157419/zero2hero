@@ -815,7 +815,7 @@ window.Quarto = {
 </dd>
 <dt>5.7</dt>
 <dd>
-<p>A：<span class="math inline">\(1\div61+1\div62\approx0.032\,52\)</span>；B：<span class="math inline">\(1\div62+1\div64\approx0.031\,76\)</span>；C：<span class="math inline">\(1\div63+1\div61+1\div62\approx0.048\,40\)</span>；D：<span class="math inline">\(1\div64\approx0.015\,63\)</span>；E：<span class="math inline">\(1\div63+1\div61\approx0.032\,27\)</span>。排序为 C、A、E、B、D。</p>
+<p>A：<span class="math inline">\(1\div61+1\div62\approx0.032\,52\)</span>；B：<span class="math inline">\(1\div62+1\div64\approx0.031\,75\)</span>；C：<span class="math inline">\(1\div63+1\div61+1\div62\approx0.048\,40\)</span>；D：<span class="math inline">\(1\div64\approx0.015\,63\)</span>；E：<span class="math inline">\(1\div63+1\div61\approx0.032\,27\)</span>。排序为 C、A、E、B、D。</p>
 </dd>
 <dt>5.10</dt>
 <dd>
@@ -823,7 +823,7 @@ window.Quarto = {
 </dd>
 <dt>5.11</dt>
 <dd>
-<p>可从检索层（Recall@<span class="math inline">\(k\)</span> 低，用户问法与评估集不同）、生成层（答案相关性低，忠实度只查“不超出材料”）、端到端（缺少无答案题、引用错位）三方面分析。</p>
+<p>可从检索层（用户问法与评估集不同导致漏检，用 Recall@<span class="math inline">\(k\)</span>、MRR 验证）、生成层（忠实度只查“不超出材料”而不查跑题，用答案相关性验证）、端到端层（遇到无答案问题未拒答而强行作答，或回答未解决实际任务，用拒答正确率、任务成功率与用户采纳率验证）三方面分析。</p>
 </dd>
 <dt>5.13</dt>
 <dd>

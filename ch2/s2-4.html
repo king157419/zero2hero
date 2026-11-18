@@ -1023,7 +1023,7 @@ window.Quarto = {
 <section id="c2-subsec-compression" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-compression">2.4.5　语言模型即压缩</h2>
 <p>为什么“预测下一个词”这么简单的目标，能训练出看起来会思考的模型？一个有力的解释来自信息论。香农证明：如果模型给某个词元的概率是 <span class="math inline">\(p\)</span>，那么配合算术编码，这个词元可以用约 <span class="math inline">\(-\log_2 p\)</span> 比特存储。于是整段文本的压缩长度（单位为比特）约为 <span class="math display">\[\ell \approx -\sum_{t=1}^{T}\log_2 P_\theta(x_t\mid x_{&lt;t}),
-\tag{2-22}\]</span> 这恰好是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a> 的训练损失乘以 <span class="math inline">\(T\)</span>，再除以 <span class="math inline">\(\ln2\)</span>（把自然对数换成以 2 为底）。所以，<strong>降低损失与提高压缩率是同一件事</strong>。而要把一份内容压缩得足够好，就必须发现其中的规律——压缩物理教科书的最好办法，是掌握牛顿定律。德莱唐（Grégoire Delétang）等人（2023）用实验支持了这一观点<sup><a href="../ch2/references.html#ref-33">[33]</a></sup>：只在文本上训练的 Chinchilla 70B，能把 ImageNet 图像块压缩到原始大小的 43.4%、把 LibriSpeech 语音压缩到 16.4%，优于专用的 PNG（58.5%）和 FLAC（30.3%）。</p>
+\tag{2-22}\]</span> 这恰好是式 <a href="../ch2/s2-2.html#c2-eq-ce">（2-5）</a> 的训练损失乘以 <span class="math inline">\(T\)</span>，再除以 <span class="math inline">\(\ln2\)</span>（把自然对数换成以 2 为底）。所以，<strong>降低损失与提高压缩率是同一件事</strong>。而要把一份内容压缩得足够好，就必须发现其中的规律——压缩物理教科书的最好办法，是掌握牛顿定律。德莱唐（Grégoire Delétang）等人（2024）用实验支持了这一观点<sup><a href="../ch2/references.html#ref-33">[33]</a></sup>：只在文本上训练的 Chinchilla 70B，能把 ImageNet 图像块压缩到原始大小的 43.4%、把 LibriSpeech 语音压缩到 16.4%，优于专用的 PNG（58.5%）和 FLAC（30.3%）。</p>
 </section>
 <section id="c2-subsec-emergence" class="level2">
 <h2 class="anchored" data-anchor-id="c2-subsec-emergence">2.4.6　涌现能力</h2>

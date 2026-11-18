@@ -796,7 +796,7 @@ window.Quarto = {
 </section>
 <section id="基于人类反馈的强化学习rlhf" class="level2">
 <h2 class="anchored" data-anchor-id="基于人类反馈的强化学习rlhf">3.8.2　基于人类反馈的强化学习（RLHF）</h2>
-<p><strong>基于人类反馈的强化学习</strong>（Reinforcement Learning from Human Feedback，RLHF）是最早大规模应用的对齐方法，OpenAI 在 2022 年的 InstructGPT 中系统描述了这一流程<sup><a href="../ch3/references.html#ref-36">[36]</a></sup>，ChatGPT 也采用了类似的方法。如图 <a href="../ch3/s3-8.html#c3-fig-rlhf">3-17</a>，它分三步：</p>
+<p><strong>基于人类反馈的强化学习</strong>（Reinforcement Learning from Human Feedback，RLHF）是最早大规模应用的对齐方法，OpenAI 在 2022 年的 InstructGPT 中系统描述了这一流程<sup><a href="../ch3/references.html#ref-38">[38]</a></sup>，ChatGPT 也采用了类似的方法。如图 <a href="../ch3/s3-8.html#c3-fig-rlhf">3-17</a>，它分三步：</p>
 <ol type="1">
 <li><p><strong>监督微调</strong>：用人工撰写的示范数据对预训练模型做 SFT，得到初始策略（第 <a href="../ch3/s3-6.html">3.6</a> 节）；</p></li>
 <li><p><strong>训练奖励模型</strong>：让 SFT 模型对同一问题生成多个回答，由标注员排序，用这些偏好数据训练一个给回答打分的奖励模型；</p></li>
@@ -810,7 +810,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 3-17　RLHF 的三个步骤<sup><a href="../ch3/references.html#ref-36">[36]</a></sup>。青绿色箭头表示上一步的产物被下一步使用：SFT 模型为第 2 步生成候选回答，并作为第 3 步策略模型的初始值；奖励模型为第 3 步提供奖励信号</p>
+<p>图 3-17　RLHF 的三个步骤<sup><a href="../ch3/references.html#ref-38">[38]</a></sup>。蓝色箭头表示上一步的产物被下一步使用：SFT 模型为第 2 步生成候选回答，奖励模型为第 3 步提供奖励信号（第 3 步的策略模型同样由 SFT 模型初始化）</p>
 </div>
 </div>
 </section>
@@ -830,7 +830,7 @@ window.Quarto = {
 2 &amp; <span class="math inline">\(\sigma(\Delta)\)</span> &amp; <span class="math inline">\(1/(1+e^{-1.5})\)</span> 等 &amp; 0.818；0.550；0.182 &amp; sigmoid；<span class="math inline">\(e^{-1.5}\approx0.223\)</span>，<span class="math inline">\(e^{-0.2}\approx0.819\)</span><br>
 3 &amp; 损失 &amp; <span class="math inline">\(-\ln\sigma(\Delta)\)</span> &amp; 0.201；0.598；1.701 &amp; 式 <a href="../ch3/s3-8.html#c3-eq-rm">（3-28）</a>，用未四舍五入的 <span class="math inline">\(\sigma\)</span> 计算<br>
 4 &amp; 梯度大小 &amp; <span class="math inline">\(1-\sigma(\Delta)\)</span> &amp; 0.182；0.450；0.818 &amp; 梯度分析中的系数，对 <span class="math inline">\(r_w\)</span> 取负号、对 <span class="math inline">\(r_l\)</span> 取正号<br>
-5 &amp; 平均损失 &amp; <span class="math inline">\((0.201+0.598+1.701)\div3\)</span> &amp; 0.834 &amp; 式 <a href="../ch3/s3-8.html#c3-eq-rm">（3-28）</a> 中的期望用样本均值代替<br>
+5 &amp; 平均损失 &amp; <span class="math inline">\((0.201+0.598+1.701)\div3\)</span> &amp; 0.834 &amp; 式 <a href="../ch3/s3-8.html#c3-eq-rm">（3-28）</a> 中的期望用样本均值代替；用未四舍五入的损失计算<br>
 </p>
 </div>
 <p>数据流向两个分数 → 求差 <span class="math inline">\(\Delta\)</span> → <span class="math inline">\(\sigma(\Delta)\)</span> → 取 <span class="math inline">\(-\ln\)</span> 得损失，取 <span class="math inline">\(1-\sigma\)</span> 得梯度大小。 A 组已经分对且差距大，梯度只有 0.182；C 组排错，梯度是 A 组的 4.5 倍（<span class="math inline">\(0.818\div0.182\)</span>）；B 组差距很小，<span class="math inline">\(\sigma\)</span> 接近 0.5，损失和梯度都处于中间。平均损失主要来自排错的 C 组（1.701 占三项之和的约 68%）。</p>
@@ -853,7 +853,7 @@ window.Quarto = {
 <p>初始策略采用 SFT 后的模型；训练数据只需一批<strong>提示词</strong>（Prompt 集），不需要标注。对每个提示词，由当前策略生成回答，再把问题和回答送入奖励模型打分，训练目标是让生成的文本在奖励模型上得分尽可能高。</p>
 <p><strong>带 KL 惩罚的目标</strong>　 如果一味追求奖励模型的高分，策略很快会找到奖励模型的“漏洞”：奖励模型偏爱长回答，策略就生成冗长空洞的内容，甚至生成人看来毫无意义却能骗取高分的文本。这种现象称为<strong>奖励作弊</strong>（reward hacking）。为此，RLHF 在目标中加入 KL 散度惩罚，约束策略不要偏离初始的 SFT 模型（称为<strong>参考模型</strong> <span class="math inline">\(\pi_{\mathrm{ref}}\)</span>）太远： <span class="math display">\[\max_{\pi_\theta}\ \mathbb{E}_{x\sim\mathcal{D},\,y\sim\pi_\theta(\cdot\mid x)}\bigl[r_\phi(x,y)\bigr]-\beta\,\mathbb{D}_{\mathrm{KL}}\bigl[\pi_\theta(y\mid x)\,\Vert\,\pi_{\mathrm{ref}}(y\mid x)\bigr],
 \tag{3-29}\]</span> <span class="math inline">\(\beta\)</span> 控制约束强度：KL 惩罚让策略不至于偏离参考模型太远，从而缓解奖励作弊、维持语言的流畅；<span class="math inline">\(\beta\)</span> 过大则会限制模型的改进空间。</p>
-<p><strong>PPO 的裁剪目标</strong>　 <strong>近端策略优化</strong>（Proximal Policy Optimization，PPO）<sup><a href="../ch3/references.html#ref-37">[37]</a></sup>是一种深度强化学习算法，用于训练智能体在与环境的交互中最大化累积回报；在这里，智能体就是要优化的语言模型。它的核心思想是：每次更新不要让新策略与旧策略相差太大，以保证训练稳定。定义新旧策略在同一动作上的概率比 <span class="math display">\[\rho_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)},
+<p><strong>PPO 的裁剪目标</strong>　 <strong>近端策略优化</strong>（Proximal Policy Optimization，PPO）<sup><a href="../ch3/references.html#ref-39">[39]</a></sup>是一种深度强化学习算法，用于训练智能体在与环境的交互中最大化累积回报；在这里，智能体就是要优化的语言模型。它的核心思想是：每次更新不要让新策略与旧策略相差太大，以保证训练稳定。定义新旧策略在同一动作上的概率比 <span class="math display">\[\rho_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)},
 \tag{3-30}\]</span> 并最大化裁剪后的目标 <span class="math display">\[\mathcal{L}^{\mathrm{CLIP}}(\theta)=\mathbb{E}_t\Bigl[\min\bigl(\rho_t(\theta)\hat{A}_t,\ \mathrm{clip}(\rho_t(\theta),1-\epsilon,1+\epsilon)\,\hat{A}_t\bigr)\Bigr],
 \tag{3-31}\]</span> <span class="math inline">\(\hat{A}_t\)</span> 是<strong>优势函数</strong>的估计，表示在状态 <span class="math inline">\(s_t\)</span> 选择动作 <span class="math inline">\(a_t\)</span> 比“平均水平”好多少；<span class="math inline">\(\epsilon\)</span> 通常取 0.2。裁剪的作用是：概率比偏离 1 太多时，不再沿该方向继续增大更新，避免策略一步变化过大。这个目标对参数 <span class="math inline">\(\theta\)</span> 求梯度后，仍用随机梯度下降类的优化器（如 AdamW）更新。</p>
 <p><strong>四个模型</strong>　 如图 <a href="../ch3/s3-8.html#c3-fig-ppo">3-18</a>，用 PPO 做 RLHF 要同时用到四个模型：<strong>策略模型</strong>（Actor，可训练，SFT 初始化）、<strong>参考模型</strong>（Reference，冻结的 SFT 模型，算 KL 惩罚）、<strong>奖励模型</strong>（Reward，冻结，打分）和<strong>价值模型</strong>（Critic，可训练，估计每个状态的期望回报，用于计算优势 <span class="math inline">\(\hat{A}_t\)</span>）。四个模型规模相近，其中两个还要训练，显存和计算开销很大；加上强化学习对超参数敏感，RLHF 的工程实现相当复杂，这促使研究者寻找更简单的方案。</p>
@@ -870,20 +870,20 @@ window.Quarto = {
 </section>
 <section id="直接偏好优化dpo" class="level2">
 <h2 class="anchored" data-anchor-id="直接偏好优化dpo">3.8.5　直接偏好优化（DPO）</h2>
-<p><strong>直接偏好优化</strong>（Direct Preference Optimization，DPO）由 Rafailov 等人于 2023 年提出<sup><a href="../ch3/references.html#ref-38">[38]</a></sup>。它的关键发现是：式 <a href="../ch3/s3-8.html#c3-eq-rlhf">（3-29）</a> 的优化问题有解析解，由此可以把“奖励”用策略模型自身的概率表示出来，从而<strong>跳过训练奖励模型和强化学习，直接用偏好数据优化语言模型</strong>。损失函数为 <span class="math display">\[\mathcal{L}_{\mathrm{DPO}}(\theta)=-\mathbb{E}_{(x,y_w,y_l)\sim\mathcal{D}}\Bigl[\log\sigma\Bigl(\beta\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\mathrm{ref}}(y_w\mid x)}-\beta\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\mathrm{ref}}(y_l\mid x)}\Bigr)\Bigr].
+<p><strong>直接偏好优化</strong>（Direct Preference Optimization，DPO）由 Rafailov 等人于 2023 年提出<sup><a href="../ch3/references.html#ref-40">[40]</a></sup>。它的关键发现是：式 <a href="../ch3/s3-8.html#c3-eq-rlhf">（3-29）</a> 的优化问题有解析解，由此可以把“奖励”用策略模型自身的概率表示出来，从而<strong>跳过训练奖励模型和强化学习，直接用偏好数据优化语言模型</strong>。损失函数为 <span class="math display">\[\mathcal{L}_{\mathrm{DPO}}(\theta)=-\mathbb{E}_{(x,y_w,y_l)\sim\mathcal{D}}\Bigl[\log\sigma\Bigl(\beta\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\mathrm{ref}}(y_w\mid x)}-\beta\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\mathrm{ref}}(y_l\mid x)}\Bigr)\Bigr].
 \tag{3-32}\]</span> 与式 <a href="../ch3/s3-8.html#c3-eq-rm">（3-28）</a> 对比可以看出，DPO 把 <span class="math inline">\(\beta\log\frac{\pi_\theta(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}\)</span> 当作“隐式奖励”：训练让模型<strong>提高偏好回答 <span class="math inline">\(y_w\)</span> 相对于参考模型的概率，同时降低较差回答 <span class="math inline">\(y_l\)</span> 的相对概率</strong>。</p>
 <p>与 PPO 相比，DPO 流程简单——不需要单独训练奖励模型，也不需要在训练中采样生成回答，训练过程和 SFT 一样是普通的监督学习；资源开销小——只需策略模型和参考模型两个模型，其中参考模型冻结，它对训练集中各回答的概率还可以预先算好；训练稳定——没有强化学习那样复杂的超参数。因此 DPO 及其变体在开源社区广泛使用。也有研究表明，在一些复杂任务上，精心调优的 PPO 仍有优势，两类方法各有适用场景。</p>
 </section>
 <section id="基于-ai-反馈的强化学习rlaif" class="level2">
 <h2 class="anchored" data-anchor-id="基于-ai-反馈的强化学习rlaif">3.8.6　基于 AI 反馈的强化学习（RLAIF）</h2>
-<p>人工标注偏好成本高、速度慢，标注员本身的偏见和不一致也影响质量。<strong>基于 AI 反馈的强化学习</strong>（Reinforcement Learning from AI Feedback，RLAIF）用能力较强的 AI 模型代替人提供偏好判断：给它一组明确的评判原则，让它比较两个回答的优劣，再用这些 AI 偏好训练奖励模型或直接做 DPO。Anthropic 于 2022 年提出的 Constitutional AI（宪法式 AI）是代表<sup><a href="../ch3/references.html#ref-39">[39]</a></sup>：研究者先写下一组原则（“宪法”），让模型依据原则批评和修改自己的回答，再用 AI 依据原则做出的偏好判断进行强化学习，在很少人工标注的情况下提升了无害性。Google 的研究也表明，在摘要等任务上 RLAIF 可以达到与 RLHF 相当的效果。RLAIF 大幅降低了数据成本，但 AI 评判者自身的偏差可能被放大，仍需人工抽检。</p>
+<p>人工标注偏好成本高、速度慢，标注员本身的偏见和不一致也影响质量。<strong>基于 AI 反馈的强化学习</strong>（Reinforcement Learning from AI Feedback，RLAIF）用能力较强的 AI 模型代替人提供偏好判断：给它一组明确的评判原则，让它比较两个回答的优劣，再用这些 AI 偏好训练奖励模型或直接做 DPO。Anthropic 于 2022 年提出的 Constitutional AI（宪法式 AI）是代表<sup><a href="../ch3/references.html#ref-41">[41]</a></sup>：研究者先写下一组原则（“宪法”），让模型依据原则批评和修改自己的回答，再用 AI 依据原则做出的偏好判断进行强化学习，在很少人工标注的情况下提升了无害性。Google 的研究也表明，在摘要等任务上 RLAIF 可以达到与 RLHF 相当的效果。RLAIF 大幅降低了数据成本，但 AI 评判者自身的偏差可能被放大，仍需人工抽检。</p>
 </section>
 <section id="基于可验证奖励的强化学习与推理模型" class="level2">
 <h2 class="anchored" data-anchor-id="基于可验证奖励的强化学习与推理模型">3.8.7　基于可验证奖励的强化学习与推理模型</h2>
-<p>上述方法的奖励都来自“偏好”，而偏好是主观的、可能出错的。对数学、编程这类答案可以客观验证的任务，可以直接用<strong>规则</strong>计算奖励：最终答案是否正确，代码能否通过测试用例。这类方法称为<strong>基于可验证奖励的强化学习</strong>（Reinforcement Learning with Verifiable Rewards，RLVR）<sup><a href="../ch3/references.html#ref-40">[40]</a></sup>。奖励来自客观验证，而不是可能被钻空子的奖励模型，能有效缓解奖励作弊。</p>
-<p><strong>组相对策略优化</strong>（Group Relative Policy Optimization，GRPO）由 DeepSeek 在 2024 年提出<sup><a href="../ch3/references.html#ref-41">[41]</a></sup>，它进一步简化了 PPO：对每个问题让模型一次生成 <span class="math inline">\(G\)</span> 个回答，分别得到奖励 <span class="math inline">\(r_1,\dots,r_G\)</span>，用组内的相对表现作为优势： <span class="math display">\[\hat{A}_i=\frac{r_i-\mathrm{mean}(r_1,\dots,r_G)}{\mathrm{std}(r_1,\dots,r_G)},
+<p>上述方法的奖励都来自“偏好”，而偏好是主观的、可能出错的。对数学、编程这类答案可以客观验证的任务，可以直接用<strong>规则</strong>计算奖励：最终答案是否正确，代码能否通过测试用例。这类方法称为<strong>基于可验证奖励的强化学习</strong>（Reinforcement Learning with Verifiable Rewards，RLVR）<sup><a href="../ch3/references.html#ref-42">[42]</a></sup>。奖励来自客观验证，而不是可能被钻空子的奖励模型，能有效缓解奖励作弊。</p>
+<p><strong>组相对策略优化</strong>（Group Relative Policy Optimization，GRPO）由 DeepSeek 在 2024 年提出<sup><a href="../ch3/references.html#ref-43">[43]</a></sup>，它进一步简化了 PPO：对每个问题让模型一次生成 <span class="math inline">\(G\)</span> 个回答，分别得到奖励 <span class="math inline">\(r_1,\dots,r_G\)</span>，用组内的相对表现作为优势： <span class="math display">\[\hat{A}_i=\frac{r_i-\mathrm{mean}(r_1,\dots,r_G)}{\mathrm{std}(r_1,\dots,r_G)},
 \tag{3-33}\]</span> 即“比同组平均水平好多少”。这样<strong>不再需要单独训练价值模型</strong>，显存和计算开销明显下降。</p>
-<p>2024 年以来，OpenAI 的 o1、DeepSeek-R1 等<strong>推理模型</strong>（reasoning model）的出现，使后训练的重心从“对齐偏好”扩展到“提升推理能力”。DeepSeek-R1 的技术报告显示<sup><a href="../ch3/references.html#ref-42">[42]</a></sup>，其中的 R1-Zero 直接在基础模型上、仅用答案正确性和格式规范两类规则奖励，配合 GRPO 做大规模强化学习，模型就自发学会了生成很长的思维链、反思并修正错误；正式发布的 R1 还在强化学习前后加入了少量冷启动 SFT 数据等步骤，以改善可读性。这类模型在回答前先“思考”较长时间，用更多的推理计算换取更高的准确率，称为<strong>测试时计算扩展</strong>（test-time compute scaling）。截至 2026 年 11 月，主流的前沿模型大多提供这种“思考”模式。它也意味着推理阶段生成的 token 数大幅增加，第 <a href="../ch3/s3-9.html">3.9</a> 节以后讨论的推理效率问题更加重要。</p>
+<p>2024 年以来，OpenAI 的 o1、DeepSeek-R1 等<strong>推理模型</strong>（reasoning model）的出现，使后训练的重心从“对齐偏好”扩展到“提升推理能力”。DeepSeek-R1 的技术报告显示<sup><a href="../ch3/references.html#ref-44">[44]</a></sup>，其中的 R1-Zero 直接在基础模型上、仅用答案正确性和格式规范两类规则奖励，配合 GRPO 做大规模强化学习，模型就自发学会了生成很长的思维链、反思并修正错误；正式发布的 R1 还在强化学习前后加入了少量冷启动 SFT 数据等步骤，以改善可读性。这类模型在回答前先“思考”较长时间，用更多的推理计算换取更高的准确率，称为<strong>测试时计算扩展</strong>（test-time compute scaling）。截至 2026 年 11 月，主流的前沿模型大多提供这种“思考”模式。它也意味着推理阶段生成的 token 数大幅增加，第 <a href="../ch3/s3-9.html">3.9</a> 节以后讨论的推理效率问题更加重要。</p>
 <p>表 <a href="../ch3/s3-8.html#c3-tab-align">3-12</a> 比较了几种对齐方法。</p>
 <div id="c3-tab-align" class="booktab">
 <div class="tabcap">

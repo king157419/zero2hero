@@ -729,7 +729,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#c1-subsec-rag" id="toc-c1-subsec-rag" class="nav-link" data-scroll-target="#c1-subsec-rag">1.4.2　检索增强生成</a></li>
   <li><a href="#c1-subsec-agent" id="toc-c1-subsec-agent" class="nav-link" data-scroll-target="#c1-subsec-agent">1.4.3　智能体</a></li>
   <li><a href="#c1-subsec-multimodal" id="toc-c1-subsec-multimodal" class="nav-link" data-scroll-target="#c1-subsec-multimodal">1.4.4　多模态与世界模型</a></li>
-  <li><a href="#c1-subsec-efficiency" id="toc-c1-subsec-efficiency" class="nav-link" data-scroll-target="#c1-subsec-efficiency">1.4.5　效率：专家混合、蒸馏、量化与开放权重</a></li>
+  <li><a href="#c1-subsec-efficiency" id="toc-c1-subsec-efficiency" class="nav-link" data-scroll-target="#c1-subsec-efficiency">1.4.5　效率：混合专家、蒸馏、量化与开放权重</a></li>
   <li><a href="#c1-subsec-snapshot" id="toc-c1-subsec-snapshot" class="nav-link" data-scroll-target="#c1-subsec-snapshot">1.4.6　截至 2026 年 11 月的主要模型与趋势</a></li>
   </ul>
 </nav>
@@ -772,7 +772,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="c1-subsec-rag" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-rag">1.4.2　检索增强生成</h2>
 <p>参数化知识有截止时间，也不包含企业内部资料。<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）的思路是：回答之前，先从外部知识库中检索与问题相关的资料，把资料和问题一起放进提示，让模型依据这些资料作答<sup><a href="../ch1/references.html#ref-26">[26]</a></sup>。其流程如图 <a href="../ch1/s1-4.html#c1-fig-enable">1-8</a>(a) 所示：文档事先被切成小块并建立索引；用户提问后，检索器找出最相关的若干片段；系统把“问题 + 片段”拼成提示交给模型；模型生成回答，并可以标出依据的是哪一段资料。</p>
-<p>RAG 带来三点好处：知识更新只需更新知识库，无须重新训练模型；回答可以附上出处，便于核查；企业的私有资料可以不进入模型训练。但它不会自动正确：检索可能漏掉关键资料，切块可能切断上下文，模型也可能误读或忽略检索到的证据。因此评估 RAG 系统要分两头看：“检索到的是不是正确的证据”和“回答是否忠实于证据”。RAG 的完整流程、改进方法和评估见第 <a href="../ch5/s5-2.html">5.2</a> 、<a href="../ch5/s5-4.html">5.4</a> 、<a href="../ch5/s5-7.html">5.7</a> 节。</p>
+<p>RAG 带来三点好处：知识更新只需更新知识库，无须重新训练模型；回答可以附上出处，便于核查；企业的私有资料可以不进入模型训练。但它不会自动正确：检索可能漏掉关键资料，切块可能切断上下文，模型也可能误读或忽略检索到的证据。因此评估 RAG 系统要分两头看：“检索到的是不是正确的证据”和“回答是否忠实于证据”。RAG 的完整流程、改进方法和评估见第 <a href="../ch5/s5-2.html">5.2</a>、<a href="../ch5/s5-4.html">5.4</a>、<a href="../ch5/s5-7.html">5.7</a> 节。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>“知识库不进入模型训练”不等于“数据不会泄露”。RAG 系统中，文档要经过切块、向量化、存储和检索，检索到的片段会随提示发给模型服务方，日志中也可能留存。若模型调用的是第三方服务，或知识库没有做好按用户权限过滤，私有数据照样可能暴露给不该看到的人。保护私有数据要靠访问控制、权限过滤、日志与数据保留策略，而不是只靠“不训练”。</p>
@@ -848,7 +848,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>它的工作流程是：若输入包含语音、图像等，先借助多模态能力把它们转换成模型能处理的形式；再由模型结合记忆进行推理和规划；然后通过工具调用模块执行动作，观察结果，再决定下一步，循环往复，直到目标完成。这正是第 <a href="../ch1/s1-4.html#c1-subsec-prompt">1.4.1</a> 小节 ReAct 的“思考—行动—观察”循环。</p>
 <p>近两年，智能体的能力主要在以下几方面扩展：随着视觉语言模型的成熟，智能体可以“看懂”屏幕和图片，直接操作图形界面；借助少样本示例和上下文学习，它能在没有大量标注数据的情况下快速适应新任务；通过标准化的工具接口，能调用的外部系统越来越多；具备记忆与反思能力后，能从失败中总结经验；一些面向陪伴、客服场景的智能体还模拟个性、情感和社交互动。为了让模型方便地接入各类工具与数据源，业界出现了 MCP（Model Context Protocol，模型上下文协议）等开放协议，其细节见第 <a href="../ch7/s7-6.html">7.6</a> 节。</p>
-<p>智能体的行动能力来自模型与外部系统的组合。一旦工具能写文件、付款、发消息或控制设备，模型的错误就从“一段错误的文字”变成“一次错误的操作”。长任务中还会出现错误累积、偏离目标和反复调用同一工具的循环。因此需要最小权限、参数校验、敏感操作人工确认、沙箱执行和完整审计（第 <a href="../ch1/s1-6.html#c1-subsec-security">1.6.4</a> 小节）。智能体的组件与闭环见第 <a href="../ch6/s6-2.html">6.2</a> 、<a href="../ch6/s6-3.html">6.3</a> 节，编程智能体的工程方法见第 7 章（第 <a href="../ch7/s7-1.html">7.1</a> 节起），记忆系统见第 <a href="../ch8/s8-1.html">8.1</a> 节。</p>
+<p>智能体的行动能力来自模型与外部系统的组合。一旦工具能写文件、付款、发消息或控制设备，模型的错误就从“一段错误的文字”变成“一次错误的操作”。长任务中还会出现错误累积、偏离目标和反复调用同一工具的循环。因此需要最小权限、参数校验、敏感操作人工确认、沙箱执行和完整审计（第 <a href="../ch1/s1-6.html#c1-subsec-security">1.6.4</a> 小节）。智能体的组件与闭环见第 <a href="../ch6/s6-2.html">6.2</a>、<a href="../ch6/s6-3.html">6.3</a> 节，编程智能体的工程方法见第 7 章（第 <a href="../ch7/s7-1.html">7.1</a> 节起），记忆系统见第 <a href="../ch8/s8-1.html">8.1</a> 节。</p>
 </section>
 <section id="c1-subsec-multimodal" class="level2">
 <h2 class="anchored" data-anchor-id="c1-subsec-multimodal">1.4.4　多模态与世界模型</h2>
@@ -856,15 +856,15 @@ ul.task-list li input[type="checkbox"] {
 <p>世界模型（第 <a href="../ch1/s1-1.html#c1-subsec-world">1.1.4</a> 小节）方面，2025 年以来已出现能根据文字或图像生成可交互三维环境、并按用户动作实时演化的模型，也有面向机器人和自动驾驶、用于生成训练数据和做仿真的“世界基础模型”。这些系统离可靠地预测真实物理世界还有距离，但它们与大语言模型的结合，是具身智能的主要方向之一。</p>
 </section>
 <section id="c1-subsec-efficiency" class="level2">
-<h2 class="anchored" data-anchor-id="c1-subsec-efficiency">1.4.5　效率：专家混合、蒸馏、量化与开放权重</h2>
+<h2 class="anchored" data-anchor-id="c1-subsec-efficiency">1.4.5　效率：混合专家、蒸馏、量化与开放权重</h2>
 <p>能力提升并不只靠增大参数量。下面几种技术都在“用更少的计算得到同样的能力”：</p>
 <ul>
-<li><p><strong>专家混合</strong>（Mixture of Experts，MoE）：把网络中的前馈层复制成许多个“专家”，每个词元只交给其中少数几个专家计算。模型的<strong>总参数量</strong>很大，但处理每个词元时<strong>激活的参数</strong>只占一小部分。例如 DeepSeek 于 2026 年 4 月发布的 DeepSeek-V4-Pro 总参数约 1.6 万亿，每个词元只激活约 490 亿个<sup><a href="../ch1/references.html#ref-29">[29]</a></sup>。结构细节见第 <a href="../ch2/s2-5.html">2.5</a> 节，多卡部署见第 <a href="../ch4/s4-3.html">4.3</a> 节；</p></li>
+<li><p><strong>混合专家</strong>（Mixture of Experts，MoE）：把网络中的前馈层复制成许多个“专家”，每个词元只交给其中少数几个专家计算。模型的<strong>总参数量</strong>很大，但处理每个词元时<strong>激活的参数</strong>只占一小部分。例如 DeepSeek 于 2026 年 4 月发布的 DeepSeek-V4-Pro 总参数约 1.6 万亿，每个词元只激活约 490 亿个<sup><a href="../ch1/references.html#ref-29">[29]</a></sup>。它在 Transformer 中的位置见第 <a href="../ch2/s2-5.html">2.5</a> 节，多卡专家并行见第 <a href="../ch4/s4-3.html">4.3</a> 节；</p></li>
 <li><p><strong>蒸馏</strong>（distillation）：用大模型的输出训练小模型，让小模型学到接近的能力；</p></li>
 <li><p><strong>量化</strong>（quantization）：用 8 位、4 位等更少的位数存储参数，减少显存占用、加快推理（原理见第 <a href="../ch3/s3-10.html">3.10</a> 节，推理中的使用见第 <a href="../ch4/s4-4.html">4.4</a> 节）。</p></li>
 </ul>
-<p>效果十分显著。《2025 年人工智能指数报告》统计，达到 GPT-3.5 水平（以多学科知识问答基准 MMLU 得 64.8 分计）的模型，调用价格从 2022 年 11 月的每百万词元 20 美元降到 2024 年 10 月的 0.07 美元，降为原来的约 1/286<sup><a href="../ch1/references.html#ref-31">[31]</a></sup>。</p>
-<p><strong>开放权重</strong>模型公开发布训练好的参数，使用者可以在许可证允许的范围内下载到自己的服务器或电脑上运行和微调。同一份报告指出，在聊天机器人竞技场排行榜上，最好的开放权重模型与最好的闭源模型之间的差距从 2024 年 1 月的 8.0% 缩小到 2025 年 2 月的 1.7%<sup><a href="../ch1/references.html#ref-31">[31]</a></sup>。开放权重让本地部署、离线使用和行业定制成为可能；在设备端运行的小模型还能降低网络延迟、减少数据外发，但受设备内存、功耗和算力限制。</p>
+<p>效果十分显著。《2025 年人工智能指数报告》统计，达到 GPT-3.5 水平（以多学科知识问答基准 MMLU 得 64.8 分计）的模型，调用价格从 2022 年 11 月的每百万词元 20 美元降到 2024 年 10 月的 0.07 美元，降为原来的约 1/286<sup><a href="../ch1/references.html#ref-30">[30]</a></sup>。</p>
+<p><strong>开放权重</strong>模型公开发布训练好的参数，使用者可以在许可证允许的范围内下载到自己的服务器或电脑上运行和微调。同一份报告指出，在聊天机器人竞技场排行榜上，最好的开放权重模型与最好的闭源模型之间的差距从 2024 年 1 月的 8.0% 缩小到 2025 年 2 月的 1.7%<sup><a href="../ch1/references.html#ref-30">[30]</a></sup>。开放权重让本地部署、离线使用和行业定制成为可能；在设备端运行的小模型还能降低网络延迟、减少数据外发，但受设备内存、功耗和算力限制。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>开放权重不等于开源。软件意义上的“开源”意味着源代码可获取、可修改、可再分发；而许多“开源大模型”只公开了权重，训练数据、数据处理代码和训练代码并未公开，许可证还可能限制商业用途或用户规模。选型时要读清许可证，并综合考虑任务准确率、速度、成本、隐私、可维护性，而不能只看参数量或排行榜名次。</p>
@@ -888,17 +888,17 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">OpenAI</td>
-<td style="text-align: left;">GPT-5（2025 年 8 月）；GPT-5.6（2026 年 7 月）<sup><a href="../ch1/references.html#ref-32">[32]</a></sup>；GPT-6 Astra（2026 年 9 月，先向网络安全合作机构开放，再逐步推广到 ChatGPT 和 API）<sup><a href="../ch1/references.html#ref-33">[33]</a></sup></td>
-<td style="text-align: left;">否</td>
+<td style="text-align: left;">GPT-5（2025 年 8 月）；GPT-5.6（2026 年 7 月）<sup><a href="../ch1/references.html#ref-31">[31]</a></sup>；GPT-6 Astra（2026 年 9 月，先向网络安全合作机构开放，再逐步推广到 ChatGPT 和应用程序编程接口，Application Programming Interface，API）^[[32]](references.qmd#r</td>
+<td style="text-align: left;">ef-32)^ 否</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Anthropic</td>
-<td style="text-align: left;">Claude Opus 4.6 与 Sonnet 4.6（2026 年 2 月，上下文窗口 100 万词元）<sup><a href="../ch1/references.html#ref-34">[34]</a></sup>；Claude Opus 5.5 与 Sonnet 5.5（2026 年 9 月）<sup><a href="../ch1/references.html#ref-35">[35]</a></sup>；Claude Fable 5.2（2026 年 11 月，同一底座、安全限制较少的</td>
-<td style="text-align: left;">Mythos 5.2 只向经审核的机构开放）<sup><a href="../ch1/references.html#ref-36">[36]</a></sup> 否</td>
+<td style="text-align: left;">Claude Opus 4.6 与 Sonnet 4.6（2026 年 2 月，上下文窗口 100 万词元）<sup><a href="../ch1/references.html#ref-33">[33]</a></sup>；Claude Opus 5.5 与 Sonnet 5.5（2026 年 9 月）<sup><a href="../ch1/references.html#ref-34">[34]</a></sup>；Claude Fable 5.2（2026 年 11 月，同一底座、安全限制较少的</td>
+<td style="text-align: left;">Mythos 5.2 只向经审核的机构开放）<sup><a href="../ch1/references.html#ref-35">[35]</a></sup> 否</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Google</td>
-<td style="text-align: left;">Gemini 3（2025 年 11 月）；Gemini 3.6 Flash（2026 年 7 月）；Gemini 4 Argon（2026 年 9 月底发布，先向网络安全合作方开放，10 月全面上线）<sup><a href="../ch1/references.html#ref-40">[40]</a></sup></td>
+<td style="text-align: left;">Gemini 3（2025 年 11 月）；Gemini 3.6 Flash（2026 年 7 月）；Gemini 4 Argon（2026 年 9 月底发布，先向网络安全合作方开放，10 月全面上线）<sup><a href="../ch1/references.html#ref-36">[36]</a></sup></td>
 <td style="text-align: left;">否</td>
 </tr>
 <tr class="even">
@@ -908,12 +908,12 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td style="text-align: left;">阿里巴巴</td>
-<td style="text-align: left;">通义千问 Qwen3.5 系列（2026 年 2 月）<sup><a href="../ch1/references.html#ref-30">[30]</a></sup>；Qwen3.8-Max（2026 年 8 月，总参数约 2.4 万亿，千问系列首次超过万亿）<sup><a href="../ch1/references.html#ref-38">[38]</a></sup></td>
+<td style="text-align: left;">通义千问 Qwen3.5 系列（2026 年 2 月）<sup><a href="../ch1/references.html#ref-38">[38]</a></sup>；Qwen3.8-Max（2026 年 8 月，总参数约 2.4 万亿，千问系列迄今规模最大的模型）<sup><a href="../ch1/references.html#ref-39">[39]</a></sup></td>
 <td style="text-align: left;">多数版本是</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Meta</td>
-<td style="text-align: left;">Llama 4 系列（2025 年 4 月）；2026 年起主力产品转向不开放权重的 Muse 系列<sup><a href="../ch1/references.html#ref-39">[39]</a></sup></td>
+<td style="text-align: left;">Llama 4 系列（2025 年 4 月）；2026 年起主力产品转向不开放权重的 Muse 系列<sup><a href="../ch1/references.html#ref-40">[40]</a></sup></td>
 <td style="text-align: left;">Llama 是</td>
 </tr>
 </tbody>
@@ -923,8 +923,8 @@ ul.task-list li input[type="checkbox"] {
 <p>透过具体型号，可以看到几条较稳定的趋势：</p>
 <ul>
 <li><p><strong>能力仍在快速提升，而且越来越“参差不齐”</strong>。《2026 年人工智能指数报告》指出，由真实代码仓库问题构成的编程基准 SWE-bench Verified 的最好成绩在一年内从约 60% 升到接近 100%，中美顶尖模型的差距缩小到 2.7%（2026 年 3 月）；但模型在一些人类觉得简单的任务上仍会失败<sup><a href="../ch1/references.html#ref-28">[28]</a></sup>；</p></li>
-<li><p><strong>从“回答问题”走向“完成任务”</strong>。各家的主力产品都在强化长时间自主工作的智能体能力，例如 OpenAI 随 GPT-5.6 推出面向工作任务的 ChatGPT Work<sup><a href="../ch1/references.html#ref-32">[32]</a></sup>，据媒体报道，Anthropic 于 2026 年 4 月推出由平台代为运行智能体的托管服务 Claude Managed Agents，编程智能体成为竞争最激烈的应用；</p></li>
-<li><p><strong>前沿模型出现“分级发布”</strong>。随着模型在网络攻防、生物等领域的能力增强，2026 年起多家机构对最强模型采取限制发布：完整能力的版本只向经过审核的安全研究机构开放，面向公众的版本加上安全分类器，触发时自动转交较弱的模型处理<sup><a href="../ch1/references.html#ref-36">[36]</a></sup>；有的模型在公开发布前先接受政府评估<sup><a href="../ch1/references.html#ref-32">[32]</a></sup>；</p></li>
+<li><p><strong>从“回答问题”走向“完成任务”</strong>。各家的主力产品都在强化长时间自主工作的智能体能力，例如 OpenAI 随 GPT-5.6 推出面向工作任务的 ChatGPT Work<sup><a href="../ch1/references.html#ref-31">[31]</a></sup>，Anthropic 也推出由平台代为运行智能体的托管服务 Claude Managed Agents（据媒体报道于 2026 年 4 月上线）；其中，编程智能体成为竞争最激烈的应用；</p></li>
+<li><p><strong>前沿模型出现“分级发布”</strong>。随着模型在网络攻防、生物等领域的能力增强，2026 年起多家机构对最强模型采取限制发布：完整能力的版本只向经过审核的安全研究机构开放，面向公众的版本加上安全分类器，触发时自动转交较弱的模型处理<sup><a href="../ch1/references.html#ref-35">[35]</a></sup>；有的模型在公开发布前先接受政府评估<sup><a href="../ch1/references.html#ref-31">[31]</a></sup>；</p></li>
 <li><p><strong>开放权重模型紧追闭源模型</strong>，中国机构是开放权重模型的主要贡献者之一，模型训练和推理的成本持续下降。</p></li>
 </ul>
 <p>评价这些进展时要记住：单一排行榜分数既覆盖不了真实应用，也会因训练数据中混入测试题（数据污染）、提示设置不同和题目“做满”而失真。当前的评测越来越重视动态更新的题集、专家级任务、长程执行、安全性，以及真实场景中的成本与失败方式。</p>

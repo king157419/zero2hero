@@ -813,7 +813,7 @@ window.Quarto = {
 <div class="boxtitle">
 <p>例 4-3　KV 缓存与并发上限</p>
 </div>
-<p>某 8B 模型有 32 层，采用分组查询注意力（GQA），KV 头数为 8，每头 128 维，以 BF16 存储（2 字节）。单个请求、序列长度 4096 时， <span class="math display">\[M_{\mathrm{KV}} = 2\times32\times8\times128\times4096\times1\times2 \approx 5.4\times10^{8}\ \text{字节} = 0.5\,\text{GiB}.\]</span> 在 80 GB 显卡上，BF16 权重约占 16 GB。即使不计其他开销，剩余显存也只能容纳约 <span class="math inline">\(64/0.54\approx 119\)</span> 个这样的请求。若序列长度增加到 32K，单个请求的 KV 缓存将达到 4 GiB，并发上限随之降至约 15 个。</p>
+<p>某 8B 模型有 32 层，采用分组查询注意力（GQA），KV 头数为 8，每头 128 维，以 BF16 存储（2 字节）。单个请求、序列长度 4096 时， <span class="math display">\[M_{\mathrm{KV}} = 2\times32\times8\times128\times4096\times1\times2 = 0.5\,\text{GiB} \approx 0.54\,\text{GB}.\]</span> 在 80 GB 显卡上，BF16 权重约占 16 GB。即使不计其他开销，剩余显存也只能容纳约 <span class="math inline">\(64/0.54\approx 119\)</span> 个这样的请求。若序列长度增加到 32K，单个请求的 KV 缓存将达到 4 GiB，并发上限随之降至约 15 个。</p>
 </div>
 <p>可见，KV 缓存随序列长度和并发数线性增长，往往比权重本身更早耗尽显存（图 <a href="../ch4/s4-4.html#figure-kv">4-10</a>），成为长上下文、高并发服务的主要约束。计算时要注意：采用 GQA 或 MQA（多查询注意力）的模型，<span class="math inline">\(H_{\mathrm{KV}}\)</span> 小于查询头数，不能误用查询头数代入。</p>
 <div id="figure-kv" class="bookfig">

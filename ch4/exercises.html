@@ -802,11 +802,11 @@ window.Quarto = {
 </dd>
 <dt>4.2</dt>
 <dd>
-<p><span class="math inline">\(I^{*}=300\times10^{12}/1.5\times10^{12}=200\)</span> FLOP/byte。批大小为 1 的解码阶段 <span class="math inline">\(I\approx1\)</span>，访存受限；长输入的预填充阶段 <span class="math inline">\(I\approx T\)</span>，输入足够长时计算受限。</p>
+<p><span class="math inline">\(I^{*}=(300\times10^{12})/(1.5\times10^{12})=200\)</span> FLOP/byte。批大小为 1 的解码阶段 <span class="math inline">\(I\approx1\)</span>，访存受限；长输入的预填充阶段 <span class="math inline">\(I\approx T\)</span>，输入足够长时计算受限。</p>
 </dd>
 <dt>4.3</dt>
 <dd>
-<p>可从显存带宽、内核实现效率、KV 缓存读取效率、批大小以及是否发生 CPU 卸载等方面分析。</p>
+<p>可从显存带宽、权重精度、内核与软件栈实现效率、KV 缓存读取效率以及是否发生 CPU 卸载等方面分析。</p>
 </dd>
 <dt>4.5</dt>
 <dd>

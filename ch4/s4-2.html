@@ -847,7 +847,7 @@ ul.task-list li input[type="checkbox"] {
 <p>讨论互联时，最有用的问题不是“哪种技术更快”，而是“<strong>数据要从哪里传到哪里</strong>”。不同层级的链路各有分工（图 <a href="../ch4/s4-2.html#figure-interconnect">4-5</a>）：</p>
 <ul>
 <li><p><strong>PCIe</strong>（PCI Express）是通用的设备互联总线，连接 CPU 与 GPU、网卡、NVMe 硬盘等外设。PCIe 5.0 x16 的单向带宽约 64 GB/s。</p></li>
-<li><p><strong>NVLink</strong> 是 NVIDIA 的 GPU 高速互联技术，用于同一服务器内 GPU 与 GPU（或与 Grace CPU）之间的直接通信，带宽远高于 PCIe（H100 每卡 NVLink 总带宽约 900 GB/s<sup><a href="../ch4/references.html#ref-7">[7]</a></sup>）。配合 NVSwitch 交换芯片，可以让一台服务器内的 8 张 GPU 两两全速互联。</p></li>
+<li><p><strong>NVLink</strong> 是 NVIDIA 的 GPU 高速互联技术，用于同一服务器内 GPU 与 GPU（或与 Grace CPU）之间的直接通信，带宽远高于 PCIe（H100 每卡 NVLink 双向总带宽约 900 GB/s，单向约 450 GB/s<sup><a href="../ch4/references.html#ref-7">[7]</a></sup>）。配合 NVSwitch 交换芯片，可以让一台服务器内的 8 张 GPU 两两全速互联。</p></li>
 <li><p><strong>InfiniBand</strong>（IB）是面向高性能计算集群的<strong>跨节点</strong>网络，单端口带宽可达 400 Gb/s（NDR）。它原生支持 <strong>RDMA</strong>（Remote Direct Memory Access，远程直接内存访问）：数据可以直接写入远端机器的内存，而不必经过双方 CPU 的多次拷贝和内核协议栈处理。以太网借助 <strong>RoCE</strong>（RDMA over Converged Ethernet）也能实现 RDMA，成本较低，但在拥塞控制和延迟稳定性上通常需要更细致的调优。</p></li>
 </ul>
 <div id="figure-interconnect" class="bookfig">
@@ -857,10 +857,10 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <div class="figcap">
-<p>图 4-5　单机内与跨节点的典型数据通路（示意）。机内 GPU 经 NVLink/NVSwitch 互联，GPU 与 CPU、网卡之间经 PCIe 连接，不同服务器之间经 InfiniBand 网络通信。带宽为 H100 一代硬件的数量级参考值，具体取决于配置</p>
+<p>图 4-5　单机内与跨节点的典型数据通路（示意）。机内 GPU 经 NVLink/NVSwitch 互联，GPU 与 CPU、网卡之间经 PCIe 连接，不同服务器之间经 InfiniBand 网络通信。带宽为 H100 一代硬件的数量级参考值，NVLink 双向合计约 900 GB/s，具体取决于配置</p>
 </div>
 </div>
-<p>把这几个数字放在一起，就能看出一条规律：不同层级链路的带宽相差一个数量级以上，因此<strong>通信越频繁的工作，越应该放在越近的地方</strong>。第 <a href="../ch4/s4-3.html#subsec-parallel">4.3.4</a> 小节会看到，张量并行每一层都要通信，应当留在 NVLink 相连的同一台机器内；数据并行、流水线并行通信较少，才适合跨越 InfiniBand 网络。也正因为二者位于不同的互联层级、解决不同的问题，NVLink 与 InfiniBand 不应混为一谈。</p>
+<p>把这几个数字放在一起，就能看出一条规律：机内 NVLink 的带宽远高于 PCIe 总线和单端口跨节点网络（相差近一个数量级），因此<strong>通信越频繁的工作，越应该放在越近的地方</strong>。第 <a href="../ch4/s4-3.html#subsec-parallel">4.3.4</a> 小节会看到，张量并行每一层都要通信，应当留在 NVLink 相连的同一台机器内；数据并行、流水线并行通信较少，才适合跨越 InfiniBand 网络。也正因为二者位于不同的互联层级、解决不同的问题，NVLink 与 InfiniBand 不应混为一谈。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>“RDMA 完全绕过操作系统”只是一种简化说法。实际使用 RDMA 仍需注册内存、加载驱动、管理权限与连接；更准确的表述是：RDMA <strong>在数据传输路径上</strong>省去了常规的 CPU 数据拷贝和部分内核协议处理，从而降低延迟和 CPU 开销。</p>

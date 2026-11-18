@@ -832,7 +832,7 @@ window.Quarto = {
 <li><p><strong>成本</strong>：按 token 计费的服务，输入费用随长度线性增长；自建服务则要为更长的序列付出显存（见例 <a href="../ch8/s8-1.html#c8-ex-fullhist">8-1</a>）。</p></li>
 <li><p><strong>延迟</strong>：首 token 延迟（Time To First Token，TTFT）中的预填充时间随输入长度增长，用户问一句短话也要等模型把全部历史读一遍。</p></li>
 <li><p><strong>噪声</strong>：寒暄、试错和已被推翻的旧版本与有用信息一起进入窗口，降低了有效信息的占比。</p></li>
-<li><p><strong>中间遗忘</strong>：Liu 等人发现，相关信息位于长输入的开头或结尾时，模型利用得最好；位于中间时，准确率明显下降<sup><a href="../ch8/references.html#ref-2">[2]</a></sup>。这一现象被称为 <strong>Lost in the Middle</strong>。</p></li>
+<li><p><strong>中间迷失</strong>：Liu 等人发现，相关信息位于长输入的开头或结尾时，模型利用得最好；位于中间时，准确率明显下降<sup><a href="../ch8/references.html#ref-2">[2]</a></sup>。这一现象被称为 <strong>Lost in the Middle</strong>。</p></li>
 <li><p><strong>冲突混淆</strong>：同一件事的新旧说法同时出现时，窗口本身不提供“哪条更新、哪条已作废”的判断依据。</p></li>
 <li><p><strong>安全风险</strong>：带进来的历史文档和网页越多，其中夹带的恶意指令（提示注入）越容易生效。</p></li>
 </ol>
@@ -897,7 +897,7 @@ window.Quarto = {
 </tbody>
 </table>
 <p><strong>数据从哪来</strong>：0.6 token/字取自 DeepSeek 文档的换算<sup><a href="../ch8/references.html#ref-1">[1]</a></sup>；第 2 步各数为模型结构参数，代入式 <a href="../ch4/s4-4.html#eq-kv">（4-7）</a> 并取 <span class="math inline">\(T=1\)</span>、<span class="math inline">\(B=1\)</span>；第 4 步的 0.54 GB 精确值为 <span class="math inline">\(5.37\times10^{8}\)</span> 字节；第 5 步的 64 GB 是显存减去权重，未计运行时开销，因此结果偏乐观，并向下取整；第 6、7 步只计了 <span class="math inline">\(2N\)</span> 的线性部分，没有计注意力随 <span class="math inline">\(T^{2}\)</span> 增长的那部分，序列越长低估越多。</p>
-<p><strong>结论</strong>：带全部历史时，单个请求的 KV 缓存是乙的约 29 倍，一张卡只能同时服务 4 个用户，每次提问还要多等约 4.6 s。而且这还没算成本以外的五类代价。推理引擎的前缀缓存可以在两次请求开头完全相同的部分上免去重复的预填充计算（历史只在末尾追加时能命中，中间一改就失效），但缓存本身仍占显存，也解决不了噪声、冲突和中间遗忘。</p>
+<p><strong>结论</strong>：带全部历史时，单个请求的 KV 缓存是乙的约 29 倍，一张卡只能同时服务 4 个用户，每次提问还要多等约 4.6 s。而且这还没算成本以外的五类代价。推理引擎的前缀缓存可以在两次请求开头完全相同的部分上免去重复的预填充计算（历史只在末尾追加时能命中，中间一改就失效），但缓存本身仍占显存，也解决不了噪声、冲突和中间迷失。</p>
 </div>
 <div class="widget" data-widget="c8cost"></div>
 <p>因此，窗口尺寸是一项珍贵资源，“把全部历史都带上”不能当成默认策略。窗口变大只是给了更多房间；房间里放什么、怎么找、过期的东西何时扔掉，是另一类问题。</p>
@@ -1005,10 +1005,10 @@ window.Quarto = {
 <td style="text-align: left;">判断可信度</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">owner</td>
-<td style="text-align: left;">归属的用户、会话或项目</td>
-<td style="text-align: left;">用户 A</td>
-<td style="text-align: left;">防止跨用户串用</td>
+<td style="text-align: left;">owner / scope</td>
+<td style="text-align: left;">归属的用户、会话或项目，以及适用范围（长期或仅本次任务）</td>
+<td style="text-align: left;">用户 A，长期偏好</td>
+<td style="text-align: left;">防止跨用户或跨任务串用</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">importance</td>
@@ -1161,7 +1161,7 @@ window.Quarto = {
 <td style="text-align: left;"><strong>程序记忆</strong></td>
 <td style="text-align: left;">这件事该怎么做？</td>
 <td style="text-align: left;">回答前先查讲义，再调用代码执行工具验证</td>
-<td style="text-align: left;">工作流、SOP、技能文件、代码片段</td>
+<td style="text-align: left;">工作流、标准作业程序（SOP）、技能文件、代码片段</td>
 </tr>
 </tbody>
 </table>
@@ -1227,7 +1227,7 @@ window.Quarto = {
 </section>
 <section id="c8-subsec-rag" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-rag">8.1.5　长期记忆与 RAG、长上下文、微调</h2>
-<p>长期记忆最容易和第 <a href="../ch5/s5-2.html">5.2</a> 节的<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）混为一谈，因为二者都“从外部取回内容放进上下文”。先简要回顾 RAG 的流程：离线阶段把文档清洗、保留标题结构、附上作者与日期等元数据，再切成块（固定长度切块、按文档结构切块或按语义切块），用嵌入模型把每块编码成向量存入向量数据库；在线阶段改写用户问题，用稀疏检索（如 BM25，按词频与逆文档频率给关键词匹配打分，擅长专有名词、编号和精确数字）和稠密检索（向量相似度，擅长同义改写）召回候选，再用交叉编码器（把问题与候选片段拼在一起送入模型打分，比分别编码更准但更慢）重排序，取少量片段装进上下文生成回答。RAG 答错通常出在六处：库里根本没有答案、切块切断了关键条件、措辞差异太大没召回、召回了相似但错误的内容、模型无视了上下文中的证据、召回了旧版本而缺少时间判断。这些机制的细节见第 <a href="../ch5/s5-2.html">5.2</a> 节。</p>
+<p>长期记忆最容易和第 5 章的<strong>检索增强生成</strong>（Retrieval-Augmented Generation，RAG）混为一谈，因为二者都“从外部取回内容放进上下文”。先简要回顾 RAG 的流程：离线阶段把文档清洗、保留标题结构、附上作者与日期等元数据，再切成块（固定长度切块、按文档结构切块或按语义切块），用嵌入模型把每块编码成向量存入向量数据库；在线阶段改写用户问题，用稀疏检索（如 BM25，按词频与逆文档频率给关键词匹配打分，擅长专有名词、编号和精确数字）和稠密检索（向量相似度，擅长同义改写）召回候选，再用交叉编码器（把问题与候选片段拼在一起送入模型打分，比分别编码更准但更慢）重排序，取少量片段装进上下文生成回答。RAG 答错通常出在六处：库里根本没有答案、切块切断了关键条件、措辞差异太大没召回、召回了相似但错误的内容、模型无视了上下文中的证据、召回了旧版本而缺少时间判断。这些机制的细节见第 <a href="../ch5/s5-2.html">5.2</a> ～ <a href="../ch5/s5-4.html">5.4</a> 节和第 <a href="../ch5/s5-8.html">5.8</a> 节。</p>
 <div id="c8-tab-routes" class="booktab">
 <div class="tabcap">
 <p>表 8-8　长上下文、RAG、微调与长期记忆</p>
@@ -1384,7 +1384,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><strong>加权求和</strong>（<span class="math inline">\(0.7\times\)</span> 向量 <span class="math inline">\(+\,0.3\times\)</span> BM25）： A <span class="math inline">\(=0.7\times0.92+0.3\times0.20=0.644+0.060=0.704\)</span>； B <span class="math inline">\(=0.7\times0.88+0.3\times1.00=0.616+0.300=0.916\)</span>； C <span class="math inline">\(=0.7\times0.85+0=0.595\)</span>； D <span class="math inline">\(=0.7\times0.70+0.3\times0.75=0.490+0.225=0.715\)</span>。 排序为 B <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> C。</p>
+<p><strong>加权求和</strong>（<span class="math inline">\(0.7\times\text{向量}+0.3\times\text{BM25}\)</span>）： A <span class="math inline">\(=0.7\times0.92+0.3\times0.20=0.644+0.060=0.704\)</span>； B <span class="math inline">\(=0.7\times0.88+0.3\times1.00=0.616+0.300=0.916\)</span>； C <span class="math inline">\(=0.7\times0.85+0=0.595\)</span>； D <span class="math inline">\(=0.7\times0.70+0.3\times0.75=0.490+0.225=0.715\)</span>。 排序为 B <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> C。</p>
 <p><strong>RRF</strong>（<span class="math inline">\(k=60\)</span>，按式 <a href="../ch8/s8-1.html#c8-eq-rrf">（8-2）</a>）： A <span class="math inline">\(=1/(60+1)+1/(60+3)\approx0.01639+0.01587\approx0.03227\)</span>； B <span class="math inline">\(=1/(60+2)+1/(60+1)\approx0.01613+0.01639\approx0.03252\)</span>； C <span class="math inline">\(=1/(60+3)\approx0.01587\)</span>； D <span class="math inline">\(=1/(60+4)+1/(60+2)\approx0.01563+0.01613\approx0.03175\)</span>。 排序为 B <span class="math inline">\(&gt;\)</span> A <span class="math inline">\(&gt;\)</span> D <span class="math inline">\(&gt;\)</span> C。</p>
 <p><strong>结论</strong>：两种方法都把真正有用的 B 排在第一，但第二名不同。加权求和让精确命中“CS302”的 D 胜出，RRF 则因为 A 在向量一路排第一而让 A 胜出。RRF 的各项得分差距很小（<span class="math inline">\(k=60\)</span> 把名次差异压平了），它适合两路得分尺度不可比的场合；加权求和对权重和归一化方式很敏感，权重要在自己的数据上调。无论哪种方法，都还需要后面的时间过滤：如果 B 已被更新的通知取代，排第一也没用。</p>
 </div>
@@ -1399,7 +1399,7 @@ window.Quarto = {
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>
-<li><p>把全部历史放进窗口，KV 缓存随长度线性增长，预填充计算量至少线性增长（注意力部分随长度平方增长），还带来噪声、中间遗忘、冲突和注入风险。</p></li>
+<li><p>把全部历史放进窗口，KV 缓存随长度线性增长，预填充计算量至少线性增长（注意力部分随长度平方增长），还带来噪声、中间迷失、冲突和注入风险。</p></li>
 <li><p>上下文工程决定单次请求看到什么；记忆系统维护跨会话的状态。前者是后者进入模型的出口。</p></li>
 <li><p>一条记忆带有类型、时间、来源、归属、重要性、置信度和链接，经历感知、编码、巩固、存储、检索、使用、更新、遗忘八个环节。</p></li>
 <li><p>RAG 是取回机制，长期记忆是有写入、更新、遗忘和归属的状态系统。</p></li>

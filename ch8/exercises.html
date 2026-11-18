@@ -783,10 +783,10 @@ window.Quarto = {
 <ol type="1">
 <li><p>（概念）如果上下文窗口足够大，能把用户全部聊天记录都放进去，是否还需要长期记忆？请从成本、延迟、新旧信息冲突和任务连续性四个角度说明。</p></li>
 <li><p>（计算）某 70B 模型有 80 层，KV 头数 8，每头 128 维，KV 缓存以 BF16 存储，部署在 4 张显卡上，合计有效算力按 <span class="math inline">\(1.6\times10^{15}\)</span> FLOP/s 计。某用户的历史聊天记录约 5 万汉字，按 1 个汉字约 0.6 个 token 换算。分别估算（甲）每次请求带上全部历史、（乙）每次只带 2048 个 token 的检索记忆时，单个请求的 KV 缓存和预填充时间（只计 <span class="math inline">\(2N\)</span> 线性部分）。</p></li>
-<li><p>（辨析）把下列信息分别归入七类记忆中的一类，并对属于长期记忆的指出它是情景、语义还是程序记忆：(a) 用户 3 月 2 日说想换工作；(b) 用户是素食者；(c) 每周一生成周报的操作步骤；(d) 周四下午提醒用户提交报销材料；(e) 当前正在填写的表单已完成第 3 栏；(f) 模型知道巴黎是法国首都。</p></li>
+<li><p>（辨析）把下列信息分别归入七类记忆（表 <a href="../ch8/s8-1.html#c8-tab-seven">8-7</a>）中的一类，并指出哪些属于短期记忆、哪些属于长期记忆：(a) 用户 3 月 2 日说想换工作；(b) 用户是素食者；(c) 每周一生成周报的操作步骤；(d) 周四下午提醒用户提交报销材料；(e) 当前正在填写的表单已完成第 3 栏；(f) 模型知道巴黎是法国首都。</p></li>
 <li><p>（辨析）某公司把员工手册和每位员工与助手的全部对话都切块存进同一个向量库，检索时按相似度取前 5 条。这算不算长期记忆系统？哪些部分属于 RAG？要成为长期记忆，还缺哪些环节？</p></li>
 <li><p>（辨析）在“考试是哪一天”的例子中，版本 C 的回答之所以正确，哪些工作属于上下文工程，哪些工作属于记忆系统？如果课程又发了一条“考试改到 6 月 25 日”的通知，两者各需要做什么？</p></li>
-<li><p>（计算）三条候选记忆 X、Y、Z 的向量检索名次为 1、3、2，BM25 名次为 X 未召回、Y 第 1、Z 第 2；向量得分（余弦）为 0.90、0.80、0.85，BM25 归一化得分为 0、1.0、0.6。分别用 <span class="math inline">\(0.7\times\)</span> 向量 <span class="math inline">\(+\,0.3\times\)</span> BM25 的加权求和与 <span class="math inline">\(k=60\)</span> 的 RRF 排序。RRF 下 Y 与 Z 的得分差多少？这说明了 RRF 的什么特点？</p></li>
+<li><p>（计算）三条候选记忆 X、Y、Z 的向量检索名次为 1、3、2，BM25 名次为 X 未召回、Y 第 1、Z 第 2；向量得分（余弦）为 0.90、0.80、0.85，BM25 归一化得分为 0、1.0、0.6。分别用 <span class="math inline">\(0.7\times\text{向量}+0.3\times\text{BM25}\)</span> 的加权求和与 <span class="math inline">\(k=60\)</span> 的 RRF 排序。RRF 下 Y 与 Z 的得分差多少？这说明了 RRF 的什么特点？</p></li>
 <li><p>（计算）按式 <a href="../ch8/s8-2.html#c8-eq-ga">（8-3）</a>，三条候选记忆为：a 重要性 3、距上次访问 2 小时、相关度 0.9；b 重要性 9、48 小时、相关度 0.5；c 重要性 6、10 小时、相关度 0.7。（1）三个权重都取 1 时排序如何？（2）若把重要性的权重改为 3，排序如何变化？</p></li>
 <li><p>（计算）按 MemoryBank 的规则（<span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span>，首次 <span class="math inline">\(S=1\)</span>，每次回忆 <span class="math inline">\(S\)</span> 加 1 且 <span class="math inline">\(t\)</span> 归零，<span class="math inline">\(t\)</span> 以天计），一条记忆第 0 天写入，第 2 天和第 5 天各被回忆一次。求两次回忆前一刻的保留率；若检索阈值为 0.1，这条记忆最晚在第几天退出检索？若从未被回忆呢？</p></li>
 <li><p>（概念）MemGPT 的工作上下文、回忆存储、归档存储能否分别对应第 <a href="../ch8/s8-1.html#c8-subsec-types">8.1.4</a> 小节的工作记忆、情景记忆和语义记忆？哪些地方可以对应，哪些地方不能简单画等号？</p></li>
@@ -804,7 +804,7 @@ window.Quarto = {
 </dd>
 <dt>8.3</dt>
 <dd>
-<p>(a) 情景记忆；(b) 语义记忆；(c) 程序记忆；(d) 前瞻记忆；(e) 工作记忆；(f) 参数记忆。</p>
+<p>(a) 情景记忆；(b) 语义记忆；(c) 程序记忆；(d) 前瞻记忆；(e) 工作记忆；(f) 参数记忆。其中 (e) 为短期记忆，(a)～(d) 为跨会话保存的外部长期记忆（(a)～(c) 分别是情景、语义、程序记忆），(f) 固化在模型权重中。</p>
 </dd>
 <dt>8.4</dt>
 <dd>
@@ -816,7 +816,7 @@ window.Quarto = {
 </dd>
 <dt>8.7</dt>
 <dd>
-<p>新近性：<span class="math inline">\(0.995^{2}\approx0.990\)</span>，<span class="math inline">\(0.995^{48}\approx\mathrm{e}^{-0.241}\approx0.786\)</span>，<span class="math inline">\(0.995^{10}\approx0.951\)</span>；归一化（差 0.204）后 a 1，b 0，c <span class="math inline">\((0.951-0.786)\div0.204\approx0.809\)</span>。重要性归一化（差 6）：a 0，b 1，c 0.5。相关性归一化（差 0.4）：a 1，b 0，c 0.5。（1）a <span class="math inline">\(=2.000\)</span>，b <span class="math inline">\(=1.000\)</span>，c <span class="math inline">\(=1.809\)</span>，排序 a <span class="math inline">\(&gt;\)</span> c <span class="math inline">\(&gt;\)</span> b。（2）重要性乘 3：a <span class="math inline">\(=2.000\)</span>，b <span class="math inline">\(=1+3\times1=3.000\)</span>，c <span class="math inline">\(=0.809+3\times0.5+0.5=2.809\)</span>，排序变为 b <span class="math inline">\(&gt;\)</span> c <span class="math inline">\(&gt;\)</span> a。</p>
+<p>新近性：<span class="math inline">\(0.995^{2}\approx0.990\)</span>，<span class="math inline">\(0.995^{48}\approx\mathrm{e}^{-0.241}\approx0.786\)</span>，<span class="math inline">\(0.995^{10}\approx0.951\)</span>；归一化（差 0.204）后 a 1，b 0，c <span class="math inline">\((0.951-0.786)\div0.204\approx0.809\)</span>。重要性归一化（差 6）：a 0，b 1，c 0.5。相关性归一化（差 0.4）：a 1，b 0，c 0.5。（1）a <span class="math inline">\(=2.000\)</span>，b <span class="math inline">\(=1.000\)</span>，c <span class="math inline">\(=1.809\)</span>，排序 a <span class="math inline">\(&gt;\)</span> c <span class="math inline">\(&gt;\)</span> b。（2）重要性乘 3：a <span class="math inline">\(=1+3\times0+1=2.000\)</span>，b <span class="math inline">\(=0+3\times1+0=3.000\)</span>，c <span class="math inline">\(=0.809+3\times0.5+0.5=2.809\)</span>，排序变为 b <span class="math inline">\(&gt;\)</span> c <span class="math inline">\(&gt;\)</span> a。</p>
 </dd>
 <dt>8.8</dt>
 <dd>
@@ -828,7 +828,7 @@ window.Quarto = {
 </dd>
 <dt>8.11</dt>
 <dd>
-字段至少包括 content、time、source、scope（适用范围：长期或仅本次任务）、confidence。判断时先看作用域（本周的要求是否只针对这一次），再看时间与来源；若确认是长期改变，对旧条目做修正（标为失效）而非直接删除，并保留情景记录作为证据。
+字段至少包括 content、type、time、source、owner / scope（归属与适用范围：长期或仅本次任务）、confidence、links。判断时先看适用范围（本周的要求是否只针对这一次），再看时间与来源：若仅限本次任务，只追加（ADD）临时记录，不改长期偏好；若确认是长期改变，则追加新偏好，并对旧条目做修正（UPDATE，标为失效并用 links 关联），而不是直接删除（DELETE）；已有等价记忆时无需操作（NOOP）。保留情景记录作为证据。
 </dd>
 </dl>
 </div>

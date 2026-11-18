@@ -806,7 +806,7 @@ window.Quarto = {
 <section id="c8-subsec-memgpt" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-memgpt">8.2.2　MemGPT 与 Letta：把上下文当作内存来管理</h2>
 <p>MemGPT 由加州大学伯克利分校团队于 2023 年 10 月提出<sup><a href="../ch8/references.html#ref-6">[6]</a></sup>，核心思想是<strong>虚拟上下文管理</strong>。它借用操作系统的分层存储：内存小而快，磁盘大而慢，程序需要的数据由操作系统在两者之间换入换出。对应到语言模型，窗口内的内容相当于内存，称为<strong>主上下文</strong>；窗口外的数据库相当于磁盘，称为<strong>外部上下文</strong>。与操作系统不同的是，决定“换入什么、换出什么”的不是固定算法，而是模型自己：它通过函数调用（function calling）发出读写请求，由系统执行。</p>
-<p>图 <a href="../ch8/s8-2.html#c8-fig-memgpt">8-3</a> 给出了 MemGPT 的结构，表 <a href="../ch8/s8-2.html#c8-tab-memgpt">8-10</a> 列出各部分的职责。主上下文分为三块：只读的<strong>系统指令</strong>，说明控制流程和可用的记忆函数；可读写的<strong>工作上下文</strong>，存放关键事实与用户偏好，只能通过函数修改；<strong>FIFO 队列</strong>，即滚动的消息历史，第一条是对已被移出消息的递归摘要。外部上下文分为两块：<strong>回忆存储</strong>保存全部消息历史，包括已被移出窗口的消息；<strong>归档存储</strong>保存任意长度的文本，如文档和长期笔记。</p>
+<p>图 <a href="../ch8/s8-2.html#c8-fig-memgpt">8-3</a> 给出了 MemGPT 的结构，表 <a href="../ch8/s8-2.html#c8-tab-memgpt">8-10</a> 列出各部分的职责。主上下文分为三块：只读的<strong>系统指令</strong>，说明控制流程和可用的记忆函数；可读写的<strong>工作上下文</strong>，存放关键事实与用户偏好，只能通过函数修改；<strong>先进先出</strong>（First In, First Out，FIFO）队列，即滚动的消息历史，第一条是对已被移出消息的递归摘要。外部上下文分为两块：<strong>回忆存储</strong>保存全部消息历史，包括已被移出窗口的消息；<strong>归档存储</strong>保存任意长度的文本，如文档和长期笔记。</p>
 <div id="c8-fig-memgpt" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -866,17 +866,17 @@ window.Quarto = {
 </div>
 <p>换入换出怎样触发？队列管理器监视窗口占用：达到“警告阈值”（论文举例为窗口的 70%）时，向模型插入一条“内存压力”提示，让它抓紧把重要信息写进工作上下文或归档存储；达到“刷新阈值”（例如 100%）时，按比例（例如一半）移出最早的消息，写入回忆存储，并更新递归摘要。模型每次函数调用后可以要求立即继续执行下一步（类似操作系统的分页调度），也可以交出控制权、等待下一个事件（论文称为 yield）。这种“模型发起调用—系统执行—结果回到模型”的循环，正是第 <a href="../ch6/s6-3.html">6.3</a> 节所讲的智能体循环在记忆管理上的应用。</p>
 <p>在多会话聊天的“深度记忆检索”（Deep Memory Retrieval，DMR）任务中，模型要回答关于很早以前会话的问题。论文报告，GPT-4 单独作答的准确率为 32.1%，加上 MemGPT 后为 92.5%<sup><a href="../ch8/references.html#ref-6">[6]</a></sup>。代价也很明显：记忆质量取决于模型是否在正确时机写入和检索，函数调用能力弱的模型（论文中的 GPT-3.5）表现明显变差；模型也常在没翻完归档存储时就停止检索。</p>
-<p>2024 年 9 月，MemGPT 的开源项目并入 Letta 公司，代码和包名改为 Letta<sup><a href="../ch8/references.html#ref-7">[7]</a></sup>。Letta 把工作上下文进一步拆成多个<strong>记忆块</strong>（memory block），每块有标签、字数上限和当前值，例如“用户偏好”一块、“当前任务”一块，代理可以有针对性地改写其中一块，开发者也更容易看懂当前记忆。2025 年 4 月，该团队提出<strong>睡眠期计算</strong>（sleep-time compute）<sup><a href="../ch8/references.html#ref-8">[8]</a></sup>：在用户还没提问的空闲时段，另一个“睡眠期代理”预先整理上下文、推断可能的问题，并改写主代理的记忆块。论文在改造过的数学推理任务上报告，达到同样准确率所需的测试时计算约减少到原来的五分之一。代价是后台计算仍要花钱，异步写入还会带来时序问题：主代理可能在整理完成之前又产生了新信息。</p>
+<p>2024 年 9 月，MemGPT 的开源项目并入 Letta 公司，代码和包名改为 Letta<sup><a href="../ch8/references.html#ref-7">[7]</a></sup>。Letta 把工作上下文进一步拆成多个<strong>记忆块</strong>（memory block），每块有标签、字数上限和当前值，例如“用户偏好”一块、“当前任务”一块，智能体可以有针对性地改写其中一块，开发者也更容易看懂当前记忆。2025 年 4 月，该团队提出<strong>睡眠期计算</strong>（sleep-time compute）<sup><a href="../ch8/references.html#ref-8">[8]</a></sup>：在用户还没提问的空闲时段，另一个“睡眠期智能体”预先整理上下文、推断可能的问题，并改写主智能体的记忆块。论文在改造过的数学推理任务上报告，达到同样准确率所需的测试时计算约减少到原来的五分之一。代价是后台计算仍要花钱，异步写入还会带来时序问题：主智能体可能在整理完成之前又产生了新信息。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p><strong>MemGPT 与 Letta</strong>。MemGPT 指 2023 年论文提出的设计模式：模型通过工具自己编辑分层记忆。Letta 指承载这一模式的工程框架和公司，提供持久化代理、记忆块、工具与数据源管理等功能。讨论概念贡献时说 MemGPT，讨论现在可用的软件时说 Letta。</p>
+<p><strong>MemGPT 与 Letta</strong>。MemGPT 指 2023 年论文提出的设计模式：模型通过工具自己编辑分层记忆。Letta 指承载这一模式的工程框架和公司，提供持久化智能体、记忆块、工具与数据源管理等功能。讨论概念贡献时说 MemGPT，讨论现在可用的软件时说 Letta。</p>
 </div>
 </section>
 <section id="c8-subsec-mem0" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-mem0">8.2.3　Mem0 与 Mem0g：先提取，再决定增删改</h2>
 <p>Mem0 团队在 2025 年 4 月发表的论文中，把目标定得更接近生产环境：在持续对话中动态提取、整合和检索要点，不必每次都重新处理完整历史<sup><a href="../ch8/references.html#ref-9">[9]</a></sup>。它与“向量数据库加搜索”的关键区别是一个两阶段流程（图 <a href="../ch8/s8-2.html#c8-fig-mem0">8-4</a>）。</p>
 <p><strong>提取阶段</strong>：每来一对新消息（用户一句、助手一句），系统把三样东西交给语言模型——数据库里的会话摘要、新消息之前的最近 <span class="math inline">\(m\)</span> 条消息（论文取 <span class="math inline">\(m=10\)</span>）、这对新消息——让它抽出若干<strong>候选事实</strong>，例如“用户对坚果过敏”“用户下周三出国开会”。</p>
-<p><strong>更新阶段</strong>：对每条候选事实，先从向量库中检索语义最接近的 <span class="math inline">\(s\)</span> 条已有记忆（论文取 <span class="math inline">\(s=10\)</span>），再让语言模型通过函数调用在四种操作中选一种：<code>ADD</code>（新增）、<code>UPDATE</code>（用新信息补充或改写某条旧记忆）、<code>DELETE</code>（删除被新信息否定的旧记忆）、<code>NOOP</code>（已有等价记忆，不做任何事）。这四种操作就是表 <a href="../ch8/s8-1.html#c8-tab-update">8-4</a> 中追加、修正、合并、删除的一个具体实现。</p>
+<p><strong>更新阶段</strong>：对每条候选事实，先从向量库中检索语义最接近的 <span class="math inline">\(s\)</span> 条已有记忆（论文取 <span class="math inline">\(s=10\)</span>），再让语言模型通过函数调用在四种操作中选一种：<code>ADD</code>（新增）、<code>UPDATE</code>（用新信息补充或改写某条旧记忆）、<code>DELETE</code>（删除被新信息否定的旧记忆）、<code>NOOP</code>（已有等价记忆，不做任何事）。这组操作对应表 <a href="../ch8/s8-1.html#c8-tab-update">8-4</a> 的更新机制：<code>ADD</code> 对应追加，<code>UPDATE</code> 兼顾修正与补充合并，<code>DELETE</code> 对应删除，<code>NOOP</code> 用于在已有等价记忆时跳过重复写入。</p>
 <div id="c8-fig-mem0" class="bookfig">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -923,7 +923,7 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>论文在 LoCoMo 基准（第 <a href="../ch8/s8-2.html#c8-subsec-locomo">8.2.8</a> 小节）上用“以大模型作评判”（LLM-as-a-Judge，记为 J 分）比较各方案。Mem0 的 J 分为 66.9%，Mem0g 为 68.4%，OpenAI 的记忆功能为 52.9%；把整段对话全部放进上下文的做法为 72.9%，反而最高。但全量上下文每次查询要处理约 2.6 万个 token，p95 延迟（最慢 5% 请求的延迟）约 17.1 s；Mem0 每次只取回约 1800 个 token 的记忆，p95 延迟约 1.44 s，即论文摘要所说的“p95 延迟降低 91%、token 成本节省 90% 以上”<sup><a href="../ch8/references.html#ref-9">[9]</a></sup>。这组数字很能说明问题：在这个基准上，记忆系统用少量准确率换来了一个数量级的延迟和成本下降。它们是特定实验设置下的结果，不能直接外推到所有业务；图结构也不是越多越好，实体抽取和关系维护都会增加写入成本。</p>
+<p>论文在 LoCoMo 基准（第 <a href="../ch8/s8-2.html#c8-subsec-locomo">8.2.8</a> 小节）上用“以大模型作评判”（LLM-as-a-Judge，记为 J 分）比较各方案。Mem0 的 J 分为 66.9%，Mem0g 为 68.4%，OpenAI 的记忆功能为 52.9%；把整段对话全部放进上下文的做法为 72.9%，反而最高。但全量上下文每次查询要处理约 2.6 万个 token（该数字取自 Mem0 论文，其统计口径与第 <a href="../ch8/s8-2.html#c8-subsec-locomo">8.2.8</a> 小节所引 LoCoMo 原论文的每段约 9000 个 token 不同），p95 延迟（最慢 5% 请求的延迟）约 17.1 s；Mem0 每次只取回约 1800 个 token 的记忆，p95 延迟约 1.44 s，即论文摘要所说的“p95 延迟降低 91%、token 成本节省 90% 以上”<sup><a href="../ch8/references.html#ref-9">[9]</a></sup>。这组数字很能说明问题：在这个基准上，记忆系统用少量准确率换来了一个数量级的延迟和成本下降。它们是特定实验设置下的结果，不能直接外推到所有业务；图结构也不是越多越好，实体抽取和关系维护都会增加写入成本。</p>
 </section>
 <section id="c8-subsec-ga" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-ga">8.2.4　Generative Agents：让记忆驱动反思与计划</h2>
@@ -977,7 +977,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><strong>数据从哪来</strong>：衰减因子 0.995、重要性 1～10、权重均为 1 取自论文<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>；三条记忆的具体数值为本题设定。<span class="math inline">\(0.995^{20}=\mathrm{e}^{20\ln0.995}\approx\mathrm{e}^{-0.100}\approx0.905\)</span>，<span class="math inline">\(0.995^{100}\approx\mathrm{e}^{-0.501}\approx0.606\)</span>。</p>
+<p><strong>数据从哪来</strong>：衰减因子 0.995、重要性 1～10、权重均为 1 取自论文<sup><a href="../ch8/references.html#ref-10">[10]</a></sup>；三条记忆的具体数值为本题设定。<span class="math inline">\(0.995^{20}=\mathrm{e}^{20\ln0.995}\approx\mathrm{e}^{-0.100}\approx0.905\)</span>，<span class="math inline">\(0.995^{100}\approx\mathrm{e}^{-0.501}\approx0.606\)</span>。归一化和总分按未舍入的精确值计算后再保留三位小数；若直接用表中的三位小数相除，步骤 2 为 <span class="math inline">\((0.905-0.606)\div0.389\approx0.769\)</span>，末位略有出入。</p>
 <p><strong>结论</strong>：排序为 <span class="math inline">\(m_1&gt;m_3&gt;m_2\)</span>，派对计划被取回。若只看新近性，排第一的会是刚吃的早饭 <span class="math inline">\(m_2\)</span>；若只看相关性，<span class="math inline">\(m_1\)</span> 虽仍第一，但 <span class="math inline">\(m_2\)</span> 与 <span class="math inline">\(m_3\)</span> 的差距无法反映“分手”与“早饭”这类重要性差别。多信号打分正是为了避免任何一个信号单独主导。注意归一化是在候选集合内做的，换一批候选，同一条记忆的归一化分数就会变。</p>
 </div>
 <div class="widget" data-widget="c8ga"></div>
@@ -1056,7 +1056,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 8-6　MemoryBank 的遗忘曲线 <span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span>。灰线为从未被回忆的记忆；青绿线在第 1、3 天各被回忆一次，每次回忆使保留率回到 1、强度 S 加 1，此后衰减变慢（数值见例 <a href="../ch8/s8-2.html#c8-ex-forget">8-4</a>）</p>
+<p>图 8-6　MemoryBank 的遗忘曲线 <span class="math inline">\(R=\mathrm{e}^{-t/S}\)</span>。灰线为从未被回忆的记忆；蓝线在第 1、3 天各被回忆一次，每次回忆使保留率回到 1、强度 <span class="math inline">\(S\)</span> 加 1，此后衰减变慢（数值见例 <a href="../ch8/s8-2.html#c8-ex-forget">8-4</a>）</p>
 </div>
 </div>
 <div class="widget" data-widget="c8forget"></div>
@@ -1090,7 +1090,7 @@ window.Quarto = {
 <li><p><strong>Reflexion</strong>（2023）<sup><a href="../ch8/references.html#ref-13">[13]</a></sup>：智能体执行任务失败后，根据环境反馈用语言写一段自我反思（“我上次在这里失败是因为……”），存进情景反思记忆，下次尝试时放入上下文。它不修改模型权重，只靠记住教训来改进。论文报告在 HumanEval 编程基准上 pass@1 达到 91%，高于当时 GPT-4 的 80%。</p></li>
 <li><p><strong>Voyager</strong>（2023）<sup><a href="../ch8/references.html#ref-14">[14]</a></sup>：在游戏《我的世界》（Minecraft）中，智能体把成功完成的复杂动作写成可复用的 JavaScript 函数，存入不断扩充的<strong>技能库</strong>；遇到新任务时检索并组合旧技能。它记住的不是“发生过什么”，而是“这件事以后怎么做”，是程序记忆的直接实现。论文报告获得的独特物品数约为此前最好方法的 3.3 倍，解锁关键科技树节点最快可达 15.3 倍。</p></li>
 <li><p><strong>LongMem</strong>（2023）<sup><a href="../ch8/references.html#ref-15">[15]</a></sup>：主语言模型保持冻结，旁边接一个可训练的残差<strong>旁路网络</strong>（SideNet），把很长的历史以注意力键值对的形式缓存进记忆库，需要时取回并融合进当前层。它把记忆做进模型的运行机制，记忆长度可扩展到约 6.5 万个 token。</p></li>
-<li><p><strong>HippoRAG</strong>（2024）<sup><a href="../ch8/references.html#ref-16">[16]</a></sup>：受海马体为大脑皮层记忆建立索引的理论启发，用开放信息抽取（Open Information Extraction，OpenIE）从文本中抽出实体和三元组，建成知识图谱；检索时以问题中的实体为起点运行个性化 PageRank（Personalized PageRank，PPR），让相关性沿图传播，从而一步找到需要多跳才能串起来的事实。论文报告在多跳问答上最多提升 20%，且比迭代检索方法 IRCoT 便宜 10～30 倍、快 6～13 倍。</p></li>
+<li><p><strong>HippoRAG</strong>（2024）<sup><a href="../ch8/references.html#ref-16">[16]</a></sup>：受海马体为大脑皮层记忆建立索引的理论启发，用开放信息抽取（Open Information Extraction，OpenIE）从文本中抽出实体和三元组，建成知识图谱；检索时以问题中的实体为起点运行个性化 PageRank（Personalized PageRank，PPR），让相关性沿图传播，从而一步找到需要多跳才能串起来的事实。论文报告在多跳问答上最多提升 20%，且比交错检索与思维链（Interleaving Retrieval with Chain-of-Thought，IRCoT）这一迭代检索方法便宜 10～30 倍、快 6～13 倍。</p></li>
 <li><p><strong>Zep 与 Graphiti</strong>（2025）<sup><a href="../ch8/references.html#ref-17">[17]</a></sup>：用<strong>时序知识图谱</strong>记录事实的有效期。例如（用户 A，偏好，Java）的有效期为 2024—2025，（用户 A，偏好，Python）为 2025 至今。新事实到来时，旧关系被标记为失效而非删除，因此既能回答“现在用什么”，也能回答“以前用什么、何时改的”。论文报告其在 DMR 上的准确率为 94.8%，对照的是 MemGPT 论文中最好的一组结果（配 GPT-4 Turbo 时为 93.4%，与前文配 GPT-4 时的 92.5% 是不同的基座模型），在 LongMemEval 基准上准确率最多提高 18.5%，响应延迟降低约 90%。</p></li>
 <li><p><strong>MemOS</strong>（2025）<sup><a href="../ch8/references.html#ref-18">[18]</a></sup>：把记忆当作和算力、存储同等的系统资源来调度，统一管理三类记忆：<strong>明文记忆</strong>（文档、知识图谱等外部可读内容）、<strong>激活记忆</strong>（KV 缓存等推理时的中间状态）和<strong>参数记忆</strong>（权重及 LoRA 等增量参数）。这是论文第 4.1 节的划分（截至 2026 年 11 月的 arXiv 各版本均如此）。部分介绍资料把<strong>图结构记忆</strong>单列为第四类，凑成参数、激活、明文、图结构四类；论文中图结构只是组织明文记忆的一种方式，并未单列，所以本书按论文取三类，读到四类说法时可理解为把明文记忆按组织形式又拆了一层。三类记忆都封装成带来源、版本等元数据的 MemCube，可以组合、迁移，也可以相互转化：常用的明文内容可以预先算成 KV 缓存，稳定的知识可以蒸馏进参数。它还考虑多个智能体之间的记忆隔离、共享与生命周期审计（图 <a href="../ch8/s8-2.html#c8-fig-memos">8-8</a>）。</p></li>
 </ul>
@@ -1108,7 +1108,7 @@ window.Quarto = {
 </section>
 <section id="c8-subsec-locomo" class="level2">
 <h2 class="anchored" data-anchor-id="c8-subsec-locomo">8.2.8　LoCoMo：检验“真的记得”还是“碰巧答对”</h2>
-<p>前面的系统都在提出机制，LoCoMo 解决的是怎样比较它们。它由北卡罗来纳大学教堂山分校、南加州大学和 Snap 公司的研究者于 2024 年发布，发表于 ACL 2024<sup><a href="../ch8/references.html#ref-19">[19]</a></sup>。数据集有 50 段超长对话，每段平均约 300 轮、9000 个 token，平均跨 19 个会话，最长 35 个会话；对话由语言模型代理根据人物设定和时间事件图生成，再经人工检查修改，以保证长距离一致。它包含三项任务：问答、事件摘要和多模态对话生成。问答部分共 7512 道题，分五类（表 <a href="../ch8/s8-2.html#c8-tab-locomo">8-12</a>）。</p>
+<p>前面的系统都在提出机制，LoCoMo 解决的是怎样比较它们。它由北卡罗来纳大学教堂山分校、南加州大学和 Snap 公司的研究者于 2024 年发布，发表于 ACL 2024<sup><a href="../ch8/references.html#ref-19">[19]</a></sup>。数据集有 50 段超长对话，每段平均约 300 轮、9000 个 token，平均跨 19 个会话，最长 35 个会话；对话由语言模型智能体根据人物设定和时间事件图生成，再经人工检查修改，以保证长距离一致。它包含三项任务：问答、事件摘要和多模态对话生成。问答部分共 7512 道题，分五类（表 <a href="../ch8/s8-2.html#c8-tab-locomo">8-12</a>）。</p>
 <div id="c8-tab-locomo" class="booktab">
 <div class="tabcap">
 <p>表 8-12　LoCoMo 问答的五类题目</p>
@@ -1199,7 +1199,7 @@ window.Quarto = {
 <td style="text-align: left;">MemGPT / Letta</td>
 <td style="text-align: left;">2023.10；伯克利（2024.09 并入 Letta）</td>
 <td style="text-align: left;">主上下文三块 + 回忆存储 + 归档存储；Letta 用记忆块</td>
-<td style="text-align: left;">模型调用函数读写；睡眠期代理异步整理</td>
+<td style="text-align: left;">模型调用函数读写；睡眠期智能体异步整理</td>
 <td style="text-align: left;">函数调用检索、分页翻阅</td>
 <td style="text-align: left;">DMR 准确率：GPT-4 单独 32.1%，加 MemGPT 92.5%</td>
 </tr>
@@ -1286,7 +1286,7 @@ window.Quarto = {
 <p><strong>认知启发的巩固</strong>　 现有系统常见的问题是：对话形成孤立片段，重复经历无法抽象，新旧知识难以融合，记得细节却总结不出规律。借鉴人类记忆研究，可以在后台运行一个巩固引擎：由<strong>预测误差</strong>（新信息与已有预期不符）触发巩固；经<strong>注意偏向</strong>筛选出值得整合的内容；通过<strong>离线重放</strong>（在空闲时重新处理近期经历）把相关情景放在一起；抽取出<strong>图式</strong>（schema），即从多次经历中概括出的一般规则；当旧知识被重新取用并与新信息冲突时进行<strong>再巩固</strong>（reconsolidation），修改原有结构。目标不是保留更多细节，而是形成稳定、可泛化、可更新的知识。</p>
 <p><strong>注意偏向驱动的选择性记忆</strong>　 智能体每天接收大量输入，真正影响未来决策的只占很少一部分。例如在“谢谢！”“今天天气不错”“我对花生严重过敏，请记住”“以后请优先用 Python 示例”“刚才那段格式有点乱”“下个月项目目标改为大模型”这串输入中，值得长期记住的主要是第三、四、六句。可以设计一个<strong>注意偏向评分器</strong>，综合与任务和长期目标的相关度、用户的显性与隐性偏好、信息的新颖度与预测误差、情感强度与反馈、未来潜在使用价值，再在三个阶段使用它：<strong>选择性编码</strong>决定什么有资格写入，<strong>选择性巩固</strong>决定离线时优先整合什么，<strong>选择性检索</strong>决定当前任务优先取回什么。</p>
 <p><strong>用强化学习学会记与忘</strong>　 目前的系统大多依赖工程师写死的规则：重要性高于 0.8 才保存、只保留最近 <span class="math inline">\(N\)</span> 条、超过 30 天自动删除、检索固定取前 <span class="math inline">\(k\)</span> 条。这些规则难以适应多变的用户和任务。另一种思路是把记忆管理建模为强化学习问题：<strong>状态</strong>是当前任务上下文和记忆库负载，<strong>动作</strong>是保存、丢弃、调整巩固强度、剪枝，<strong>奖励</strong>是长期任务成功率减去存储和检索成本，学到的<strong>策略</strong>决定不同场景下的最佳记忆动作。核心转变是从“工程师规定怎样记”走向“智能体通过长期反馈学会怎样记”。</p>
-<p><strong>仍未解决的问题</strong>　 事实会随时间变化，系统要区分“曾经为真”和“现在为真”；同一用户在不同任务中偏好不同，需要控制作用域；自动提取和反思可能产生看似合理却未经证实的记忆；异步维护和多代理共享记忆会带来覆盖与并发冲突；记忆数量增长后，延迟、存储成本和隐私风险都会上升。选型时，与其先问“用哪个框架”，不如先回答六个问题：要记的是事实、事件、流程还是关系？一条记忆由谁写入，能否追溯来源？新旧冲突按什么规则处理？读取需要向量、精确键值、时间窗口还是图遍历？延迟和整理成本各能承受多少？用什么任务级指标证明记忆确实改善了结果？</p>
+<p><strong>仍未解决的问题</strong>　 事实会随时间变化，系统要区分“曾经为真”和“现在为真”；同一用户在不同任务中偏好不同，需要控制作用域；自动提取和反思可能产生看似合理却未经证实的记忆；异步维护和多智能体共享记忆会带来覆盖与并发冲突；记忆数量增长后，延迟、存储成本和隐私风险都会上升。选型时，与其先问“用哪个框架”，不如先回答六个问题：要记的是事实、事件、流程还是关系？一条记忆由谁写入，能否追溯来源？新旧冲突按什么规则处理？读取需要向量、精确键值、时间窗口还是图遍历？延迟和整理成本各能承受多少？用什么任务级指标证明记忆确实改善了结果？</p>
 <div class="bookbox keypoints">
 <p><span class="boxtitle">本节要点</span></p>
 <ul>

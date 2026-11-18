@@ -845,7 +845,7 @@ window.Quarto = {
   \hat{\boldsymbol{m}}_t=\frac{\boldsymbol{m}_t}{1-\beta_1^{t}},\qquad
   \hat{\boldsymbol{v}}_t=\frac{\boldsymbol{v}_t}{1-\beta_2^{t}}.
 \end{gathered}
-\tag{3-11～3-12}\]</span> 式 <a href="../ch3/s3-4.html#c3-eq-adam-bias">（3-12）</a> 是偏差修正：<span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 初始化为 0，训练初期会偏小，除以 <span class="math inline">\(1-\beta^{t}\)</span> 把它们拉回正常量级。<strong>AdamW</strong><sup><a href="../ch3/references.html#ref-16">[16]</a></sup> 把权重衰减（一种防止参数过大的正则化）从梯度中解耦，直接作用于参数： <span class="math display">\[\theta_{t+1}=\theta_t-\eta\Bigl(\frac{\hat{\boldsymbol{m}}_t}{\sqrt{\hat{\boldsymbol{v}}_t}+\epsilon}+\lambda\,\theta_t\Bigr),
+\tag{3-11～3-12}\]</span> 式 <a href="../ch3/s3-4.html#c3-eq-adam-bias">（3-12）</a> 是偏差修正：<span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span> 初始化为 0，训练初期会偏小，除以 <span class="math inline">\(1-\beta^{t}\)</span> 把它们拉回正常量级。<strong>AdamW</strong><sup><a href="../ch3/references.html#ref-18">[18]</a></sup> 把权重衰减（一种防止参数过大的正则化）从梯度中解耦，直接作用于参数： <span class="math display">\[\theta_{t+1}=\theta_t-\eta\Bigl(\frac{\hat{\boldsymbol{m}}_t}{\sqrt{\hat{\boldsymbol{v}}_t}+\epsilon}+\lambda\,\theta_t\Bigr),
 \tag{3-13}\]</span> <span class="math inline">\(\lambda\)</span> 为权重衰减系数，<span class="math inline">\(\epsilon\)</span> 是防止除零的小常数。AdamW 收敛快、对超参数相对不敏感（学习率仍需仔细调），是目前大模型训练事实上的标准，例如 LLaMA 取 <span class="math inline">\(\beta_1=0.9\)</span>、<span class="math inline">\(\beta_2=0.95\)</span>、<span class="math inline">\(\lambda=0.1\)</span>。要特别记住：<strong>AdamW 为每个参数额外保存 <span class="math inline">\(\boldsymbol{m}\)</span> 和 <span class="math inline">\(\boldsymbol{v}\)</span> 两个状态</strong>，这是训练显存的主要来源之一（第 <a href="../ch3/s3-5.html">3.5</a> 节）。</p>
 <p><strong>学习率调度</strong>　 大模型很少使用固定学习率，最常见的是“<strong>线性预热</strong> + <strong>余弦衰减</strong>”（图 <a href="../ch3/s3-4.html#c3-fig-lr">3-6</a>）：前 <span class="math inline">\(S_w\)</span> 步内学习率从 0 线性增长到 <span class="math inline">\(\eta_{\max}\)</span>，避免随机初始化的模型被过大的更新“冲垮”；此后按余弦曲线降到 <span class="math inline">\(\eta_{\min}\)</span>，让模型在后期精细收敛。记总步数为 <span class="math inline">\(S\)</span>，第 <span class="math inline">\(s\)</span> 步的学习率为 <span class="math display">\[\eta_s=\begin{cases}
     \eta_{\max}\cdot\dfrac{s}{S_w}, &amp; s&lt;S_w,\\[8pt]
@@ -924,13 +924,13 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>全用 FP32 最稳妥，但现代 GPU 的张量核心在 16 位精度下的吞吐通常是 FP32 的数倍乃至十余倍。<strong>混合精度训练</strong>（mixed precision training）<sup><a href="../ch3/references.html#ref-17">[17]</a></sup>兼顾二者：</p>
+<p>全用 FP32 最稳妥，但现代 GPU 的张量核心在 16 位精度下的吞吐通常是 FP32 的数倍乃至十余倍。<strong>混合精度训练</strong>（mixed precision training）<sup><a href="../ch3/references.html#ref-19">[19]</a></sup>兼顾二者：</p>
 <ol type="1">
 <li><p>保存一份 FP32 的<strong>主权重</strong>（master weights）；</p></li>
 <li><p>每步把主权重转为 FP16 或 BF16，用低精度完成前向与反向传播，得到低精度梯度；</p></li>
 <li><p>把梯度转回 FP32，由优化器更新 FP32 主权重。</p></li>
 </ol>
-<p>计算量最大的矩阵乘法在低精度下进行，速度显著提高；参数更新在 FP32 下进行，避免许多微小的更新量在低精度下被舍入为零。使用 FP16 时，很多梯度会因范围太小而下溢为 0，需要<strong>损失缩放</strong>（loss scaling）：先把损失乘以较大的系数 <span class="math inline">\(s\)</span> 再反向传播，使梯度落入 FP16 的表示范围，更新前再除以 <span class="math inline">\(s\)</span>。BF16 的指数位与 FP32 相同，基本不需要损失缩放，因此成为当前的首选。DeepSeek-V3 等模型进一步在大规模训练中使用了 FP8 混合精度<sup><a href="../ch3/references.html#ref-18">[18]</a></sup>。</p>
+<p>计算量最大的矩阵乘法在低精度下进行，速度显著提高；参数更新在 FP32 下进行，避免许多微小的更新量在低精度下被舍入为零。使用 FP16 时，很多梯度会因范围太小而下溢为 0，需要<strong>损失缩放</strong>（loss scaling）：先把损失乘以较大的系数 <span class="math inline">\(s\)</span> 再反向传播，使梯度落入 FP16 的表示范围，更新前再除以 <span class="math inline">\(s\)</span>。BF16 的指数位与 FP32 相同，基本不需要损失缩放，因此成为当前的首选。DeepSeek-V3 等模型进一步在大规模训练中使用了 FP8 混合精度<sup><a href="../ch3/references.html#ref-20">[20]</a></sup>。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
 <p>混合精度<strong>不会</strong>减少模型状态的显存。实现方式有两种：Megatron-LM、DeepSpeed 等框架同时保存 BF16 权重与梯度（2 + 2 字节）和 FP32 主权重；PyTorch 的自动混合精度只保存 FP32 权重与梯度（4 + 4 字节），计算时临时转换为低精度。两种方式加上 AdamW 的 <span class="math inline">\(\boldsymbol{m}\)</span>、<span class="math inline">\(\boldsymbol{v}\)</span>，都约为 16 字节/参数（见下一节的表 <a href="../ch3/s3-5.html#c3-tab-bytes">3-7</a>）。混合精度节省的主要是计算时间和激活值显存。</p>

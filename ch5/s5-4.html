@@ -789,7 +789,7 @@ window.Quarto = {
 </div>
 <section id="c5-subsec-forms" class="level2">
 <h2 class="anchored" data-anchor-id="c5-subsec-forms">5.4.1　RAG 的五种形态</h2>
-<p>过去几年，RAG 大致发展出五种形态，后一种针对前一种的短板<sup><a href="../ch5/references.html#ref-6">[6]</a></sup>（表 <a href="../ch5/s5-4.html#c5-tab-forms">5-5</a>）。它们不是“后者淘汰前者”的关系：大量生产系统仍以基础 RAG 为主，因为它成本最低、最可控；成熟系统往往是几种形态的组合。</p>
+<p>早期综述把 RAG 归纳为基础 RAG、高级 RAG 与模块化 RAG 等范式<sup><a href="../ch5/references.html#ref-6">[6]</a></sup>；结合近年的演进，实践中大致形成了五种形态，后一种针对前一种的短板（表 <a href="../ch5/s5-4.html#c5-tab-forms">5-5</a>）。它们不是“后者淘汰前者”的关系：大量生产系统仍以基础 RAG 为主，因为它成本最低、最可控；成熟系统往往是几种形态的组合。</p>
 <div id="c5-tab-forms" class="booktab">
 <div class="tabcap">
 <p>表 5-5　RAG 的五种形态</p>
@@ -851,7 +851,7 @@ window.Quarto = {
 </figure>
 </div>
 <div class="figcap">
-<p>图 5-3　高级 RAG 的优化点在流水线上的位置。青绿色为本节重点讨论的检索前、检索中、检索后三类优化；上方是决定是否检索的旁路，下方虚线是持续改进的反馈回路</p>
+<p>图 5-3　高级 RAG 的优化点在流水线上的位置。浅蓝色框为本节重点讨论的检索前、检索中、检索后三类优化；上方是决定是否检索的旁路，下方虚线是持续改进的反馈回路</p>
 </div>
 </div>
 </section>
@@ -875,7 +875,7 @@ window.Quarto = {
   \frac{f(t,D)\,(k_1+1)}{f(t,D)+k_1\left(1-b+b\cdot\dfrac{\lvert D\rvert}{\mathrm{avgdl}}\right)},
 \tag{5-3}\]</span> 其中 <span class="math inline">\(f(t,D)\)</span> 是词 <span class="math inline">\(t\)</span> 在 <span class="math inline">\(D\)</span> 中的出现次数，<span class="math inline">\(\lvert D\rvert\)</span> 是文档长度，<span class="math inline">\(\mathrm{avgdl}\)</span> 是语料平均文档长度；<span class="math inline">\(k_1\)</span>（常取 1.2～2.0）控制词频饱和的快慢，<span class="math inline">\(b\)</span>（常取 0.75）控制长度归一化的强度，这里的 <span class="math inline">\(b\)</span> 是 BM25 自带的参数，与全书表示位数的 <span class="math inline">\(b\)</span> 无关。由于向量检索得到的是<strong>稠密向量</strong>（每一维都有值），BM25 对应的词频向量绝大多数维度为零，二者也常被称为<strong>稠密检索</strong>与<strong>稀疏检索</strong>。BM25 有两个向量检索比不了的优点：对专有名词、型号、编号极其敏感；可解释，能看到是哪个词命中了。例如用户搜索“错误码 TS-999”，嵌入模型可能找到一批泛泛讨论错误码的文档，BM25 则能精确捞出含该字符串的那一篇<sup><a href="../ch5/references.html#ref-13">[13]</a></sup>；反过来，用户问“东西坏了怎么换”而文档写“退换货流程”时，BM25 无能为力，向量检索却能靠语义找到。</p>
 <p><strong>用 RRF 合并两路结果</strong>　 <strong>混合检索</strong>（hybrid search）让向量检索和 BM25 各召回一批候选，再合并成一个列表。两路的原始分数量纲不同（余弦相似度在 <span class="math inline">\(-1\)</span>～1 之间，BM25 分数没有固定上界，常见量级为几到几十），不能直接相加。最常用的合并方法是<strong>倒数排名融合</strong>（Reciprocal Rank Fusion，RRF）<sup><a href="../ch5/references.html#ref-15">[15]</a></sup>：只看文档在各路列表中排第几， <span class="math display">\[\mathrm{RRF}(d) = \sum_{r\in\mathcal{P}} \frac{1}{c+\mathrm{rank}_r(d)},
-\tag{5-4}\]</span> 其中 <span class="math inline">\(\mathcal{P}\)</span> 是参与融合的各路检索列表的集合，<span class="math inline">\(\mathrm{rank}_r(d)\)</span> 是文档 <span class="math inline">\(d\)</span> 在列表 <span class="math inline">\(r\)</span> 中的名次（从 1 开始，未出现则该项记 0），<span class="math inline">\(c\)</span> 是平滑常数，原论文取 60（原文记作 <span class="math inline">\(k\)</span>，此处改记 <span class="math inline">\(c\)</span> 以免与返回条数 <span class="math inline">\(k\)</span> 混淆）。<span class="math inline">\(c\)</span> 越大，分母主要由 <span class="math inline">\(c\)</span> 决定，不同名次的得分越接近，单独一路的头部名次就越难主导融合结果。RRF 简单、稳定、几乎无须调参，是工程上的默认选择。</p>
+\tag{5-4}\]</span> 其中 <span class="math inline">\(\mathcal{P}\)</span> 是参与融合的各路检索列表的集合，<span class="math inline">\(\mathrm{rank}_r(d)\)</span> 是文档 <span class="math inline">\(d\)</span> 在列表 <span class="math inline">\(r\)</span> 中的名次（从 1 开始；若 <span class="math inline">\(d\)</span> 未在列表 <span class="math inline">\(r\)</span> 中出现，则求和式中对应的分式项记 0），<span class="math inline">\(c\)</span> 是平滑常数，原论文取 60（原文记作 <span class="math inline">\(k\)</span>，此处改记 <span class="math inline">\(c\)</span> 以免与返回条数 <span class="math inline">\(k\)</span> 混淆）。<span class="math inline">\(c\)</span> 越大，分母主要由 <span class="math inline">\(c\)</span> 决定，不同名次的得分越接近，单独一路的头部名次就越难主导融合结果。RRF 简单、稳定、几乎无须调参，是工程上的默认选择。</p>
 <div id="c5-ex-rrf" class="bookbox example">
 <div class="boxtitle">
 <p>例 5-4　用 RRF 合并两路检索结果</p>
@@ -940,7 +940,7 @@ window.Quarto = {
 <p><strong>重排</strong>　 向量检索采用<strong>双编码器</strong>（bi-encoder，也称双塔）结构：问题和文档分别送进编码器得到两个向量，再算相似度。文档向量可以提前算好存起来，所以很快；但问题和文档在编码时互不可见，细粒度的对应关系会丢失。<strong>重排</strong>（reranking）通常采用<strong>交叉编码器</strong>（cross-encoder）<sup><a href="../ch5/references.html#ref-16">[16]</a></sup>：把问题和一个候选文档拼接成一个输入，让模型在每一层注意力中逐词比对，直接输出一个相关性分数。它准确得多，但每个候选都要和问题一起完整运行一次模型，无法预先计算，只能用于少量候选。因此标准做法是<strong>两阶段</strong>：第一阶段用向量或混合检索快速召回 100～150 个候选，第二阶段用重排模型精选 10～20 个交给生成器。在 Anthropic 的实验中，重排把检索失败率从 2.9% 进一步降到 1.9%<sup><a href="../ch5/references.html#ref-13">[13]</a></sup>，代价是每次查询增加几十到几百毫秒。重排模型有开源的 bge-reranker 系列，也有 Cohere Rerank 等商业服务；重排时还可以加入其他标准，例如用户偏好、文档新旧和来源权威性。对垂直领域，用自己标注的数据微调一个重排模型，往往比微调生成模型更划算。</p>
 <div class="bookbox pitfall">
 <p><span class="boxtitle">辨析</span></p>
-<p>双编码器与交叉编码器的区别不在于模型大小，而在于<strong>问题和文档是否在同一次前向计算中相互可见</strong>。双编码器“分别编码、再比距离”，文档向量可离线预算，适合从海量文档中召回；交叉编码器“拼在一起、联合打分”，不能预算，适合对少量候选精排。二者是先后配合的关系，不是互相替代。</p>
+<p>双编码器与交叉编码器的区别不在于模型大小，而在于<strong>问题和文档是否在同一次前向计算中相互可见</strong>。双编码器“分别编码、再比距离”，文档向量可离线预计算，适合从海量文档中召回；交叉编码器“拼在一起、联合打分”，不能预计算，适合对少量候选精排。二者是先后配合的关系，不是互相替代。</p>
 </div>
 <p><strong>两种融合</strong>　 把多个检索结果“合起来”可以发生在两个位置。<strong>增强阶段的融合</strong>在把文档交给生成器之前完成：重排、过滤、合并、去重、聚合，RRF 与重排都属于此类，也是最简单有效的一类。<strong>生成阶段的融合</strong>则让生成器先分别处理每个检索文档，在生成最终回答时再综合它们的信息，例如 FiD（Fusion-in-Decoder）<sup><a href="../ch5/references.html#ref-17">[17]</a></sup>把每个段落分别编码，在解码器中统一注意。前者对模型无要求，后者通常需要专门训练的模型。</p>
 <p><strong>上下文压缩</strong>　 精选后的 10～20 个块加起来可能仍然太长，而且互相重复。<strong>上下文压缩</strong>（context compression）有两种做法：<strong>抽取式</strong>用一个小模型给每句话打相关性分数，只保留高分句，原文不改，引用可追溯；<strong>生成式</strong>让模型把多段材料改写成一段摘要，更短，但经过了“二次加工”，引用可能对不上原文。对可追溯性要求高的场景更常用抽取式。</p>
